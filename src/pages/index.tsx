@@ -1,8 +1,9 @@
+import type { ApiProfileGet } from "@/app/api/profile/route";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 const Home = () => {
-  const query = useQuery({
+  const query = useQuery<ApiProfileGet>({
     queryKey: ["profile"],
     queryFn: async () => {
       const response = await fetch("/api/profile");
