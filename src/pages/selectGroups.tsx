@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
 import { DummyData } from "@/services/usos/getGroups";
-import Accordion from "@/components/Accordion";
+import GroupsAccordion from "@/components/Accordion";
 import { getGroups } from "@/services/usos/getGroups";
 import { Group } from "@/services/usos/getGroups";
 
@@ -56,7 +56,7 @@ export default function Home({ groups }: InferGetServerSidePropsType<typeof getS
     <div>
       <h1>Home</h1>
       {groups.map((data: DummyData, index) => (
-        <Accordion key={data.registration.id} index={index} onClick={checkGroup} {...data} />
+        <GroupsAccordion key={data.registration.id} index={index} onClick={checkGroup} {...data} />
       ))}
     </div>
   );
