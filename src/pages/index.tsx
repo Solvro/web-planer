@@ -62,7 +62,7 @@ const Block: React.FC<any> = ({ className, ...rest }) => {
         damping: 50,
       }}
       className={twMerge(
-        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-solvrolightshadow/15 border border-solvroshadow/10	",
+        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-black/15 border border-solvroshadow/10	",
         className
       )}
       {...rest}
@@ -166,9 +166,9 @@ const AboutBlock = () => (
     className="col-span-12 text-3xl flex justify-center items-center text-center"
   >
     <h1 className=" text-4xl font-medium leading-tight">
-      <span className="text-white">
+      <span className="text-white font-inter tracking-wide	">
         Stwórz z nami swój plan używając{" "}
-        <span className="text-solvrolightshadow">DARMOWEGO</span> zapisownika!
+        <span className="uppercase">darmowego</span> zapisownika!
       </span>
     </h1>
   </Block>
