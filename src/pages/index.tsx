@@ -9,7 +9,7 @@ import { fadeIn } from "@/lib/variants";
 
 export const RevealBento = () => {
   return (
-    <div className="min-h-screen bg-solvrodark px-4 py-12 text-zinc-50">
+    <div className="min-h-screen bg-solvrolight px-4 py-12 text-zinc-50 border border-2 border-solvroshadow">
       <Logo />
       <motion.div
         // Nw ktora animacje wybrac
@@ -22,7 +22,7 @@ export const RevealBento = () => {
         initial="hidden"
         whileInView={"show"}
         viewport={{ once: false, amount: 0.3 }}
-        className="mx-auto grid max-w-7xl grid-flow-dense grid-cols-12 gap-x-5 gap-y-5"
+        className="mx-auto grid max-w-screen-xl grid-flow-dense grid-cols-12 gap-x-5 gap-y-5"
       >
         <HeaderBlock />
         <SocialsBlock />
