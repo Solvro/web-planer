@@ -11,7 +11,6 @@ import { GoDatabase } from "react-icons/go";
 import { MdOutlineFreeCancellation } from "react-icons/md";
 import { MdIosShare } from "react-icons/md";
 
-
 export const RevealBento = () => {
   return (
     <div className="min-h-screen bg-solvrolight px-4 py-12 text-zinc-50 border-solvrodark">
@@ -62,7 +61,7 @@ const Block: React.FC<any> = ({ className, ...rest }) => {
         damping: 50,
       }}
       className={twMerge(
-        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-black/15 border border-solvroshadow/10	",
+        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-black/15 border border-solvroshadow/10",
         className
       )}
       {...rest}
@@ -120,9 +119,9 @@ const SocialsBlock = () => (
       className="col-span-3 md:col-span-2"
     >
       <div className="flex flex-col items-center justify-center gap-4">
-        <GoDatabase size={40}/>
+        <GoDatabase size={40} />
         <p className="text-center text-xs text-white uppercase font-semibold">
-        Automatyczne pobieranie zapisów z USOS
+          Automatyczne pobieranie zapisów z USOS
         </p>
       </div>
     </Block>
@@ -134,9 +133,9 @@ const SocialsBlock = () => (
       className="col-span-3  md:col-span-2"
     >
       <div className="flex flex-col items-center justify-center gap-6">
-      <MdOutlineFreeCancellation size={40}/>
+        <MdOutlineFreeCancellation size={40} />
         <p className="text-center text-xs text-white uppercase font-semibold">
-        Wykluczanie niemożliwych zajęć
+          Wykluczanie niemożliwych zajęć
         </p>
       </div>
     </Block>
@@ -148,9 +147,9 @@ const SocialsBlock = () => (
       className="col-span-3 md:col-span-2"
     >
       <div className="flex flex-col items-center justify-center gap-6">
-      <MdIosShare size={40}/>
+        <MdIosShare size={40} />
         <p className="text-center text-xs text-white uppercase font-semibold">
-        Udostępniaj swój plan innym
+          Udostępniaj swój plan innym
         </p>
       </div>
     </Block>
@@ -194,7 +193,7 @@ const EmailListBlock = () => (
     </p>
     <Button
       variant="outline"
-      className="bg-white text-black text-xl hover:bg-blue-700 hover:text-white border-4 hover:border-blue-700 mt-4 md:mt-0 self-center md:p-7"
+      className="bg-white text-black text-xl hover:bg-blue-800 hover:text-white border-4 hover:border-blue-800 mt-4 md:mt-0 self-center md:p-7"
     >
       Utwórz nowy plan
       <ChevronRightIcon className="ml-2 h-4 w-4" />
