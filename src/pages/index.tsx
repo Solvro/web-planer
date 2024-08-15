@@ -6,10 +6,15 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
 import { fadeIn } from "@/lib/variants";
+import { GrSchedules } from "react-icons/gr";
+import { GoDatabase } from "react-icons/go";
+import { MdOutlineFreeCancellation } from "react-icons/md";
+import { MdIosShare } from "react-icons/md";
+
 
 export const RevealBento = () => {
   return (
-    <div className="min-h-screen bg-solvrolight px-4 py-12 text-zinc-50 border border-2 border-solvroshadow">
+    <div className="min-h-screen bg-solvrolight px-4 py-12 text-zinc-50 border-solvrodark">
       <Logo />
       <motion.div
         // Nw ktora animacje wybrac
@@ -57,7 +62,7 @@ const Block: React.FC<any> = ({ className, ...rest }) => {
         damping: 50,
       }}
       className={twMerge(
-        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-solvrolightshadow/10 border border-solvroshadow/10	",
+        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-solvrolightshadow/20 border border-solvroshadow/10	",
         className
       )}
       {...rest}
@@ -92,19 +97,20 @@ const SocialsBlock = () => (
         rotate: "2.5deg",
         scale: 1.1,
       }}
-      className="col-span-3  md:col-span-2"
+      className="place-content-center col-span-3  md:col-span-2"
     >
-      <a
-        href="#"
-        className="grid h-full place-content-center text-3xl text-white"
-      >
-        <Image
+      <div className="flex flex-col items-center justify-center gap-6">
+        {/* <Image
           src="/assets/logo/pwr.png"
           alt="Logo Politechniki Wrocławskiej"
-          width={60}
-          height={60}
-        />
-      </a>
+          width={40}
+          height={40}
+        /> */}
+        <GrSchedules size={40} />
+        <p className="text-center text-xs text-white uppercase font-semibold">
+          Twórz wiele planów
+        </p>
+      </div>
     </Block>
     <Block
       whileHover={{
@@ -113,17 +119,12 @@ const SocialsBlock = () => (
       }}
       className="col-span-3 md:col-span-2"
     >
-      <a
-        href="#"
-        className="grid h-full place-content-center text-3xl text-white"
-      >
-        <Image
-          src="/assets/logo/pwr.png"
-          alt="Logo Politechniki Wrocławskiej"
-          width={60}
-          height={60}
-        />
-      </a>
+      <div className="flex flex-col items-center justify-center gap-4">
+        <GoDatabase size={40}/>
+        <p className="text-center text-xs text-white uppercase font-semibold">
+        Automatyczne pobieranie zapisów z USOS'a
+        </p>
+      </div>
     </Block>
     <Block
       whileHover={{
@@ -132,14 +133,12 @@ const SocialsBlock = () => (
       }}
       className="col-span-3  md:col-span-2"
     >
-      <a href="#" className="grid h-full place-content-center text-black">
-        <Image
-          src="/assets/logo/wit.png"
-          alt="Logo Wydziału Informatyki i Telekomunikacji na Politechnice Wrocławskiej"
-          width={60}
-          height={60}
-        />
-      </a>
+      <div className="flex flex-col items-center justify-center gap-6">
+      <MdOutlineFreeCancellation size={40}/>
+        <p className="text-center text-xs text-white uppercase font-semibold">
+        Wykluczanie niemożliwych zajęć
+        </p>
+      </div>
     </Block>
     <Block
       whileHover={{
@@ -148,17 +147,12 @@ const SocialsBlock = () => (
       }}
       className="col-span-3 md:col-span-2"
     >
-      <a
-        href="#"
-        className="grid h-full place-content-center text-3xl text-white"
-      >
-        <Image
-          src="/assets/logo/pwr.png"
-          alt="Picture of the author"
-          width={60}
-          height={60}
-        />
-      </a>
+      <div className="flex flex-col items-center justify-center gap-6">
+      <MdIosShare size={40}/>
+        <p className="text-center text-xs text-white uppercase font-semibold">
+        Udostępniaj swój plan innym
+        </p>
+      </div>
     </Block>
   </>
 );
@@ -174,8 +168,7 @@ const AboutBlock = () => (
     <h1 className=" text-4xl font-medium leading-tight">
       <span className="text-white">
         Stwórz z nami swój plan używając{" "}
-        <span className="text-solvrolightshadow underline">darmowego</span>{" "}
-        zapisownika!
+        <span className="text-solvrolightshadow">DARMOWEGO</span> zapisownika!
       </span>
     </h1>
   </Block>
