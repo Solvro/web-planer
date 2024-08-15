@@ -169,7 +169,7 @@ const AboutBlock = () => (
       rotate: "0.0deg",
       scale: 1.01,
     }}
-    className="col-span-12 text-3xl flex justify-center items-center  "
+    className="col-span-12 text-3xl flex justify-center items-center text-center"
   >
     <h1 className=" text-4xl font-medium leading-tight">
       <span className="text-white">
