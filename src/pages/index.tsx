@@ -62,7 +62,7 @@ const Block: React.FC<any> = ({ className, ...rest }) => {
         damping: 50,
       }}
       className={twMerge(
-        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-solvrolightshadow/20 border border-solvroshadow/10	",
+        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-solvrolightshadow/15 border border-solvroshadow/10	",
         className
       )}
       {...rest}
