@@ -193,18 +193,20 @@ const LocationBlock = () => (
 );
 
 const EmailListBlock = () => (
-  <Block className="flex items-center	justify-center col-span-12 gap-10 md:col-span-9 text-right">
-    <p className="text-center text-xl">
-      Zaloguj się do platformy USOS i stwórz swój plan na semestr!
-    </p>
-    <Button
-      variant="outline"
-      className="bg-white text-black p-10 text-xl hover:bg-solvrolightshadow hover:border-solvroshadow "
-    >
-      Utwórz nowy plan
-      <ChevronRightIcon className="ml-2 h-4 w-4" />
-    </Button>
-  </Block>
+<Block className="flex flex-col md:flex-row items-center justify-center col-span-12 md:gap-10 md:col-span-9 text-center">
+  <p className="text-center md:text-xl md:mr-4">
+    Zaloguj się do platformy USOS i stwórz swój plan na semestr!
+  </p>
+  <Button
+    variant="outline"
+    className="bg-white text-black text-xl hover:bg-solvrolightshadow hover:border-solvroshadow mt-4 md:mt-0 self-center md:p-8"
+  >
+    Utwórz nowy plan
+    <ChevronRightIcon className="ml-2 h-4 w-4" />
+  </Button>
+</Block>
+
+
 );
 
 const Logo = () => {
