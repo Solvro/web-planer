@@ -122,7 +122,7 @@ const SocialsBlock = () => (
       <div className="flex flex-col items-center justify-center gap-4">
         <GoDatabase size={40}/>
         <p className="text-center text-xs text-white uppercase font-semibold">
-        Automatyczne pobieranie zapisów z USOS'a
+        Automatyczne pobieranie zapisów z USOS
         </p>
       </div>
     </Block>
