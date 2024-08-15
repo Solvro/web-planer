@@ -73,13 +73,15 @@ const HeaderBlock = () => (
     }}
     className="col-span-12 row-span-2 md:col-span-8 text-center flex justify-center content-center align-middle items-center"
   >
-    <Image
-      src="/assets/logo/logo_solvro_color.png"
-      alt="Logo Koła Naukowego Solvro w kolorze"
-      width={400}
-      height={400}
-      className="rounded-md animate-waving-hand duration-10000 cursor-pointer"
-    />
+    <a href="https://solvro.pwr.edu.pl/">
+      <Image
+        src="/assets/logo/logo_solvro_color.png"
+        alt="Logo Koła Naukowego Solvro w kolorze"
+        width={400}
+        height={400}
+        className="rounded-md animate-waving-hand duration-10000 cursor-pointer"
+      />
+    </a>
   </Block>
 );
 
@@ -193,31 +195,31 @@ const LocationBlock = () => (
 );
 
 const EmailListBlock = () => (
-<Block className="flex flex-col md:flex-row items-center justify-center col-span-12 md:gap-10 md:col-span-9 text-center">
-  <p className="text-center md:text-xl md:mr-4">
-    Zaloguj się do platformy USOS i stwórz swój plan na semestr!
-  </p>
-  <Button
-    variant="outline"
-    className="bg-white text-black text-xl hover:bg-solvrolightshadow hover:border-solvroshadow mt-4 md:mt-0 self-center md:p-8"
-  >
-    Utwórz nowy plan
-    <ChevronRightIcon className="ml-2 h-4 w-4" />
-  </Button>
-</Block>
-
-
+  <Block className="flex flex-col md:flex-row items-center justify-center col-span-12 md:gap-10 md:col-span-9 text-center">
+    <p className="text-center md:text-xl md:mr-4">
+      Zaloguj się do platformy USOS i stwórz swój plan na semestr!
+    </p>
+    <Button
+      variant="outline"
+      className="bg-white text-black text-xl hover:bg-blue-700 hover:text-white border-4 hover:border-blue-700 mt-4 md:mt-0 self-center md:p-7"
+    >
+      Utwórz nowy plan
+      <ChevronRightIcon className="ml-2 h-4 w-4" />
+    </Button>
+  </Block>
 );
 
 const Logo = () => {
   return (
-    <Image
-      src="/assets/logo/solvro.png"
-      alt="Logo Koła Naukowego Solvro"
-      width={200}
-      height={50}
-      className="mx-auto mb-12 cursor-pointer"
-    />
+    <a href="https://solvro.pwr.edu.pl/">
+      <Image
+        src="/assets/logo/solvro.png"
+        alt="Logo Koła Naukowego Solvro"
+        width={200}
+        height={50}
+        className="mx-auto mb-12 cursor-pointer"
+      />
+    </a>
   );
 };
 
