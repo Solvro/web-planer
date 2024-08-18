@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Plan from "../components/ui/plan";
+import Link from "next/link";
 
 const Plans = () => {
   const [plans, setPlans] = useState([
@@ -18,11 +19,13 @@ const Plans = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="bg-blue-500 text-white p-4 flex justify-between">
-        <h1 className="text-2xl font-bold">PLANNER</h1>
-        <span>
+        <Link href="/">
+          <button className="text-2xl font-bold">PLANNER</button>
+        </Link>
+        <div>
           <button className="text-white px-4 py-2 rounded">Moje plany</button>
           <button className="text-white px-4 py-2 rounded">Zaloguj</button>
-        </span>
+        </div>
       </header>
       <main className="flex-grow pt-3">
         <div className="pb-6">
@@ -30,16 +33,18 @@ const Plans = () => {
             Twoje plany Bartus Lewaku
           </h1>
         </div>
-        <div className="bg-gray-200 p-4 mx-auto grid gap-4 min-h-[400px] max-w-screen-lg grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-          <button
-            onClick={addNewPlan}
-            className="border-dashed border-2 border-gray-400 flex justify-center items-center p-4 h-[200px]"
-          >
-            <h1>Dodaj nowy plan</h1>
-          </button>
-          {plans.map((plan) => (
-            <Plan key={plan.id} name={plan.name} />
-          ))}
+        <div className="bg-gray-200 p-4 mx-auto min-h-[1000px] min-w-[1600px] w-full max-w-[1800px]">
+          <div className="grid grid-cols-5 gap-4">
+            <button
+              onClick={addNewPlan}
+              className="border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center p-4 h-[200px]"
+            >
+              <h1>Dodaj nowy plan</h1>
+            </button>
+            {plans.map((plan) => (
+              <Plan key={plan.id} name={plan.name} />
+            ))}
+          </div>
         </div>
       </main>
       <footer>
