@@ -1,40 +1,39 @@
 import React, { FC } from "react";
 import { ClassBlockProps } from "@/lib/types";
-import ClassBlock from "./ClassBlock";
+import { ClassBlock } from "./ClassBlock";
 
-type ClassScheduleProps = {
+interface ClassScheduleProps {
   schedule: ClassBlockProps[];
   day: string;
-};
+}
+const upperHours = [
+  "7:30",
+  "9:00",
+  "9:15",
+  "11:00",
+  "11:15",
+  "13:00",
+  "13:15",
+  "15:00",
+  "15:15",
+  "17:00",
+  "17:05",
+  "18:45",
+  "18:55",
+  "20:35",
+] as const;
+
+const bottomHours = [
+  "8:15",
+  "10:15",
+  "12:15",
+  "14:15",
+  "16:10",
+  "18:00",
+  "19:50",
+] as const;
 
 const ClassSchedule: FC<ClassScheduleProps> = ({ schedule, day }) => {
-  const upperHours = [
-    "7:30",
-    "9:00",
-    "9:15",
-    "11:00",
-    "11:15",
-    "13:00",
-    "13:15",
-    "15:00",
-    "15:15",
-    "17:00",
-    "17:05",
-    "18:45",
-    "18:55",
-    "20:35",
-  ];
-
-  const bottomHours = [
-    "8:15",
-    "10:15",
-    "12:15",
-    "14:15",
-    "16:10",
-    "18:00",
-    "19:50",
-  ];
-
   return (
     <>
       <div className="flex justify-center items-center text-xl">{day}</div>
@@ -68,4 +67,4 @@ const ClassSchedule: FC<ClassScheduleProps> = ({ schedule, day }) => {
   );
 };
 
-export default ClassSchedule;
+export { ClassSchedule };

@@ -1,18 +1,18 @@
 import React from "react";
-import ClassSchedule from "@/components/ClassSchedule";
+import { ClassSchedule } from "@/components/ClassSchedule";
 import { ClassBlockProps } from "@/lib/types";
 const ScheduleTest = () => {
-  const mockL: ClassBlockProps = {
-    startTime: "18:55",
-    endTime: "20:35",
+  const mockL = {
+    startTime: "17:05",
+    endTime: "19:50",
     group: "1",
     courseName: "Fizyka I",
     lecturer: "Jerzy Świątek",
     week: "TN",
     courseType: "L",
-  };
+  } satisfies ClassBlockProps;
 
-  const mockW: ClassBlockProps = {
+  const mockW = {
     startTime: "18:55",
     endTime: "19:50",
     group: "3",
@@ -20,9 +20,9 @@ const ScheduleTest = () => {
     lecturer: "Jerzy Świątek",
     week: "",
     courseType: "W",
-  };
+  } satisfies ClassBlockProps;
 
-  const mockS: ClassBlockProps = {
+  const mockS = {
     startTime: "13:15",
     endTime: "14:45",
     group: "5",
@@ -30,9 +30,9 @@ const ScheduleTest = () => {
     lecturer: "Jerzy Świątek",
     week: "TP",
     courseType: "S",
-  };
+  } satisfies ClassBlockProps;
 
-  const mockC: ClassBlockProps = {
+  const mockC = {
     startTime: "7:30",
     endTime: "9:00",
     group: "11",
@@ -40,9 +40,9 @@ const ScheduleTest = () => {
     lecturer: "Jerzy Świątek",
     week: "",
     courseType: "C",
-  };
+  } satisfies ClassBlockProps;
 
-  const mockP: ClassBlockProps = {
+  const mockP = {
     startTime: "9:15",
     endTime: "11:00",
     group: "5",
@@ -50,9 +50,9 @@ const ScheduleTest = () => {
     lecturer: "Jerzy Świątek",
     week: "",
     courseType: "P",
-  };
+  } satisfies ClassBlockProps;
 
-  const mock1115: ClassBlockProps = {
+  const mock1115 = {
     startTime: "11:15",
     endTime: "13:00",
     group: "4",
@@ -60,9 +60,9 @@ const ScheduleTest = () => {
     lecturer: "Jerzy Świątek",
     week: "",
     courseType: "L",
-  };
+  } satisfies ClassBlockProps;
 
-  const mock1610: ClassBlockProps = {
+  const mock1610 = {
     startTime: "16:10",
     endTime: "16:55",
     group: "12",
@@ -70,7 +70,7 @@ const ScheduleTest = () => {
     lecturer: "Ngoc Nquyen",
     week: "TP",
     courseType: "C",
-  };
+  } satisfies ClassBlockProps;
   const mondaySchedule = [
     mockL,
     mockW,
