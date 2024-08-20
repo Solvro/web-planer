@@ -1,42 +1,11 @@
-import { createUsosService } from "@/lib/usos";
-import { GetUserRegistrations } from "@/services/usos/getUserRegistrations";
-import { GetRegistrationRoundCourses } from "@/services/usos/getRegistrationRoundCourses";
 import { Day } from "@/services/usos/types";
 import { LessonType } from "@/services/usos/types";
 import { Frequency } from "@/services/usos/types";
 
-// export async function GET() {
-//   const usosService = await createUsosService();
-//   const registrations = await usosService.getUserRegistrations();
-//   const coursesRegistrations = await Promise.all(
-//     registrations.map(async (registration) => {
-//       return {
-//         registration: registration,
-//         courses: await usosService.getRegistrationRoundCourses(registration.id),
-//       };
-//     })
-//   );
-
-//   const groupsCoursesRegistrations = await Promise.all(
-//     coursesRegistrations.map(async (coursesRegistration) => {
-//       return await Promise.all(
-//         coursesRegistration.courses.map(async (course) => {
-//           return {
-//             registration: coursesRegistration.registration,
-//             course: course.course,
-//             groups: await usosService.getGroups(course.course.id),
-//           };
-//         })
-//       );
-//     })
-//   );
-//   return Response.json(groupsCoursesRegistrations);
-// }
-
-type Time = {
+interface Time {
   hours: number;
   minutes: number;
-};
+}
 export interface Group {
   hourStartTime: Time;
   hourEndTime: Time;
@@ -72,7 +41,7 @@ export interface DummyData {
   }[];
 }
 
-const dummyData: DummyData[] = [
+const dummyData = [
   {
     registration: {
       id: "1",
@@ -203,4 +172,4 @@ const dummyData: DummyData[] = [
       },
     ],
   },
-];
+] satisfies DummyData[];
