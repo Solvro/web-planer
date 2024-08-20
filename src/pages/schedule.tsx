@@ -82,14 +82,7 @@ const ScheduleTest = () => {
     mock1610,
   ];
 
-  return (
-    <>
-      <ClassSchedule
-        schedule={mondaySchedule}
-        day="Poniedziałek"
-      ></ClassSchedule>
-    </>
-  );
+  return <ClassSchedule schedule={mondaySchedule} day="Poniedziałek" />;
 };
 
 export default ScheduleTest;

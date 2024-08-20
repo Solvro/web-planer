@@ -1,6 +1,5 @@
+import { cn } from "@/lib/utils";
 import React, { FC } from "react";
-import { ClassBlockProps } from "@/lib/types";
-
 const typeClasses = {
   W: "bg-red-300",
   L: "bg-blue-300",
@@ -9,7 +8,7 @@ const typeClasses = {
   P: "bg-fuchsia-200",
 } as const;
 
-const hourClasses: { [key: string]: string } = {
+const hourClasses = {
   "7:30": "col-start-1",
   "8:15": "col-start-2",
   "9:15": "col-start-3",
@@ -43,16 +42,25 @@ function calculateDurationSpans(startTime: string, endTime: string) {
   return "col-span-1";
 }
 
-const ClassBlock: FC<ClassBlockProps> = (props) => {
+const ClassBlock = (props: {
+  startTime: string;
+  endTime: string;
+  group: string;
+  courseName: string;
+  lecturer: string;
+  week: "TN" | "TP" | "";
+  courseType: "W" | "L" | "C" | "S" | "P";
+}) => {
   const duration = calculateDurationSpans(props.startTime, props.endTime);
 
   return (
     <div
-      className={`${
-        hourClasses[props.startTime]
-      } ${duration} p-2 rounded-lg shadow-md flex flex-col justify-center truncate ${
-        typeClasses[props.courseType]
-      }`}
+      className={cn(
+        hourClasses[props.startTime as keyof typeof hourClasses],
+        duration,
+        typeClasses[props.courseType],
+        "p-2 rounded-lg shadow-md flex flex-col justify-center truncate"
+      )}
     >
       <div className="flex justify-between">
         <p>{`${props.courseType} ${
