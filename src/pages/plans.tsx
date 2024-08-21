@@ -33,7 +33,7 @@ const Plans = () => {
             Twoje plany Bartus Lewaku
           </h1>
         </div>
-        <div className="bg-gray-200 p-4 mx-auto h-screen max-h-[1000px] w-full max-w-[2200px] overflow-y-auto">
+        <div className="container bg-gray-200 p-4 mx-auto h-screen max-h-[1000px] overflow-y-auto">
           <div className="flex flex-wrap gap-4">
             <button
               onClick={addNewPlan}
