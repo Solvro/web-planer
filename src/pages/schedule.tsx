@@ -79,7 +79,7 @@ const mockFootball = {
   courseName: "Piłka nożna",
   lecturer: "Ziutek Ziutowski",
   week: "",
-  courseType: "WF",
+  courseType: "C",
 } satisfies ClassBlockProps;
 const mockSpanish = {
   startTime: "21:00",
@@ -98,7 +98,7 @@ const mockVoleyball = {
   courseName: "Siatkówka",
   lecturer: "Nauczyciel X",
   week: "",
-  courseType: "WF",
+  courseType: "C",
 } satisfies ClassBlockProps;
 const mondaySchedule = [
   mockL,
