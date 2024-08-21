@@ -6,7 +6,6 @@ const typeClasses = {
   C: "bg-green-300",
   S: "bg-orange-300",
   P: "bg-fuchsia-200",
-  WF: "bg-teal-300",
 } as const;
 
 function calculatePosition(startTime: string, endTime: string) {
@@ -30,7 +29,7 @@ const ClassBlock = (props: {
   courseName: string;
   lecturer: string;
   week: "TN" | "TP" | "";
-  courseType: "W" | "L" | "C" | "S" | "P" | "WF";
+  courseType: "W" | "L" | "C" | "S" | "P";
 }) => {
   const position = calculatePosition(props.startTime, props.endTime);
   const [startGrid, durationSpan] = position;

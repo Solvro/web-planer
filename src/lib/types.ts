@@ -11,5 +11,5 @@ export interface ClassBlockProps {
   courseName: string;
   lecturer: string;
   week: "TN" | "TP" | "";
-  courseType: "W" | "L" | "C" | "S" | "P" | "WF";
+  courseType: "W" | "L" | "C" | "S" | "P";
 }
