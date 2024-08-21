@@ -52,6 +52,7 @@ export default function Home({ groups }: InferGetServerSidePropsType<typeof getS
   return (
     <div>
       <h1>Home</h1>
+      <h1 className="text-2xl font-semibold p-4 ">Wybierz odpowiednią turę:</h1>
       {allGroups.map((data, index) => (
         <GroupsAccordion key={data.registration.id} index={index} onClick={checkGroup} {...data} />
       ))}

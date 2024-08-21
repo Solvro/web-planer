@@ -11,12 +11,11 @@ export const GroupsAccordion = ({
 } & DummyData) => {
   return (
     <div className="max-w-96">
-      <h1 className="text-2xl font-semibold p-4 ">Wybierz odpowiednią turę:</h1>
       <Accordion type="single" collapsible className="">
         <AccordionItem value="item-1">
-          <AccordionTrigger className="px-4">
+          <AccordionTrigger className="px-4  hover:no-underline">
             <div className="flex items-center gap-4">
-              <div className="w-[50px] h-[50px] rounded-[50px] bg-[#9DC2FA] items-center flex justify-center">
+              <div className="w-[50px] h-[50px] rounded-[50px] bg-primary items-center flex justify-center font-bold">
                 {index + 1}
               </div>
               {props.registration.name}
@@ -28,9 +27,9 @@ export const GroupsAccordion = ({
                 {course.groups.map((group) => (
                   <div
                     key={group.name}
-                    className="grid grid-cols-[1fr_4fr_1fr] gap-4 justify-between break-all items-center py-2 text-base hover:bg-[#49454F] hover:cursor-pointer p-4 "
+                    className="grid grid-cols-[1fr_4fr_1fr] gap-4 justify-between break-all items-center py-2 text-base hover:bg-stone-300 hover:cursor-pointer p-4 "
                   >
-                    <div className="w-[50px] h-[50px] rounded-[50px] bg-[#D9E8FF] items-center flex justify-center">
+                    <div className="w-[50px] h-[50px] rounded-[50px] bg-secondary items-center flex justify-center">
                       {group.type.slice(0, 1).toUpperCase()}
                     </div>
                     <div>{group.name}</div>
