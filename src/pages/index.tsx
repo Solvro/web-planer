@@ -18,9 +18,7 @@ const Home = () => {
       <p>
         Hejka {query.data?.first_name} {query.data?.last_name}
       </p>
-      <Link href="/plans">
-        <button>Go to Plans</button>
-      </Link>
+      <Link href="/plans">Go to Plans</Link>
     </div>
   );
 };
