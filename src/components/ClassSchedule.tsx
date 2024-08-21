@@ -1,32 +1,43 @@
 import React, { FC } from "react";
 import { ClassBlockProps } from "@/lib/types";
 import { ClassBlock } from "./ClassBlock";
+import { Hour } from "./Hour";
 
 const upperHours = [
   "7:30",
+  "8:00",
   "9:00",
-  "9:15",
+  "10:00",
   "11:00",
-  "11:15",
+  "12:00",
   "13:00",
-  "13:15",
+  "14:00",
   "15:00",
-  "15:15",
-  "17:00",
-  "17:05",
+  "16:00",
+  "16:55",
+  "17:50",
   "18:45",
-  "18:55",
-  "20:35",
+  "19:40",
+  "20:45",
+  "21:40",
 ] as const;
 
 const bottomHours = [
   "8:15",
+  "9:15",
   "10:15",
+  "11:15",
   "12:15",
+  "13:15",
   "14:15",
+  "15:15",
   "16:10",
+  "17:05",
   "18:00",
+  "18:55",
   "19:50",
+  "20:55",
+  "21:50",
 ] as const;
 
 const ClassSchedule = ({
@@ -38,28 +49,19 @@ const ClassSchedule = ({
 }) => {
   return (
     <>
-      <div className="flex justify-center items-center text-xl">{day}</div>
-      <div className="flex flex-col text-xs gap-1 overflow-x-scroll p-1 scrollbar-thin scrollbar-thumb-sky-900 scrollbar-track-sky-300">
-        <div className="min-w-[1400px]">
-          <div className="grid grid-flow-col grid-cols-auto gap-0.5">
-            {upperHours.map((hour, index) => (
-              <div
-                className={index % 2 === 0 ? `` : `flex justify-end`}
-                key={hour}
-              >
-                {hour}
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-flow-col grid-cols-auto gap-2">
-            {bottomHours.map((hour) => (
-              <div className="flex justify-center" key={hour}>
-                {hour}
-              </div>
-            ))}
-          </div>
+      <div className="flex justify-center items-center text-2xl font-semibold">
+        {day}
+      </div>
+      <div className="flex flex-col text-[9px] gap overflow-x-scroll overflow-y-hidden p-1 scrollbar-thin scrollbar-thumb-sky-900 scrollbar-track-sky-300">
+        <div className="grid grid-cols-dayPlan min-w-[1400px] px-[10px]">
+          {upperHours.map((hour, index) => (
+            <Hour hour={hour} key={index} />
+          ))}
+          {bottomHours.map((hour, index) => (
+            <Hour hour={hour} key={index} />
+          ))}
         </div>
-        <div className="grid grid-cols-14 grid-flow-col gap-1 min-w-[1400px]">
+        <div className="grid grid-cols-dayPlan grid-flow-col min-w-[1400px] gap-y-3 px-[10px] py-5">
           {schedule.map((block, index) => (
             <ClassBlock key={index} {...block} />
           ))}
