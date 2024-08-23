@@ -20,10 +20,20 @@ const config = {
     },
     extend: {
       colors: {
+        // START Do wybrania i wywalenia
         solvrodark: "#152959",
         solvrolight: "#132550",
         solvroshadow: "#2c3e6a",
+        mainpage: "rgb(21, 41, 89)",
+        mainbutton: "rgb(164, 200, 255)",
+        mainbutton2: "rgb(140, 170, 230)",
+        mainbutton3: "rgb(120, 150, 210)",
+        mainbutton4: "rgb(100, 130, 190)",
+        mainbutton5: "rgb(80, 110, 170)",
+        mainbutton6: "rgb(60, 90, 150)",
+        mainbutton7: "rgb(40, 70, 130)",
         solvrolightshadow: "#737f9b",
+        // END
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -93,26 +103,52 @@ const config = {
           '60%': { transform: 'rotate(0.0deg)' },
           '100%': { transform: 'rotate(0.0deg)' },
         },
+        flip: {
+          '0%': { transform: 'rotateY(0deg)' },
+          '10%': { transform: 'rotateY(15deg)' },
+          '25%': { transform: 'rotateY(30deg)' },
+          '50%': { transform: 'rotateY(0deg)' },
+          '60%': { transform: 'rotateY(-15deg)' },
+          '75%': { transform: 'rotateY(-30deg)' },
+          '100%': { transform: 'rotateY(360deg)' }
+        },
+        'move-top': {
+          '0%': { top: '-10%' },       
+          '100%': { top: '28%' },    
+        },
+        'move-bottom': {
+          '0%': { bottom: '-10%' },       
+          '100%': { bottom: '28%' },    
+        },
+        open: {
+          '0%': { transform: 'scaleY(0)', opacity: '0' },
+          '100%': { transform: 'scaleY(1)', opacity: '1' },
+        },
+        close: {
+          '0%': { transform: 'scaleY(1)', opacity: '1' },
+          '100%': { transform: 'scaleY(0)', opacity: '0' },
+        },
+        'slide-down': {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
-        'custom-bounce': 'custom-bounce 3s infinite',
-        'waving-hand': 'wave 2s linear infinite',
-      },
-      gridColumnStart: {
-        "13": "13",
-        "14": "14",
-        "15": "15",
-        "16": "16",
-      },
-      gridTemplateColumns: {
-        "14": "repeat(14, minmax(0, 1fr))",
-        "15": "repeat(15, minmax(0, 1fr))",
-        "16": "repeat(16, minmax(0, 1fr))",
-        dayPlan: "repeat(174, 1fr)",
+        'waving-hand': 'flip 1s infinite',
+        open: 'open 0.3s ease-out forwards',
+        close: 'close 0.3s ease-out forwards',
+        'slide-down': 'slide-down 0.3s ease-out forwards',
+        'fade-in': 'fade-in 0.3s ease-in-out forwards',
+        'move-top': 'move-top 0.3s ease-in-out infinite alternate',
+        'move-bottom': 'move-bottom 0.3s ease-in-out infinite alternate',
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
 export default config;

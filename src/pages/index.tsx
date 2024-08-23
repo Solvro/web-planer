@@ -1,41 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { FiMapPin } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+import { ApiProfileGet } from "@/app/api/profile/route";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
-import { fadeIn } from "@/lib/variants";
-import { GrSchedules } from "react-icons/gr";
-import { GoDatabase } from "react-icons/go";
-import { MdOutlineFreeCancellation } from "react-icons/md";
-import { MdIosShare } from "react-icons/md";
 
-export const RevealBento = () => {
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   return (
-    <div className="min-h-screen bg-solvrolight px-4 py-12 text-zinc-50 border-solvrodark">
-      <Logo />
-      <motion.div
-        // Nw ktora animacje wybrac
-        // initial="initial"
-        // animate="animate"
-        // transition={{
-        //   staggerChildren: 0.05,
-        // }}
-        variants={fadeIn("center", 0.5)}
-        initial="hidden"
-        whileInView={"show"}
-        viewport={{ once: false, amount: 0.3 }}
-        className="mx-auto grid max-w-screen-xl grid-flow-dense grid-cols-12 gap-x-5 gap-y-5"
-      >
-        <HeaderBlock />
-        <SocialsBlock />
-        <AboutBlock />
-        <LocationBlock />
-        <EmailListBlock />
-      </motion.div>
-      <Footer />
-    </div>
+    <>
+      <div className="flex items-center justify-between z-50 relative h-20">
+        <Logo />
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex flex-row h-20 gap-10 items-center text-white pr-10 lg:pr-40">
+          <ul className="flex gap-6">
+            <li className="cursor-pointer">Strona główna</li>
+            <li className="cursor-pointer">Aktualności</li>
+            <li className="cursor-pointer">Instrukcje</li>
+            <li className="cursor-pointer">Terminarz</li>
+            <li className="cursor-pointer">Pomoc</li>
+            <li className="cursor-pointer">Kontakt</li>
+          </ul>
+        </nav>
+
+        {/* Mobile Menu Icon */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={toggleMenu}
+            className="text-white focus:outline-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
+            <ul className="flex flex-col text-center gap-4 p-4 text-white uppercase">
+              <li className="cursor-pointer p-2">Strona główna</li>
+              <li className="cursor-pointer p-2">Aktualności</li>
+              <li className="cursor-pointer p-2">Instrukcje</li>
+              <li className="cursor-pointer p-2">Terminarz</li>
+              <li className="cursor-pointer p-2">Pomoc</li>
+              <li className="cursor-pointer p-2">Kontakt</li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -60,144 +92,73 @@ const Block: React.FC<any> = ({ className, ...rest }) => {
         stiffness: 400,
         damping: 50,
       }}
-      className={twMerge(
-        "col-span-4 rounded-lg p-6 bg-gradient-to-b from-solvrodark/90 via-solvroshadow/5 to-black/15 border border-solvroshadow/10",
-        className
-      )}
+      className={twMerge("col-span-4 rounded-lg p-6", className)}
       {...rest}
     />
   );
 };
 
-const HeaderBlock = () => (
+const AnimationLogo = () => (
   <Block
     whileHover={{
       rotate: "0.0deg",
       scale: 1.01,
     }}
-    className="col-span-12 row-span-2 md:col-span-8 text-center flex justify-center content-center align-middle items-center"
+    className="md:mt-10 text-center flex justify-center content-center align-middle items-center"
   >
-    <a href="https://solvro.pwr.edu.pl/">
-      <Image
-        src="/assets/logo/logo_solvro_color.png"
-        alt="Logo Koła Naukowego Solvro w kolorze"
-        width={400}
-        height={400}
-        className="rounded-md animate-waving-hand duration-10000 cursor-pointer"
-      />
-    </a>
+    <div className="md:flex justify-center items-center gap-4 sm:gap-6">
+      <div className="md:mt-5 md:mb-0 mb-5">
+        <p className="font-bold text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          SOLVRO
+        </p>
+      </div>
+
+      <a href="https://solvro.pwr.edu.pl/">
+        <Image
+          src="/assets/logo/logo_solvro_mono.png"
+          alt="Logo Koła Naukowego Solvro w kolorze"
+          width={200}
+          height={200}
+          className="rounded-md animate-waving-hand duration-5000 cursor-pointer pb-10"
+        />
+      </a>
+
+      <div className="mb:mt-5">
+        <p className="font-bold text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          PLANER
+        </p>
+      </div>
+    </div>
   </Block>
 );
 
-const SocialsBlock = () => (
-  <>
-    <Block
-      whileHover={{
-        rotate: "2.5deg",
-        scale: 1.1,
-      }}
-      className="place-content-center col-span-3  md:col-span-2"
-    >
-      <div className="flex flex-col items-center justify-center gap-6">
-        {/* <Image
-          src="/assets/logo/pwr.png"
-          alt="Logo Politechniki Wrocławskiej"
-          width={40}
-          height={40}
-        /> */}
-        <GrSchedules size={40} />
-        <p className="text-center text-xs text-white uppercase font-semibold">
-          Twórz wiele planów
-        </p>
-      </div>
-    </Block>
-    <Block
-      whileHover={{
-        rotate: "-2.5deg",
-        scale: 1.1,
-      }}
-      className="col-span-3 md:col-span-2"
-    >
-      <div className="flex flex-col items-center justify-center gap-4">
-        <GoDatabase size={40} />
-        <p className="text-center text-xs text-white uppercase font-semibold">
-          Automatyczne pobieranie zapisów z USOS
-        </p>
-      </div>
-    </Block>
-    <Block
-      whileHover={{
-        rotate: "-2.5deg",
-        scale: 1.1,
-      }}
-      className="col-span-3  md:col-span-2"
-    >
-      <div className="flex flex-col items-center justify-center gap-6">
-        <MdOutlineFreeCancellation size={40} />
-        <p className="text-center text-xs text-white uppercase font-semibold">
-          Wykluczanie niemożliwych zajęć
-        </p>
-      </div>
-    </Block>
-    <Block
-      whileHover={{
-        rotate: "2.5deg",
-        scale: 1.1,
-      }}
-      className="col-span-3 md:col-span-2"
-    >
-      <div className="flex flex-col items-center justify-center gap-6">
-        <MdIosShare size={40} />
-        <p className="text-center text-xs text-white uppercase font-semibold">
-          Udostępniaj swój plan innym
-        </p>
-      </div>
-    </Block>
-  </>
-);
-
-const AboutBlock = () => (
-  <Block
-    whileHover={{
-      rotate: "0.0deg",
-      scale: 1.01,
-    }}
-    className="col-span-12 text-3xl flex justify-center items-center text-center"
-  >
-    <h1 className=" text-4xl font-medium leading-tight">
-      <span className="text-white font-inter tracking-wide	">
-        Stwórz z nami swój plan używając{" "}
-        <span className="uppercase">darmowego</span> zapisownika!
-      </span>
-    </h1>
-  </Block>
-);
-
-const LocationBlock = () => (
-  <Block
-    whileHover={{
-      rotate: "0.0deg",
-      scale: 1.01,
-    }}
-    className="col-span-12 flex flex-col items-center gap-4 md:col-span-3 "
-  >
-    <FiMapPin className="text-3xl" />
-    <p className="text-center text-lg">Politechnika Wrocławska</p>
-  </Block>
-);
-
-const EmailListBlock = () => (
-  <Block className="flex flex-col md:flex-row items-center justify-center col-span-12 md:gap-10 md:col-span-9 text-center">
-    <p className="text-center md:text-xl md:mr-4">
-      Zaloguj się do platformy USOS i stwórz swój plan na semestr!
-    </p>
-    <Button
-      variant="outline"
-      className="bg-white text-black text-xl hover:bg-blue-800 hover:text-white border-4 hover:border-blue-800 mt-4 md:mt-0 self-center md:p-7"
-    >
-      Utwórz nowy plan
-      <ChevronRightIcon className="ml-2 h-4 w-4" />
-    </Button>
+const JoinUsBlock = () => (
+  <Block className="flex flex-col justify-center items-center gap-6 md:gap-10">
+    <div className="">
+      <h1 className="text-4xl font-medium leading-tight text-center md:text-left">
+        <span className="text-white font-inter tracking-wide animate-in">
+          Stwórz z nami swój plan używając{" "}
+          <span className="uppercase font-bold">darmowego</span> zapisownika!
+        </span>
+      </h1>
+    </div>
+    <div className="">
+      <p className="text-center md:text-2xl md:mr-4 text-white">
+        Zaloguj się do platformy USOS i stwórz swój plan na semestr!
+      </p>
+    </div>
+    <div className="">
+      <Button
+        variant="outline"
+        className="h-20 text-2xl hover:bg-white border-4
+       hover:text-black  
+       md:mt-0 self-center md:p-7 
+       hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] animate-pulse duration-5000 hover:animate-none"
+      >
+        Przejdź do planowania
+        <ChevronRightIcon className="ml-2" />
+      </Button>
+    </div>
   </Block>
 );
 
@@ -205,11 +166,11 @@ const Logo = () => {
   return (
     <a href="https://solvro.pwr.edu.pl/">
       <Image
-        src="/assets/logo/solvro.png"
+        src="/assets/logo/solvro_white.png"
         alt="Logo Koła Naukowego Solvro"
-        width={200}
-        height={50}
-        className="mx-auto mb-12 cursor-pointer"
+        width={150}
+        height={150}
+        className="mx-auto cursor-pointer ml-20"
       />
     </a>
   );
@@ -222,7 +183,7 @@ const Footer = () => {
         Made with ❤️ by{" "}
         <a
           href="https://solvro.pwr.edu.pl/"
-          className="text-blue-300 hover:underline font-bold"
+          className="text-mainbutton hover:underline font-bold"
         >
           SOLVRO
         </a>
@@ -232,7 +193,139 @@ const Footer = () => {
 };
 
 const Home = () => {
-  return <RevealBento />;
+  const query = useQuery<ApiProfileGet>({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const response = await fetch("/api/profile");
+      return response.json();
+    },
+  });
+
+  return (
+    <>
+      {/* Main Page */}
+      <div className="min-h-screen bg-mainbutton5 relative overflow-hidden">
+        {/* Blobs */}
+        <div className="">
+          <svg
+            style={{
+              position: "absolute",
+              top: "50%",
+              overflow: "hidden",
+              boxShadow: "100 100 ",
+            }}
+            width="685"
+            height="725"
+            viewBox="0 0 685 725"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M666 733C554.346 1014.97 311 818 -12 733C-247.475 733 -227.275 728.837 -227.275 464.181C-227.275 344.785 -212.174 257.477 -125.373 132.524C-79.4254 -47.6951 190.184 -54.0001 249 176C285.195 317.541 479.451 382.961 596.021 481.796C668.874 543.566 711.384 618.388 666 733Z"
+              fill="url(#paint0_linear_396_121)"
+              fillOpacity="0.2"
+            />
+            <defs>
+              <linearGradient
+                id="paint0_linear_396_121"
+                x1="228.505"
+                y1="0.113281"
+                x2="228.505"
+                y2="879.428"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stopColor="#FFFFFF" />
+                <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <svg
+            style={{
+              position: "absolute",
+              top: "-30%",
+              right: "-20%",
+              overflow: "hidden",
+              rotate: "180deg",
+            }}
+            width="1085"
+            height="1025"
+            viewBox="0 0 685 725"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M666 733C554.346 1014.97 311 818 -12 733C-247.475 733 -227.275 728.837 -227.275 464.181C-227.275 344.785 -212.174 257.477 -125.373 132.524C-79.4254 -47.6951 190.184 -54.0001 249 176C285.195 317.541 479.451 382.961 596.021 481.796C668.874 543.566 711.384 618.388 666 733Z"
+              fill="url(#paint0_linear_396_121)"
+              fillOpacity="0.2"
+            />
+            <defs>
+              <linearGradient
+                id="paint0_linear_396_121"
+                x1="228.505"
+                y1="0.113281"
+                x2="228.505"
+                y2="879.428"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stopColor="#FFFFFF" />
+                <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        {/* Particles */}
+        <div className="">
+          <div className="particleX animate-move-top duration-10000 absolute top-32 right-10 md:top-36 md:right-80">
+            <Image
+              src="/assets/particle/particleX.png"
+              alt="Kształt cząsteczki X"
+              width={20}
+              height={20}
+            />
+          </div>
+          <div className="particleX animate-move-bottom absolute bottom-12 left-20 md:bottom-48 md:left-80 duration-10000 ">
+            <Image
+              src="/assets/particle/particleX.png"
+              alt="Kształt cząsteczki X"
+              width={20}
+              height={20}
+            />
+          </div>
+          <div className="particleO animate-bounce duration-2000 absolute bottom-52 right-4 md:bottom-64 md:right-1/3">
+            <Image
+              src="/assets/particle/particleO.png"
+              alt="Kształt cząsteczki O"
+              width={20}
+              height={20}
+            />
+          </div>
+          <div className="animate-bounce duration-2000 absolute top-72 left-5 md:top-40 md:left-40">
+            <Image
+              src="/assets/particle/particleO.png"
+              alt="Kształt cząsteczki O"
+              width={20}
+              height={20}
+            />
+          </div>
+        </div>
+        {/* Main Content page */}
+        <div className="container mx-auto ">
+          <Navbar />
+          <div className="flex flex-col ">
+            <div className="flex justify-center">
+              <div className="px-10">
+                <AnimationLogo />
+              </div>
+            </div>
+            <section className="flex justify-center ">
+              <JoinUsBlock />
+            </section>
+          </div>
+          <Footer />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Home;
