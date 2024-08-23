@@ -204,9 +204,9 @@ const Home = () => {
   return (
     <>
       {/* Main Page */}
-      <div className="min-h-screen bg-mainbutton5 relative overflow-hidden">
+      <div className="min-h-screen bg-mainpage relative overflow-hidden">
         {/* Blobs */}
-        <div className="">
+        <div className="hidden md:block">
           <svg
             style={{
               position: "absolute",
@@ -309,7 +309,7 @@ const Home = () => {
           </div>
         </div>
         {/* Main Content page */}
-        <div className="container mx-auto ">
+        <div className="container mx-auto">
           <Navbar />
           <div className="flex flex-col ">
             <div className="flex justify-center">
