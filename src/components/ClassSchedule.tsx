@@ -1,7 +1,8 @@
-import React, { FC } from "react";
+import React from "react";
 import { ClassBlockProps } from "@/lib/types";
 import { ClassBlock } from "./ClassBlock";
 import { Hour } from "./Hour";
+import { extendedCourse, extendedGroup } from "@/pages/createplan";
 
 const upperHours = [
   "7:30",
@@ -43,16 +44,22 @@ const bottomHours = [
 const ClassSchedule = ({
   schedule,
   day,
+  courses,
+  groups,
+  onClick,
 }: {
   schedule: ClassBlockProps[];
   day: string;
+  courses: extendedCourse[];
+  groups: extendedGroup[];
+  onClick: (id: string) => void;
 }) => {
   return (
-    <>
-      <div className="flex justify-center items-center text-2xl font-semibold">
+    <div>
+      <div className="flex justify-center items-center text-2xl font-semibold relative z-20 bg-white">
         {day}
       </div>
-      <div className="flex flex-col text-[9px] gap overflow-x-scroll overflow-y-hidden p-1 scrollbar-thin scrollbar-thumb-sky-900 scrollbar-track-sky-300">
+      <div className="flex flex-col text-[9px]">
         <div className="grid grid-cols-dayPlan min-w-[1400px] px-[10px]">
           {upperHours.map((hour, index) => (
             <Hour hour={hour} key={index} />
@@ -63,11 +70,11 @@ const ClassSchedule = ({
         </div>
         <div className="grid grid-cols-dayPlan grid-flow-col min-w-[1400px] gap-y-3 px-[10px] py-5">
           {schedule.map((block, index) => (
-            <ClassBlock key={index} {...block} />
+            <ClassBlock key={index} {...block} courses={courses} groups={groups} onClick={onClick} />
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

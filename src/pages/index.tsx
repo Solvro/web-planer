@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { FiMapPin } from "react-icons/fi";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
 import { fadeIn } from "@/lib/variants";
@@ -10,6 +9,7 @@ import { GrSchedules } from "react-icons/gr";
 import { GoDatabase } from "react-icons/go";
 import { MdOutlineFreeCancellation } from "react-icons/md";
 import { MdIosShare } from "react-icons/md";
+import Link from "next/link";
 
 export const RevealBento = () => {
   return (
@@ -106,9 +106,7 @@ const SocialsBlock = () => (
           height={40}
         /> */}
         <GrSchedules size={40} />
-        <p className="text-center text-xs text-white uppercase font-semibold">
-          Twórz wiele planów
-        </p>
+        <p className="text-center text-xs text-white uppercase font-semibold">Twórz wiele planów</p>
       </div>
     </Block>
     <Block
@@ -148,9 +146,7 @@ const SocialsBlock = () => (
     >
       <div className="flex flex-col items-center justify-center gap-6">
         <MdIosShare size={40} />
-        <p className="text-center text-xs text-white uppercase font-semibold">
-          Udostępniaj swój plan innym
-        </p>
+        <p className="text-center text-xs text-white uppercase font-semibold">Udostępniaj swój plan innym</p>
       </div>
     </Block>
   </>
@@ -166,8 +162,7 @@ const AboutBlock = () => (
   >
     <h1 className=" text-4xl font-medium leading-tight">
       <span className="text-white font-inter tracking-wide	">
-        Stwórz z nami swój plan używając{" "}
-        <span className="uppercase">darmowego</span> zapisownika!
+        Stwórz z nami swój plan używając <span className="uppercase">darmowego</span> zapisownika!
       </span>
     </h1>
   </Block>
@@ -191,13 +186,15 @@ const EmailListBlock = () => (
     <p className="text-center md:text-xl md:mr-4">
       Zaloguj się do platformy USOS i stwórz swój plan na semestr!
     </p>
-    <Button
-      variant="outline"
-      className="bg-white text-black text-xl hover:bg-blue-800 hover:text-white border-4 hover:border-blue-800 mt-4 md:mt-0 self-center md:p-7"
+    <Link
+      href="/createplan"
+      //variant="outline"
+      //className="bg-white text-black text-xl hover:bg-blue-800 hover:text-white border-4 hover:border-blue-800 mt-4 md:mt-0 self-center md:p-7 "
+      className="h-10 px-4 py-2 border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black text-xl hover:bg-blue-800 hover:text-white border-4 hover:border-blue-800 mt-4 md:mt-0 self-center md:p-7"
     >
       Utwórz nowy plan
       <ChevronRightIcon className="ml-2 h-4 w-4" />
-    </Button>
+    </Link>
   </Block>
 );
 
@@ -220,10 +217,7 @@ const Footer = () => {
     <footer className="mt-12">
       <p className="text-center text-white">
         Made with ❤️ by{" "}
-        <a
-          href="https://solvro.pwr.edu.pl/"
-          className="text-blue-300 hover:underline font-bold"
-        >
+        <a href="https://solvro.pwr.edu.pl/" className="text-blue-300 hover:underline font-bold">
           SOLVRO
         </a>
       </p>
