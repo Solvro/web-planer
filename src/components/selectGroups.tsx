@@ -1,7 +1,7 @@
 import React from "react";
 import { GroupsAccordion } from "@/components/Accordion";
 import { Registration } from "@/lib/types";
-import { extendedCourse } from "./createplan";
+import { extendedCourse } from "../pages/createplan";
 
 export default function SelectGroups({
   registrations,

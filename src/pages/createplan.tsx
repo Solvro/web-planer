@@ -1,5 +1,5 @@
-import ScheduleTest from "./schedule";
-import SelectGroups from "./selectGroups";
+import ScheduleTest from "@/components/schedule";
+import SelectGroups from "@/components/selectGroups";
 import type { GetServerSideProps } from "next";
 
 import { DummyData } from "@/services/usos/getGroups";

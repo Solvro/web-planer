@@ -1,7 +1,7 @@
 import React from "react";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { ClassBlockProps } from "@/lib/types";
-import { extendedCourse, extendedGroup } from "./createplan";
+import { extendedCourse, extendedGroup } from "../pages/createplan";
 
 const ScheduleTest = ({
   schedule,
