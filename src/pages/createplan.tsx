@@ -23,21 +23,25 @@ const mockRegistration3 = {
 const mockCourse1 = {
   name: "Fizyka I",
   registrationName: mockRegistration1.name,
+  ects: 4,
 } satisfies Course;
 
 const mockCourse2 = {
   name: "Wykład X",
   registrationName: mockRegistration1.name,
+  ects: 1,
 } satisfies Course;
 
 const mockCourse3 = {
   name: "Seminarium X",
   registrationName: mockRegistration2.name,
+  ects: 5,
 } satisfies Course;
 
 const mockCourse4 = {
   name: "Cwiczenia X",
   registrationName: mockRegistration2.name,
+  ects: 8,
 } satisfies Course;
 
 const mockL = {
@@ -214,7 +218,6 @@ const CreatePlan = () => {
       groups.map((group) => (group.group === id ? { ...group, isChecked: !group.isChecked } : group))
     );
   }
-  console.log(groups);
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-semibold text-center">Mój plan</h1>
@@ -224,7 +227,16 @@ const CreatePlan = () => {
       </div>
       <div className="flex gap-11 items-center justify-around">
         <Link href="/">Wróć do panelu głównego</Link>
-        <span>Liczba ects: 4</span>
+        <span>
+          Liczba ects:{" "}
+          {groups.reduce(
+            (acc, curr) =>
+              acc +
+              (curr.isChecked ? courses.find((course) => course.name === curr.courseName)?.ects ?? 0 : 0),
+
+            0
+          )}
+        </span>
         <Link href="plans" className="font-semibold text-xl">
           Przejdź dalej
         </Link>

@@ -43,9 +43,9 @@ const ClassBlock = (props: {
     (group) =>
       group.courseType === props.courseType && props.courseName === group.courseName && group.isChecked
   );
-  //sprawdza czy grupa z danego kursu jest zaznaczona
+  //sprawdza czy ta grupa z danego kursu jest zaznaczona
   const isThisGroupChecked = checkedGroupFromCourse?.group === props.group;
-  //Jesli ktoras grupa z tego kursu nie jest zaznaczona daje onClicka, jesli ktora jest zaznaczona, ale to nie ona nie daje onClicka, jesli ktoras jest zaznaczona i to ona daje onClicka
+  //Jesli ktoras grupa z tego kursu nie jest zaznaczona daje onClicka, jesli ktoras jest zaznaczona, ale to nie ona nie daje onClicka, jesli ktoras jest zaznaczona i to ona daje onClicka
   const newOnClick = Boolean(checkedGroupFromCourse?.isChecked)
     ? isThisGroupChecked
       ? () => props.onClick(props.group)
@@ -62,14 +62,15 @@ const ClassBlock = (props: {
         className={cn(
           position,
           typeClasses[props.courseType],
-          "p-2 rounded-lg shadow-md flex flex-col justify-center truncate relative"
+          `p-2 rounded-lg shadow-md flex flex-col justify-center truncate relative ${
+            Boolean(checkedGroupFromCourse?.isChecked)
+              ? isThisGroupChecked
+                ? "cursor-pointer"
+                : "opacity-20"
+              : "cursor-pointer opacity-60"
+          }`
         )}
       >
-        {Boolean(checkedGroupFromCourse?.isChecked)
-          ? isThisGroupChecked
-            ? "to jest ta"
-            : "to nie ta"
-          : "nie zaznaczono"}
         <div className="flex justify-between">
           <p>{`${props.courseType} ${props.week === "" ? "" : `|${props.week}`}`}</p>
           <p>{`Grupa ${props.group}`}</p>

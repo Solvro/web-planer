@@ -24,4 +24,5 @@ export interface Registration {
 export interface Course {
   name: string;
   registrationName: string;
+  ects: number;
 }
