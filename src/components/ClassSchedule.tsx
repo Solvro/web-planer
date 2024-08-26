@@ -2,7 +2,7 @@ import React from "react";
 import { ClassBlockProps } from "@/lib/types";
 import { ClassBlock } from "./ClassBlock";
 import { Hour } from "./Hour";
-import { extendedCourse, extendedGroup } from "@/pages/createplan";
+import { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
 
 const upperHours = [
   "7:30",
@@ -50,8 +50,8 @@ const ClassSchedule = ({
 }: {
   schedule: ClassBlockProps[];
   day: string;
-  courses: extendedCourse[];
-  groups: extendedGroup[];
+  courses: ExtendedCourse[];
+  groups: ExtendedGroup[];
   onClick: (id: string) => void;
 }) => {
   return (

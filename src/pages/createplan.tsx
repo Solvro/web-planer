@@ -1,9 +1,5 @@
-import ScheduleTest from "@/components/schedule";
-import SelectGroups from "@/components/selectGroups";
-import type { GetServerSideProps } from "next";
-
-import { DummyData } from "@/services/usos/getGroups";
-import { getGroups } from "@/services/usos/getGroups";
+import { ScheduleTest } from "@/components/schedule";
+import { SelectGroups } from "@/components/selectGroups";
 import Link from "next/link";
 import { ClassBlockProps, Course, Registration } from "@/lib/types";
 import { useState } from "react";
@@ -193,31 +189,31 @@ const mockGroups = [
   mockVoleyball2,
 ];
 
-export interface extendedCourse extends Course {
+export interface ExtendedCourse extends Course {
   isChecked: boolean;
 }
 
-export interface extendedGroup extends ClassBlockProps {
+export interface ExtendedGroup extends ClassBlockProps {
   isChecked: boolean;
 }
 
 const CreatePlan = () => {
-  const [courses, setCourses] = useState<extendedCourse[]>(
+  const [courses, setCourses] = useState<ExtendedCourse[]>(
     mockCourses.map((mockCourse) => ({ ...mockCourse, isChecked: false }))
   );
-  const [groups, setGroups] = useState<extendedGroup[]>(
+  const [groups, setGroups] = useState<ExtendedGroup[]>(
     mockGroups.map((mockGroup) => ({ ...mockGroup, isChecked: false }))
   );
-  function checkCourse(id: string) {
+  const checkCourse = (id: string) => {
     setCourses(
       courses.map((course) => (course.name === id ? { ...course, isChecked: !course.isChecked } : course))
     );
-  }
-  function checkGroup(id: string) {
+  };
+  const checkGroup = (id: string) => {
     setGroups(
       groups.map((group) => (group.group === id ? { ...group, isChecked: !group.isChecked } : group))
     );
-  }
+  };
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-semibold text-center">Mój plan</h1>

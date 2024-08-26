@@ -1,17 +1,17 @@
 import React from "react";
 import { GroupsAccordion } from "@/components/Accordion";
 import { Registration } from "@/lib/types";
-import { extendedCourse } from "../pages/createplan";
+import { ExtendedCourse } from "../pages/createplan";
 
-export default function SelectGroups({
+export const SelectGroups = ({
   registrations,
   courses,
   checkCourse,
 }: {
   registrations: Registration[];
-  courses: extendedCourse[];
+  courses: ExtendedCourse[];
   checkCourse: (id: string) => void;
-}) {
+}) => {
   return (
     <div className="overflow-auto">
       <h1 className="text-2xl font-semibold p-4 ">Wybierz odpowiednią turę:</h1>
@@ -26,4 +26,4 @@ export default function SelectGroups({
       ))}
     </div>
   );
-}
+};

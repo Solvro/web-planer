@@ -1,17 +1,17 @@
 import React from "react";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { ClassBlockProps } from "@/lib/types";
-import { extendedCourse, extendedGroup } from "../pages/createplan";
+import { ExtendedCourse, ExtendedGroup } from "../pages/createplan";
 
-const ScheduleTest = ({
+export const ScheduleTest = ({
   schedule,
   courses,
   groups,
   onClick,
 }: {
   schedule: ClassBlockProps[];
-  courses: extendedCourse[];
-  groups: extendedGroup[];
+  courses: ExtendedCourse[];
+  groups: ExtendedGroup[];
   onClick: (id: string) => void;
 }) => {
   return (
@@ -23,12 +23,10 @@ const ScheduleTest = ({
         groups={groups}
         onClick={onClick}
       />
-      {/* <ClassSchedule schedule={schedule} day="Wtorek" courses={courses} groups={groups} onClick={onClick} />
+      <ClassSchedule schedule={schedule} day="Wtorek" courses={courses} groups={groups} onClick={onClick} />
       <ClassSchedule schedule={schedule} day="Środa" courses={courses} groups={groups} onClick={onClick} />
       <ClassSchedule schedule={schedule} day="Czwartek" courses={courses} groups={groups} onClick={onClick} />
-      <ClassSchedule schedule={schedule} day="Piątek" courses={courses} groups={groups} onClick={onClick} /> */}
+      <ClassSchedule schedule={schedule} day="Piątek" courses={courses} groups={groups} onClick={onClick} />
     </div>
   );
 };
-
-export default ScheduleTest;

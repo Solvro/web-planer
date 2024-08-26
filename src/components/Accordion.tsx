@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { extendedCourse } from "@/pages/createplan";
+import { ExtendedCourse } from "@/pages/createplan";
 
 export const GroupsAccordion = ({
   registrationName,
@@ -10,7 +10,7 @@ export const GroupsAccordion = ({
   registrationName: string;
   index: number;
   onClick: (id: string) => void;
-  courses: extendedCourse[];
+  courses: ExtendedCourse[];
 }) => {
   return (
     <div className="max-w-96">
@@ -31,9 +31,11 @@ export const GroupsAccordion = ({
                   <div key={course.name}>
                     <div className="grid grid-cols-[1fr_4fr_1fr] gap-4 justify-between break-all items-center py-2 text-base hover:bg-stone-300 hover:cursor-pointer p-4 ">
                       <div className="w-[50px] h-[50px] rounded-[50px] bg-secondary items-center flex justify-center">
-                        W
+                        {course.name.slice(0, 1).toUpperCase()}
                       </div>
-                      <div>{course.name}</div>
+                      <label htmlFor={`${index}-${course.name}`} className="hover:cursor-pointer">
+                        {course.name}
+                      </label>
                       <input
                         id={`${index}-${course.name}`}
                         type="checkbox"
