@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
-import React, { FC } from "react";
+import { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
+
+import React from "react";
 const typeClasses = {
   W: "bg-red-300",
   L: "bg-blue-300",
@@ -30,31 +32,46 @@ const ClassBlock = (props: {
   lecturer: string;
   week: "TN" | "TP" | "";
   courseType: "W" | "L" | "C" | "S" | "P";
+  courses: ExtendedCourse[];
+  groups: ExtendedGroup[];
+  onClick: (id: string) => void;
 }) => {
   const position = calculatePosition(props.startTime, props.endTime);
   const [startGrid, durationSpan] = position;
-
+  const isCourseChecked = props.courses.find((course) => course.name === props.courseName);
+  const checkedGroupFromCourse = props.groups.find(
+    (group) =>
+      group.courseType === props.courseType && props.courseName === group.courseName && group.isChecked
+  );
+  const isThisGroupChecked = checkedGroupFromCourse?.group === props.group;
   return (
-    <div
-      style={{
-        gridColumnStart: startGrid,
-        gridColumnEnd: `span ${durationSpan}`,
-      }}
-      className={cn(
-        position,
-        typeClasses[props.courseType],
-        "p-2 rounded-lg shadow-md flex flex-col justify-center truncate relative"
-      )}
-    >
-      <div className="flex justify-between">
-        <p>{`${props.courseType} ${
-          props.week === "" ? "" : `|${props.week}`
-        }`}</p>
-        <p>{`Grupa ${props.group}`}</p>
-      </div>
-      <p className="font-bold truncate">{props.courseName}</p>
-      <p className="font-semibold truncate">{props.lecturer}</p>
-    </div>
+    Boolean(isCourseChecked?.isChecked) && (
+      <button
+        disabled={Boolean(checkedGroupFromCourse?.isChecked) ? !isThisGroupChecked : false}
+        onClick={() => props.onClick(props.group)}
+        style={{
+          gridColumnStart: startGrid,
+          gridColumnEnd: `span ${durationSpan}`,
+        }}
+        className={cn(
+          position,
+          typeClasses[props.courseType],
+          `p-2 rounded-lg shadow-md flex flex-col justify-center truncate relative`,
+          Boolean(checkedGroupFromCourse?.isChecked)
+            ? isThisGroupChecked
+              ? "cursor-pointer"
+              : "opacity-20"
+            : "cursor-pointer opacity-60"
+        )}
+      >
+        <div className="flex justify-between">
+          <p>{`${props.courseType} ${props.week === "" ? "" : `|${props.week}`}`}</p>
+          <p>{`Grupa ${props.group}`}</p>
+        </div>
+        <p className="font-bold truncate">{props.courseName}</p>
+        <p className="font-semibold truncate">{props.lecturer}</p>
+      </button>
+    )
   );
 };
 
