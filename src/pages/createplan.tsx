@@ -278,7 +278,7 @@ const CreatePlan = () => {
       <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
         <Link
           href="plans"
-          className="h-14 flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-32 py-2 hover:bg-solvroshadow cursor-pointer w-1/2 transition-all hover:shadow-lg font-semibold"
+          className="h-32 sm:h-14 flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-32 py-2 hover:bg-solvroshadow cursor-pointer w-1/2 transition-all hover:shadow-lg font-semibold"
         >
           <IoMdArrowBack size={20} className="block" />
           <span className="">Powrót do planów</span>

@@ -63,11 +63,10 @@ const Plans = () => {
         <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
           <Link
             href="/"
-            className="h-14 gap-4 flex-1 flex flex-col sm:flex-row min-w-32 items-center justify-center text-center hover:bg-solvroshadow cursor-pointer w-full sm:w-auto transition-all hover:shadow-lg font-semibold "
+            className="h-32 sm:h-14 gap-4 flex-1 flex sm:flex-row min-w-32 items-center justify-center text-center hover:bg-solvroshadow cursor-pointer w-full sm:w-auto transition-all hover:shadow-lg font-semibold"
           >
-            <IoMdArrowBack size={20} className="hidden sm:block" />
+            <IoMdArrowBack size={20} className="block" />
             Powrót do głównej strony
-            <IoMdArrowBack size={20} className="sm:hidden" />
           </Link>
         </div>
       </div>
