@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { useQuery } from "@tanstack/react-query";
 import { ApiProfileGet } from "@/app/api/profile/route";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -71,12 +71,25 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
             <ul className="flex flex-col text-center gap-4 p-4 text-white uppercase">
-              <li className="cursor-pointer p-2">Strona główna</li>
-              <li className="cursor-pointer p-2">Aktualności</li>
-              <li className="cursor-pointer p-2">Instrukcje</li>
-              <li className="cursor-pointer p-2">Terminarz</li>
-              <li className="cursor-pointer p-2">Pomoc</li>
-              <li className="cursor-pointer p-2">Kontakt</li>
+              <li className="cursor-pointer p-2">
+                <a href="#">Strona główna</a>
+              </li>
+              <li className="cursor-pointer p-2">
+                <a href="https://www.facebook.com/knsolvro">Aktualności</a>
+              </li>
+              <li className="cursor-pointer p-2">
+                <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
+                  Instrukcje
+                </a>
+              </li>
+              <li className="cursor-pointer p-2">
+                <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
+                  Terminarz
+                </a>
+              </li>
+              <li className="cursor-pointer p-2">
+                <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+              </li>
             </ul>
           </div>
         )}
@@ -164,13 +177,14 @@ const JoinUsBlock = () => (
     <div className="">
       <Link
         href="createplan"
-        className="h-20 text-2xl hover:bg-white border-4
-       hover:text-black  
-       md:mt-0 self-center md:p-7 
-       hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] animate-pulse duration-5000 hover:animate-none inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-input bg-background hover:bg-accent hover:text-accent-foreground"
+        className={buttonVariants({
+          size: "lg",
+          variant: "outline",
+          class:
+            "transition-all h-20 hover:bg-white border-4 md:mt-0 self-center md:p-7 hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] animate-pulse duration-2000 hover:animate-none text-xl cursor-pointer",
+        })}
       >
-        Przejdź do planowania
-        <ChevronRightIcon className="ml-2" />
+        Przejdź do planowania <ChevronRightIcon className="ml-2" />
       </Link>
     </div>
   </Block>
@@ -220,7 +234,7 @@ const Home = () => {
       {/* Main Page */}
       <div className="min-h-screen bg-mainbutton5 relative overflow-hidden">
         {/* Blobs */}
-        <div className="">
+        <div className="hidden md:block">
           <svg
             style={{
               position: "absolute",
