@@ -21,12 +21,25 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-row h-20 gap-10 items-center text-white pr-10 lg:pr-40">
           <ul className="flex gap-6">
-            <li className="cursor-pointer">Strona główna</li>
-            <li className="cursor-pointer">Aktualności</li>
-            <li className="cursor-pointer">Instrukcje</li>
-            <li className="cursor-pointer">Terminarz</li>
-            <li className="cursor-pointer">Pomoc</li>
-            <li className="cursor-pointer">Kontakt</li>
+            <li className="cursor-pointer">
+              <a href="#">Strona główna</a>
+            </li>
+            <li className="cursor-pointer">
+              <a href="https://www.facebook.com/knsolvro">Aktualności</a>
+            </li>
+            <li className="cursor-pointer">
+              <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
+                Instrukcje
+              </a>
+            </li>
+            <li className="cursor-pointer">
+              <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
+                Terminarz
+              </a>
+            </li>
+            <li className="cursor-pointer">
+              <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+            </li>
           </ul>
         </nav>
 
