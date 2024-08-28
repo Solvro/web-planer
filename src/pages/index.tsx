@@ -176,7 +176,7 @@ const JoinUsBlock = () => (
     </div>
     <div className="">
       <Link
-        href="createplan"
+        href="plans"
         className={buttonVariants({
           size: "lg",
           variant: "outline",

@@ -3,6 +3,24 @@ import { SelectGroups } from "@/components/selectGroups";
 import Link from "next/link";
 import { ClassBlockProps, Course, Registration } from "@/lib/types";
 import { useState } from "react";
+import Image from "next/image";
+import { CiEdit } from "react-icons/ci";
+import { IoMdArrowForward } from "react-icons/io";
+import { IoMdArrowBack } from "react-icons/io";
+
+const Logo = () => {
+  return (
+    <a href="https://planer.solvro.pl/">
+      <Image
+        src="/assets/logo/solvro_white.png"
+        alt="Logo Koła Naukowego Solvro"
+        width={150}
+        height={150}
+        className="mx-auto cursor-pointer ml-20"
+      />
+    </a>
+  );
+};
 
 const mockRegistration1 = {
   name: "Registration 1",
@@ -206,36 +224,80 @@ const CreatePlan = () => {
   );
   const checkCourse = (id: string) => {
     setCourses(
-      courses.map((course) => (course.name === id ? { ...course, isChecked: !course.isChecked } : course))
+      courses.map((course) =>
+        course.name === id
+          ? { ...course, isChecked: !course.isChecked }
+          : course
+      )
     );
   };
   const checkGroup = (id: string) => {
     setGroups(
-      groups.map((group) => (group.group === id ? { ...group, isChecked: !group.isChecked } : group))
+      groups.map((group) =>
+        group.group === id ? { ...group, isChecked: !group.isChecked } : group
+      )
     );
   };
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-semibold text-center">Mój plan</h1>
-      <div className="min-[1200px]:grid min-[1200px]:grid-cols-[1fr_4fr] border-b-primary border-b-4">
-        <SelectGroups registrations={registrations} courses={courses} checkCourse={checkCourse} />
-        <ScheduleTest schedule={mondaySchedule} courses={courses} groups={groups} onClick={checkGroup} />
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
+      {/* <Navbar /> */}
+      <div className="flex items-center min-h-20 max-h-20 bg-mainbutton5 gap-4">
+        <div className="flex-none">
+          <Logo />
+        </div>
+        <div className="flex-grow flex justify-center">
+          <h1 className="flex items-center gap-2 p-2 md:px-14 text-sm md:text-3xl font-semibold text-center text-white border border-dashed rounded cursor-pointer">
+            Mój plan <CiEdit />
+          </h1>
+        </div>
+        <div className="hidden sm:block flex-none pr-4">
+          <Image
+            src="https://github.com/shadcn.png"
+            width={40}
+            height={40}
+            className="rounded-full"
+            alt="Picture of the author"
+          />
+        </div>
       </div>
-      <div className="flex gap-11 items-center justify-around">
-        <Link href="/">Wróć do panelu głównego</Link>
-        <span>
-          Liczba ects:{" "}
-          {groups.reduce(
-            (acc, curr) =>
-              acc +
-              (curr.isChecked ? courses.find((course) => course.name === curr.courseName)?.ects ?? 0 : 0),
 
-            0
-          )}
-        </span>
-        <Link href="plans" className="font-semibold text-xl">
-          Przejdź dalej
+      <div className="flex-grow min-[1200px]:grid min-[1200px]:grid-cols-[1fr_4fr] border-b-primary border-b-4">
+        <SelectGroups
+          registrations={registrations}
+          courses={courses}
+          checkCourse={checkCourse}
+        />
+        <ScheduleTest
+          schedule={mondaySchedule}
+          courses={courses}
+          groups={groups}
+          onClick={checkGroup}
+        />
+      </div>
+
+      <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
+        <Link
+          href="plans"
+          className="h-14 flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-32 py-2 hover:bg-solvroshadow cursor-pointer w-1/2 transition-all hover:shadow-lg font-semibold"
+        >
+          <IoMdArrowBack size={20} className="block" />
+          <span className="">Powrót do planów</span>
         </Link>
+
+        <div className="flex-grow flex items-center justify-center text-sm text-center">
+          <span>
+            Liczba ects:{" "}
+            {groups.reduce(
+              (acc, curr) =>
+                acc +
+                (curr.isChecked
+                  ? courses.find((course) => course.name === curr.courseName)
+                      ?.ects ?? 0
+                  : 0),
+              0
+            )}
+          </span>
+        </div>
       </div>
     </div>
   );

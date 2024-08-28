@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Plan } from "@/components/plan";
 import Link from "next/link";
-
+import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
+import Image from "next/image";
 const Plans = () => {
   const [plans, setPlans] = useState([
     { id: 1, name: "Plan domyślny - poniedziałek" },
@@ -18,41 +19,58 @@ const Plans = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="bg-blue-500 text-white p-4 flex justify-between">
-        <Link className="text-2xl font-bold" href="/">
-          PLANNER
-        </Link>
-        <div>
-          <button className="text-white px-4 py-2 rounded">Moje plany</button>
-          <button className="text-white px-4 py-2 rounded">Zaloguj</button>
+      <div className="flex items-center h-14 bg-mainbutton5">
+        <a href="https://planer.solvro.pl/" className="flex-shrink-0 ml-4">
+          <Image
+            src="/assets/logo/solvro_white.png"
+            alt="Logo Koła Naukowego Solvro"
+            width={150}
+            height={150}
+            className="cursor-pointer"
+          />
+        </a>
+        <h1 className="text-xl sm:text-3xl text-center text-white mx-auto">
+          Twoje plany
+        </h1>
+        <div className="hidden sm:block flex-none pr-4">
+          <Image
+            src="https://github.com/shadcn.png"
+            width={40}
+            height={40}
+            className="rounded-full"
+            alt="Picture of the author"
+          />
         </div>
-      </header>
-      <main className="flex-grow pt-3">
-        <div className="pb-6">
-          <h1 className="font-bold text-center text-4xl">
-            Twoje plany Bartus Lewaku
-          </h1>
-        </div>
-        <div className="container bg-gray-200 p-4 mx-auto h-screen max-h-[1000px] overflow-y-auto">
-          <div className="flex flex-wrap gap-4">
-            <button
+      </div>
+
+      <main className="flex-grow">
+        <div className="container bg-gray-200 rounded p-4 mx-auto flex flex-col h-[calc(100vh-128px)]">
+          <div className="flex flex-wrap gap-4 overflow-y-auto">
+            <Link
               onClick={addNewPlan}
-              className="border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center p-4 h-[200px] w-[200px]"
+              href="createplan"
+              className="border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center p-4 h-[200px] w-[200px] shadow-xl"
             >
               <span>Dodaj nowy plan</span>
-            </button>
+            </Link>
             {plans.map((plan) => (
               <Plan key={plan.id} name={plan.name} />
             ))}
           </div>
         </div>
       </main>
-      <footer>
-        <div className="bg-blue-200 p-6"></div>
-        <div className="bg-blue-500 text-white p-4 text-center">
-          &copy; 2069 Bartus Lewaku
+      <div>
+        <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
+          <Link
+            href="/"
+            className="h-14 gap-4 flex-1 flex flex-col sm:flex-row min-w-32 items-center justify-center text-center hover:bg-solvroshadow cursor-pointer w-full sm:w-auto transition-all hover:shadow-lg font-semibold "
+          >
+            <IoMdArrowBack size={20} className="hidden sm:block" />
+            Powrót do głównej strony
+            <IoMdArrowBack size={20} className="sm:hidden" />
+          </Link>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
