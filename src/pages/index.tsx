@@ -6,6 +6,7 @@ import { ApiProfileGet } from "@/app/api/profile/route";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -161,16 +162,16 @@ const JoinUsBlock = () => (
       </p>
     </div>
     <div className="">
-      <Button
-        variant="outline"
+      <Link
+        href="createplan"
         className="h-20 text-2xl hover:bg-white border-4
        hover:text-black  
        md:mt-0 self-center md:p-7 
-       hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] animate-pulse duration-5000 hover:animate-none"
+       hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] animate-pulse duration-5000 hover:animate-none inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-input bg-background hover:bg-accent hover:text-accent-foreground"
       >
         Przejdź do planowania
         <ChevronRightIcon className="ml-2" />
-      </Button>
+      </Link>
     </div>
   </Block>
 );
