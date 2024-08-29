@@ -31,7 +31,7 @@ export const getAccessToken = async (
   const response = await fetch(
     `https://apps.${
       env.USOS_BASE_URL
-    }/services/oauth/access_token?${new URLSearchParams(Object.entries(data))}
+    }/services/oauth/access_token?${new URLSearchParams(Object.entries(data)).toString()}
 		`,
     {
       method: "POST",
@@ -71,7 +71,7 @@ export async function getRequestToken() {
       env.USOS_BASE_URL
     }/services/oauth/request_token?${new URLSearchParams(
       Object.entries(data)
-    )}`,
+    ).toString()}`,
     {
       method: "POST",
       headers: {

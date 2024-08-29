@@ -1,6 +1,4 @@
-import { Day } from "@/services/usos/types";
-import { LessonType } from "@/services/usos/types";
-import { Frequency } from "@/services/usos/types";
+import { Day , LessonType , Frequency } from "@/services/usos/types";
 
 interface Time {
   hours: number;
@@ -23,7 +21,7 @@ export interface Group {
   isChecked?: boolean;
 }
 
-export async function getGroups() {
+export function getGroups() {
   return dummyData;
 }
 
@@ -32,13 +30,13 @@ export interface DummyData {
     id: string;
     name: string;
   };
-  courses: {
+  courses: Array<{
     course: {
       id: string;
       name: string;
     };
     groups: Group[];
-  }[];
+  }>;
 }
 
 const dummyData = [

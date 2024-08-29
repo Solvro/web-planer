@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ExtendedCourse } from "@/pages/createplan";
+import type { ExtendedCourse } from "@/pages/createplan";
 
 export const GroupsAccordion = ({
   registrationName,
@@ -14,7 +14,7 @@ export const GroupsAccordion = ({
 }) => {
   return (
     <div className="max-w-96">
-      <Accordion type="single" collapsible className="">
+      <Accordion type="single" collapsible={true} className="">
         <AccordionItem value="item-1">
           <AccordionTrigger className="px-4  hover:no-underline">
             <div className="flex items-center gap-4">
@@ -39,7 +39,7 @@ export const GroupsAccordion = ({
                       <input
                         id={`${index}-${course.name}`}
                         type="checkbox"
-                        onChange={() => onClick(course.name)}
+                        onChange={() => { onClick(course.name); }}
                         className="w-6 h-6 justify-self-end cursor-pointer"
                         checked={course.isChecked}
                       />

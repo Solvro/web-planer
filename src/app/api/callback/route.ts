@@ -9,7 +9,7 @@ export const GET = async (request: NextRequest) => {
   const oauth_token = url.searchParams.get("oauth_token");
   const oauth_verifier = url.searchParams.get("oauth_verifier");
 
-  if (!oauth_token || !oauth_verifier) {
+  if (typeof oauth_token !== "string" || typeof oauth_verifier !== "string") {
     return new Response("Bad request", {
       status: 400,
     });
@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest) => {
 
   const secret = cookies().get("oauth_token_secret")?.value;
 
-  if (!secret) {
+  if (typeof secret !== "string") {
     return new Response("Another bad request", {
       status: 401,
     });
@@ -35,7 +35,7 @@ export const GET = async (request: NextRequest) => {
     secret
   );
 
-  if (!access_token.token || !access_token.secret) {
+  if (typeof access_token.token !== "string" || typeof access_token.secret !== "string") {
     return new Response("Forbidden", {
       status: 401,
     });

@@ -21,10 +21,10 @@ const hourToTime = (hour: string) => {
   };
 };
 
-type Time = {
+interface Time {
   hours: number;
   minutes: number;
-};
+}
 
 const calculateDifference = (start: Time, end: Time) => {
   let hours = end.hours - start.hours;
@@ -44,7 +44,7 @@ const calculateDifference = (start: Time, end: Time) => {
 export const usosService = (usosClient: UsosClient) => {
   return {
     getProfile: async () => {
-      return await usosClient.get<GetProfile>(
+      return usosClient.get<GetProfile>(
         "users/user?fields=id|student_number|first_name|last_name|sex|student_status|staff_status|email|photo_urls|homepage_url"
       );
     },
@@ -129,7 +129,7 @@ export const usosService = (usosClient: UsosClient) => {
     getGroups: async (courseId: string, term?: string) => {
       const data = await fetchWithCookie(
         `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPlanZajecPrzedmiotu&prz_kod=${courseId}&plan_division=semester&plan_format=new-ui${
-          term ? `&cdyd_kod=${term}` : ""
+          typeof term === "string" ? `&cdyd_kod=${term}` : ""
         }`,
         {
           headers: {
@@ -195,7 +195,7 @@ export const usosService = (usosClient: UsosClient) => {
           .map((t) => t.trim());
         const hourStart = hours?.at(0) ?? "";
         const hourEnd = hours?.at(1) ?? "";
-        const name = entry.attribs["name"];
+        const name = entry.attribs.name;
         const nameExtended = $(entry)
           .find('span[slot="dialog-info"]')
           .text()

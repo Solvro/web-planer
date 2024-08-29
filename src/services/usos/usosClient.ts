@@ -12,7 +12,7 @@ export const createClient = ({
   secret?: string;
   fetch: typeof window.fetch;
 }) => {
-  if (!token || !secret) {
+  if (typeof token !== "string" || typeof secret !== "string") {
     throw new Error("No token or secret provided");
   }
   return {
@@ -41,11 +41,12 @@ export const createClient = ({
       }
 
       if (!response.ok) {
+        // eslint-disable-next-line no-console
         console.log("Not ok", await response.text());
         throw new Error("Unauthorized");
       }
 
-      return response.json();
+      return response.json() as Promise<R>;
     },
     async post<R = unknown>(endpoint: string, body: unknown): Promise<R> {
       const url = `${baseUrl}/${endpoint}`;
@@ -74,7 +75,7 @@ export const createClient = ({
         throw new Error(response.statusText);
       }
 
-      return response.json();
+      return response.json() as Promise<R>;
     },
   };
 };

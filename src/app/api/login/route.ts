@@ -1,11 +1,12 @@
 import { USOS_APPS_URL } from "@/env.mjs";
 import { getRequestToken } from "@/lib/auth";
 import { cookies } from "next/headers";
-import { redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
+
 export async function GET() {
   const token = await getRequestToken();
 
-  if (!token.token || !token.secret) {
+  if (typeof token.token !== "string" || typeof token.secret !== "string") {
     return Response.json(
       {
         error: "Invalid token",

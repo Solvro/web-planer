@@ -6,7 +6,7 @@ interface TypeholeRootWrapper {
   is_registration_valid: boolean;
   limits: null;
   is_linkage_required: boolean | null;
-  registrations_count: null | number;
+  registrations_count: number | null;
 }
 interface Term {
   id: string;

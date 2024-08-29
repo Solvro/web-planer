@@ -1,3 +1,32 @@
 {
-  "extends": "next/core-web-vitals"
+  "$schema": "https://json.schemastore.org/eslintrc",
+  "extends": [
+    "@alergeek-ventures/eslint-config/typescript",
+    "@alergeek-ventures/eslint-config/react",
+    "plugin:@next/next/recommended"
+  ],
+
+  "parser": "@typescript-eslint/parser",
+  "root": true,
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "simple-import-sort/imports": "off",
+    "simple-import-sort/exports": "off",
+    "@typescript-eslint/no-magic-numbers": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/pages/**/*", "src/app/**/*"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ]
 }

@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
-import { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
+import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
 
 import React from "react";
+
 const typeClasses = {
   W: "bg-red-300",
   L: "bg-blue-300",
@@ -24,40 +25,51 @@ function calculatePosition(startTime: string, endTime: string) {
   return [startGrid, durationSpan];
 }
 
-const ClassBlock = (props: {
+const ClassBlock = ({
+  startTime,
+  endTime,
+  group,
+  courseName,
+  lecturer,
+  week,
+  courseType,
+  courses,
+  groups,
+  onClick,
+}: {
   startTime: string;
   endTime: string;
   group: string;
   courseName: string;
   lecturer: string;
-  week: "TN" | "TP" | "";
-  courseType: "W" | "L" | "C" | "S" | "P";
+  week: "" | "TN" | "TP";
+  courseType: "C" | "L" | "P" | "S" | "W";
   courses: ExtendedCourse[];
   groups: ExtendedGroup[];
   onClick: (id: string) => void;
 }) => {
-  const position = calculatePosition(props.startTime, props.endTime);
+  const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
-  const isCourseChecked = props.courses.find((course) => course.name === props.courseName);
-  const checkedGroupFromCourse = props.groups.find(
-    (group) =>
-      group.courseType === props.courseType && props.courseName === group.courseName && group.isChecked
+  const isCourseChecked = courses.find((course) => course.name === courseName);
+  const checkedGroupFromCourse = groups.find(
+    (g) =>
+      g.courseType === courseType && courseName === g.courseName && g.isChecked
   );
-  const isThisGroupChecked = checkedGroupFromCourse?.group === props.group;
+  const isThisGroupChecked = checkedGroupFromCourse?.group === group;
   return (
     Boolean(isCourseChecked?.isChecked) && (
       <button
-        disabled={Boolean(checkedGroupFromCourse?.isChecked) ? !isThisGroupChecked : false}
-        onClick={() => props.onClick(props.group)}
+        disabled={checkedGroupFromCourse?.isChecked === true ? !isThisGroupChecked : false}
+        onClick={() => { onClick(group); }}
         style={{
           gridColumnStart: startGrid,
           gridColumnEnd: `span ${durationSpan}`,
         }}
         className={cn(
           position,
-          typeClasses[props.courseType],
+          typeClasses[courseType],
           `p-2 rounded-lg shadow-md flex flex-col justify-center truncate relative`,
-          Boolean(checkedGroupFromCourse?.isChecked)
+          checkedGroupFromCourse?.isChecked === true
             ? isThisGroupChecked
               ? "cursor-pointer"
               : "opacity-20"
@@ -65,11 +77,11 @@ const ClassBlock = (props: {
         )}
       >
         <div className="flex justify-between">
-          <p>{`${props.courseType} ${props.week === "" ? "" : `|${props.week}`}`}</p>
-          <p>{`Grupa ${props.group}`}</p>
+          <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
+          <p>{`Grupa ${group}`}</p>
         </div>
-        <p className="font-bold truncate">{props.courseName}</p>
-        <p className="font-semibold truncate">{props.lecturer}</p>
+        <p className="font-bold truncate">{courseName}</p>
+        <p className="font-semibold truncate">{lecturer}</p>
       </button>
     )
   );
