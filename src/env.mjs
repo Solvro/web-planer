@@ -6,10 +6,9 @@ export const env = createEnv({
   server: {
     USOS_CONSUMER_KEY: z.string().min(1),
     USOS_CONSUMER_SECRET: z.string().min(1),
-    USOS_BASE_URL: z.string().startsWith("usos"),
-    SITE_URL: z.string().url(),
+    USOS_BASE_URL: z.string().startsWith("usos").default("usos.pwr.edu.pl"),
+    SITE_URL: z.string().url().default("http://localhost:3000"),
   },
-
   runtimeEnv: {
     SITE_URL: process.env.SITE_URL,
     USOS_BASE_URL: process.env.USOS_BASE_URL,

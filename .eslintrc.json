@@ -5,7 +5,6 @@
     "@alergeek-ventures/eslint-config/react",
     "plugin:@next/next/recommended"
   ],
-
   "parser": "@typescript-eslint/parser",
   "root": true,
   "parserOptions": {
