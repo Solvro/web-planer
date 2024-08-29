@@ -6,5 +6,4 @@ const config = {
   ignoreDependencies: ["sharp", "@radix-ui/*"],
 } satisfies KnipConfig;
 
-// eslint-disable-next-line import/no-default-export
 export default config;

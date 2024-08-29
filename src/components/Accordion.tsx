@@ -21,9 +21,9 @@ export const GroupsAccordion = ({
     <div className="max-w-96">
       <Accordion type="single" collapsible={true} className="">
         <AccordionItem value="item-1">
-          <AccordionTrigger className="px-4  hover:no-underline">
+          <AccordionTrigger className="px-4 hover:no-underline">
             <div className="flex items-center gap-4">
-              <div className="w-[50px] h-[50px] rounded-[50px] bg-primary items-center flex justify-center font-bold">
+              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-primary font-bold">
                 {index + 1}
               </div>
               {registrationName}
@@ -34,8 +34,8 @@ export const GroupsAccordion = ({
               (course) =>
                 course.registrationName === registrationName && (
                   <div key={course.name}>
-                    <div className="grid grid-cols-[1fr_4fr_1fr] gap-4 justify-between break-all items-center py-2 text-base hover:bg-stone-300 hover:cursor-pointer p-4 ">
-                      <div className="w-[50px] h-[50px] rounded-[50px] bg-secondary items-center flex justify-center">
+                    <div className="grid grid-cols-[1fr_4fr_1fr] items-center justify-between gap-4 break-all p-4 py-2 text-base hover:cursor-pointer hover:bg-stone-300">
+                      <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-secondary">
                         {course.name.slice(0, 1).toUpperCase()}
                       </div>
                       <label
@@ -50,7 +50,7 @@ export const GroupsAccordion = ({
                         onChange={() => {
                           onClick(course.name);
                         }}
-                        className="w-6 h-6 justify-self-end cursor-pointer"
+                        className="h-6 w-6 cursor-pointer justify-self-end"
                         checked={course.isChecked}
                       />
                     </div>

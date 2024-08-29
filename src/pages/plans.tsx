@@ -26,9 +26,9 @@ const Plans = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex items-center h-14 bg-mainbutton5">
-        <a href="https://planer.solvro.pl/" className="flex-shrink-0 ml-4">
+    <div className="flex min-h-screen flex-col">
+      <div className="flex h-14 items-center bg-mainbutton5">
+        <a href="https://planer.solvro.pl/" className="ml-4 flex-shrink-0">
           <Image
             src="/assets/logo/solvro_white.png"
             alt="Logo Koła Naukowego Solvro"
@@ -37,10 +37,10 @@ const Plans = () => {
             className="cursor-pointer"
           />
         </a>
-        <h1 className="text-xl sm:text-3xl text-center text-white mx-auto">
+        <h1 className="mx-auto text-center text-xl text-white sm:text-3xl">
           Twoje plany
         </h1>
-        <div className="hidden sm:block flex-none pr-4">
+        <div className="hidden flex-none pr-4 sm:block">
           <Image
             src="https://github.com/shadcn.png"
             width={40}
@@ -52,11 +52,11 @@ const Plans = () => {
       </div>
 
       <main className="flex-grow">
-        <div className="container bg-gray-200 rounded p-4 mx-auto flex flex-col h-[calc(100vh-128px)]">
+        <div className="container mx-auto flex h-[calc(100vh-128px)] flex-col rounded bg-gray-200 p-4">
           <div className="flex flex-wrap gap-4 overflow-y-auto">
             <button
               onClick={addNewPlan}
-              className="border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center p-4 h-[200px] w-[200px] shadow-xl"
+              className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl"
             >
               <span>Dodaj nowy plan</span>
             </button>
@@ -67,10 +67,10 @@ const Plans = () => {
         </div>
       </main>
       <div>
-        <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
+        <div className="flex h-32 flex-row items-center justify-between bg-mainbutton3 text-sm text-white sm:h-14 sm:text-lg">
           <Link
             href="/"
-            className="h-32 sm:h-14 gap-4 flex-1 flex sm:flex-row min-w-32 items-center justify-center text-center hover:bg-solvroshadow cursor-pointer w-full sm:w-auto transition-all hover:shadow-lg font-semibold"
+            className="flex h-32 w-full min-w-32 flex-1 cursor-pointer items-center justify-center gap-4 text-center font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg sm:h-14 sm:w-auto sm:flex-row"
           >
             <IoMdArrowBack size={20} className="block" />
             Powrót do głównej strony
