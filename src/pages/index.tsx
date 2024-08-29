@@ -15,11 +15,11 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
   return (
-    <div className="flex items-center justify-between z-50 relative h-20">
+    <div className="relative z-50 flex h-20 items-center justify-between">
       <Logo />
 
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex flex-row h-20 gap-10 items-center text-white pr-10 lg:pr-40">
+      <nav className="hidden h-20 flex-row items-center gap-10 pr-10 text-white md:flex lg:pr-40">
         <ul className="flex gap-6">
           <li className="cursor-pointer">
             <Link href="/">Strona główna</Link>
@@ -44,7 +44,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Menu Icon */}
-      <div className="md:hidden flex items-center">
+      <div className="flex items-center md:hidden">
         <button onClick={toggleMenu} className="text-white focus:outline-none">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,8 +65,8 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen ? (
-        <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
-          <ul className="flex flex-col text-center gap-4 p-4 text-white uppercase">
+        <div className="absolute left-0 top-full w-full animate-fade-in bg-mainbutton6 shadow-lg md:hidden">
+          <ul className="flex flex-col gap-4 p-4 text-center uppercase text-white">
             <li className="cursor-pointer p-2">
               <Link href="/">Strona główna</Link>
             </li>
@@ -129,11 +129,11 @@ const AnimationLogo = () => (
       rotate: "0.0deg",
       scale: 1.01,
     }}
-    className="md:mt-10 text-center flex justify-center content-center align-middle items-center"
+    className="flex content-center items-center justify-center text-center align-middle md:mt-10"
   >
-    <div className="md:flex justify-center items-center gap-4 sm:gap-6">
-      <div className="md:mt-5 md:mb-0 mb-5">
-        <p className="font-bold text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+    <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
+      <div className="mb-5 md:mb-0 md:mt-5">
+        <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
           SOLVRO
         </p>
       </div>
@@ -144,12 +144,12 @@ const AnimationLogo = () => (
           alt="Logo Koła Naukowego Solvro w kolorze"
           width={200}
           height={200}
-          className="rounded-md animate-waving-hand duration-5000 cursor-pointer pb-10"
+          className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
         />
       </a>
 
       <div className="mb:mt-5">
-        <p className="font-bold text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+        <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
           PLANER
         </p>
       </div>
@@ -158,17 +158,17 @@ const AnimationLogo = () => (
 );
 
 const JoinUsBlock = () => (
-  <Block className="flex flex-col justify-center items-center gap-6 md:gap-10">
+  <Block className="flex flex-col items-center justify-center gap-6 md:gap-10">
     <div className="">
-      <h1 className="text-4xl font-medium leading-tight text-center md:text-left">
-        <span className="text-white font-inter tracking-wide animate-in">
+      <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
+        <span className="font-inter tracking-wide text-white animate-in">
           Stwórz z nami swój plan używając{" "}
-          <span className="uppercase font-bold">darmowego</span> zapisownika!
+          <span className="font-bold uppercase">darmowego</span> zapisownika!
         </span>
       </h1>
     </div>
     <div className="">
-      <p className="text-center md:text-2xl md:mr-4 text-white">
+      <p className="text-center text-white md:mr-4 md:text-2xl">
         Zaloguj się do platformy USOS i stwórz swój plan na semestr!
       </p>
     </div>
@@ -179,7 +179,7 @@ const JoinUsBlock = () => (
           size: "lg",
           variant: "outline",
           class:
-            "transition-all h-20 hover:bg-white border-4 md:mt-0 self-center md:p-7 hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] animate-pulse duration-2000 hover:animate-none text-xl cursor-pointer",
+            "h-20 animate-pulse cursor-pointer self-center border-4 text-xl transition-all duration-2000 hover:animate-none hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7",
         })}
       >
         Przejdź do planowania <ChevronRightIcon className="ml-2" />
@@ -196,7 +196,7 @@ const Logo = () => {
         alt="Logo Koła Naukowego Solvro"
         width={150}
         height={150}
-        className="mx-auto cursor-pointer ml-20"
+        className="mx-auto ml-20 cursor-pointer"
       />
     </a>
   );
@@ -209,7 +209,7 @@ const Footer = () => {
         Made with ❤️ by{" "}
         <a
           href="https://solvro.pwr.edu.pl/"
-          className="text-mainbutton hover:underline font-bold"
+          className="font-bold text-mainbutton hover:underline"
         >
           SOLVRO
         </a>
@@ -222,7 +222,7 @@ const Home = () => {
   return (
     <>
       {/* Main Page */}
-      <div className="min-h-screen bg-mainbutton5 relative overflow-hidden">
+      <div className="relative min-h-screen overflow-hidden bg-mainbutton5">
         {/* Blobs */}
         <div className="hidden md:block">
           <svg
@@ -293,7 +293,7 @@ const Home = () => {
         </div>
         {/* Particles */}
         <div className="">
-          <div className="particleX animate-move-top duration-10000 absolute top-32 right-10 md:top-36 md:right-80">
+          <div className="particleX absolute right-10 top-32 animate-move-top duration-10000 md:right-80 md:top-36">
             <Image
               src="/assets/particle/particleX.png"
               alt="Kształt cząsteczki X"
@@ -301,7 +301,7 @@ const Home = () => {
               height={20}
             />
           </div>
-          <div className="particleX animate-move-bottom absolute bottom-12 left-20 md:bottom-48 md:left-80 duration-10000 ">
+          <div className="particleX absolute bottom-12 left-20 animate-move-bottom duration-10000 md:bottom-48 md:left-80">
             <Image
               src="/assets/particle/particleX.png"
               alt="Kształt cząsteczki X"
@@ -309,7 +309,7 @@ const Home = () => {
               height={20}
             />
           </div>
-          <div className="particleO animate-bounce duration-2000 absolute bottom-52 right-4 md:bottom-64 md:right-1/3">
+          <div className="particleO absolute bottom-52 right-4 animate-bounce duration-2000 md:bottom-64 md:right-1/3">
             <Image
               src="/assets/particle/particleO.png"
               alt="Kształt cząsteczki O"
@@ -317,7 +317,7 @@ const Home = () => {
               height={20}
             />
           </div>
-          <div className="animate-bounce duration-2000 absolute top-72 left-5 md:top-40 md:left-40">
+          <div className="absolute left-5 top-72 animate-bounce duration-2000 md:left-40 md:top-40">
             <Image
               src="/assets/particle/particleO.png"
               alt="Kształt cząsteczki O"
@@ -327,15 +327,15 @@ const Home = () => {
           </div>
         </div>
         {/* Main Content page */}
-        <div className="container mx-auto ">
+        <div className="container mx-auto">
           <Navbar />
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <div className="flex justify-center">
               <div className="px-10">
                 <AnimationLogo />
               </div>
             </div>
-            <section className="flex justify-center ">
+            <section className="flex justify-center">
               <JoinUsBlock />
             </section>
           </div>

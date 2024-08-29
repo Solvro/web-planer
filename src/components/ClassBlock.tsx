@@ -74,7 +74,7 @@ const ClassBlock = ({
         className={cn(
           position,
           typeClasses[courseType],
-          `p-2 rounded-lg shadow-md flex flex-col justify-center truncate relative`,
+          `relative flex flex-col justify-center truncate rounded-lg p-2 shadow-md`,
           checkedGroupFromCourse?.isChecked === true
             ? isThisGroupChecked
               ? "cursor-pointer"
@@ -86,8 +86,8 @@ const ClassBlock = ({
           <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
           <p>{`Grupa ${group}`}</p>
         </div>
-        <p className="font-bold truncate">{courseName}</p>
-        <p className="font-semibold truncate">{lecturer}</p>
+        <p className="truncate font-bold">{courseName}</p>
+        <p className="truncate font-semibold">{lecturer}</p>
       </button>
     )
   );

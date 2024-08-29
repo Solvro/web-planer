@@ -5,10 +5,12 @@ export const Plan = ({ id, name }: { id: number; name: string }) => {
   return (
     <Link
       href={`createplan/${id}`}
-      className="bg-white p-4 shadow-lg rounded-lg w-[200px] h-[200px] text-left"
+      className="h-[200px] w-[200px] rounded-lg bg-white p-4 text-left shadow-lg"
     >
-      <div className="font-semibold text-xl">{name}</div>
-      <div className="mt-2 text-gray-600">Kliknij w plan, aby wyświetlić szczegóły</div>
+      <div className="text-xl font-semibold">{name}</div>
+      <div className="mt-2 text-gray-600">
+        Kliknij w plan, aby wyświetlić szczegóły
+      </div>
     </Link>
   );
 };

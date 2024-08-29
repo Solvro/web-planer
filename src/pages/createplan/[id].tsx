@@ -18,7 +18,7 @@ const Logo = () => {
         alt="Logo Koła Naukowego Solvro"
         width={150}
         height={150}
-        className="mx-auto cursor-pointer ml-20"
+        className="mx-auto ml-20 cursor-pointer"
       />
     </a>
   );
@@ -269,18 +269,18 @@ const CreatePlan = ({
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden">
+    <div className="flex min-h-screen flex-col overflow-x-hidden">
       {/* <Navbar /> */}
-      <div className="flex items-center min-h-20 max-h-20 bg-mainbutton5 gap-4">
+      <div className="flex max-h-20 min-h-20 items-center gap-4 bg-mainbutton5">
         <div className="flex-none">
           <Logo />
         </div>
-        <div className="flex-grow flex justify-center">
-          <h1 className="flex items-center gap-2 p-2 md:px-14 text-sm md:text-3xl font-semibold text-center text-white border border-dashed rounded cursor-pointer">
+        <div className="flex flex-grow justify-center">
+          <h1 className="flex cursor-pointer items-center gap-2 rounded border border-dashed p-2 text-center text-sm font-semibold text-white md:px-14 md:text-3xl">
             Mój plan <CiEdit />
           </h1>
         </div>
-        <div className="hidden sm:block flex-none pr-4">
+        <div className="hidden flex-none pr-4 sm:block">
           <Image
             src="https://github.com/shadcn.png"
             width={40}
@@ -291,7 +291,7 @@ const CreatePlan = ({
         </div>
       </div>
 
-      <div className="flex-grow min-[1200px]:grid min-[1200px]:grid-cols-[1fr_4fr] border-b-primary border-b-4">
+      <div className="flex-grow border-b-4 border-b-primary min-[1200px]:grid min-[1200px]:grid-cols-[1fr_4fr]">
         <SelectGroups
           registrations={registrations}
           courses={plan.courses}
@@ -305,16 +305,16 @@ const CreatePlan = ({
         />
       </div>
 
-      <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
+      <div className="flex h-32 flex-row items-center justify-between bg-mainbutton3 text-sm text-white sm:h-14 sm:text-lg">
         <Link
           href="/plans"
-          className="h-32 sm:h-14 flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-32 py-2 hover:bg-solvroshadow cursor-pointer w-1/2 transition-all hover:shadow-lg font-semibold"
+          className="flex h-32 w-1/2 cursor-pointer items-center justify-center gap-2 px-2 py-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg sm:h-14 sm:gap-4 sm:px-32"
         >
           <IoMdArrowBack size={20} className="block" />
           <span className="">Powrót do planów</span>
         </Link>
 
-        <div className="flex-grow flex items-center justify-center text-sm text-center">
+        <div className="flex flex-grow items-center justify-center text-center text-sm">
           <span>
             Liczba ects:{" "}
             {plan.groups.reduce(
