@@ -1,15 +1,14 @@
-import type { UsosClient } from "./usosClient";
-import type { GetCoursesCart } from "./getCoursesCart";
-import type { GetCoursesEditions } from "./getCoursesEditions";
-
-import type { GetProfile } from "./getProfile";
-import type { GetRegistrationRoundCourses } from "./getRegistrationRoundCourses";
-import type { GetUserRegistrations } from "./getUserRegistrations";
 import * as cheerio from "cheerio";
 import makeFetchCookie from "fetch-cookie";
-import { Frequency, Day, LessonType } from "./types";
 
+import type { GetCoursesCart } from "./getCoursesCart";
+import type { GetCoursesEditions } from "./getCoursesEditions";
+import type { GetProfile } from "./getProfile";
+import type { GetRegistrationRoundCourses } from "./getRegistrationRoundCourses";
 import { type GetTerms } from "./getTerms";
+import type { GetUserRegistrations } from "./getUserRegistrations";
+import { Day, Frequency, LessonType } from "./types";
+import type { UsosClient } from "./usosClient";
 
 const fetchWithCookie = makeFetchCookie(fetch);
 
@@ -45,12 +44,12 @@ export const usosService = (usosClient: UsosClient) => {
   return {
     getProfile: async () => {
       return usosClient.get<GetProfile>(
-        "users/user?fields=id|student_number|first_name|last_name|sex|student_status|staff_status|email|photo_urls|homepage_url"
+        "users/user?fields=id|student_number|first_name|last_name|sex|student_status|staff_status|email|photo_urls|homepage_url",
       );
     },
     getCoursesCarts: async () => {
       const data = await usosClient.get<GetCoursesCart>(
-        "registrations/courses_cart"
+        "registrations/courses_cart",
       );
 
       return data;
@@ -58,28 +57,28 @@ export const usosService = (usosClient: UsosClient) => {
 
     getUserRegistrations: async () => {
       const data = await usosClient.get<GetUserRegistrations>(
-        "registrations/user_registrations?fields=id|description|message|type|status|is_linkage_required|www_instance|faculty|rounds|related_courses"
+        "registrations/user_registrations?fields=id|description|message|type|status|is_linkage_required|www_instance|faculty|rounds|related_courses",
       );
 
       return data;
     },
     getRegistrationRoundCourses: async (roundId: string) => {
       const data = await usosClient.get<GetRegistrationRoundCourses>(
-        `registrations/registration_round_courses?registration_round_id=${roundId}`
+        `registrations/registration_round_courses?registration_round_id=${roundId}`,
       );
 
       return data;
     },
     getCourseEditions: async (courseId: string, termId: string) => {
       const data = await usosClient.get<GetCoursesEditions>(
-        `courses/course_edition2?course_id=${courseId}&term_id=${termId}&fields=course_units`
+        `courses/course_edition2?course_id=${courseId}&term_id=${termId}&fields=course_units`,
       );
 
       return data;
     },
     getCourseUnitWithGroups: async (courseUnitId: string) => {
       const data = await usosClient.get(
-        `courses/course_unit?course_unit_id=${courseUnitId}&fields=class_groups[participants[id]|course_unit_id|course_unit|lecturers|description]`
+        `courses/course_unit?course_unit_id=${courseUnitId}&fields=class_groups[participants[id]|course_unit_id|course_unit|lecturers|description]`,
       );
 
       return data;
@@ -91,17 +90,17 @@ export const usosService = (usosClient: UsosClient) => {
     },
     getClassGroupTimetable: async (
       courseUnitId: string,
-      groupNumber: string
+      groupNumber: string,
     ) => {
       const data = await usosClient.get(
-        `tt/classgroup?unit_id=${courseUnitId}&group_number=${groupNumber}&fields=type|start_time|end_time|frequency|group_number|classtype_name|course_name|sm_id`
+        `tt/classgroup?unit_id=${courseUnitId}&group_number=${groupNumber}&fields=type|start_time|end_time|frequency|group_number|classtype_name|course_name|sm_id`,
       );
 
       return data;
     },
     getMeetingDate: async (meetingId: string) => {
       const data = await usosClient.get(
-        `meetings/meeting?meeting_id=${meetingId}`
+        `meetings/meeting?meeting_id=${meetingId}`,
       );
 
       return data;
@@ -113,7 +112,7 @@ export const usosService = (usosClient: UsosClient) => {
     },
     getCourse: async (courseId: string) => {
       const data = await fetchWithCookie(
-        `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=${courseId}`
+        `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=${courseId}`,
       );
 
       const $ = cheerio.load(await data.text());
@@ -136,7 +135,7 @@ export const usosService = (usosClient: UsosClient) => {
             Accept:
               "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
           },
-        }
+        },
       ).then((t) => t.text());
 
       const $ = cheerio.load(data);

@@ -1,6 +1,6 @@
 import crypto from "crypto";
-
 import OAuth from "oauth-1.0a";
+
 import { env } from "@/env.mjs";
 
 export const oauth = new OAuth({
@@ -14,7 +14,7 @@ export const oauth = new OAuth({
 export const getAccessToken = async (
   oauth_token: string,
   oauth_verifier: string,
-  secret: string
+  secret: string,
 ) => {
   const data = oauth.authorize(
     {
@@ -25,7 +25,7 @@ export const getAccessToken = async (
     {
       key: oauth_token,
       secret,
-    }
+    },
   );
 
   const response = await fetch(
@@ -38,7 +38,7 @@ export const getAccessToken = async (
       headers: {
         Authorization: oauth.toHeader(data).Authorization,
       },
-    }
+    },
   );
   const text = await response.text();
 
@@ -60,7 +60,7 @@ export async function getRequestToken() {
     method: "POST",
     data: {
       oauth_callback: removeMultipleSlashesFromUrl(
-        `${env.SITE_URL}/api/callback`
+        `${env.SITE_URL}/api/callback`,
       ),
       scopes: "studies|offline_access",
     },
@@ -70,14 +70,14 @@ export async function getRequestToken() {
     `https://apps.${
       env.USOS_BASE_URL
     }/services/oauth/request_token?${new URLSearchParams(
-      Object.entries(data)
+      Object.entries(data),
     ).toString()}`,
     {
       method: "POST",
       headers: {
         Authorization: oauth.toHeader(data).Authorization,
       },
-    }
+    },
   );
   const params = new URLSearchParams(await response.text());
 

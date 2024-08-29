@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Plan } from "@/components/plan";
-import Link from "next/link";
-import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
+import Link from "next/link";
+import React, { useState } from "react";
+import { IoMdArrowBack } from "react-icons/io";
+
+import { Plan } from "@/components/plan";
 
 const Plans = () => {
   const [plans, setPlans] = useState([

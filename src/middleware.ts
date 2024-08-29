@@ -1,7 +1,8 @@
 import type { NextRequest } from "next/server";
-import { NextResponse  } from "next/server";
-import { createClient } from "./services/usos/usosClient";
+import { NextResponse } from "next/server";
+
 import { usosService } from "./services/usos";
+import { createClient } from "./services/usos/usosClient";
 
 export async function middleware(request: NextRequest) {
   const tokens = {
@@ -28,7 +29,7 @@ export async function middleware(request: NextRequest) {
 
     if (request.nextUrl.pathname.startsWith("/app")) {
       const response = NextResponse.redirect(new URL("/login", request.url));
-  
+
       response.cookies.delete("access_token");
       response.cookies.delete("access_token_secret");
 

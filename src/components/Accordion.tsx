@@ -1,4 +1,9 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import type { ExtendedCourse } from "@/pages/createplan";
 
 export const GroupsAccordion = ({
@@ -33,19 +38,24 @@ export const GroupsAccordion = ({
                       <div className="w-[50px] h-[50px] rounded-[50px] bg-secondary items-center flex justify-center">
                         {course.name.slice(0, 1).toUpperCase()}
                       </div>
-                      <label htmlFor={`${index}-${course.name}`} className="hover:cursor-pointer">
+                      <label
+                        htmlFor={`${index}-${course.name}`}
+                        className="hover:cursor-pointer"
+                      >
                         {course.name}
                       </label>
                       <input
                         id={`${index}-${course.name}`}
                         type="checkbox"
-                        onChange={() => { onClick(course.name); }}
+                        onChange={() => {
+                          onClick(course.name);
+                        }}
                         className="w-6 h-6 justify-self-end cursor-pointer"
                         checked={course.isChecked}
                       />
                     </div>
                   </div>
-                )
+                ),
             )}
           </AccordionContent>
         </AccordionItem>

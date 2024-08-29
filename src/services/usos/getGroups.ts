@@ -1,4 +1,4 @@
-import { Day , LessonType , Frequency } from "@/services/usos/types";
+import { Day, Frequency, LessonType } from "@/services/usos/types";
 
 interface Time {
   hours: number;

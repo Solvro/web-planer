@@ -1,18 +1,19 @@
-import { test, describe, expect } from 'vitest';
-import { usosService } from './usos';
+import { describe, expect, test } from "vitest";
 
-describe('usos', () => {
-	const service = usosService({
-		get: function <R = unknown>(): Promise<R> {
-			throw new Error('Function not implemented.');
-		},
-		post: function <R = unknown>(): Promise<R> {
-			throw new Error('Function not implemented.');
-		}
-	});
-	test('getCourses', async () => {
-		const course = await service.getGroups('W04IST-SI0010L');
+import { usosService } from "./usos";
 
-		expect(course).toMatchSnapshot();
-	});
+describe("usos", () => {
+  const service = usosService({
+    get: function <R = unknown>(): Promise<R> {
+      throw new Error("Function not implemented.");
+    },
+    post: function <R = unknown>(): Promise<R> {
+      throw new Error("Function not implemented.");
+    },
+  });
+  test("getCourses", async () => {
+    const course = await service.getGroups("W04IST-SI0010L");
+
+    expect(course).toMatchSnapshot();
+  });
 });
