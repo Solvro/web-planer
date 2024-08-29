@@ -1,11 +1,12 @@
-import type React from "react";
-import { useState, type ComponentProps } from "react";
 import { motion } from "framer-motion";
-import { twMerge } from "tailwind-merge";
-import { buttonVariants } from "@/components/ui/button";
-import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import type React from "react";
+import { type ComponentProps, useState } from "react";
+import { twMerge } from "tailwind-merge";
+
+import { buttonVariants } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,85 +16,87 @@ const Navbar = () => {
   };
   return (
     <div className="flex items-center justify-between z-50 relative h-20">
-        <Logo />
+      <Logo />
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex flex-row h-20 gap-10 items-center text-white pr-10 lg:pr-40">
-          <ul className="flex gap-6">
-            <li className="cursor-pointer">
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex flex-row h-20 gap-10 items-center text-white pr-10 lg:pr-40">
+        <ul className="flex gap-6">
+          <li className="cursor-pointer">
+            <Link href="/">Strona główna</Link>
+          </li>
+          <li className="cursor-pointer">
+            <a href="https://www.facebook.com/knsolvro">Aktualności</a>
+          </li>
+          <li className="cursor-pointer">
+            <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
+              Instrukcje
+            </a>
+          </li>
+          <li className="cursor-pointer">
+            <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
+              Terminarz
+            </a>
+          </li>
+          <li className="cursor-pointer">
+            <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Mobile Menu Icon */}
+      <div className="md:hidden flex items-center">
+        <button onClick={toggleMenu} className="text-white focus:outline-none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen ? (
+        <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
+          <ul className="flex flex-col text-center gap-4 p-4 text-white uppercase">
+            <li className="cursor-pointer p-2">
               <Link href="/">Strona główna</Link>
             </li>
-            <li className="cursor-pointer">
+            <li className="cursor-pointer p-2">
               <a href="https://www.facebook.com/knsolvro">Aktualności</a>
             </li>
-            <li className="cursor-pointer">
+            <li className="cursor-pointer p-2">
               <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
                 Instrukcje
               </a>
             </li>
-            <li className="cursor-pointer">
+            <li className="cursor-pointer p-2">
               <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
                 Terminarz
               </a>
             </li>
-            <li className="cursor-pointer">
+            <li className="cursor-pointer p-2">
               <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
             </li>
           </ul>
-        </nav>
-
-        {/* Mobile Menu Icon */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={toggleMenu}
-            className="text-white focus:outline-none"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen ? <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
-            <ul className="flex flex-col text-center gap-4 p-4 text-white uppercase">
-              <li className="cursor-pointer p-2">
-                <Link href="/">Strona główna</Link>
-              </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://www.facebook.com/knsolvro">Aktualności</a>
-              </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
-                  Instrukcje
-                </a>
-              </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
-                  Terminarz
-                </a>
-              </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
-              </li>
-            </ul>
-          </div> : null}
-      </div>
+      ) : null}
+    </div>
   );
 };
 
-const Block = ({ className, ...rest }: ComponentProps<typeof motion["div"]> & { className: string }) => {
+const Block = ({
+  className,
+  ...rest
+}: ComponentProps<(typeof motion)["div"]> & { className: string }) => {
   return (
     <motion.div
       variants={{
@@ -216,8 +219,6 @@ const Footer = () => {
 };
 
 const Home = () => {
-
-
   return (
     <>
       {/* Main Page */}

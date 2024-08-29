@@ -10,4 +10,3 @@ export const Plan = ({ name }: { name: string }) => {
     </button>
   );
 };
-

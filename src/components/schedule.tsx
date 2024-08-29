@@ -1,6 +1,8 @@
 import React from "react";
+
 import { ClassSchedule } from "@/components/ClassSchedule";
 import type { ClassBlockProps } from "@/lib/types";
+
 import type { ExtendedCourse, ExtendedGroup } from "../pages/createplan";
 
 export const ScheduleTest = ({
@@ -23,10 +25,34 @@ export const ScheduleTest = ({
         groups={groups}
         onClick={onClick}
       />
-      <ClassSchedule schedule={schedule} day="Wtorek" courses={courses} groups={groups} onClick={onClick} />
-      <ClassSchedule schedule={schedule} day="Środa" courses={courses} groups={groups} onClick={onClick} />
-      <ClassSchedule schedule={schedule} day="Czwartek" courses={courses} groups={groups} onClick={onClick} />
-      <ClassSchedule schedule={schedule} day="Piątek" courses={courses} groups={groups} onClick={onClick} />
+      <ClassSchedule
+        schedule={schedule}
+        day="Wtorek"
+        courses={courses}
+        groups={groups}
+        onClick={onClick}
+      />
+      <ClassSchedule
+        schedule={schedule}
+        day="Środa"
+        courses={courses}
+        groups={groups}
+        onClick={onClick}
+      />
+      <ClassSchedule
+        schedule={schedule}
+        day="Czwartek"
+        courses={courses}
+        groups={groups}
+        onClick={onClick}
+      />
+      <ClassSchedule
+        schedule={schedule}
+        day="Piątek"
+        courses={courses}
+        groups={groups}
+        onClick={onClick}
+      />
     </div>
   );
 };

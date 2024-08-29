@@ -1,7 +1,7 @@
+import React from "react";
+
 import { cn } from "@/lib/utils";
 import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
-
-import React from "react";
 
 const typeClasses = {
   W: "bg-red-300",
@@ -53,14 +53,20 @@ const ClassBlock = ({
   const isCourseChecked = courses.find((course) => course.name === courseName);
   const checkedGroupFromCourse = groups.find(
     (g) =>
-      g.courseType === courseType && courseName === g.courseName && g.isChecked
+      g.courseType === courseType && courseName === g.courseName && g.isChecked,
   );
   const isThisGroupChecked = checkedGroupFromCourse?.group === group;
   return (
     Boolean(isCourseChecked?.isChecked) && (
       <button
-        disabled={checkedGroupFromCourse?.isChecked === true ? !isThisGroupChecked : false}
-        onClick={() => { onClick(group); }}
+        disabled={
+          checkedGroupFromCourse?.isChecked === true
+            ? !isThisGroupChecked
+            : false
+        }
+        onClick={() => {
+          onClick(group);
+        }}
         style={{
           gridColumnStart: startGrid,
           gridColumnEnd: `span ${durationSpan}`,
@@ -73,7 +79,7 @@ const ClassBlock = ({
             ? isThisGroupChecked
               ? "cursor-pointer"
               : "opacity-20"
-            : "cursor-pointer opacity-60"
+            : "cursor-pointer opacity-60",
         )}
       >
         <div className="flex justify-between">

@@ -1,7 +1,8 @@
-import { getAccessToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
+
+import { getAccessToken } from "@/lib/auth";
 
 export const GET = async (request: NextRequest) => {
   const url = request.nextUrl;
@@ -32,10 +33,13 @@ export const GET = async (request: NextRequest) => {
   const access_token = await getAccessToken(
     oauth_token,
     oauth_verifier,
-    secret
+    secret,
   );
 
-  if (typeof access_token.token !== "string" || typeof access_token.secret !== "string") {
+  if (
+    typeof access_token.token !== "string" ||
+    typeof access_token.secret !== "string"
+  ) {
     return new Response("Forbidden", {
       status: 401,
     });

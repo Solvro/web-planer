@@ -27,7 +27,7 @@ export const createClient = ({
         {
           key: token,
           secret,
-        }
+        },
       );
       const response = await fetch(url, {
         method: "GET",
@@ -61,7 +61,7 @@ export const createClient = ({
         {
           key: token,
           secret,
-        }
+        },
       );
       const response = await fetch(url, {
         method: "POST",

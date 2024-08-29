@@ -1,7 +1,8 @@
-import { USOS_APPS_URL } from "@/env.mjs";
-import { getRequestToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { USOS_APPS_URL } from "@/env.mjs";
+import { getRequestToken } from "@/lib/auth";
 
 export async function GET() {
   const token = await getRequestToken();
@@ -13,7 +14,7 @@ export async function GET() {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 
@@ -30,6 +31,6 @@ export async function GET() {
   });
 
   return redirect(
-    `${USOS_APPS_URL}/services/oauth/authorize?oauth_token=${token.token}`
+    `${USOS_APPS_URL}/services/oauth/authorize?oauth_token=${token.token}`,
   );
 }

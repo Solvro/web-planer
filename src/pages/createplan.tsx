@@ -1,11 +1,12 @@
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { CiEdit } from "react-icons/ci";
+import { IoMdArrowBack } from "react-icons/io";
+
 import { ScheduleTest } from "@/components/schedule";
 import { SelectGroups } from "@/components/selectGroups";
-import Link from "next/link";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
-import { useState } from "react";
-import Image from "next/image";
-import { CiEdit } from "react-icons/ci";
-import {  IoMdArrowBack } from "react-icons/io";
 
 const Logo = () => {
   return (
@@ -216,25 +217,25 @@ export interface ExtendedGroup extends ClassBlockProps {
 
 const CreatePlan = () => {
   const [courses, setCourses] = useState<ExtendedCourse[]>(
-    mockCourses.map((mockCourse) => ({ ...mockCourse, isChecked: false }))
+    mockCourses.map((mockCourse) => ({ ...mockCourse, isChecked: false })),
   );
   const [groups, setGroups] = useState<ExtendedGroup[]>(
-    mockGroups.map((mockGroup) => ({ ...mockGroup, isChecked: false }))
+    mockGroups.map((mockGroup) => ({ ...mockGroup, isChecked: false })),
   );
   const checkCourse = (id: string) => {
     setCourses(
       courses.map((course) =>
         course.name === id
           ? { ...course, isChecked: !course.isChecked }
-          : course
-      )
+          : course,
+      ),
     );
   };
   const checkGroup = (id: string) => {
     setGroups(
       groups.map((group) =>
-        group.group === id ? { ...group, isChecked: !group.isChecked } : group
-      )
+        group.group === id ? { ...group, isChecked: !group.isChecked } : group,
+      ),
     );
   };
   return (
@@ -290,10 +291,10 @@ const CreatePlan = () => {
               (acc, curr) =>
                 acc +
                 (curr.isChecked
-                  ? courses.find((course) => course.name === curr.courseName)
-                      ?.ects ?? 0
+                  ? (courses.find((course) => course.name === curr.courseName)
+                      ?.ects ?? 0)
                   : 0),
-              0
+              0,
             )}
           </span>
         </div>

@@ -1,6 +1,7 @@
+import { cookies } from "next/headers";
+
 import { usosService } from "@/services/usos";
 import { createClient } from "@/services/usos/usosClient";
-import { cookies } from "next/headers";
 
 export const createUsosService = () => {
   const tokens = {

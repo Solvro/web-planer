@@ -1,10 +1,8 @@
 import type { NextResponse } from "next/server";
 
-export type ApiResponse<T extends (...args: unknown[]) => NextResponse | Promise<NextResponse>> = Awaited<
-  ReturnType<T>
-> extends NextResponse<infer Y>
-  ? Y
-  : never;
+export type ApiResponse<
+  T extends (...args: unknown[]) => NextResponse | Promise<NextResponse>,
+> = Awaited<ReturnType<T>> extends NextResponse<infer Y> ? Y : never;
 
 export interface ClassBlockProps {
   startTime: string;
