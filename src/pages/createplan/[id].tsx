@@ -1,6 +1,8 @@
+import { useAtom } from "jotai";
+import { atomFamily, atomWithStorage } from "jotai/utils";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
 
@@ -215,29 +217,57 @@ export interface ExtendedGroup extends ClassBlockProps {
   isChecked: boolean;
 }
 
-const CreatePlan = () => {
-  const [courses, setCourses] = useState<ExtendedCourse[]>(
-    mockCourses.map((mockCourse) => ({ ...mockCourse, isChecked: false })),
-  );
-  const [groups, setGroups] = useState<ExtendedGroup[]>(
-    mockGroups.map((mockGroup) => ({ ...mockGroup, isChecked: false })),
-  );
+const planFamily = atomFamily(
+  ({ id }: { id: number }) =>
+    atomWithStorage(`${id}-plan`, {
+      id,
+      courses: mockCourses.map((mockCourse) => ({
+        ...mockCourse,
+        isChecked: false,
+      })),
+      groups: mockGroups.map((mockGroup) => ({
+        ...mockGroup,
+        isChecked: false,
+      })),
+    }),
+  (a, b) => a.id === b.id,
+);
+
+// eslint-disable-next-line @typescript-eslint/require-await
+export const getServerSideProps = (async (context) => {
+  const { id } = context.query;
+  if (typeof id !== "string") {
+    throw new Error(`Invalid id ${id?.toString()}`);
+  }
+  const planId = parseInt(id);
+
+  return { props: { planId } };
+}) satisfies GetServerSideProps<{ planId: number }>;
+
+const CreatePlan = ({
+  planId,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [plan, setPlan] = useAtom(planFamily({ id: planId }));
+
   const checkCourse = (id: string) => {
-    setCourses(
-      courses.map((course) =>
+    setPlan({
+      ...plan,
+      courses: plan.courses.map((course) =>
         course.name === id
           ? { ...course, isChecked: !course.isChecked }
           : course,
       ),
-    );
+    });
   };
   const checkGroup = (id: string) => {
-    setGroups(
-      groups.map((group) =>
+    setPlan({
+      ...plan,
+      groups: plan.groups.map((group) =>
         group.group === id ? { ...group, isChecked: !group.isChecked } : group,
       ),
-    );
+    });
   };
+
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">
       {/* <Navbar /> */}
@@ -264,20 +294,20 @@ const CreatePlan = () => {
       <div className="flex-grow min-[1200px]:grid min-[1200px]:grid-cols-[1fr_4fr] border-b-primary border-b-4">
         <SelectGroups
           registrations={registrations}
-          courses={courses}
+          courses={plan.courses}
           checkCourse={checkCourse}
         />
         <ScheduleTest
           schedule={mondaySchedule}
-          courses={courses}
-          groups={groups}
+          courses={plan.courses}
+          groups={plan.groups}
           onClick={checkGroup}
         />
       </div>
 
       <div className="flex flex-row items-center justify-between bg-mainbutton3 text-white h-32 sm:h-14 text-sm sm:text-lg">
         <Link
-          href="plans"
+          href="/plans"
           className="h-32 sm:h-14 flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-32 py-2 hover:bg-solvroshadow cursor-pointer w-1/2 transition-all hover:shadow-lg font-semibold"
         >
           <IoMdArrowBack size={20} className="block" />
@@ -287,12 +317,13 @@ const CreatePlan = () => {
         <div className="flex-grow flex items-center justify-center text-sm text-center">
           <span>
             Liczba ects:{" "}
-            {groups.reduce(
+            {plan.groups.reduce(
               (acc, curr) =>
                 acc +
                 (curr.isChecked
-                  ? (courses.find((course) => course.name === curr.courseName)
-                      ?.ects ?? 0)
+                  ? (plan.courses.find(
+                      (course) => course.name === curr.courseName,
+                    )?.ects ?? 0)
                   : 0),
               0,
             )}

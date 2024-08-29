@@ -1,22 +1,27 @@
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { IoMdArrowBack } from "react-icons/io";
 
 import { Plan } from "@/components/plan";
 
+const plansAtom = atomWithStorage<
+  Array<{ id: number; name: string }> | never[]
+>("plansIds", []);
+
 const Plans = () => {
-  const [plans, setPlans] = useState([
-    { id: 1, name: "Plan domyślny - poniedziałek" },
-    { id: 2, name: "Plan domyślny - wolna środa" },
-  ]);
+  const [plans, setPlans] = useAtom(plansAtom);
+  const router = useRouter();
 
   const addNewPlan = () => {
     const newPlan = {
-      id: Date.now(),
+      id: plans.length + 1,
       name: `Nowy plan - ${plans.length + 1}`,
     };
     setPlans([...plans, newPlan]);
+    void router.push(`/createplan/${plans.length + 1}`);
   };
 
   return (
@@ -48,15 +53,14 @@ const Plans = () => {
       <main className="flex-grow">
         <div className="container bg-gray-200 rounded p-4 mx-auto flex flex-col h-[calc(100vh-128px)]">
           <div className="flex flex-wrap gap-4 overflow-y-auto">
-            <Link
+            <button
               onClick={addNewPlan}
-              href="createplan"
               className="border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center p-4 h-[200px] w-[200px] shadow-xl"
             >
               <span>Dodaj nowy plan</span>
-            </Link>
+            </button>
             {plans.map((plan) => (
-              <Plan key={plan.id} name={plan.name} />
+              <Plan key={plan.id} id={plan.id} name={plan.name} />
             ))}
           </div>
         </div>
