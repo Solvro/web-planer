@@ -56,10 +56,10 @@ const ClassSchedule = ({
 }) => {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex justify-center items-center text-2xl font-semibold bg-white">
+      <div className="flex justify-center items-center text-2xl font-semibold z-20 bg-white">
         {day}
       </div>
-      <div className="flex-1 overflow-y-hidden">
+      <div className="flex-1 overflow-y-hidden text-[9px]">
         <div className="grid grid-cols-dayPlan min-w-[1400px] px-[10px]">
           {upperHours.map((hour, index) => (
             <Hour hour={hour} key={index} />
