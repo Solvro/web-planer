@@ -2,8 +2,7 @@ import React from "react";
 
 import { GroupsAccordion } from "@/components/Accordion";
 import type { Registration } from "@/lib/types";
-
-import type { ExtendedCourse } from "../pages/createplan";
+import type { ExtendedCourse } from "@/pages/createplan/[id]";
 
 export const SelectGroups = ({
   registrations,

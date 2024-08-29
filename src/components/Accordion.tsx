@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { ExtendedCourse } from "@/pages/createplan";
+import type { ExtendedCourse } from "@/pages/createplan/[id]";
 
 export const GroupsAccordion = ({
   registrationName,
