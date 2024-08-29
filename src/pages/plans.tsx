@@ -7,9 +7,10 @@ import { IoMdArrowBack } from "react-icons/io";
 
 import { Plan } from "@/components/plan";
 
-const plansAtom = atomWithStorage<
-  Array<{ id: number; name: string }> | never[]
->("plansIds", []);
+const plansAtom = atomWithStorage<Array<{ id: number; name: string }>>(
+  "plansIds",
+  [],
+);
 
 const Plans = () => {
   const [plans, setPlans] = useAtom(plansAtom);
