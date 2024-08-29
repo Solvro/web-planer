@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Format check
+        run: npm run format:check
+        if: always()
+
+      - name: Lint
+        run: npm run lint
+        if: always()
+
+      - name: Type check
+        run: npm run typecheck
+        if: always()
+
+      - name: Build
+        run: npm run build
+        if: always()
+
+      - name: Find deadcode
+        run: npm run knip

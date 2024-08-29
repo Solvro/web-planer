@@ -1,4 +1,5 @@
 import { buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -11,15 +12,16 @@ export default function Home() {
         💸
       </span>
 
-      <a
+      <Link
         href="/api/login"
         className={buttonVariants({
           size: "lg",
+          variant: "outline",
           class: "text-md transition-all hover:shadow-lg",
         })}
       >
         Zaloguj się z USOSem
-      </a>
+      </Link>
     </div>
   );
 }

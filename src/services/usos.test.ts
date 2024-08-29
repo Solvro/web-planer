@@ -1,4 +1,4 @@
-import { test, describe, expect } from 'bun:test';
+import { test, describe, expect } from 'vitest';
 import { usosService } from './usos';
 
 describe('usos', () => {

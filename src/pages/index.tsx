@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState, type ComponentProps } from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { useQuery } from "@tanstack/react-query";
-import { ApiProfileGet } from "@/app/api/profile/route";
 import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
 import { ChevronRightIcon } from "lucide-react";
@@ -15,15 +14,14 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
   return (
-    <>
-      <div className="flex items-center justify-between z-50 relative h-20">
+    <div className="flex items-center justify-between z-50 relative h-20">
         <Logo />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-row h-20 gap-10 items-center text-white pr-10 lg:pr-40">
           <ul className="flex gap-6">
             <li className="cursor-pointer">
-              <a href="#">Strona główna</a>
+              <Link href="/">Strona główna</Link>
             </li>
             <li className="cursor-pointer">
               <a href="https://www.facebook.com/knsolvro">Aktualności</a>
@@ -68,11 +66,10 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
+        {isMenuOpen ? <div className="md:hidden absolute top-full left-0 w-full bg-mainbutton6 shadow-lg animate-fade-in">
             <ul className="flex flex-col text-center gap-4 p-4 text-white uppercase">
               <li className="cursor-pointer p-2">
-                <a href="#">Strona główna</a>
+                <Link href="/">Strona główna</Link>
               </li>
               <li className="cursor-pointer p-2">
                 <a href="https://www.facebook.com/knsolvro">Aktualności</a>
@@ -91,14 +88,12 @@ const Navbar = () => {
                 <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
               </li>
             </ul>
-          </div>
-        )}
+          </div> : null}
       </div>
-    </>
   );
 };
 
-const Block: React.FC<any> = ({ className, ...rest }) => {
+const Block = ({ className, ...rest }: ComponentProps<typeof motion["div"]> & { className: string }) => {
   return (
     <motion.div
       variants={{
@@ -221,13 +216,7 @@ const Footer = () => {
 };
 
 const Home = () => {
-  const query = useQuery<ApiProfileGet>({
-    queryKey: ["profile"],
-    queryFn: async () => {
-      const response = await fetch("/api/profile");
-      return response.json();
-    },
-  });
+
 
   return (
     <>

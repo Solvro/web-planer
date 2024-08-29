@@ -1,9 +1,9 @@
 import type { NextResponse } from "next/server";
 
-export type ApiResponse<T extends (...args: any) => NextResponse | Promise<NextResponse>> = Awaited<
+export type ApiResponse<T extends (...args: unknown[]) => NextResponse | Promise<NextResponse>> = Awaited<
   ReturnType<T>
-> extends NextResponse<infer T>
-  ? T
+> extends NextResponse<infer Y>
+  ? Y
   : never;
 
 export interface ClassBlockProps {
@@ -12,8 +12,8 @@ export interface ClassBlockProps {
   group: string;
   courseName: string;
   lecturer: string;
-  week: "TN" | "TP" | "";
-  courseType: "W" | "L" | "C" | "S" | "P";
+  week: "" | "TN" | "TP";
+  courseType: "C" | "L" | "P" | "S" | "W";
   registrationName: string;
 }
 

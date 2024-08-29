@@ -1,12 +1,11 @@
 import { ScheduleTest } from "@/components/schedule";
 import { SelectGroups } from "@/components/selectGroups";
 import Link from "next/link";
-import { ClassBlockProps, Course, Registration } from "@/lib/types";
+import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 import { useState } from "react";
 import Image from "next/image";
 import { CiEdit } from "react-icons/ci";
-import { IoMdArrowForward } from "react-icons/io";
-import { IoMdArrowBack } from "react-icons/io";
+import {  IoMdArrowBack } from "react-icons/io";
 
 const Logo = () => {
   return (

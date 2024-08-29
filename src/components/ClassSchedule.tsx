@@ -1,8 +1,10 @@
 import React from "react";
-import { ClassBlockProps } from "@/lib/types";
+
+import type { ClassBlockProps } from "@/lib/types";
+import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
+
 import { ClassBlock } from "./ClassBlock";
 import { Hour } from "./Hour";
-import { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
 
 const upperHours = [
   "7:30",
@@ -69,7 +71,7 @@ const ClassSchedule = ({
           ))}
         </div>
         <div className="grid grid-cols-dayPlan grid-flow-col min-w-[1400px] gap-y-3 px-[10px] py-5">
-          <div className="absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200"></div>
+          <div className="absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200" />
           {schedule.map((block, index) => (
             <ClassBlock
               key={index}

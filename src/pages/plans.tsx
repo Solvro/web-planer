@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Plan } from "@/components/plan";
 import Link from "next/link";
-import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
+import { IoMdArrowBack } from "react-icons/io";
 import Image from "next/image";
+
 const Plans = () => {
   const [plans, setPlans] = useState([
     { id: 1, name: "Plan domyślny - poniedziałek" },
