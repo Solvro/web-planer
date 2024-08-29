@@ -1,7 +1,7 @@
 import React from "react";
 
 import { cn } from "@/lib/utils";
-import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan";
+import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan/[id]";
 
 const typeClasses = {
   W: "bg-red-300",
