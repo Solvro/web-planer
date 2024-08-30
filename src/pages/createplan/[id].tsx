@@ -3,26 +3,16 @@ import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
 
+import { SolvroLogo } from "@/components/SolvroLogo";
 import { ScheduleTest } from "@/components/schedule";
 import { SelectGroups } from "@/components/selectGroups";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 
-const Logo = () => {
-  return (
-    <a href="https://planer.solvro.pl/">
-      <Image
-        src="/assets/logo/solvro_white.png"
-        alt="Logo Koła Naukowego Solvro"
-        width={150}
-        height={150}
-        className="mx-auto ml-20 cursor-pointer"
-      />
-    </a>
-  );
-};
+import { plansAtom } from "../plans";
 
 const mockRegistration1 = {
   name: "Registration 1",
@@ -217,10 +207,11 @@ export interface ExtendedGroup extends ClassBlockProps {
   isChecked: boolean;
 }
 
-const planFamily = atomFamily(
+export const planFamily = atomFamily(
   ({ id }: { id: number }) =>
     atomWithStorage(`${id}-plan`, {
       id,
+      name: `Nowy plan - ${id}`,
       courses: mockCourses.map((mockCourse) => ({
         ...mockCourse,
         isChecked: false,
@@ -236,9 +227,11 @@ const planFamily = atomFamily(
 // eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps = (async (context) => {
   const { id } = context.query;
+
   if (typeof id !== "string") {
     throw new Error(`Invalid id ${id?.toString()}`);
   }
+
   const planId = parseInt(id);
 
   return { props: { planId } };
@@ -248,6 +241,32 @@ const CreatePlan = ({
   planId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
+
+  //tutaj używam atomu z widoku planow, zeby poprawnie aktualizowaly się nazwy
+  const [plansTitles, setPlansTitles] = useAtom(plansAtom);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const changePlanName = (newName: string) => {
+    setPlan({
+      ...plan,
+      name: newName,
+    });
+    setPlansTitles(
+      plansTitles.map((openedPlan) =>
+        openedPlan.id === planId
+          ? {
+              ...openedPlan,
+              name: newName,
+            }
+          : openedPlan,
+      ),
+    );
+  };
 
   const checkCourse = (id: string) => {
     setPlan({
@@ -271,16 +290,28 @@ const CreatePlan = ({
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
       {/* <Navbar /> */}
-      <div className="flex max-h-20 min-h-20 items-center gap-4 bg-mainbutton5">
-        <div className="flex-none">
-          <Logo />
+      <div className="flex max-h-20 min-h-20 items-center justify-between bg-mainbutton5">
+        <div className="ml-4 w-1/4 flex-none">
+          <SolvroLogo />
         </div>
-        <div className="flex flex-grow justify-center">
-          <h1 className="flex cursor-pointer items-center gap-2 rounded border border-dashed p-2 text-center text-sm font-semibold text-white md:px-14 md:text-3xl">
-            Mój plan <CiEdit />
-          </h1>
+        <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
+          <input
+            type="text"
+            value={plan.name}
+            onChange={(e) => {
+              changePlanName(e.target.value);
+            }}
+            className={`w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all ${
+              isEditing ? "border-b-2 font-normal" : " "
+            }`}
+            disabled={!isEditing}
+          />
+          <CiEdit
+            className="ml-2 transform cursor-pointer transition-transform hover:scale-110 active:scale-90"
+            onClick={handleEditClick}
+          />
         </div>
-        <div className="hidden flex-none pr-4 sm:block">
+        <div className="mr-4 flex w-1/4 justify-end">
           <Image
             src="https://github.com/shadcn.png"
             width={40}
