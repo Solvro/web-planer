@@ -5,9 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { IoMdArrowBack } from "react-icons/io";
 
+import { SolvroLogo } from "@/components/SolvroLogo";
 import { Plan } from "@/components/plan";
 
-const plansAtom = atomWithStorage<Array<{ id: number; name: string }>>(
+export const plansAtom = atomWithStorage<Array<{ id: number; name: string }>>(
   "plansIds",
   [],
 );
@@ -22,25 +23,22 @@ const Plans = () => {
       name: `Nowy plan - ${plans.length + 1}`,
     };
     setPlans([...plans, newPlan]);
-    void router.push(`/createplan/${plans.length + 1}`);
+
+    void router.push(`/createplan/${newPlan.id}`);
   };
 
   return (
     <div className="flex min-h-screen flex-col">
-      <div className="flex h-14 items-center bg-mainbutton5">
-        <a href="https://planer.solvro.pl/" className="ml-4 flex-shrink-0">
-          <Image
-            src="/assets/logo/solvro_white.png"
-            alt="Logo Koła Naukowego Solvro"
-            width={150}
-            height={150}
-            className="cursor-pointer"
-          />
-        </a>
-        <h1 className="mx-auto text-center text-xl text-white sm:text-3xl">
-          Twoje plany
-        </h1>
-        <div className="hidden flex-none pr-4 sm:block">
+      <div className="flex max-h-20 min-h-20 items-center justify-between bg-mainbutton5">
+        <div className="ml-4 w-1/4 flex-none">
+          <SolvroLogo />
+        </div>
+        <div className="flex flex-grow justify-center">
+          <div className="flex items-center justify-center text-lg font-semibold text-white md:text-3xl">
+            <p className="text-nowrap">Twoje Plany</p>
+          </div>
+        </div>
+        <div className="mr-4 flex w-1/4 justify-end">
           <Image
             src="https://github.com/shadcn.png"
             width={40}
@@ -52,7 +50,7 @@ const Plans = () => {
       </div>
 
       <main className="flex-grow">
-        <div className="container mx-auto flex h-[calc(100vh-128px)] flex-col rounded bg-gray-200 p-4">
+        <div className="container mx-auto flex h-[calc(100vh-128px)] flex-col items-center rounded bg-gray-200 p-4">
           <div className="flex flex-wrap gap-4 overflow-y-auto">
             <button
               onClick={addNewPlan}
