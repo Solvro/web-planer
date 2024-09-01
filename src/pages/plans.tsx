@@ -49,26 +49,24 @@ const Plans = () => {
         </div>
       </div>
 
-      <main className="flex-grow">
-        <div className="container mx-auto flex h-[calc(100vh-128px)] flex-col items-center rounded bg-gray-200 p-4">
-          <div className="flex flex-wrap gap-4 overflow-y-auto">
-            <button
-              onClick={addNewPlan}
-              className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl"
-            >
-              <span>Dodaj nowy plan</span>
-            </button>
-            {plans.map((plan) => (
-              <Plan key={plan.id} id={plan.id} name={plan.name} />
-            ))}
-          </div>
+      <div className="container mx-auto flex h-[calc(100vh-128px)] flex-col items-center rounded bg-gray-200 p-4">
+        <div className="flex flex-wrap gap-4 overflow-y-auto">
+          <button
+            onClick={addNewPlan}
+            className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl"
+          >
+            <span>Dodaj nowy plan</span>
+          </button>
+          {plans.map((plan) => (
+            <Plan key={plan.id} id={plan.id} name={plan.name} />
+          ))}
         </div>
-      </main>
+      </div>
       <div>
-        <div className="flex h-32 flex-row items-center justify-between bg-mainbutton3 text-sm text-white sm:h-14 sm:text-lg">
+        <div className="flex h-14 flex-row items-center justify-between bg-mainbutton3 text-sm text-white">
           <Link
             href="/"
-            className="flex h-32 w-full min-w-32 flex-1 cursor-pointer items-center justify-center gap-4 text-center font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg sm:h-14 sm:w-auto sm:flex-row"
+            className="flex h-full flex-1 cursor-pointer items-center justify-center gap-2 text-center font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
           >
             <IoMdArrowBack size={20} className="block" />
             Powrót do głównej strony
