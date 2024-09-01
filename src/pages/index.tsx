@@ -6,7 +6,7 @@ import type React from "react";
 import { type ComponentProps, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,19 +22,16 @@ const Navbar = () => {
       <nav className="hidden h-20 flex-row items-center gap-10 pr-10 text-white md:flex lg:pr-40">
         <ul className="flex gap-6">
           <li className="cursor-pointer">
-            <Link href="/">Strona główna</Link>
-          </li>
-          <li className="cursor-pointer">
             <a href="https://www.facebook.com/knsolvro">Aktualności</a>
           </li>
+
           <li className="cursor-pointer">
-            <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
-              Instrukcje
-            </a>
-          </li>
-          <li className="cursor-pointer">
-            <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
-              Terminarz
+            <a
+              target="_blank"
+              href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
+              rel="noreferrer"
+            >
+              Terminarz USOS
             </a>
           </li>
           <li className="cursor-pointer">
@@ -67,9 +64,6 @@ const Navbar = () => {
       {isMenuOpen ? (
         <div className="absolute left-0 top-full w-full animate-fade-in bg-mainbutton6 shadow-lg md:hidden">
           <ul className="flex flex-col gap-4 p-4 text-center uppercase text-white">
-            <li className="cursor-pointer p-2">
-              <Link href="/">Strona główna</Link>
-            </li>
             <li className="cursor-pointer p-2">
               <a href="https://www.facebook.com/knsolvro">Aktualności</a>
             </li>
@@ -173,17 +167,29 @@ const JoinUsBlock = () => (
       </p>
     </div>
     <div className="">
-      <Link
-        href="plans"
-        className={buttonVariants({
-          size: "lg",
-          variant: "outline",
-          class:
-            "h-20 animate-pulse cursor-pointer self-center border-4 text-xl transition-all duration-2000 hover:animate-none hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7",
-        })}
-      >
-        Przejdź do planowania <ChevronRightIcon className="ml-2" />
-      </Link>
+      {process.env.NODE_ENV === "development" ||
+      (typeof window !== "undefined" &&
+        window.location.hostname === "planer.solvro.pl") ? (
+        <Link
+          href="/plans"
+          className={buttonVariants({
+            size: "lg",
+            variant: "outline",
+            class:
+              "h-20 cursor-pointer self-center border-4 text-xl transition-all duration-300 hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7",
+          })}
+        >
+          Przejdź do planowania <ChevronRightIcon className="ml-2" />
+        </Link>
+      ) : (
+        <Button
+          disabled={true}
+          variant="outline"
+          className="h-20 cursor-pointer self-center border-4 text-xl transition-all duration-300 hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7"
+        >
+          Już niedługo :)
+        </Button>
+      )}
     </div>
   </Block>
 );

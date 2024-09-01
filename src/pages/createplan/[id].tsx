@@ -8,13 +8,11 @@ import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCheckmarkOutline } from "react-icons/io5";
 
+import { ScheduleTest } from "@/components/Schedule";
+import { SelectGroups } from "@/components/SelectGroups";
 import { SolvroLogo } from "@/components/SolvroLogo";
-import { ScheduleTest } from "@/components/schedule";
-import { SelectGroups } from "@/components/selectGroups";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-import { plansAtom } from "../plans";
 
 const mockRegistration1 = {
   name: "Registration 1",
@@ -211,18 +209,23 @@ export interface ExtendedGroup extends ClassBlockProps {
 
 export const planFamily = atomFamily(
   ({ id }: { id: number }) =>
-    atomWithStorage(`${id}-plan`, {
-      id,
-      name: `Nowy plan - ${id}`,
-      courses: mockCourses.map((mockCourse) => ({
-        ...mockCourse,
-        isChecked: false,
-      })),
-      groups: mockGroups.map((mockGroup) => ({
-        ...mockGroup,
-        isChecked: false,
-      })),
-    }),
+    atomWithStorage(
+      `${id}-plan`,
+      {
+        id,
+        name: `Nowy plan - ${id}`,
+        courses: mockCourses.map((mockCourse) => ({
+          ...mockCourse,
+          isChecked: false,
+        })),
+        groups: mockGroups.map((mockGroup) => ({
+          ...mockGroup,
+          isChecked: false,
+        })),
+      },
+      undefined,
+      { getOnInit: true },
+    ),
   (a, b) => a.id === b.id,
 );
 
@@ -244,35 +247,15 @@ const CreatePlan = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
 
-  //tutaj używam atomu z widoku planow, zeby poprawnie aktualizowaly się nazwy
-  const [plansTitles, setPlansTitles] = useAtom(plansAtom);
-
   const [isEditing, setIsEditing] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleNameInputIcon = (isClicked: boolean) => {
-    if (isClicked) {
-      return <IoCheckmarkOutline />;
-    }
-    return <CiEdit />;
-  };
 
   const changePlanName = (newName: string) => {
     setPlan({
       ...plan,
       name: newName,
     });
-    setPlansTitles(
-      plansTitles.map((openedPlan) =>
-        openedPlan.id === planId
-          ? {
-              ...openedPlan,
-              name: newName,
-            }
-          : openedPlan,
-      ),
-    );
   };
 
   const checkCourse = (id: string) => {
@@ -296,7 +279,6 @@ const CreatePlan = ({
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
-      {/* <Navbar /> */}
       <div className="flex max-h-20 min-h-20 items-center justify-between bg-mainbutton5">
         <div className="ml-4 w-1/4 flex-none">
           <SolvroLogo />
@@ -306,8 +288,8 @@ const CreatePlan = ({
             className="flex items-center justify-center"
             onSubmit={(e) => {
               e.preventDefault();
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-              changePlanName(e.currentTarget.elements.name.value);
+              const formData = new FormData(e.currentTarget);
+              changePlanName(formData.get("name")?.toString() ?? "");
               inputRef.current?.blur();
             }}
           >
@@ -318,23 +300,26 @@ const CreatePlan = ({
                 "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
               )}
               name="name"
-              defaultValue={plan.name}
+              id="name"
+              defaultValue={typeof window === "undefined" ? "" : plan.name}
               onFocus={() => {
                 setIsEditing(true);
               }}
-              onBlur={() => {
+              onBlur={(e) => {
                 setIsEditing(false);
+                changePlanName(e.currentTarget.value);
               }}
             />
-            <button
-              type={isEditing ? "button" : "submit"}
-              onClick={() => {
-                inputRef.current?.focus();
-              }}
-              className="ml-2 transform cursor-pointer transition-transform"
-            >
-              {handleNameInputIcon(isEditing)}
-            </button>
+            {isEditing ? (
+              <button type="submit" className="ml-2">
+                <IoCheckmarkOutline />
+              </button>
+            ) : (
+              <label htmlFor="name" className="ml-2 cursor-pointer">
+                <span className="sr-only">Nazwa planu</span>
+                <CiEdit />
+              </label>
+            )}
           </form>
         </div>
         <div className="mr-4 flex w-1/4 justify-end">
