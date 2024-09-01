@@ -4,9 +4,7 @@ import React from "react";
 export const Plan = ({ id, name }: { id: number; name: string }) => {
   return (
     <Link
-      href={{
-        pathname: `/createplan/${id}`,
-      }}
+      href={`/createplan/${id}`}
       className="h-[200px] w-[200px] rounded-lg bg-white p-4 text-left shadow-lg"
     >
       <div className="text-xl font-semibold">{name}</div>

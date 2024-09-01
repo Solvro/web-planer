@@ -1,16 +1,22 @@
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { IoMdArrowBack } from "react-icons/io";
 
+import { Plan } from "@/components/Plan";
 import { SolvroLogo } from "@/components/SolvroLogo";
-import { Plan } from "@/components/plan";
 
-export const plansAtom = atomWithStorage<Array<{ id: number; name: string }>>(
-  "plansIds",
-  [],
+import { planFamily } from "./createplan/[id]";
+
+const plansIds = atomWithStorage<Array<{ id: number }>>("plansIds", []);
+
+const plansAtom = atom(
+  (get) => get(plansIds).map((id) => get(planFamily(id))),
+  (get, set, values: Array<{ id: number }>) => {
+    set(plansIds, values);
+  },
 );
 
 const Plans = () => {
@@ -20,11 +26,11 @@ const Plans = () => {
   const addNewPlan = () => {
     const newPlan = {
       id: plans.length + 1,
-      name: `Nowy plan - ${plans.length + 1}`,
     };
-    setPlans([...plans, newPlan]);
 
-    void router.push(`/createplan/${newPlan.id}`);
+    void router.push(`/createplan/${newPlan.id}`).then(() => {
+      setPlans([...plans, newPlan]);
+    });
   };
 
   return (
