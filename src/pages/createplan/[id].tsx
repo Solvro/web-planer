@@ -3,7 +3,7 @@ import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCheckmarkOutline } from "react-icons/io5";
@@ -249,9 +249,7 @@ const CreatePlan = ({
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleNameInputIcon = (isClicked: boolean) => {
     if (isClicked) {
@@ -304,26 +302,39 @@ const CreatePlan = ({
           <SolvroLogo />
         </div>
         <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
-          <form className="flex items-center justify-center">
+          <form
+            className="flex items-center justify-center"
+            onSubmit={(e) => {
+              e.preventDefault();
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+              changePlanName(e.currentTarget.elements.name.value);
+              inputRef.current?.blur();
+            }}
+          >
             <input
+              ref={inputRef}
               type="text"
-              value={plan.name}
-              onChange={(e) => {
-                changePlanName(e.target.value);
-              }}
               className={cn(
-                "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all",
-                isEditing ? "border-b-2 font-normal" : "",
+                "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
               )}
-              disabled={!isEditing}
+              name="name"
+              defaultValue={plan.name}
+              onFocus={() => {
+                setIsEditing(true);
+              }}
+              onBlur={() => {
+                setIsEditing(false);
+              }}
             />
-            <Link
-              href={`/createplan/${plan.id}`}
-              className="ml-2 transform cursor-pointer transition-transform hover:scale-110 active:scale-90"
-              onClick={handleEditClick}
+            <button
+              type={isEditing ? "button" : "submit"}
+              onClick={() => {
+                inputRef.current?.focus();
+              }}
+              className="ml-2 transform cursor-pointer transition-transform"
             >
               {handleNameInputIcon(isEditing)}
-            </Link>
+            </button>
           </form>
         </div>
         <div className="mr-4 flex w-1/4 justify-end">
