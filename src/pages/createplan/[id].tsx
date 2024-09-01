@@ -6,11 +6,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
+import { IoCheckmarkOutline } from "react-icons/io5";
 
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { ScheduleTest } from "@/components/schedule";
 import { SelectGroups } from "@/components/selectGroups";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 import { plansAtom } from "../plans";
 
@@ -251,6 +253,13 @@ const CreatePlan = ({
     setIsEditing(!isEditing);
   };
 
+  const handleNameInputIcon = (isClicked: boolean) => {
+    if (isClicked) {
+      return <IoCheckmarkOutline />;
+    }
+    return <CiEdit />;
+  };
+
   const changePlanName = (newName: string) => {
     setPlan({
       ...plan,
@@ -295,21 +304,27 @@ const CreatePlan = ({
           <SolvroLogo />
         </div>
         <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
-          <input
-            type="text"
-            value={plan.name}
-            onChange={(e) => {
-              changePlanName(e.target.value);
-            }}
-            className={`w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all ${
-              isEditing ? "border-b-2 font-normal" : " "
-            }`}
-            disabled={!isEditing}
-          />
-          <CiEdit
-            className="ml-2 transform cursor-pointer transition-transform hover:scale-110 active:scale-90"
-            onClick={handleEditClick}
-          />
+          <form className="flex items-center justify-center">
+            <input
+              type="text"
+              value={plan.name}
+              onChange={(e) => {
+                changePlanName(e.target.value);
+              }}
+              className={cn(
+                "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all",
+                isEditing ? "border-b-2 font-normal" : "",
+              )}
+              disabled={!isEditing}
+            />
+            <Link
+              href={`/createplan/${plan.id}`}
+              className="ml-2 transform cursor-pointer transition-transform hover:scale-110 active:scale-90"
+              onClick={handleEditClick}
+            >
+              {handleNameInputIcon(isEditing)}
+            </Link>
+          </form>
         </div>
         <div className="mr-4 flex w-1/4 justify-end">
           <Image
@@ -336,16 +351,16 @@ const CreatePlan = ({
         />
       </div>
 
-      <div className="flex flex-row flex-nowrap items-center justify-between bg-mainbutton3 text-sm text-white sm:text-lg">
+      <div className="flex flex-row flex-nowrap items-center justify-between bg-mainbutton3 text-sm text-white">
         <Link
           href="/plans"
-          className="flex h-32 w-1/2 cursor-pointer items-center justify-center gap-2 px-2 py-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg sm:h-14 sm:gap-4 sm:px-32"
+          className="flex w-1/2 cursor-pointer items-center justify-center gap-2 p-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
         >
           <IoMdArrowBack size={20} className="block" />
           <span className="text-nowrap">Powrót do planów</span>
         </Link>
 
-        <div className="flex flex-grow items-center justify-center text-center text-sm">
+        <div className="flex w-1/2 flex-grow items-center justify-center text-center text-sm">
           <span>
             Liczba ects:{" "}
             {plan.groups.reduce(
