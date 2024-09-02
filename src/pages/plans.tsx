@@ -27,14 +27,14 @@ const Plans = () => {
           <button className="text-white px-4 py-2 rounded">Zaloguj</button>
         </div>
       </header>
-      <main className="flex-grow pt-3">
+      <main className="flex-grow pt-3 flex flex-col">
         <div className="pb-6">
           <h1 className="font-bold text-center text-4xl">
             Twoje plany Bartus Lewaku
           </h1>
         </div>
-        <div className="container bg-gray-200 p-4 mx-auto h-screen max-h-[1000px] overflow-y-auto">
-          <div className="flex flex-wrap gap-4">
+        <div className="flex-grow bg-gray-200 p-4 container mx-auto overflow-y-auto max-h-[calc(100vh-400px)]">
+          <div className="flex flex-wrap gap-4 justify-center items-center sm:justify-start">
             <button
               onClick={addNewPlan}
               className="border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center p-4 h-[200px] w-[200px]"
@@ -48,6 +48,7 @@ const Plans = () => {
         </div>
       </main>
       <footer>
+        <div className="p-9"></div>
         <div className="bg-blue-200 p-6"></div>
         <div className="bg-blue-500 text-white p-4 text-center">
           &copy; 2069 Bartus Lewaku
