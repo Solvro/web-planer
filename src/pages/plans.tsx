@@ -55,8 +55,8 @@ const Plans = () => {
         </div>
       </div>
 
-      <div className="container mx-auto flex h-[calc(100vh-128px)] flex-col items-center rounded bg-gray-200 p-4">
-        <div className="flex flex-wrap gap-4 overflow-y-auto">
+      <div className="flex-grow bg-gray-200 p-4 container mx-auto overflow-y-auto max-h-[calc(100vh-400px)]">
+        <div className="flex flex-wrap gap-4 justify-center items-center sm:justify-start">
           <button
             onClick={addNewPlan}
             className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl"
