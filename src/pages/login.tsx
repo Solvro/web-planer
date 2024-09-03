@@ -15,6 +15,7 @@ export default function Home() {
 
       <Link
         href="/api/login"
+        data-umami-event="Login"
         className={buttonVariants({
           size: "lg",
           variant: "outline",

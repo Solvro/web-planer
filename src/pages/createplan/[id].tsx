@@ -252,6 +252,7 @@ const CreatePlan = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const changePlanName = (newName: string) => {
+    void window.umami.track("Change plan name");
     setPlan({
       ...plan,
       name: newName,
@@ -259,6 +260,7 @@ const CreatePlan = ({
   };
 
   const checkCourse = (id: string) => {
+    void window.umami.track("Check course");
     setPlan({
       ...plan,
       courses: plan.courses.map((course) =>
@@ -269,6 +271,7 @@ const CreatePlan = ({
     });
   };
   const checkGroup = (id: string) => {
+    void window.umami.track("Change group");
     setPlan({
       ...plan,
       groups: plan.groups.map((group) =>
@@ -350,6 +353,7 @@ const CreatePlan = ({
       <div className="flex flex-row flex-nowrap items-center justify-between bg-mainbutton3 text-sm text-white">
         <Link
           href="/plans"
+          data-umami-event="Back to plans"
           className="flex w-1/2 cursor-pointer items-center justify-center gap-2 p-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
         >
           <IoMdArrowBack size={20} className="block" />

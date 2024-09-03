@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["github.com"],
+    remotePatterns: [
+      {
+        hostname: "github.com",
+      },
+    ],
   },
   reactStrictMode: true,
   typescript: {
