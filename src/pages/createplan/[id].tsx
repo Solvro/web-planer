@@ -12,6 +12,7 @@ import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
 import { SelectGroups } from "@/components/SelectGroups";
 import { SolvroLogo } from "@/components/SolvroLogo";
+import { encodeToBase64 } from "@/lib/sharingUtils";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -280,6 +281,18 @@ const CreatePlan = ({
       ),
     });
   };
+  const sharePlan = () => {
+    navigator.clipboard
+      .writeText(
+        `${window.location.origin}/shareplan/${encodeToBase64(JSON.stringify(plan))}`,
+      )
+      .then(() => {
+        alert("Text copied to clipboard");
+      })
+      .catch(() => {
+        alert("Failed to copy text");
+      });
+  };
 
   return (
     <>
@@ -330,6 +343,9 @@ const CreatePlan = ({
               )}
             </form>
           </div>
+          <button onClick={sharePlan} className="pl-4">
+            Udostępnij
+          </button>
           <div className="mr-4 flex w-1/4 justify-end">
             <Image
               src="https://github.com/shadcn.png"
