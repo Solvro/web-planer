@@ -34,8 +34,8 @@ const Plans = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="flex max-h-20 min-h-20 items-center justify-between bg-mainbutton5">
+    <div className="flex h-screen flex-col items-stretch">
+      <div className="flex h-20 items-center justify-between bg-mainbutton5">
         <div className="ml-4 w-1/4 flex-none">
           <SolvroLogo />
         </div>
@@ -55,7 +55,7 @@ const Plans = () => {
         </div>
       </div>
 
-      <div className="container mx-auto max-h-[calc(100vh-400px)] flex-grow overflow-y-auto bg-gray-200 p-4">
+      <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto bg-gray-200 p-4">
         <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-start">
           <button
             onClick={addNewPlan}
@@ -68,6 +68,7 @@ const Plans = () => {
           ))}
         </div>
       </div>
+
       <div>
         <div className="flex h-14 flex-row items-center justify-between bg-mainbutton3 text-sm text-white">
           <Link

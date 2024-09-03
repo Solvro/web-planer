@@ -156,7 +156,7 @@ const JoinUsBlock = () => (
     <div className="">
       <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
         <span className="font-inter tracking-wide text-white animate-in">
-          Stwórz z nami swój plan używając{" "}
+          Stwórz swój plan używając{" "}
           <span className="font-bold uppercase">darmowego</span> zapisownika!
         </span>
       </h1>
