@@ -23,7 +23,7 @@ export const Seo = ({
       name="description"
       content={
         pageDescription ??
-        "Planer to strona stworzona z myślą o studentach PWR, którzy pragną w prosty i intuicyjny sposób zarządzać swoimi zapisami na kursy (za darmo!). Dzięki integracji z API USOS, Planer pozwala na dynamiczne tworzenie planów zajęć, bez zbędnych kliknięć i błądzenia w USOSie."
+        "Planer to strona stworzona z myślą o studentach PWR, którzy pragną w prosty i intuicyjny sposób zarządzać swoimi zapisami na kursy (za darmo!)."
       }
     />
     <meta name="robots" content="index, follow" />
@@ -40,7 +40,7 @@ export const Seo = ({
       property="og:description"
       content={
         pageDescription ??
-        "Planer to strona stworzona z myślą o studentach PWR, którzy pragną w prosty i intuicyjny sposób zarządzać swoimi zapisami na kursy (za darmo!). Dzięki integracji z API USOS, Planer pozwala na dynamiczne tworzenie planów zajęć, bez zbędnych kliknięć i błądzenia w USOSie."
+        "Planer to strona stworzona z myślą o studentach PWR, którzy pragną w prosty i intuicyjny sposób zarządzać swoimi zapisami na kursy (za darmo!)."
       }
     />
     <meta property="og:image" content={pageImage ?? "/og_image.png"} />
