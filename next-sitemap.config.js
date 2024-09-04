@@ -1,4 +1,4 @@
 module.exports = {
-  siteUrl: process.env.SITE_URL,
+  siteUrl: "https://planer.solvro.pl",
   generateRobotsTxt: true,
 };
