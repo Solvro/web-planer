@@ -6,6 +6,7 @@ import type React from "react";
 import { type ComponentProps, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+import { Seo } from "@/components/SEO";
 import { Button, buttonVariants } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -229,6 +230,7 @@ const Footer = () => {
 const Home = () => {
   return (
     <>
+      <Seo />
       {/* Main Page */}
       <div className="relative min-h-screen overflow-hidden bg-mainbutton5">
         {/* Blobs */}
