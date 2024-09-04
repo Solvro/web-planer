@@ -185,9 +185,18 @@ const mondaySchedule = [
   mockVoleyball2,
 ];
 
-const registrations = [mockRegistration1, mockRegistration2, mockRegistration3];
-const mockCourses = [mockCourse1, mockCourse2, mockCourse3, mockCourse4];
-const mockGroups = [
+const registrations: Registration[] = [
+  mockRegistration1,
+  mockRegistration2,
+  mockRegistration3,
+];
+const mockCourses: Course[] = [
+  mockCourse1,
+  mockCourse2,
+  mockCourse3,
+  mockCourse4,
+];
+const mockGroups: ClassBlockProps[] = [
   mockL,
   mockW,
   mockS,
@@ -223,8 +232,7 @@ export const planFamily = atomFamily(
         groups: mockGroups.map((mockGroup) => ({
           ...mockGroup,
           isChecked: false,
-        })) as ExtendedGroup[],
-        //klopot z typami, nie kumam zbytnio
+        })),
       },
       undefined,
       { getOnInit: true },
