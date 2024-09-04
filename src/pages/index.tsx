@@ -167,7 +167,7 @@ const JoinUsBlock = () => (
         Zaloguj się do platformy USOS i stwórz swój plan na semestr!
       </p>
     </div>
-    <div className="">
+    <div className="z-50">
       {process.env.NODE_ENV === "development" ||
       (typeof window !== "undefined" &&
         window.location.hostname === "planer.solvro.pl") ? (
