@@ -11,7 +11,7 @@ import { SolvroLogo } from "@/components/SolvroLogo";
 
 import { planFamily } from "./createplan/[id]";
 
-const plansIds = atomWithStorage<Array<{ id: number }>>("plansIds", []);
+export const plansIds = atomWithStorage<Array<{ id: number }>>("plansIds", []);
 
 const plansAtom = atom(
   (get) => get(plansIds).map((id) => get(planFamily(id))),

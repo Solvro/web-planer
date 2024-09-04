@@ -223,7 +223,8 @@ export const planFamily = atomFamily(
         groups: mockGroups.map((mockGroup) => ({
           ...mockGroup,
           isChecked: false,
-        })),
+        })) as ExtendedGroup[],
+        //klopot z typami, nie kumam zbytnio
       },
       undefined,
       { getOnInit: true },
@@ -343,8 +344,8 @@ const CreatePlan = ({
               )}
             </form>
           </div>
-          <button onClick={sharePlan} className="pl-4">
-            Udostępnij
+          <button onClick={sharePlan} className="rounded-md bg-mainbutton2 p-3">
+            Udostępnij plan
           </button>
           <div className="mr-4 flex w-1/4 justify-end">
             <Image
