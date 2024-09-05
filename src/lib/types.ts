@@ -24,3 +24,9 @@ export interface Course {
   registrationName: string;
   ects: number;
 }
+
+export interface MockRegistration {
+  registration: Registration;
+  courses: Course[];
+  groups: ClassBlockProps[];
+}
