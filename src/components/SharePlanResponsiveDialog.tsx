@@ -55,13 +55,13 @@ export const SharePlanResponsiveDialog = ({ hash }: { hash: string }) => {
           Udostępnij plan
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="px-4">
-        <DrawerHeader className="text-left">
+      <DrawerContent className="items-center px-4">
+        <DrawerHeader className="w-full max-w-[400px] text-left">
           <DrawerTitle>Udostępnij plan</DrawerTitle>
           <DrawerDescription>Skopiuj link</DrawerDescription>
         </DrawerHeader>
         <CopyLink hash={hash} />
-        <DrawerFooter className="pt-2">
+        <DrawerFooter className="w-full max-w-[400px] px-0 pt-6">
           <DrawerClose asChild={true}>
             <Button variant="outline">Wróć</Button>
           </DrawerClose>
@@ -80,7 +80,7 @@ function CopyLink({ hash }: { hash: string }) {
       });
   };
   return (
-    <div className="flex items-center space-x-2 pt-4">
+    <div className="flex w-full max-w-[400px] items-center space-x-2 pt-4">
       <Input
         value={`${window.location.origin}/shareplan/${hash}`}
         readOnly={true}
