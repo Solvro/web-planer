@@ -77,7 +77,7 @@ const mockRegistrations = [
   },
 ];
 
-export function GET_REGISTRATION(request: Request) {
+export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name");
 
