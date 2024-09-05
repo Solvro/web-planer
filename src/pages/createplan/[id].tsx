@@ -11,6 +11,7 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
 import { SelectGroups } from "@/components/SelectGroups";
+import { SharePlanResponsiveDialog } from "@/components/SharePlanResponsiveDialog";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { encodeToBase64 } from "@/lib/sharingUtils";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
@@ -290,18 +291,6 @@ const CreatePlan = ({
       ),
     });
   };
-  const sharePlan = () => {
-    navigator.clipboard
-      .writeText(
-        `${window.location.origin}/shareplan/${encodeToBase64(JSON.stringify(plan))}`,
-      )
-      .then(() => {
-        alert("Plan has been copied to clipboard");
-      })
-      .catch(() => {
-        alert("Something went wrong :(");
-      });
-  };
 
   return (
     <>
@@ -313,7 +302,7 @@ const CreatePlan = ({
           <div className="ml-4 w-1/4 flex-none">
             <SolvroLogo />
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
               <form
                 className="flex items-center justify-center"
@@ -353,12 +342,9 @@ const CreatePlan = ({
                 )}
               </form>
             </div>
-            <button
-              onClick={sharePlan}
-              className="text-nowrap rounded-md bg-mainbutton2 p-3 text-lg md:text-3xl"
-            >
-              Udostępnij plan
-            </button>
+            <SharePlanResponsiveDialog
+              hash={encodeToBase64(JSON.stringify(plan))}
+            />
           </div>
 
           <div className="mr-4 flex w-1/4 justify-end">
