@@ -296,10 +296,10 @@ const CreatePlan = ({
         `${window.location.origin}/shareplan/${encodeToBase64(JSON.stringify(plan))}`,
       )
       .then(() => {
-        alert("Text copied to clipboard");
+        alert("Plan has been copied to clipboard");
       })
       .catch(() => {
-        alert("Failed to copy text");
+        alert("Something went wrong :(");
       });
   };
 
@@ -313,48 +313,54 @@ const CreatePlan = ({
           <div className="ml-4 w-1/4 flex-none">
             <SolvroLogo />
           </div>
-          <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
-            <form
-              className="flex items-center justify-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                changePlanName(formData.get("name")?.toString() ?? "");
-                inputRef.current?.blur();
-              }}
-            >
-              <input
-                ref={inputRef}
-                type="text"
-                className={cn(
-                  "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
+          <div className="flex gap-2">
+            <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
+              <form
+                className="flex items-center justify-center"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  changePlanName(formData.get("name")?.toString() ?? "");
+                  inputRef.current?.blur();
+                }}
+              >
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className={cn(
+                    "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
+                  )}
+                  name="name"
+                  id="name"
+                  defaultValue={typeof window === "undefined" ? "" : plan.name}
+                  onFocus={() => {
+                    setIsEditing(true);
+                  }}
+                  onBlur={(e) => {
+                    setIsEditing(false);
+                    changePlanName(e.currentTarget.value);
+                  }}
+                />
+                {isEditing ? (
+                  <button type="submit" className="ml-2">
+                    <IoCheckmarkOutline />
+                  </button>
+                ) : (
+                  <label htmlFor="name" className="ml-2 cursor-pointer">
+                    <span className="sr-only">Nazwa planu</span>
+                    <CiEdit />
+                  </label>
                 )}
-                name="name"
-                id="name"
-                defaultValue={typeof window === "undefined" ? "" : plan.name}
-                onFocus={() => {
-                  setIsEditing(true);
-                }}
-                onBlur={(e) => {
-                  setIsEditing(false);
-                  changePlanName(e.currentTarget.value);
-                }}
-              />
-              {isEditing ? (
-                <button type="submit" className="ml-2">
-                  <IoCheckmarkOutline />
-                </button>
-              ) : (
-                <label htmlFor="name" className="ml-2 cursor-pointer">
-                  <span className="sr-only">Nazwa planu</span>
-                  <CiEdit />
-                </label>
-              )}
-            </form>
+              </form>
+            </div>
+            <button
+              onClick={sharePlan}
+              className="text-nowrap rounded-md bg-mainbutton2 p-3 text-lg md:text-3xl"
+            >
+              Udostępnij plan
+            </button>
           </div>
-          <button onClick={sharePlan} className="rounded-md bg-mainbutton2 p-3">
-            Udostępnij plan
-          </button>
+
           <div className="mr-4 flex w-1/4 justify-end">
             <Image
               src="https://github.com/shadcn.png"
