@@ -1,9 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 // import { IoCheckmarkOutline } from "react-icons/io5";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
@@ -23,25 +24,12 @@ import type {
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const registrations: Registration[] = [];
-const mockCourses: Course[] = [];
-const mockGroups: ClassBlockProps[] = [];
-
-export const fetchAllRegistrations = async (): Promise<void> => {
+const fetchRegistrations = async (): Promise<MockRegistration[]> => {
   const res = await fetch(`/api/registrations`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
-  const data: MockRegistration[] = (await res.json()) as MockRegistration[];
-
-  const flattenedRegistrations = data.flatMap((reg) => reg.registration);
-  const flattenedCourses = data.flatMap((reg) => reg.courses);
-  const flattenedGroups = data.flatMap((reg) => reg.groups);
-
-  
-  registrations.push(...flattenedRegistrations);
-  mockCourses.push(...flattenedCourses);
-  mockGroups.push(...flattenedGroups)
+  return res.json() as Promise<MockRegistration[]>;
 };
 
 export interface ExtendedCourse extends Course {
@@ -59,14 +47,8 @@ export const planFamily = atomFamily(
       {
         id,
         name: `Nowy plan - ${id}`,
-        courses: mockCourses.map((mockCourse) => ({
-          ...mockCourse,
-          isChecked: false,
-        })),
-        groups: mockGroups.map((mockGroup) => ({
-          ...mockGroup,
-          isChecked: false,
-        })),
+        courses: [] as ExtendedCourse[],
+        groups: [] as ExtendedGroup[],
       },
       undefined,
       { getOnInit: true },
@@ -91,8 +73,38 @@ const CreatePlan = ({
   planId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
-
+  const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  
+  const {
+    data: registrations,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["registrations"],
+    queryFn: fetchRegistrations,
+  });
+
+  useEffect(() => {
+    if (registrations) {
+      setPlan((prevPlan) => ({
+        ...prevPlan,
+        courses: registrations
+          .flatMap((reg) => reg.courses)
+          .map((course) => ({
+            ...course,
+            isChecked: false,
+          })),
+        groups: registrations
+          .flatMap((reg) => reg.groups)
+          .map((group) => ({
+            ...group,
+            isChecked: false,
+          })),
+      }));
+    }
+  }, [registrations, setPlan]);
 
   const changePlanName = (newName: string) => {
     void window.umami?.track("Change plan name");
@@ -113,6 +125,7 @@ const CreatePlan = ({
       ),
     });
   };
+
   const checkGroup = (id: string) => {
     void window.umami?.track("Change group");
     setPlan({
@@ -126,7 +139,9 @@ const CreatePlan = ({
   return (
     <>
       <Seo
-        pageTitle={`${plan.name.length === 0 ? "Plan bez nazwy" : plan.name} | Kreator planu`}
+        pageTitle={`${
+          plan.name.length === 0 ? "Plan bez nazwy" : plan.name
+        } | Kreator planu`}
       />
       <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
         <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
@@ -197,7 +212,9 @@ const CreatePlan = ({
             </div>
             <div className="w-full items-center justify-center">
               <SelectGroups
-                registrations={registrations}
+                registrations={
+              registrations?.flatMap((reg) => reg.registration) ?? []
+            }
                 courses={plan.courses}
                 checkCourse={checkCourse}
               />
