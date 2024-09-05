@@ -29,6 +29,7 @@ const Plans = () => {
       id: plans.length + 1,
     };
 
+    // eslint-disable-next-line, @typescript-eslint/no-unsafe-member-access
     void window.umami.track("Create plan", {
       numberOfPlans: plans.length,
     });
