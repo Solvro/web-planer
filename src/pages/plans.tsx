@@ -29,7 +29,7 @@ const Plans = () => {
       id: plans.length + 1,
     };
 
-    void window.umami.track("Create plan", {
+    void window.umami?.track("Create plan", {
       numberOfPlans: plans.length,
     });
 

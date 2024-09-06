@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 
 declare global {
   interface Window {
-    umami: UmamiTracker;
+    umami?: UmamiTracker;
   }
 }
 
@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Seo />
       <Script
         defer={true}
-        src="/script-for-umami.js"
+        src="https://analytics.solvro.pl/script.js"
         data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
         data-domains="planer.solvro.pl"
       />
