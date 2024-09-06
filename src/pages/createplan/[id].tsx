@@ -264,7 +264,7 @@ const CreatePlan = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const changePlanName = (newName: string) => {
-    void window.umami.track("Change plan name");
+    void window.umami?.track("Change plan name");
     setPlan({
       ...plan,
       name: newName,
@@ -272,7 +272,7 @@ const CreatePlan = ({
   };
 
   const checkCourse = (id: string) => {
-    void window.umami.track("Check course");
+    void window.umami?.track("Check course");
     setPlan({
       ...plan,
       courses: plan.courses.map((course) =>
@@ -283,7 +283,7 @@ const CreatePlan = ({
     });
   };
   const checkGroup = (id: string) => {
-    void window.umami.track("Change group");
+    void window.umami?.track("Change group");
     setPlan({
       ...plan,
       groups: plan.groups.map((group) =>
