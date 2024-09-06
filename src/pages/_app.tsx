@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Seo />
       <Script
         defer={true}
-        src="https://analytics.solvro.pl/script.js"
+        src="/script-for-umami.js"
         data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
         data-domains="planer.solvro.pl"
       />
