@@ -74,7 +74,7 @@ const ClassBlock = ({
         className={cn(
           position,
           typeClasses[courseType],
-          `relative flex flex-col justify-center truncate rounded-lg p-2 shadow-md`,
+          `relative flex flex-col truncate rounded-lg p-2 shadow-md`,
           checkedGroupFromCourse?.isChecked === true
             ? isThisGroupChecked
               ? "cursor-pointer"
@@ -82,7 +82,7 @@ const ClassBlock = ({
             : "cursor-pointer opacity-60",
         )}
       >
-        <div className="flex justify-between">
+        <div className="flex w-full justify-between">
           <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
           <p>{`Grupa ${group}`}</p>
         </div>

@@ -23,7 +23,7 @@ export const GroupsAccordion = ({
         <AccordionItem value="item-1">
           <AccordionTrigger className="px-4 hover:no-underline">
             <div className="flex items-center gap-4">
-              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-primary font-bold">
+              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-mainbutton2 font-bold">
                 {index + 1}
               </div>
               {registrationName}

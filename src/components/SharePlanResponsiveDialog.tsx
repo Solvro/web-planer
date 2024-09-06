@@ -30,7 +30,7 @@ export const SharePlanResponsiveDialog = ({ hash }: { hash: string }) => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild={true}>
-          <Button className="rounded-md bg-mainbutton2 text-lg md:text-3xl">
+          <Button className="rounded-md bg-mainbutton2 text-lg text-black md:text-2xl">
             Udostępnij plan
           </Button>
         </DialogTrigger>
@@ -87,7 +87,7 @@ function CopyLink({ hash }: { hash: string }) {
       />
       <Button
         onClick={sharePlan}
-        className="rounded-md bg-mainbutton2 text-lg md:text-3xl"
+        className="rounded-md bg-mainbutton2 text-lg md:text-2xl"
       >
         <Image src="/copy.svg" alt="svg" width="15" height="15" />
       </Button>

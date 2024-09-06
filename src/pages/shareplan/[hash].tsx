@@ -4,7 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { ReadonlyScheduleTest } from "@/components/ReadonlyScheduleTest";
+import { SharePlanResponsiveDialog } from "@/components/SharePlanResponsiveDialog";
 import { SolvroLogo } from "@/components/SolvroLogo";
+import { Button } from "@/components/ui/button";
 import { decodeFromBase64 } from "@/lib/sharingUtils";
 
 import type { ExtendedCourse, ExtendedGroup } from "../createplan/[id]";
@@ -22,13 +24,14 @@ export const getServerSideProps = (async (context) => {
     courses: ExtendedCourse[];
     groups: ExtendedGroup[];
   };
-  return { props: { plan } };
+  return { props: { plan, hash } };
 }) satisfies GetServerSideProps<{
   plan: { courses: ExtendedCourse[]; groups: ExtendedGroup[] };
 }>;
 
 const SharePlan = ({
   plan,
+  hash,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plans, setPlans] = useAtom(plansIds);
   const [planToCopy, setPlanToCopy] = useAtom(
@@ -65,14 +68,15 @@ const SharePlan = ({
         <div className="ml-4 w-1/4 flex-none">
           <SolvroLogo />
         </div>
-        <div className="flex gap-2">
-          <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
-            <button
+        <div className="flex items-center gap-2">
+          <SharePlanResponsiveDialog hash={hash} />
+          <div className="flex items-center justify-center rounded-xl bg-mainbutton2">
+            <Button
               onClick={copyPlan}
-              className="text-nowrap rounded-md bg-mainbutton2 p-3 text-2xl font-normal"
+              className="text-nowrap rounded-md bg-mainbutton2 text-lg text-black md:text-2xl"
             >
-              Copy plan
-            </button>
+              Dodaj do widoku moje plany
+            </Button>
           </div>
         </div>
 

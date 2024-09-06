@@ -14,8 +14,7 @@ export const SelectGroups = ({
   checkCourse: (id: string) => void;
 }) => {
   return (
-    <div className="overflow-auto">
-      <h1 className="p-4 text-2xl font-semibold">Wybierz odpowiednią turę:</h1>
+    <div className="w-full overflow-auto">
       {registrations.map((registration, index) => (
         <GroupsAccordion
           key={registration.name}

@@ -16,7 +16,7 @@ export const ScheduleTest = ({
   onClick: (id: string) => void;
 }) => {
   return (
-    <div className="flex max-h-[80vh] flex-col gap-2 overflow-auto p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
+    <div className="overflow-x flex max-h-[80vh] flex-col gap-2 overflow-auto scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
       <ClassSchedule
         schedule={schedule}
         day="Poniedziałek"
