@@ -56,7 +56,7 @@ const ReadonlyClassBlock = ({
         `relative flex flex-col justify-center truncate rounded-lg p-2 shadow-md`,
       )}
     >
-      <div className="flex justify-between">
+      <div className="flex w-full justify-between">
         <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
         <p>{`Grupa ${group}`}</p>
       </div>

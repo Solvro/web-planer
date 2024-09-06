@@ -8,10 +8,10 @@ import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCheckmarkOutline } from "react-icons/io5";
 
+import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
 import { SelectGroups } from "@/components/SelectGroups";
-import { SharePlanResponsiveDialog } from "@/components/SharePlanResponsiveDialog";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { encodeToBase64 } from "@/lib/sharingUtils";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
@@ -297,56 +297,14 @@ const CreatePlan = ({
       <Seo
         pageTitle={`${plan.name.length === 0 ? "Plan bez nazwy" : plan.name} | Kreator planu`}
       />
-      <div className="flex min-h-screen flex-col overflow-x-hidden">
-        <div className="flex max-h-20 min-h-20 items-center justify-between bg-mainbutton5">
+      <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
+        <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton5">
           <div className="ml-4 w-1/4 flex-none">
             <SolvroLogo />
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center rounded-xl bg-mainbutton2 p-1.5 text-lg font-semibold md:text-3xl">
-              <form
-                className="flex items-center justify-center"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  changePlanName(formData.get("name")?.toString() ?? "");
-                  inputRef.current?.blur();
-                }}
-              >
-                <input
-                  ref={inputRef}
-                  type="text"
-                  className={cn(
-                    "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
-                  )}
-                  name="name"
-                  id="name"
-                  defaultValue={typeof window === "undefined" ? "" : plan.name}
-                  onFocus={() => {
-                    setIsEditing(true);
-                  }}
-                  onBlur={(e) => {
-                    setIsEditing(false);
-                    changePlanName(e.currentTarget.value);
-                  }}
-                />
-                {isEditing ? (
-                  <button type="submit" className="ml-2">
-                    <IoCheckmarkOutline />
-                  </button>
-                ) : (
-                  <label htmlFor="name" className="ml-2 cursor-pointer">
-                    <span className="sr-only">Nazwa planu</span>
-                    <CiEdit />
-                  </label>
-                )}
-              </form>
-            </div>
-            <SharePlanResponsiveDialog
-              hash={encodeToBase64(JSON.stringify(plan))}
-            />
+          <div className="flex w-1/2 items-center justify-center text-2xl font-bold md:text-4xl">
+            Kreator planu
           </div>
-
           <div className="mr-4 flex w-1/4 justify-end">
             <Image
               src="https://github.com/shadcn.png"
@@ -357,46 +315,96 @@ const CreatePlan = ({
             />
           </div>
         </div>
-
-        <div className="flex-grow border-b-4 border-b-primary min-[1200px]:grid min-[1200px]:grid-cols-[1fr_4fr]">
-          <SelectGroups
-            registrations={registrations}
-            courses={plan.courses}
-            checkCourse={checkCourse}
-          />
-          <ScheduleTest
-            schedule={mondaySchedule}
-            courses={plan.courses}
-            groups={plan.groups}
-            onClick={checkGroup}
-          />
+        {/* div z nazwa innymi i select grouos */}
+        <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-start">
+          <div className="flex w-11/12 flex-col items-center justify-center gap-2 rounded-xl border-2 bg-slate-100 p-2 md:flex-row-reverse md:items-start lg:w-4/12 lg:flex-col">
+            {/* nazwa planu */}
+            <div className="flex flex-col justify-start gap-2 md:w-1/2 lg:w-full">
+              <div className="flex w-full items-center justify-center rounded-lg bg-mainbutton2 px-4 py-2 text-xl font-semibold lg:text-2xl">
+                <form
+                  className="flex w-full items-center justify-center"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    changePlanName(formData.get("name")?.toString() ?? "");
+                    inputRef.current?.blur();
+                  }}
+                >
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    className={cn(
+                      "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
+                    )}
+                    name="name"
+                    id="name"
+                    defaultValue={
+                      typeof window === "undefined" ? "" : plan.name
+                    }
+                    onFocus={() => {
+                      setIsEditing(true);
+                    }}
+                    onBlur={(e) => {
+                      setIsEditing(false);
+                      changePlanName(e.currentTarget.value);
+                    }}
+                  />
+                  {isEditing ? (
+                    <button type="submit" className="ml-2">
+                      <IoCheckmarkOutline />
+                    </button>
+                  ) : (
+                    <label htmlFor="name" className="ml-2 cursor-pointer">
+                      <span className="sr-only">Nazwa planu</span>
+                      <CiEdit />
+                    </label>
+                  )}
+                </form>
+              </div>
+              {/* div z ects i przyciskiem do wyswietlenia calego planu */}
+              <div className="flex w-full items-center justify-between">
+                <PlanDisplayLink hash={encodeToBase64(JSON.stringify(plan))} />
+                <span>
+                  Liczba ects:{" "}
+                  {plan.groups.reduce(
+                    (acc, curr) =>
+                      acc +
+                      (curr.isChecked
+                        ? (plan.courses.find(
+                            (course) => course.name === curr.courseName,
+                          )?.ects ?? 0)
+                        : 0),
+                    0,
+                  )}
+                </span>
+              </div>
+            </div>
+            <div className="w-full items-center justify-center md:w-1/2 lg:w-full">
+              <SelectGroups
+                registrations={registrations}
+                courses={plan.courses}
+                checkCourse={checkCourse}
+              />
+            </div>
+          </div>
+          <div className="flex w-full items-start overflow-x-auto md:w-11/12">
+            <ScheduleTest
+              schedule={mondaySchedule}
+              courses={plan.courses}
+              groups={plan.groups}
+              onClick={checkGroup}
+            />
+          </div>
         </div>
-
-        <div className="flex flex-row flex-nowrap items-center justify-between bg-mainbutton3 text-sm text-white">
+        <div className="w-full bg-mainbutton3 text-xs text-white md:text-sm lg:text-base">
           <Link
             href="/plans"
             data-umami-event="Back to plans"
-            className="flex w-1/2 cursor-pointer items-center justify-center gap-2 p-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
+            className="flex w-full cursor-pointer items-center justify-center gap-2 p-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
           >
             <IoMdArrowBack size={20} className="block" />
             <span className="text-nowrap">Powrót do planów</span>
           </Link>
-
-          <div className="flex w-1/2 flex-grow items-center justify-center text-center text-sm">
-            <span>
-              Liczba ects:{" "}
-              {plan.groups.reduce(
-                (acc, curr) =>
-                  acc +
-                  (curr.isChecked
-                    ? (plan.courses.find(
-                        (course) => course.name === curr.courseName,
-                      )?.ects ?? 0)
-                    : 0),
-                0,
-              )}
-            </span>
-          </div>
         </div>
       </div>
     </>
