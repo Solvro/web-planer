@@ -4,7 +4,7 @@ import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCheckmarkOutline } from "react-icons/io5";
@@ -73,7 +73,6 @@ const CreatePlan = ({
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  
   const {
     data: registrations,
     isLoading,
@@ -83,25 +82,27 @@ const CreatePlan = ({
     queryFn: fetchRegistrations,
   });
 
-  useEffect(() => {
-    if (registrations) {
-      setPlan((prevPlan) => ({
-        ...prevPlan,
-        courses: registrations
-          .flatMap((reg) => reg.courses)
-          .map((course) => ({
-            ...course,
-            isChecked: false,
-          })),
-        groups: registrations
-          .flatMap((reg) => reg.groups)
-          .map((group) => ({
-            ...group,
-            isChecked: false,
-          })),
+  if (registrations && plan.courses.length === 0 && plan.groups.length === 0) {
+    const courses = registrations
+      .flatMap((reg) => reg.courses)
+      .map((course) => ({
+        ...course,
+        isChecked: false,
       }));
-    }
-  }, [registrations, setPlan]);
+
+    const groups = registrations
+      .flatMap((reg) => reg.groups)
+      .map((group) => ({
+        ...group,
+        isChecked: false,
+      }));
+
+    setPlan((prevPlan) => ({
+      ...prevPlan,
+      courses,
+      groups,
+    }));
+  }
 
   const changePlanName = (newName: string) => {
     void window.umami.track("Change plan name");
