@@ -44,3 +44,4 @@ jobs:
 
       - name: Find deadcode
         run: npm run knip
+        if: always()

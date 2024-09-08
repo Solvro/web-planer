@@ -59,6 +59,7 @@ const ClassBlock = ({
   return (
     Boolean(isCourseChecked?.isChecked) && (
       <button
+        suppressHydrationWarning={true}
         disabled={
           checkedGroupFromCourse?.isChecked === true
             ? !isThisGroupChecked

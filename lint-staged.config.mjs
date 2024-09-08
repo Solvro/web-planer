@@ -16,7 +16,7 @@ export default {
     const filesToLint = await removeIgnoredFiles(files);
     return [
       `prettier --write ${files.join(" ")}`,
-      `eslint --max-warnings=0 ${filesToLint}`,
+      `eslint --fix --max-warnings=0 ${filesToLint}`,
     ];
   },
 };

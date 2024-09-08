@@ -57,11 +57,11 @@ const ClassSchedule = ({
   onClick: (id: string) => void;
 }) => {
   return (
-    <div className="flex min-w-fit flex-col overflow-visible rounded-xl border-2 p-1">
+    <div className="flex min-w-fit flex-col rounded-xl border-2 p-1">
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold">
         {day}
       </div>
-      <div className="max-h-[300px] flex-1 overflow-auto p-2 text-[9px]">
+      <div className="flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]">
         <div className="grid min-w-[1400px] grid-cols-dayPlan px-[10px]">
           {upperHours.map((hour, index) => (
             <Hour hour={hour} key={index} />

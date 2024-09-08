@@ -325,7 +325,6 @@ const CreatePlan = ({
 
         <div className="flex w-full flex-col items-center justify-center gap-2 md:flex-row md:items-start">
           <div className="flex w-9/12 max-w-[400px] flex-col items-center justify-center gap-2 md:ml-4 md:w-4/12 md:flex-col">
-            {/* plan name */}
             <div className="w-full rounded-xl border-2 p-5">
               <div className="flex flex-col justify-start gap-3 md:w-full">
                 <div className="flex w-full">
@@ -345,34 +344,22 @@ const CreatePlan = ({
                         type="text"
                         name="name"
                         id="name"
+                        placeholder="Wolne poniedziałki"
                         defaultValue={
                           typeof window === "undefined" ? "" : plan.name
                         }
-                        onBlur={(e) => {
+                        onChange={(e) => {
                           changePlanName(e.currentTarget.value);
                         }}
                       />
                     </div>
                   </form>
                 </div>
-                {/* div with ects and full screen view btn*/}
+
                 <div className="flex w-full items-center justify-between gap-1 md:flex-col lg:flex-row">
                   <PlanDisplayLink
                     hash={encodeToBase64(JSON.stringify(plan))}
                   />
-                  <span>
-                    ECTS:{" "}
-                    {plan.groups.reduce(
-                      (acc, curr) =>
-                        acc +
-                        (curr.isChecked
-                          ? (plan.courses.find(
-                              (course) => course.name === curr.courseName,
-                            )?.ects ?? 0)
-                          : 0),
-                      0,
-                    )}
-                  </span>
                 </div>
               </div>
             </div>

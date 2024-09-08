@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Copy } from "lucide-react";
 import * as React from "react";
 import { MdOutlineIosShare } from "react-icons/md";
 
@@ -31,7 +31,8 @@ export const SharePlanResponsiveDialog = ({ hash }: { hash: string }) => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild={true}>
-          <Button className="flex items-center justify-center rounded-xl bg-mainbutton3 text-lg text-black">
+          <Button className="flex items-center justify-center gap-4 rounded-xl text-lg">
+            Udostępnij
             <MdOutlineIosShare />
           </Button>
         </DialogTrigger>
@@ -86,11 +87,8 @@ function CopyLink({ hash }: { hash: string }) {
         value={`${window.location.origin}/shareplan/${hash}`}
         readOnly={true}
       />
-      <Button
-        onClick={sharePlan}
-        className="rounded-md bg-mainbutton2 text-lg md:text-2xl"
-      >
-        <Image src="/copy.svg" alt="svg" width="15" height="15" />
+      <Button onClick={sharePlan} className="rounded-md text-lg md:text-2xl">
+        <Copy className="h-4 w-4" />
       </Button>
     </div>
   );
