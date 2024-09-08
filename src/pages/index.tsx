@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronRightIcon } from "lucide-react";
+// import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
@@ -178,7 +178,8 @@ const JoinUsBlock = () => (
       (typeof window !== "undefined" &&
         window.location.hostname === "planer.solvro.pl") ? (
         <Link
-          href="/plans"
+          // href="/plans"
+          href="#"
           data-umami-event="Landing - Go to planning"
           className={buttonVariants({
             size: "lg",
@@ -187,7 +188,8 @@ const JoinUsBlock = () => (
               "h-20 cursor-pointer self-center border-4 text-xl transition-all duration-300 hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7",
           })}
         >
-          Przejdź do planowania <ChevronRightIcon className="ml-2" />
+          {/* Przejdź do planowania <ChevronRightIcon className="ml-2" /> */}
+          Startujemy 10 września
         </Link>
       ) : (
         <Button
