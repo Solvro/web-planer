@@ -101,12 +101,13 @@ const SharePlan = ({
           />
         </div>
       </div>
-      <div className="flex items-center justify-center gap-2 p-2">
+      <div className="flex items-center justify-center gap-4 p-2">
         <SharePlanResponsiveDialog hash={hash} />
         <Button
           onClick={copyPlan}
-          className="text-nowrap rounded-md bg-mainbutton3 text-lg text-black"
+          className="flex items-center justify-center gap-4 text-nowrap rounded-md text-lg"
         >
+          Skopiuj
           <LuDownloadCloud />
         </Button>
       </div>
