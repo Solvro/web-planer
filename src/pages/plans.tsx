@@ -84,7 +84,7 @@ const Plans = () => {
         </div>
 
         <div>
-          <div className="flex w-full flex-1 items-center justify-center bg-mainbutton7">
+          <div className="flex w-full flex-1 items-center justify-center bg-mainbutton7 p-2">
             <p className="text-center text-white">
               Made with ❤️ by{" "}
               <a
