@@ -41,8 +41,8 @@ const Plans = () => {
   return (
     <>
       <Seo pageTitle="Twoje Plany | Planer" />
-      <div className="flex h-screen flex-col items-stretch">
-        <div className="flex h-20 items-center justify-between bg-mainbutton5">
+      <div className="flex h-screen flex-col items-stretch bg-white">
+        <div className="flex h-20 items-center justify-between bg-mainbutton7">
           <div className="ml-4 w-1/4 flex-none">
             <SolvroLogo />
           </div>
@@ -62,7 +62,7 @@ const Plans = () => {
           </div>
         </div>
 
-        <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto bg-gray-200 p-4">
+        <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">
           <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-start">
             <button
               onClick={addNewPlan}
@@ -77,7 +77,7 @@ const Plans = () => {
         </div>
 
         <div>
-          <div className="flex h-14 flex-row items-center justify-between bg-mainbutton3 text-sm text-white">
+          <div className="flex h-14 flex-row items-center justify-between bg-mainbutton7 text-sm text-white">
             <Link
               href="/"
               className="flex h-full flex-1 cursor-pointer items-center justify-center gap-2 text-center font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
