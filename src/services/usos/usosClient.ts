@@ -1,7 +1,15 @@
+import { LRUCache } from "lru-cache";
+
 import { USOS_APPS_URL } from "@/env.mjs";
 import { oauth } from "@/lib/auth";
 
 const baseUrl = `${USOS_APPS_URL}/services`;
+
+const cache = new LRUCache<string, object>({
+  ttl: 60 * 60 * 1000,
+  ttlAutopurge: false,
+  max: 10000,
+});
 
 export const createClient = ({
   token,
@@ -18,6 +26,10 @@ export const createClient = ({
   return {
     async get<R = unknown>(endpoint: string): Promise<R> {
       const url = `${baseUrl}/${endpoint}`;
+
+      if (cache.has(url)) {
+        return cache.get(url) as R;
+      }
 
       const data = oauth.authorize(
         {
@@ -46,7 +58,12 @@ export const createClient = ({
         throw new Error("Unauthorized");
       }
 
-      return response.json() as Promise<R>;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const json: object = await response.json();
+
+      cache.set(url, json);
+
+      return json as Promise<R>;
     },
     async post<R = unknown>(endpoint: string, body: unknown): Promise<R> {
       const url = `${baseUrl}/${endpoint}`;
