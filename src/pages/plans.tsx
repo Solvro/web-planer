@@ -3,11 +3,12 @@ import { atomWithStorage } from "jotai/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { IoMdArrowBack } from "react-icons/io";
 
 import { Plan } from "@/components/Plan";
 import { Seo } from "@/components/SEO";
 import { SolvroLogo } from "@/components/SolvroLogo";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { planFamily } from "./createplan/[id]";
 
@@ -41,17 +42,23 @@ const Plans = () => {
   return (
     <>
       <Seo pageTitle="Twoje Plany | Planer" />
-      <div className="flex h-screen flex-col items-stretch bg-white">
-        <div className="flex h-20 items-center justify-between bg-mainbutton7">
-          <div className="ml-4 w-1/4 flex-none">
+      <div className="flex h-screen flex-col items-stretch">
+        <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
+          <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
             <SolvroLogo />
+            <div className="md:hidden">Plany</div>
           </div>
-          <div className="flex flex-grow justify-center">
-            <div className="flex items-center justify-center text-lg font-semibold text-white md:text-3xl">
-              <p className="text-nowrap">Twoje Plany</p>
-            </div>
+          <div className="hidden w-1/2 items-center justify-center font-bold text-white md:flex md:text-4xl">
+            Twoje plany
           </div>
-          <div className="mr-4 flex w-1/4 justify-end">
+          <div className="mr-4 flex w-1/4 items-center justify-end">
+            <Link
+              href="/"
+              data-umami-event="Back to homepage"
+              className={cn(buttonVariants({ variant: "link" }), "text-white")}
+            >
+              <span className="text-nowrap">Strona główna</span>
+            </Link>
             <Image
               src="https://github.com/shadcn.png"
               width={40}
@@ -77,14 +84,16 @@ const Plans = () => {
         </div>
 
         <div>
-          <div className="flex h-14 flex-row items-center justify-between bg-mainbutton7 text-sm text-white">
-            <Link
-              href="/"
-              className="flex h-full flex-1 cursor-pointer items-center justify-center gap-2 text-center font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
-            >
-              <IoMdArrowBack size={20} className="block" />
-              Powrót do głównej strony
-            </Link>
+          <div className="flex w-full flex-1 items-center justify-center bg-mainbutton7">
+            <p className="text-center text-white">
+              Made with ❤️ by{" "}
+              <a
+                href="https://solvro.pwr.edu.pl/"
+                className="font-bold text-mainbutton hover:underline"
+              >
+                SOLVRO
+              </a>
+            </p>
           </div>
         </div>
       </div>

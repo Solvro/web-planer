@@ -223,7 +223,7 @@ const Logo = () => {
   );
 };
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className="sm:mt-12">
       <p className="p-4 text-center text-white">

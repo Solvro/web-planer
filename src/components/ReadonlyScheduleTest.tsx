@@ -9,7 +9,7 @@ export const ReadonlyScheduleTest = ({
   schedule: ClassBlockProps[];
 }) => {
   return (
-    <div className="flex h-[90vh] flex-col gap-2 overflow-auto p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
+    <div className="flex flex-col gap-2 overflow-auto p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
       <ReadonlyClassSchedule schedule={schedule} day="Poniedziałek" />
       <ReadonlyClassSchedule schedule={schedule} day="Wtorek" />
       <ReadonlyClassSchedule schedule={schedule} day="Środa" />

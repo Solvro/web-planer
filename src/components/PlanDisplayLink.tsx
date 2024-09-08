@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { SlSizeFullscreen } from "react-icons/sl";
 
 import { cn } from "@/lib/utils";
 
@@ -17,10 +18,11 @@ export function PlanDisplayLink({ hash }: { hash: string }) {
       href={linkURL}
       className={cn(
         buttonVariants({ variant: "outline" }),
-        "bg-mainbutton2 font-semibold",
+        "f bg-mainbutton2 font-semibold",
       )}
     >
-      Wyświetl plan
+      <span className="mr-2">Wyświetl</span>
+      <SlSizeFullscreen />
     </Link>
   );
 }
