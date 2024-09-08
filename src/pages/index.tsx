@@ -240,7 +240,7 @@ const Home = () => {
     <>
       <Seo />
       {/* Main Page */}
-      <div className="relative min-h-screen overflow-hidden bg-mainbutton5">
+      <div className="relative min-h-screen overflow-hidden bg-mainbutton7">
         {/* Blobs */}
         <div className="hidden md:block">
           <svg
