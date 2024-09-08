@@ -18,7 +18,7 @@ export const GroupsAccordion = ({
   courses: ExtendedCourse[];
 }) => {
   return (
-    <div className="max-w-96">
+    <div className="">
       <Accordion type="single" collapsible={true} className="">
         <AccordionItem value="item-1">
           <AccordionTrigger className="px-4 hover:no-underline">

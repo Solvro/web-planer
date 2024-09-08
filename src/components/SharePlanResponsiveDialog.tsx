@@ -1,5 +1,6 @@
 import Image from "next/image";
 import * as React from "react";
+import { MdOutlineIosShare } from "react-icons/md";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,8 +31,8 @@ export const SharePlanResponsiveDialog = ({ hash }: { hash: string }) => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild={true}>
-          <Button className="rounded-md bg-mainbutton2 text-lg text-black md:text-2xl">
-            Udostępnij plan
+          <Button className="flex items-center justify-center rounded-xl bg-mainbutton3 text-lg text-black">
+            <MdOutlineIosShare />
           </Button>
         </DialogTrigger>
         <DialogContent
@@ -51,8 +52,8 @@ export const SharePlanResponsiveDialog = ({ hash }: { hash: string }) => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild={true}>
-        <Button className="rounded-md bg-mainbutton2 text-lg md:text-3xl">
-          Udostępnij plan
+        <Button className="rounded-md bg-mainbutton3 text-lg text-black">
+          <MdOutlineIosShare />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="items-center px-4">

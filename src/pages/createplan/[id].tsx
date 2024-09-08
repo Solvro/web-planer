@@ -3,16 +3,17 @@ import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { CiEdit } from "react-icons/ci";
-import { IoMdArrowBack } from "react-icons/io";
-import { IoCheckmarkOutline } from "react-icons/io5";
+import { useRef } from "react";
 
+// import { IoCheckmarkOutline } from "react-icons/io5";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
 import { SelectGroups } from "@/components/SelectGroups";
 import { SolvroLogo } from "@/components/SolvroLogo";
+import { buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { encodeToBase64 } from "@/lib/sharingUtils";
 import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -259,8 +260,6 @@ const CreatePlan = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
 
-  const [isEditing, setIsEditing] = useState(false);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   const changePlanName = (newName: string) => {
@@ -298,14 +297,22 @@ const CreatePlan = ({
         pageTitle={`${plan.name.length === 0 ? "Plan bez nazwy" : plan.name} | Kreator planu`}
       />
       <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
-        <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton5">
-          <div className="ml-4 w-1/4 flex-none">
+        <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
+          <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
             <SolvroLogo />
+            <div className="md:hidden">Kreator</div>
           </div>
-          <div className="flex w-1/2 items-center justify-center text-2xl font-bold md:text-4xl">
-            Kreator planu
+          <div className="hidden w-1/2 items-center justify-center font-bold text-white md:flex md:text-4xl">
+            Kreator
           </div>
-          <div className="mr-4 flex w-1/4 justify-end">
+          <div className="mr-4 flex w-1/4 items-center justify-end">
+            <Link
+              href="/plans"
+              data-umami-event="Back to plans"
+              className={cn(buttonVariants({ variant: "link" }), "text-white")}
+            >
+              <span className="text-nowrap">Moje plany</span>
+            </Link>
             <Image
               src="https://github.com/shadcn.png"
               width={40}
@@ -315,71 +322,61 @@ const CreatePlan = ({
             />
           </div>
         </div>
-        {/* div z nazwa innymi i select grouos */}
-        <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-start">
-          <div className="flex w-11/12 flex-col items-center justify-center gap-2 rounded-xl border-2 bg-slate-100 p-2 md:flex-row-reverse md:items-start lg:w-4/12 lg:flex-col">
-            {/* nazwa planu */}
-            <div className="flex flex-col justify-start gap-2 md:w-1/2 lg:w-full">
-              <div className="flex w-full items-center justify-center rounded-lg bg-mainbutton2 px-4 py-2 text-xl font-semibold lg:text-2xl">
-                <form
-                  className="flex w-full items-center justify-center"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    changePlanName(formData.get("name")?.toString() ?? "");
-                    inputRef.current?.blur();
-                  }}
-                >
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    className={cn(
-                      "w-full truncate border-mainbutton5 bg-transparent outline-none duration-100 ease-in-out before:transition-all focus:border-b-2 focus:font-normal",
-                    )}
-                    name="name"
-                    id="name"
-                    defaultValue={
-                      typeof window === "undefined" ? "" : plan.name
-                    }
-                    onFocus={() => {
-                      setIsEditing(true);
+
+        <div className="flex w-full flex-col items-center justify-center gap-2 md:flex-row md:items-start">
+          <div className="flex w-9/12 max-w-[400px] flex-col items-center justify-center gap-2 md:ml-4 md:w-4/12 md:flex-col">
+            {/* plan name */}
+            <div className="w-full rounded-xl border-2 p-5">
+              <div className="flex flex-col justify-start gap-3 md:w-full">
+                <div className="flex w-full">
+                  <form
+                    className="flex w-full items-center justify-center"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
+                      changePlanName(formData.get("name")?.toString() ?? "");
+                      inputRef.current?.blur();
                     }}
-                    onBlur={(e) => {
-                      setIsEditing(false);
-                      changePlanName(e.currentTarget.value);
-                    }}
+                  >
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <Label htmlFor="name">Nazwa</Label>
+                      <Input
+                        ref={inputRef}
+                        type="text"
+                        name="name"
+                        id="name"
+                        defaultValue={
+                          typeof window === "undefined" ? "" : plan.name
+                        }
+                        onBlur={(e) => {
+                          changePlanName(e.currentTarget.value);
+                        }}
+                      />
+                    </div>
+                  </form>
+                </div>
+                {/* div with ects and full screen view btn*/}
+                <div className="flex w-full items-center justify-between gap-1 md:flex-col lg:flex-row">
+                  <PlanDisplayLink
+                    hash={encodeToBase64(JSON.stringify(plan))}
                   />
-                  {isEditing ? (
-                    <button type="submit" className="ml-2">
-                      <IoCheckmarkOutline />
-                    </button>
-                  ) : (
-                    <label htmlFor="name" className="ml-2 cursor-pointer">
-                      <span className="sr-only">Nazwa planu</span>
-                      <CiEdit />
-                    </label>
-                  )}
-                </form>
-              </div>
-              {/* div z ects i przyciskiem do wyswietlenia calego planu */}
-              <div className="flex w-full items-center justify-between">
-                <PlanDisplayLink hash={encodeToBase64(JSON.stringify(plan))} />
-                <span>
-                  Liczba ects:{" "}
-                  {plan.groups.reduce(
-                    (acc, curr) =>
-                      acc +
-                      (curr.isChecked
-                        ? (plan.courses.find(
-                            (course) => course.name === curr.courseName,
-                          )?.ects ?? 0)
-                        : 0),
-                    0,
-                  )}
-                </span>
+                  <span>
+                    ECTS:{" "}
+                    {plan.groups.reduce(
+                      (acc, curr) =>
+                        acc +
+                        (curr.isChecked
+                          ? (plan.courses.find(
+                              (course) => course.name === curr.courseName,
+                            )?.ects ?? 0)
+                          : 0),
+                      0,
+                    )}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="w-full items-center justify-center md:w-1/2 lg:w-full">
+            <div className="w-full items-center justify-center">
               <SelectGroups
                 registrations={registrations}
                 courses={plan.courses}
@@ -387,7 +384,8 @@ const CreatePlan = ({
               />
             </div>
           </div>
-          <div className="flex w-full items-start overflow-x-auto md:w-11/12">
+          <hr />
+          <div className="flex w-11/12 items-start overflow-x-auto md:ml-0">
             <ScheduleTest
               schedule={mondaySchedule}
               courses={plan.courses}
@@ -396,15 +394,16 @@ const CreatePlan = ({
             />
           </div>
         </div>
-        <div className="w-full bg-mainbutton3 text-xs text-white md:text-sm lg:text-base">
-          <Link
-            href="/plans"
-            data-umami-event="Back to plans"
-            className="flex w-full cursor-pointer items-center justify-center gap-2 p-2 font-semibold transition-all hover:bg-solvroshadow hover:shadow-lg"
-          >
-            <IoMdArrowBack size={20} className="block" />
-            <span className="text-nowrap">Powrót do planów</span>
-          </Link>
+        <div className="flex w-full flex-1 items-center justify-center bg-mainbutton7">
+          <p className="text-center text-white">
+            Made with ❤️ by{" "}
+            <a
+              href="https://solvro.pwr.edu.pl/"
+              className="font-bold text-mainbutton hover:underline"
+            >
+              SOLVRO
+            </a>
+          </p>
         </div>
       </div>
     </>
