@@ -213,8 +213,8 @@ const Logo = () => {
 
 const Footer = () => {
   return (
-    <footer className="mt-12">
-      <p className="text-center text-white">
+    <footer className="sm:mt-12">
+      <p className="p-4 text-center text-white">
         Made with ❤️ by{" "}
         <a
           href="https://solvro.pwr.edu.pl/"
