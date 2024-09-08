@@ -56,14 +56,16 @@ const SharePlan = ({
       numberOfPlans: plans.length,
     });
 
-    void router.push(`/plans`).then(() => {
-      setPlans([...plans, newPlan]);
-      setPlanToCopy({
-        ...planToCopy,
-        courses: plan.courses,
-        groups: plan.groups,
-      });
+    setPlans([...plans, newPlan]);
+    setPlanToCopy({
+      ...planToCopy,
+      courses: plan.courses,
+      groups: plan.groups,
     });
+
+    setTimeout(() => {
+      void router.push(`/createplan/${newPlan.id}`);
+    }, 200);
   };
   return (
     <div className="flex max-h-screen flex-col overflow-x-hidden">
