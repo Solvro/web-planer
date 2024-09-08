@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronRightIcon } from "lucide-react";
+// import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 
 import { Seo } from "@/components/SEO";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,6 +38,9 @@ const Navbar = () => {
           </li>
           <li className="cursor-pointer">
             <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+          </li>
+          <li className="cursor-pointer">
+            <a href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</a>
           </li>
         </ul>
       </nav>
@@ -80,6 +84,9 @@ const Navbar = () => {
             </li>
             <li className="cursor-pointer p-2">
               <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+            </li>
+            <li className="cursor-pointer p-2">
+              <a href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</a>
             </li>
           </ul>
         </div>
@@ -172,16 +179,21 @@ const JoinUsBlock = () => (
       (typeof window !== "undefined" &&
         window.location.hostname === "planer.solvro.pl") ? (
         <Link
-          href="/plans"
+          href="#"
           data-umami-event="Landing - Go to planning"
           className={buttonVariants({
             size: "lg",
             variant: "outline",
-            class:
-              "h-20 cursor-pointer self-center border-4 text-xl transition-all duration-300 hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7",
+            className: cn(
+              "h-20 cursor-wait self-center border-4 text-xl opacity-80 transition-all duration-300 md:mt-0 md:p-7",
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+              false &&
+                "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+            ),
           })}
         >
-          Przejdź do planowania <ChevronRightIcon className="ml-2" />
+          {/* Przejdź do planowania <ChevronRightIcon className="ml-2" /> */}
+          Startujemy 10 września
         </Link>
       ) : (
         <Button
@@ -213,8 +225,8 @@ const Logo = () => {
 
 const Footer = () => {
   return (
-    <footer className="mt-12">
-      <p className="text-center text-white">
+    <footer className="sm:mt-12">
+      <p className="p-4 text-center text-white">
         Made with ❤️ by{" "}
         <a
           href="https://solvro.pwr.edu.pl/"
@@ -232,7 +244,7 @@ const Home = () => {
     <>
       <Seo />
       {/* Main Page */}
-      <div className="relative min-h-screen overflow-hidden bg-mainbutton5">
+      <div className="relative min-h-screen overflow-hidden bg-mainbutton7">
         {/* Blobs */}
         <div className="hidden md:block">
           <svg

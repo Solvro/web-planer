@@ -5,7 +5,7 @@ export const Plan = ({ id, name }: { id: number; name: string }) => {
   return (
     <Link
       href={`/createplan/${id}`}
-      className="h-[200px] w-[200px] rounded-lg bg-white p-4 text-left shadow-lg"
+      className="flex h-[200px] w-[200px] flex-col items-center justify-center rounded-lg border-2 border-gray-400 bg-white p-4 text-center shadow-lg"
     >
       <div className="text-xl font-semibold">{name}</div>
       <div className="mt-2 text-gray-600">
