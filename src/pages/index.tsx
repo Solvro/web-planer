@@ -38,6 +38,9 @@ const Navbar = () => {
           <li className="cursor-pointer">
             <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
           </li>
+          <li className="cursor-pointer">
+            <a href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</a>
+          </li>
         </ul>
       </nav>
 
@@ -80,6 +83,9 @@ const Navbar = () => {
             </li>
             <li className="cursor-pointer p-2">
               <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+            </li>
+            <li className="cursor-pointer p-2">
+              <a href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</a>
             </li>
           </ul>
         </div>
