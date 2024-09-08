@@ -172,7 +172,7 @@ const JoinUsBlock = () => (
       (typeof window !== "undefined" &&
         window.location.hostname === "planer.solvro.pl") ? (
         <Link
-          href="/plans"
+          href="/api/login"
           data-umami-event="Landing - Go to planning"
           className={buttonVariants({
             size: "lg",
