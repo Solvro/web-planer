@@ -205,7 +205,7 @@ const CreatePlan = ({
             checkCourse={checkCourse}
           />
           <ScheduleTest
-            schedule={mondaySchedule}
+            schedule={plan.groups}
             courses={plan.courses}
             groups={plan.groups}
             onClick={checkGroup}
