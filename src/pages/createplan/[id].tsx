@@ -224,7 +224,7 @@ const CreatePlan = ({
           <hr />
           <div className="flex w-11/12 items-start overflow-x-auto md:ml-0">
             <ScheduleTest
-              schedule={mondaySchedule}
+              schedule={plan.groups}
               courses={plan.courses}
               groups={plan.groups}
               onClick={checkGroup}
