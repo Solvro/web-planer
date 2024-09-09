@@ -2,6 +2,7 @@ import { useAtom } from "jotai";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import * as React from "react";
 import { LuDownloadCloud } from "react-icons/lu";
 
 import { planFamily } from "@/atoms/planFamily";
@@ -28,6 +29,7 @@ export const getServerSideProps = (async (context) => {
 const SharePlan = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId: id });
   const [planToCopy, setPlanToCopy] = useAtom(
