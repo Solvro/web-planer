@@ -1,10 +1,12 @@
 import * as cheerio from "cheerio";
 import makeFetchCookie from "fetch-cookie";
+import { LRUCache } from "lru-cache";
 
 import type { GetCoursesCart } from "./getCoursesCart";
 import type { GetCoursesEditions } from "./getCoursesEditions";
 import type { GetProfile } from "./getProfile";
 import type { GetRegistrationRoundCourses } from "./getRegistrationRoundCourses";
+import type { GetRegistrations } from "./getRegistrations";
 import { type GetTerms } from "./getTerms";
 import type { GetUserRegistrations } from "./getUserRegistrations";
 import { Day, Frequency, LessonType } from "./types";
@@ -40,6 +42,11 @@ const calculateDifference = (start: Time, end: Time) => {
   };
 };
 
+const cache = new LRUCache<string, object>({
+  ttl: 60 * 1000,
+  ttlAutopurge: true,
+});
+
 export const usosService = (usosClient: UsosClient) => {
   return {
     getProfile: async () => {
@@ -57,7 +64,7 @@ export const usosService = (usosClient: UsosClient) => {
 
     getUserRegistrations: async () => {
       const data = await usosClient.get<GetUserRegistrations>(
-        "registrations/user_registrations?fields=id|description|message|type|status|is_linkage_required|www_instance|faculty|rounds|related_courses",
+        "registrations/user_registrations?fields=id|description|message|type|status|is_linkage_required|www_instance|faculty|rounds|related_courses&active=false",
       );
 
       return data;
@@ -88,6 +95,16 @@ export const usosService = (usosClient: UsosClient) => {
 
       return data;
     },
+    getRegistrations: async (facultyId: string) => {
+      return usosClient.get<GetRegistrations>(
+        `registrations/faculty_registrations?faculty_id=${facultyId}&fields=id|description|message|type|status|is_linkage_required|www_instance|related_courses`,
+      );
+    },
+    getCourses: async (coursesIds: string[]) => {
+      return usosClient.get(
+        `courses/courses&course_ids=${coursesIds.join("|")}`,
+      );
+    },
     getClassGroupTimetable: async (
       courseUnitId: string,
       groupNumber: string,
@@ -111,6 +128,15 @@ export const usosService = (usosClient: UsosClient) => {
       return data;
     },
     getCourse: async (courseId: string) => {
+      const cacheKey = `course-${courseId}`;
+
+      if (cache.has(cacheKey)) {
+        return cache.get(cacheKey) as Promise<{
+          id: string;
+          name: string;
+        }>;
+      }
+
       const data = await fetchWithCookie(
         `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=${courseId}`,
       );
@@ -119,13 +145,40 @@ export const usosService = (usosClient: UsosClient) => {
 
       const name = $("h1").text();
 
-      return {
+      cache.set(cacheKey, {
         id: courseId,
         name,
-      };
+      });
+
+      return cache.get(cacheKey) as Promise<{
+        id: string;
+        name: string;
+      }>;
     },
 
     getGroups: async (courseId: string, term?: string) => {
+      const cacheKey = `groups-${courseId}-${term}`;
+
+      if (cache.has(cacheKey)) {
+        return cache.get(cacheKey) as Promise<
+          Array<{
+            hourStartTime: Time;
+            hourEndTime: Time;
+            duration: Time;
+            person: string;
+            personLink: string;
+            groupLink: string;
+            day: Day;
+            courseId: string;
+            type: LessonType;
+            nameExtended: string;
+            groupNumber: number;
+            frequency: Frequency;
+            name: string;
+          }>
+        >;
+      }
+
       const data = await fetchWithCookie(
         `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPlanZajecPrzedmiotu&prz_kod=${courseId}&plan_division=semester&plan_format=new-ui${
           typeof term === "string" ? `&cdyd_kod=${term}` : ""
@@ -238,6 +291,8 @@ export const usosService = (usosClient: UsosClient) => {
           name,
         };
       });
+
+      cache.set(cacheKey, groups);
 
       return groups;
     },
