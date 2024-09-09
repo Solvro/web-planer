@@ -1,12 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
+
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAtom } from "jotai";
 import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-// import { IoCheckmarkOutline } from "react-icons/io5";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
@@ -16,21 +27,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { encodeToBase64 } from "@/lib/sharingUtils";
-import type {
-  ClassBlockProps,
-  Course,
-  MockRegistration,
-  Registration,
-} from "@/lib/types";
+import { buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { encodeToBase64 } from "@/lib/sharingUtils";
+import type { ClassBlockProps, Course, MockRegistration } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const fetchRegistrations = async (): Promise<MockRegistration[]> => {
-  const res = await fetch(`/api/registrations`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json() as Promise<MockRegistration[]>;
-};
 
 export interface ExtendedCourse extends Course {
   isChecked: boolean;
@@ -56,7 +58,6 @@ export const planFamily = atomFamily(
   (a, b) => a.id === b.id,
 );
 
-// eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps = (async (context) => {
   const { id } = context.query;
 
@@ -73,39 +74,78 @@ const CreatePlan = ({
   planId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
-  const [isEditing, setIsEditing] = useState(false);
+  const [groups, setGroups] = useState<ClassBlockProps[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const {
-    data: registrations,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["registrations"],
-    queryFn: fetchRegistrations,
-  });
+  const handleDepartmentChange = async (
+    facultyName: string,
+  ): Promise<MockRegistration[]> => {
+    // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+    const facultyID = facultyName.match(/\[(.*?)\]/)?.[1];
+    if (!facultyID) {
+      throw new Error(`Invalid faculty name: ${facultyName}`);
+    }
 
-  if (registrations && plan.courses.length === 0 && plan.groups.length === 0) {
-    const courses = registrations
-      .flatMap((reg) => reg.courses)
-      .map((course) => ({
-        ...course,
-        isChecked: false,
-      }));
+    try {
+      const res = await fetch(`/api/data/${facultyID}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch data");
+      }
 
-    const groups = registrations
-      .flatMap((reg) => reg.groups)
-      .map((group) => ({
-        ...group,
-        isChecked: false,
-      }));
+      const data = await res.json();
 
-    setPlan((prevPlan) => ({
-      ...prevPlan,
-      courses,
-      groups,
-    }));
-  }
+      const mockRegistrations: MockRegistration[] = data.registrations.map(
+        (registration: any) => {
+          const courses: Course[] = registration.courses.map((course: any) => ({
+            name: course.course.name,
+            registrationName: registration.registration.id,
+            ects: 0,
+          }));
+
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          const groups: ClassBlockProps[] = registration.courses.flatMap(
+            (course: any) =>
+              course.groups.map((group: any) => ({
+                startTime: `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`,
+                endTime: `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`,
+                day: group.day,
+                group: `gr. ${group.groupNumber}`,
+                courseName: course.course.name,
+                lecturer: group.person,
+                week:
+                  group.frequency === "każd"
+                    ? ""
+                    : group.frequency === "nieparzyst"
+                      ? "TN"
+                      : "TP",
+                courseType: group.type.charAt(0).toUpperCase() as
+                  | "C"
+                  | "L"
+                  | "P"
+                  | "S"
+                  | "W",
+                registrationName: registration.registration.id,
+              })),
+          );
+
+          return {
+            registration: {
+              name: registration.registration.description.pl,
+              id: registration.registration.id,
+            },
+            courses,
+            groups,
+          };
+        },
+      );
+
+      return mockRegistrations;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error fetching department data: ", error);
+      throw error;
+    }
+  };
 
   const changePlanName = (newName: string) => {
     void window.umami?.track("Change plan name");
@@ -140,10 +180,11 @@ const CreatePlan = ({
   return (
     <>
       <Seo
-        pageTitle={`${
-          plan.name.length === 0 ? "Plan bez nazwy" : plan.name
-        } | Kreator planu`}
+        pageTitle={`${plan.name.length === 0 ? "Plan bez nazwy" : plan.name} | Kreator planu`}
       />
+      <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
+        <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
+          <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
       <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
         <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
           <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
@@ -213,18 +254,17 @@ const CreatePlan = ({
             </div>
             <div className="w-full items-center justify-center">
               <SelectGroups
-                registrations={
-              registrations?.flatMap((reg) => reg.registration) ?? []
-            }
                 courses={plan.courses}
                 checkCourse={checkCourse}
+                handleDepartmentChange={handleDepartmentChange}
+                handleRegistrationChange={setGroups}
               />
             </div>
           </div>
           <hr />
           <div className="flex w-11/12 items-start overflow-x-auto md:ml-0">
             <ScheduleTest
-              schedule={plan.groups}
+              schedule={groups}
               courses={plan.courses}
               groups={plan.groups}
               onClick={checkGroup}
