@@ -1,9 +1,10 @@
+import { NeatGradient } from "@firecms/neat";
 import { motion } from "framer-motion";
 // import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
-import { type ComponentProps, useState } from "react";
+import { type ComponentProps, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { Seo } from "@/components/SEO";
@@ -135,7 +136,7 @@ const AnimationLogo = () => (
   >
     <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
       <div className="mb-5 md:mb-0 md:mt-5">
-        <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
+        <p className="gradient text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
           SOLVRO
         </p>
       </div>
@@ -151,7 +152,7 @@ const AnimationLogo = () => (
       </a>
 
       <div className="mb:mt-5">
-        <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
+        <p className="gradient text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
           PLANER
         </p>
       </div>
@@ -165,7 +166,8 @@ const JoinUsBlock = () => (
       <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
         <span className="font-inter tracking-wide text-white animate-in">
           Stwórz swój plan używając{" "}
-          <span className="font-bold uppercase">darmowego</span> zapisownika!
+          <span className="gradient font-bold uppercase">darmowego</span>{" "}
+          zapisownika!
         </span>
       </h1>
     </div>
@@ -240,79 +242,71 @@ export const Footer = () => {
 };
 
 const Home = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const gradientRef = useRef<NeatGradient | null>(null);
+  useEffect(() => {
+    if (!canvasRef.current) {
+      return;
+    }
+
+    gradientRef.current = new NeatGradient({
+      ref: canvasRef.current,
+
+      colors: [
+        {
+          color: "#000000",
+          enabled: true,
+        },
+        {
+          color: "#000000",
+          enabled: true,
+        },
+        {
+          color: "#80B3FF",
+          enabled: true,
+        },
+        {
+          color: "#274276",
+          enabled: true,
+        },
+        {
+          color: "#f5e1e5",
+          enabled: false,
+        },
+      ],
+      speed: 4,
+      horizontalPressure: 6,
+      verticalPressure: 7,
+      waveFrequencyX: 2,
+      waveFrequencyY: 2,
+      waveAmplitude: 2,
+      shadows: 7,
+      highlights: 5,
+      colorBrightness: 1,
+      colorSaturation: 0,
+      wireframe: false,
+      colorBlending: 10,
+      backgroundColor: "#000000",
+      backgroundAlpha: 0.95,
+      resolution: 1,
+    });
+  }, []);
+
   return (
     <>
       <Seo />
+      <canvas
+        style={{
+          isolation: "isolate",
+          position: "absolute",
+          zIndex: 0,
+          height: "100%",
+          width: "100%",
+        }}
+        ref={canvasRef}
+      />
       {/* Main Page */}
-      <div className="relative min-h-screen overflow-hidden bg-mainbutton7">
-        {/* Blobs */}
-        <div className="hidden md:block">
-          <svg
-            style={{
-              position: "absolute",
-              top: "50%",
-              overflow: "hidden",
-              boxShadow: "100 100 ",
-            }}
-            width="685"
-            height="725"
-            viewBox="0 0 685 725"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M666 733C554.346 1014.97 311 818 -12 733C-247.475 733 -227.275 728.837 -227.275 464.181C-227.275 344.785 -212.174 257.477 -125.373 132.524C-79.4254 -47.6951 190.184 -54.0001 249 176C285.195 317.541 479.451 382.961 596.021 481.796C668.874 543.566 711.384 618.388 666 733Z"
-              fill="url(#paint0_linear_396_121)"
-              fillOpacity="0.2"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_396_121"
-                x1="228.505"
-                y1="0.113281"
-                x2="228.505"
-                y2="879.428"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#FFFFFF" />
-                <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <svg
-            style={{
-              position: "absolute",
-              top: "-30%",
-              right: "-20%",
-              overflow: "hidden",
-              rotate: "180deg",
-            }}
-            width="1085"
-            height="1025"
-            viewBox="0 0 685 725"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M666 733C554.346 1014.97 311 818 -12 733C-247.475 733 -227.275 728.837 -227.275 464.181C-227.275 344.785 -212.174 257.477 -125.373 132.524C-79.4254 -47.6951 190.184 -54.0001 249 176C285.195 317.541 479.451 382.961 596.021 481.796C668.874 543.566 711.384 618.388 666 733Z"
-              fill="url(#paint0_linear_396_121)"
-              fillOpacity="0.2"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_396_121"
-                x1="228.505"
-                y1="0.113281"
-                x2="228.505"
-                y2="879.428"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#FFFFFF" />
-                <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
+      <div className="relative min-h-screen overflow-hidden">
         {/* Particles */}
         <div className="">
           <div className="particleX absolute right-10 top-32 animate-move-top duration-10000 md:right-80 md:top-36">

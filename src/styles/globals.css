@@ -59,7 +59,19 @@ html {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+a[href='https://neat.firecms.co']
+{
+  display: none !important;
+}
+
+.gradient {
+  background: -webkit-linear-gradient(#eee, #80b3ff, #274276);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
