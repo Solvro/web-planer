@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
-import type { Registration, Course, ClassBlockProps } from "@/lib/types";
+
+import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 
 const mockRegistration1 = {
   name: "Registration 1",
+  id: "1",
 } satisfies Registration;
 
 const mockRegistration2 = {
   name: "Registration 2",
+  id: "2",
 } satisfies Registration;
 
 const mockRegistration3 = {
   name: "Registration 3",
+  id: "3",
 } satisfies Registration;
 
 const mockCourse1 = {
@@ -41,6 +45,7 @@ const mockL = {
   startTime: "17:05",
   endTime: "19:50",
   group: "1",
+  day: "poniedzi",
   courseName: mockCourse1.name,
   lecturer: "Jerzy Świątek",
   week: "TN",
@@ -51,6 +56,7 @@ const mockL = {
 const mockW = {
   startTime: "18:55",
   endTime: "19:50",
+  day: "poniedzi",
   group: "2",
   courseName: mockCourse2.name,
   lecturer: "Jerzy Świątek",
@@ -83,16 +89,17 @@ export function GET(request: Request) {
 
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   if (name) {
-    const registration = mockRegistrations.find((reg) => reg.registration.name === name);
+    const registration = mockRegistrations.find(
+      (reg) => reg.registration.name === name,
+    );
     if (!registration) {
-      return NextResponse.json({ error: "Registration not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Registration not found" },
+        { status: 404 },
+      );
     }
     return NextResponse.json(registration);
   }
 
-  
   return NextResponse.json(mockRegistrations);
 }
-
-
-
