@@ -61,13 +61,15 @@ const Plans = () => {
         </div>
 
         <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-start">
-            <button
+          <div className="flex flex-col gap-4">
+            {/* <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-start"> */}
+            {/* <button
               onClick={addNewPlan}
               className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl"
             >
               <span>Dodaj nowy plan</span>
-            </button>
+            </button> */}
+            <button onClick={addNewPlan}>Add new plan</button>
             {plans.map((plan) => (
               <Plan key={plan.id} id={plan.id} name={plan.name} />
             ))}
