@@ -1,5 +1,4 @@
 /* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
 import { NextResponse } from "next/server";
 
 import type { ApiResponse } from "@/lib/types";
