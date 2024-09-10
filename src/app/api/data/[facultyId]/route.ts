@@ -34,7 +34,8 @@ export async function GET(
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
-    return new Response("Internal Server Error", { status: 500 });
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return new Response(`Internal Server Error ${error}`, { status: 500 });
   }
 }
 
