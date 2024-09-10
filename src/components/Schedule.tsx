@@ -15,57 +15,39 @@ export const ScheduleTest = ({
   groups: ExtendedGroup[];
   onClick: (id: string) => void;
 }) => {
-  const filterScheduleByDay = (dayCode: string) => {
-    return schedule.filter((item) => item.day === dayCode);
-  };
-
   return (
     <div className="overflow-x flex flex-col gap-3 overflow-auto scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
       <ClassSchedule
-        schedule={filterScheduleByDay("poniedzi")}
+        schedule={schedule}
         day="Poniedziałek"
         courses={courses}
         groups={groups}
         onClick={onClick}
       />
       <ClassSchedule
-        schedule={filterScheduleByDay("wtor")}
+        schedule={schedule}
         day="Wtorek"
         courses={courses}
         groups={groups}
         onClick={onClick}
       />
       <ClassSchedule
-        schedule={filterScheduleByDay("środ")}
+        schedule={schedule}
         day="Środa"
         courses={courses}
         groups={groups}
         onClick={onClick}
       />
       <ClassSchedule
-        schedule={filterScheduleByDay("czwart")}
+        schedule={schedule}
         day="Czwartek"
         courses={courses}
         groups={groups}
         onClick={onClick}
       />
       <ClassSchedule
-        schedule={filterScheduleByDay("piąt")}
+        schedule={schedule}
         day="Piątek"
-        courses={courses}
-        groups={groups}
-        onClick={onClick}
-      />
-      <ClassSchedule
-        schedule={filterScheduleByDay("sobot")}
-        day="Sobota"
-        courses={courses}
-        groups={groups}
-        onClick={onClick}
-      />
-      <ClassSchedule
-        schedule={filterScheduleByDay("niedziel")}
-        day="Niedziela"
         courses={courses}
         groups={groups}
         onClick={onClick}

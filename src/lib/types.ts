@@ -7,10 +7,8 @@ export type ApiResponse<
 export interface ClassBlockProps {
   startTime: string;
   endTime: string;
-  day: string;
   group: string;
   courseName: string;
-  courseID: string;
   lecturer: string;
   week: "" | "TN" | "TP";
   courseType: "C" | "L" | "P" | "S" | "W";
@@ -19,7 +17,6 @@ export interface ClassBlockProps {
 
 export interface Registration {
   name: string;
-  id: string;
 }
 
 export interface Course {

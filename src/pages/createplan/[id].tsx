@@ -1,23 +1,12 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
+// import { IoCheckmarkOutline } from "react-icons/io5";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
@@ -34,6 +23,14 @@ import type {
   Registration,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
+const fetchRegistrations = async (): Promise<MockRegistration[]> => {
+  const res = await fetch(`/api/registrations`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json() as Promise<MockRegistration[]>;
+};
 
 export interface ExtendedCourse extends Course {
   isChecked: boolean;
@@ -52,8 +49,6 @@ export const planFamily = atomFamily(
         name: `Nowy plan - ${id}`,
         courses: [] as ExtendedCourse[],
         groups: [] as ExtendedGroup[],
-        departments: [] as string[],
-        registrations: [] as Registration[],
       },
       undefined,
       { getOnInit: true },
@@ -61,6 +56,7 @@ export const planFamily = atomFamily(
   (a, b) => a.id === b.id,
 );
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps = (async (context) => {
   const { id } = context.query;
 
@@ -77,109 +73,39 @@ const CreatePlan = ({
   planId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
+  const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isError, setIsError] = useState(false);
 
-  const handleDepartmentChange = async (
-    facultyName: string,
-  ): Promise<Registration[]> => {
-    const facultyID = facultyName.match(/\[(.*?)\]/)?.[1];
+  const {
+    data: registrations,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["registrations"],
+    queryFn: fetchRegistrations,
+  });
 
-    setPlan({
-      ...plan,
-      departments: [facultyID],
-    });
+  if (registrations && plan.courses.length === 0 && plan.groups.length === 0) {
+    const courses = registrations
+      .flatMap((reg) => reg.courses)
+      .map((course) => ({
+        ...course,
+        isChecked: false,
+      }));
 
-    if (!facultyID) {
-      throw new Error(`Invalid faculty name: ${facultyName}`);
-    }
+    const groups = registrations
+      .flatMap((reg) => reg.groups)
+      .map((group) => ({
+        ...group,
+        isChecked: false,
+      }));
 
-    const res = await fetch(`/api/data/${encodeURIComponent(facultyID)}`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const data = await res.json();
-
-    const registrations: Registration[] = data.registrations.map(
-      (reg: any) => ({
-        name: reg.registration.description.pl,
-        id: reg.registration.id,
-      }),
-    );
-
-    return registrations;
-  };
-
-  const handleRegistrationChange = async (registrationId: string) => {
-    const facultyID = plan.departments[0];
-
-    if (!facultyID) {
-      throw new Error(`Invalid faculty name: ${facultyID}`);
-    }
-
-    try {
-      const res = await fetch(`/api/data/${encodeURIComponent(facultyID)}`);
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
-      }
-
-      const data = await res.json();
-
-      const selectedRegistration = data.registrations.find(
-        (reg: any) => reg.registration.id === registrationId,
-      );
-
-      if (!selectedRegistration) {
-        setIsError(true);
-        throw new Error(`Registration with ID ${registrationId} not found`);
-      }
-
-      const courses: ExtendedCourse[] = selectedRegistration.courses.map(
-        (course: any) => ({
-          name: course.course.name,
-          registrationName: selectedRegistration.registration.id,
-          isChecked: false,
-        }),
-      );
-
-      const groups: ExtendedGroup[] = selectedRegistration.courses.flatMap(
-        (course: any) =>
-          course.groups.map((group: any) => ({
-            startTime: `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`,
-            endTime: `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`,
-            day: group.day,
-            group: `gr. ${group.groupNumber}`,
-            courseName: course.course.name,
-            courseID: course.course.id,
-            lecturer: group.person,
-            week:
-              group.frequency === "każd"
-                ? ""
-                : group.frequency === "nieparzyst"
-                  ? "TN"
-                  : "TP",
-            courseType: group.type.charAt(0).toUpperCase() as
-              | "C"
-              | "L"
-              | "P"
-              | "S"
-              | "W",
-            registrationName: selectedRegistration.registration.id,
-            isChecked: false,
-          })),
-      );
-
-      setPlan({
-        ...plan,
-        courses,
-        groups,
-      });
-    } catch (error) {
-      console.error("Error fetching department data: ", error);
-      throw error;
-    }
-  };
+    setPlan((prevPlan) => ({
+      ...prevPlan,
+      courses,
+      groups,
+    }));
+  }
 
   const changePlanName = (newName: string) => {
     void window.umami?.track("Change plan name");
@@ -201,16 +127,12 @@ const CreatePlan = ({
     });
   };
 
-  const checkGroup = (id: string, courseType: string, groupNumber: string) => {
+  const checkGroup = (id: string) => {
     void window.umami?.track("Change group");
     setPlan({
       ...plan,
       groups: plan.groups.map((group) =>
-        group.courseID === id &&
-        group.courseType === courseType &&
-        group.group === groupNumber
-          ? { ...group, isChecked: !group.isChecked }
-          : group,
+        group.group === id ? { ...group, isChecked: !group.isChecked } : group,
       ),
     });
   };
@@ -218,7 +140,9 @@ const CreatePlan = ({
   return (
     <>
       <Seo
-        pageTitle={`${plan.name.length === 0 ? "Plan bez nazwy" : plan.name} | Kreator planu`}
+        pageTitle={`${
+          plan.name.length === 0 ? "Plan bez nazwy" : plan.name
+        } | Kreator planu`}
       />
       <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
         <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
@@ -281,20 +205,20 @@ const CreatePlan = ({
                 </div>
 
                 <div className="flex w-full items-center justify-between gap-1 md:flex-col lg:flex-row">
-                  {/* <PlanDisplayLink
+                  <PlanDisplayLink
                     hash={encodeToBase64(JSON.stringify(plan))}
-                  /> */}
+                  />
                 </div>
               </div>
             </div>
             <div className="w-full items-center justify-center">
               <SelectGroups
+                registrations={
+              registrations?.flatMap((reg) => reg.registration) ?? []
+            }
                 courses={plan.courses}
                 checkCourse={checkCourse}
-                handleDepartmentChange={handleDepartmentChange}
-                handleRegistrationChange={handleRegistrationChange}
               />
-              {isError ? <div>Wystąpił błąd</div> : null}
             </div>
           </div>
           <hr />
