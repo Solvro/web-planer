@@ -78,7 +78,7 @@ const CreatePlan = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
   const inputRef = useRef<HTMLInputElement>(null);
-  console.log(plan);
+  const [isError, setIsError] = useState(false);
 
   const handleDepartmentChange = async (
     facultyName: string,
@@ -131,6 +131,7 @@ const CreatePlan = ({
       );
 
       if (!selectedRegistration) {
+        setIsError(true);
         throw new Error(`Registration with ID ${registrationId} not found`);
       }
 
@@ -280,9 +281,9 @@ const CreatePlan = ({
                 </div>
 
                 <div className="flex w-full items-center justify-between gap-1 md:flex-col lg:flex-row">
-                  <PlanDisplayLink
+                  {/* <PlanDisplayLink
                     hash={encodeToBase64(JSON.stringify(plan))}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -293,6 +294,7 @@ const CreatePlan = ({
                 handleDepartmentChange={handleDepartmentChange}
                 handleRegistrationChange={handleRegistrationChange}
               />
+              {isError && <div>Wystąpił błąd</div>}
             </div>
           </div>
           <hr />

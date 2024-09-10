@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 // import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
@@ -159,7 +160,13 @@ const AnimationLogo = () => (
   </Block>
 );
 
-const JoinUsBlock = () => (
+const JoinUsBlock = ({
+  canPlan,
+  isLoading,
+}: {
+  canPlan: boolean;
+  isLoading: boolean;
+}) => (
   <Block className="flex flex-col items-center justify-center gap-6 md:gap-10">
     <div className="">
       <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
@@ -175,35 +182,38 @@ const JoinUsBlock = () => (
       </p>
     </div>
     <div className="z-50">
-      {process.env.NODE_ENV === "development" ||
-      (typeof window !== "undefined" &&
-        window.location.hostname === "planer.solvro.pl") ? (
+      {isLoading ? (
+        <div className="text-white">Loading...</div>
+      ) : canPlan ? (
         <Link
-          href="#"
+          href="/plans"
           data-umami-event="Landing - Go to planning"
           className={buttonVariants({
             size: "lg",
             variant: "outline",
             className: cn(
-              "h-20 cursor-wait self-center border-4 text-xl opacity-80 transition-all duration-300 md:mt-0 md:p-7",
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-              false &&
-                "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+              "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
             ),
           })}
         >
           {/* Przejdź do planowania <ChevronRightIcon className="ml-2" /> */}
-          Startujemy 10 września
+          Przejdź do planowania
         </Link>
       ) : (
-        <Button
-          disabled={true}
-          variant="outline"
-          data-umami-event="Landing - incoming soon"
-          className="h-20 cursor-pointer self-center border-4 text-xl transition-all duration-300 hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7"
+        <Link
+          href="/login"
+          data-umami-event="Landing - Go to planning"
+          className={buttonVariants({
+            size: "lg",
+            variant: "outline",
+            className: cn(
+              "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+            ),
+          })}
         >
-          Już niedługo :)
-        </Button>
+          {/* Przejdź do planowania <ChevronRightIcon className="ml-2" /> */}
+          Zaloguj się
+        </Link>
       )}
     </div>
   </Block>
@@ -240,6 +250,16 @@ export const Footer = () => {
 };
 
 const Home = () => {
+  const query = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const response = await fetch("/api/profile");
+      return response.json();
+    },
+  });
+  const isLoading = query.isLoading;
+  let canPlan = false;
+  canPlan = Boolean(query.data?.first_name);
   return (
     <>
       <Seo />
@@ -358,7 +378,7 @@ const Home = () => {
               </div>
             </div>
             <section className="flex justify-center">
-              <JoinUsBlock />
+              <JoinUsBlock canPlan={canPlan} isLoading={isLoading} />
             </section>
           </div>
           <Footer />

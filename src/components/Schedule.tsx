@@ -18,7 +18,6 @@ export const ScheduleTest = ({
   const filterScheduleByDay = (dayCode: string) => {
     return schedule.filter((item) => item.day === dayCode);
   };
-  console.log(schedule);
 
   return (
     <div className="overflow-x flex flex-col gap-3 overflow-auto scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
