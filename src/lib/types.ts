@@ -10,6 +10,7 @@ export interface ClassBlockProps {
   day: string;
   group: string;
   courseName: string;
+  courseID: string;
   lecturer: string;
   week: "" | "TN" | "TP";
   courseType: "C" | "L" | "P" | "S" | "W";

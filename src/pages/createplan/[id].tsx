@@ -31,7 +31,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { encodeToBase64 } from "@/lib/sharingUtils";
-import type { ClassBlockProps, Course, MockRegistration } from "@/lib/types";
+import type {
+  ClassBlockProps,
+  Course,
+  MockRegistration,
+  Registration,
+} from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export interface ExtendedCourse extends Course {
@@ -51,6 +56,8 @@ export const planFamily = atomFamily(
         name: `Nowy plan - ${id}`,
         courses: [] as ExtendedCourse[],
         groups: [] as ExtendedGroup[],
+        departments: [] as string[],
+        registrations: [] as Registration[],
       },
       undefined,
       { getOnInit: true },
@@ -74,16 +81,45 @@ const CreatePlan = ({
   planId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
-  const [groups, setGroups] = useState<ClassBlockProps[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  console.log(plan);
 
   const handleDepartmentChange = async (
     facultyName: string,
-  ): Promise<MockRegistration[]> => {
-    // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+  ): Promise<Registration[]> => {
     const facultyID = facultyName.match(/\[(.*?)\]/)?.[1];
+
+    setPlan({
+      ...plan,
+      departments: [facultyID],
+    });
+
     if (!facultyID) {
       throw new Error(`Invalid faculty name: ${facultyName}`);
+    }
+
+    const res = await fetch(`/api/data/${facultyID}`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await res.json();
+
+    const registrations: Registration[] = data.registrations.map(
+      (reg: any) => ({
+        name: reg.registration.description.pl,
+        id: reg.registration.id,
+      }),
+    );
+
+    return registrations;
+  };
+
+  const handleRegistrationChange = async (registrationId: string) => {
+    const facultyID = plan.departments[0];
+
+    if (!facultyID) {
+      throw new Error(`Invalid faculty name: ${facultyID}`);
     }
 
     try {
@@ -94,54 +130,55 @@ const CreatePlan = ({
 
       const data = await res.json();
 
-      const mockRegistrations: MockRegistration[] = data.registrations.map(
-        (registration: any) => {
-          const courses: Course[] = registration.courses.map((course: any) => ({
-            name: course.course.name,
-            registrationName: registration.registration.id,
-            ects: 0,
-          }));
-
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          const groups: ClassBlockProps[] = registration.courses.flatMap(
-            (course: any) =>
-              course.groups.map((group: any) => ({
-                startTime: `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`,
-                endTime: `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`,
-                day: group.day,
-                group: `gr. ${group.groupNumber}`,
-                courseName: course.course.name,
-                lecturer: group.person,
-                week:
-                  group.frequency === "każd"
-                    ? ""
-                    : group.frequency === "nieparzyst"
-                      ? "TN"
-                      : "TP",
-                courseType: group.type.charAt(0).toUpperCase() as
-                  | "C"
-                  | "L"
-                  | "P"
-                  | "S"
-                  | "W",
-                registrationName: registration.registration.id,
-              })),
-          );
-
-          return {
-            registration: {
-              name: registration.registration.description.pl,
-              id: registration.registration.id,
-            },
-            courses,
-            groups,
-          };
-        },
+      const selectedRegistration = data.registrations.find(
+        (reg: any) => reg.registration.id === registrationId,
       );
 
-      return mockRegistrations;
+      if (!selectedRegistration) {
+        throw new Error(`Registration with ID ${registrationId} not found`);
+      }
+
+      const courses: ExtendedCourse[] = selectedRegistration.courses.map(
+        (course: any) => ({
+          name: course.course.name,
+          registrationName: selectedRegistration.registration.id,
+          isChecked: false,
+        }),
+      );
+
+      const groups: ExtendedGroup[] = selectedRegistration.courses.flatMap(
+        (course: any) =>
+          course.groups.map((group: any) => ({
+            startTime: `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`,
+            endTime: `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`,
+            day: group.day,
+            group: `gr. ${group.groupNumber}`,
+            courseName: course.course.name,
+            courseID: course.course.id,
+            lecturer: group.person,
+            week:
+              group.frequency === "każd"
+                ? ""
+                : group.frequency === "nieparzyst"
+                  ? "TN"
+                  : "TP",
+            courseType: group.type.charAt(0).toUpperCase() as
+              | "C"
+              | "L"
+              | "P"
+              | "S"
+              | "W",
+            registrationName: selectedRegistration.registration.id,
+            isChecked: false,
+          })),
+      );
+
+      setPlan({
+        ...plan,
+        courses,
+        groups,
+      });
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error fetching department data: ", error);
       throw error;
     }
@@ -167,12 +204,16 @@ const CreatePlan = ({
     });
   };
 
-  const checkGroup = (id: string) => {
-    void window.umami?.track("Change group");
+  const checkGroup = (id: string, courseType: string, groupNumber: string) => {
+    void window.umami.track("Change group");
     setPlan({
       ...plan,
       groups: plan.groups.map((group) =>
-        group.group === id ? { ...group, isChecked: !group.isChecked } : group,
+        group.courseID === id &&
+        group.courseType === courseType &&
+        group.group === groupNumber
+          ? { ...group, isChecked: !group.isChecked }
+          : group,
       ),
     });
   };
@@ -257,14 +298,14 @@ const CreatePlan = ({
                 courses={plan.courses}
                 checkCourse={checkCourse}
                 handleDepartmentChange={handleDepartmentChange}
-                handleRegistrationChange={setGroups}
+                handleRegistrationChange={handleRegistrationChange}
               />
             </div>
           </div>
           <hr />
           <div className="flex w-11/12 items-start overflow-x-auto md:ml-0">
             <ScheduleTest
-              schedule={groups}
+              schedule={plan.groups}
               courses={plan.courses}
               groups={plan.groups}
               onClick={checkGroup}

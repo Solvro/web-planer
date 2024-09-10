@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Combobox } from "@/components/ui/combobox";
-import type { MockRegistration } from "@/lib/types";
+import type { MockRegistration, Registration } from "@/lib/types";
 
 const departmentOptions = [
   "Filia w Legnicy [FLG]",
@@ -38,8 +38,8 @@ export const GroupsAccordion = ({
 }: {
   registrationName: string;
   index: number;
-  onDepartmentChange: (value: string) => Promise<MockRegistration[]>;
-  onRegistrationChange: () => void;
+  onDepartmentChange: (value: string) => Promise<Registration[]>;
+  onRegistrationChange: (value: string) => Promise<void>;
   updateDepartmentSelection: (value: string) => void;
   updateRegistrationSelection: (value: string) => void;
 }) => {
@@ -58,15 +58,15 @@ export const GroupsAccordion = ({
   const handleDepartmentChange = async (value: string) => {
     setSelectedDepartment(value);
     updateDepartmentSelection(value);
-    const plan = await onDepartmentChange(value);
+    const registrations = await onDepartmentChange(value);
     setShowRegistrationSelect(true);
-    setRegistrationOptions(plan.map((p) => p.registration.name));
+    setRegistrationOptions(registrations.map((r) => r.id));
   };
 
-  const handleRegistrationChange = (value: string) => {
+  const handleRegistrationChange = async (value: string) => {
     setSelectedRegistration(value);
     updateRegistrationSelection(value);
-    onRegistrationChange();
+    await onRegistrationChange(value);
   };
 
   return (
@@ -110,6 +110,7 @@ export const GroupsAccordion = ({
                   id={`registration-select-${index}`}
                   options={registrationOptions}
                   value={selectedRegistration ?? ""}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onChange={handleRegistrationChange}
                 />
               </div>
