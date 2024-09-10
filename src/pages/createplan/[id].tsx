@@ -27,10 +27,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { encodeToBase64 } from "@/lib/sharingUtils";
-import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { encodeToBase64 } from "@/lib/sharingUtils";
 import type {
   ClassBlockProps,
   Course,
@@ -185,7 +181,7 @@ const CreatePlan = ({
   };
 
   const changePlanName = (newName: string) => {
-    void window.umami?.track("Change plan name");
+    void window.umami.track("Change plan name");
     setPlan({
       ...plan,
       name: newName,
@@ -193,7 +189,7 @@ const CreatePlan = ({
   };
 
   const checkCourse = (id: string) => {
-    void window.umami?.track("Check course");
+    void window.umami.track("Check course");
     setPlan({
       ...plan,
       courses: plan.courses.map((course) =>
@@ -223,9 +219,6 @@ const CreatePlan = ({
       <Seo
         pageTitle={`${plan.name.length === 0 ? "Plan bez nazwy" : plan.name} | Kreator planu`}
       />
-      <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
-        <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
-          <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
       <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
         <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">
           <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
