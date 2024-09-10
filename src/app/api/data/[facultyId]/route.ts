@@ -10,9 +10,9 @@ export async function GET(
   _request: Request,
   { params }: { params: { facultyId: string } },
 ) {
-  const service = createUsosService();
 
   try {
+    const service = createUsosService();
     const registrations = await Promise.all(
       (await service.getRegistrations(params.facultyId)).map(async (r) => ({
         registration: r,
