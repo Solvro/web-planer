@@ -56,7 +56,6 @@ const ClassSchedule = ({
   groups: ExtendedGroup[];
   onClick: (id: string) => void;
 }) => {
-  //console.log(schedule);
   return (
     <div className="flex min-w-fit flex-col rounded-xl border-2 p-1">
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold">
