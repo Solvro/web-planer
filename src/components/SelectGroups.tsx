@@ -2,14 +2,14 @@ import type { Dispatch, SetStateAction } from "react";
 import React, { useState } from "react";
 
 import { GroupsAccordion } from "@/components/Accordion";
-import type { ClassBlockProps, MockRegistration } from "@/lib/types";
+import type {
+  ClassBlockProps,
+  MockRegistration,
+  Registration,
+} from "@/lib/types";
 import type { ExtendedCourse } from "@/pages/createplan/[id]";
 
-const registrations = [
-  { name: "Rejestracja 1" },
-  { name: "Rejestracja 2" },
-  { name: "Rejestracja 3" },
-];
+const registrations = [{ name: "Rejestracja 1" }];
 
 export const SelectGroups = ({
   handleDepartmentChange,
@@ -17,8 +17,8 @@ export const SelectGroups = ({
 }: {
   courses: ExtendedCourse[];
   checkCourse: (id: string) => void;
-  handleDepartmentChange: (value: string) => Promise<MockRegistration[]>;
-  handleRegistrationChange: Dispatch<SetStateAction<ClassBlockProps[]>>;
+  handleDepartmentChange: (value: string) => Promise<Registration[]>;
+  handleRegistrationChange: (value: string) => Promise<void>;
 }) => {
   const [departmentSelections, setDepartmentSelections] = useState<{
     [key: string]: string | null;
@@ -79,7 +79,7 @@ export const SelectGroups = ({
             registrationName={registration.name}
             onDepartmentChange={handleDepartmentChange}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onRegistrationChange={onRegistrationChange}
+            onRegistrationChange={handleRegistrationChange}
             updateDepartmentSelection={(value) => {
               updateDepartmentSelection(registration.name, value);
             }}
