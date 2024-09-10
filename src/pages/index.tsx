@@ -201,7 +201,7 @@ const JoinUsBlock = ({
         </Link>
       ) : (
         <Link
-          href="/login"
+          href="/api/login"
           data-umami-event="Landing - Go to planning"
           className={buttonVariants({
             size: "lg",
