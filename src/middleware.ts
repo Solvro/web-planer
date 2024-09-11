@@ -24,14 +24,8 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isFailed) {
-    request.cookies.delete("access_token");
-    request.cookies.delete("access_token");
-
     if (request.nextUrl.pathname.startsWith("/app")) {
       const response = NextResponse.redirect(new URL("/login", request.url));
-
-      response.cookies.delete("access_token");
-      response.cookies.delete("access_token_secret");
 
       return response;
     }
