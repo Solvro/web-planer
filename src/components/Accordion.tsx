@@ -4,17 +4,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { ExtendedCourse } from "@/pages/createplan/[id]";
+import type { ExtendedCourse } from "@/pages/app/createplan/[id]";
 
 export const GroupsAccordion = ({
+  registrationId,
   registrationName,
   index,
   onClick,
   courses,
 }: {
+  registrationId: string;
   registrationName: string;
   index: number;
-  onClick: (id: string) => void;
+  onClick: (courseId: string) => void;
   courses: ExtendedCourse[];
 }) => {
   return (
@@ -32,7 +34,7 @@ export const GroupsAccordion = ({
           <AccordionContent>
             {courses.map(
               (course) =>
-                course.registrationName === registrationName && (
+                course.registrationId === registrationId && (
                   <div key={course.name}>
                     <div className="grid grid-cols-[1fr_5fr] items-center justify-between break-all p-4 py-2 text-base hover:cursor-pointer hover:bg-stone-300">
                       <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-secondary">
@@ -47,7 +49,7 @@ export const GroupsAccordion = ({
                           id={`${index}-${course.name}`}
                           type="checkbox"
                           onChange={() => {
-                            onClick(course.name);
+                            onClick(course.id);
                           }}
                           className="h-6 w-6 cursor-pointer"
                           checked={course.isChecked}

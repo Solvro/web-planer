@@ -1,7 +1,10 @@
 import React from "react";
 
 import { cn } from "@/lib/utils";
-import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan/[id]";
+import type {
+  ExtendedCourse,
+  ExtendedGroup,
+} from "@/pages/app/createplan/[id]";
 
 const typeClasses = {
   W: "bg-red-300",
@@ -28,7 +31,8 @@ function calculatePosition(startTime: string, endTime: string) {
 const ClassBlock = ({
   startTime,
   endTime,
-  group,
+  groupId,
+  courseId,
   courseName,
   lecturer,
   week,
@@ -39,8 +43,9 @@ const ClassBlock = ({
 }: {
   startTime: string;
   endTime: string;
-  group: string;
+  groupId: string;
   courseName: string;
+  courseId: string;
   lecturer: string;
   week: "" | "TN" | "TP";
   courseType: "C" | "L" | "P" | "S" | "W";
@@ -50,12 +55,12 @@ const ClassBlock = ({
 }) => {
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
-  const isCourseChecked = courses.find((course) => course.name === courseName);
+  const isCourseChecked = courses.find((course) => course.id === courseId);
   const checkedGroupFromCourse = groups.find(
     (g) =>
-      g.courseType === courseType && courseName === g.courseName && g.isChecked,
+      g.courseType === courseType && courseId === g.courseId && g.isChecked,
   );
-  const isThisGroupChecked = checkedGroupFromCourse?.group === group;
+  const isThisGroupChecked = checkedGroupFromCourse?.groupId === groupId;
   return (
     Boolean(isCourseChecked?.isChecked) && (
       <button
@@ -66,7 +71,7 @@ const ClassBlock = ({
             : false
         }
         onClick={() => {
-          onClick(group);
+          onClick(groupId);
         }}
         style={{
           gridColumnStart: startGrid,
@@ -85,7 +90,7 @@ const ClassBlock = ({
       >
         <div className="flex w-full justify-between">
           <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
-          <p>{`Grupa ${group}`}</p>
+          <p>{`Grupa ${groupId}`}</p>
         </div>
         <p className="truncate font-bold">{courseName}</p>
         <p className="truncate font-semibold">{lecturer}</p>

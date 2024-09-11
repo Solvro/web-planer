@@ -1,7 +1,10 @@
 import React from "react";
 
 import type { ClassBlockProps } from "@/lib/types";
-import type { ExtendedCourse, ExtendedGroup } from "@/pages/createplan/[id]";
+import type {
+  ExtendedCourse,
+  ExtendedGroup,
+} from "@/pages/app/createplan/[id]";
 
 import { ClassBlock } from "./ClassBlock";
 import { Hour } from "./Hour";

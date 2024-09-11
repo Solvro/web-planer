@@ -32,4 +32,4 @@ export async function GET(
   );
 }
 
-export type ApiProfileGet = ApiResponse<typeof GET>;
+export type ApiFacultyDataGet = ApiResponse<typeof GET>;

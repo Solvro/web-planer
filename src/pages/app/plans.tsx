@@ -34,7 +34,7 @@ const Plans = () => {
       numberOfPlans: plans.length,
     });
 
-    void router.push(`/createplan/${newPlan.id}`).then(() => {
+    void router.push(`/app/createplan/${newPlan.id}`).then(() => {
       setPlans([...plans, newPlan]);
     });
   };
