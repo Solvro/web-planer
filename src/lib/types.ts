@@ -1,28 +1,30 @@
 import type { NextResponse } from "next/server";
 
 export type ApiResponse<
-  T extends (...args: unknown[]) => NextResponse | Promise<NextResponse>,
+  T extends (...args: never[]) => NextResponse | Promise<NextResponse>,
 > = Awaited<ReturnType<T>> extends NextResponse<infer Y> ? Y : never;
 
 export interface ClassBlockProps {
   startTime: string;
   endTime: string;
-  group: string;
+  groupId: string;
+  courseId: string;
   courseName: string;
   lecturer: string;
   week: "" | "TN" | "TP";
   courseType: "C" | "L" | "P" | "S" | "W";
-  registrationName: string;
+  registrationId: string;
 }
 
 export interface Registration {
+  id: string;
   name: string;
 }
 
 export interface Course {
   name: string;
-  registrationName: string;
-  ects: number;
+  id: string;
+  registrationId: string;
 }
 
 export interface MockRegistration {

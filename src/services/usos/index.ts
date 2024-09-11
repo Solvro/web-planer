@@ -139,6 +139,7 @@ export const usosService = (usosClient: UsosClient) => {
 
       const data = await fetchWithCookie(
         `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=${courseId}`,
+        {},
       );
 
       const $ = cheerio.load(await data.text());

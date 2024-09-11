@@ -56,5 +56,5 @@ export const GET = async (request: NextRequest) => {
     httpOnly: true,
   });
 
-  return redirect("/");
+  return redirect("/app/plans");
 };

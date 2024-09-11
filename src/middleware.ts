@@ -1,34 +1,23 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { usosService } from "./services/usos";
-import { createClient } from "./services/usos/usosClient";
-
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const tokens = {
     token: request.cookies.get("access_token")?.value,
     secret: request.cookies.get("access_token_secret")?.value,
     fetch,
   };
-  let isFailed = tokens.token === undefined || tokens.secret === undefined;
 
-  let usos;
+  const isProtectedRoute = request.nextUrl.pathname.startsWith("/app");
 
-  if (!isFailed) {
-    try {
-      usos = createClient(tokens);
-      await usosService(usos).getProfile();
-    } catch (e) {
-      isFailed = true;
-    }
+  if (!isProtectedRoute) {
+    return NextResponse.next();
   }
 
-  if (isFailed) {
-    if (request.nextUrl.pathname.startsWith("/app")) {
-      const response = NextResponse.redirect(new URL("/login", request.url));
+  const isFailed = tokens.token === undefined || tokens.secret === undefined;
 
-      return response;
-    }
+  if (isFailed) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

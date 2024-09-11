@@ -9,7 +9,7 @@ export function PlanDisplayLink({ hash }: { hash: string }) {
   const [linkURL, setLinkURL] = useState("");
 
   useEffect(() => {
-    setLinkURL(`${window.location.origin}/shareplan/${hash}`);
+    setLinkURL(`${window.location.origin}/app/shareplan/${hash}`);
   }, [hash]);
 
   return (

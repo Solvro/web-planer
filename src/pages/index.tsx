@@ -1,5 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-// import { ChevronRightIcon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
@@ -7,7 +8,7 @@ import { type ComponentProps, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { Seo } from "@/components/SEO";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
@@ -20,7 +21,6 @@ const Navbar = () => {
     <div className="relative z-50 flex h-20 items-center justify-between">
       <Logo />
 
-      {/* Desktop Navigation */}
       <nav className="hidden h-20 flex-row items-center gap-10 pr-10 text-white md:flex lg:pr-40">
         <ul className="flex gap-6">
           <li className="cursor-pointer">
@@ -159,55 +159,76 @@ const AnimationLogo = () => (
   </Block>
 );
 
-const JoinUsBlock = () => (
-  <Block className="flex flex-col items-center justify-center gap-6 md:gap-10">
-    <div className="">
-      <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
-        <span className="font-inter tracking-wide text-white animate-in">
-          Stwórz swój plan używając{" "}
-          <span className="font-bold uppercase">darmowego</span> zapisownika!
-        </span>
-      </h1>
-    </div>
-    <div className="">
-      <p className="text-center text-white md:mr-4 md:text-2xl">
-        Zaloguj się do platformy USOS i stwórz swój plan na semestr!
-      </p>
-    </div>
-    <div className="z-50">
-      {process.env.NODE_ENV === "development" ||
-      (typeof window !== "undefined" &&
-        window.location.hostname === "planer.solvro.pl") ? (
-        <Link
-          href="#"
-          data-umami-event="Landing - Go to planning"
-          className={buttonVariants({
-            size: "lg",
-            variant: "outline",
-            className: cn(
-              "h-20 cursor-wait self-center border-4 text-xl opacity-80 transition-all duration-300 md:mt-0 md:p-7",
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-              false &&
+const JoinUsBlock = () => {
+  const query = useQuery({
+    queryKey: ["auth"],
+    queryFn: async () => {
+      const res = await fetch("/api/profile");
+
+      if (res.status === 401) {
+        throw new Error("Unauthorized");
+      }
+
+      return res.json();
+    },
+    retry: false,
+  });
+
+  return (
+    <Block className="flex flex-col items-center justify-center gap-6 md:gap-10">
+      <div className="">
+        <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
+          <span className="font-inter tracking-wide text-white animate-in">
+            Stwórz swój plan używając{" "}
+            <span className="font-bold uppercase">darmowego</span> zapisownika!
+          </span>
+        </h1>
+      </div>
+      <div className="">
+        <p className="text-center text-white md:mr-4 md:text-2xl">
+          Zaloguj się do platformy USOS i stwórz swój plan na semestr!
+        </p>
+      </div>
+      <div className="z-50">
+        {query.isLoading ? (
+          <div className="flex h-20 animate-spin items-center justify-center text-xl text-white">
+            <Loader2Icon size={32} />
+          </div>
+        ) : query.isError ? (
+          <Link
+            href="/api/login"
+            data-umami-event="Landing - Go to planning"
+            className={buttonVariants({
+              size: "lg",
+              variant: "outline",
+              className: cn(
+                "h-20 cursor-wait self-center border-4 text-xl opacity-80 transition-all duration-300 md:mt-0 md:p-7",
                 "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
-            ),
-          })}
-        >
-          {/* Przejdź do planowania <ChevronRightIcon className="ml-2" /> */}
-          Startujemy 10 września
-        </Link>
-      ) : (
-        <Button
-          disabled={true}
-          variant="outline"
-          data-umami-event="Landing - incoming soon"
-          className="h-20 cursor-pointer self-center border-4 text-xl transition-all duration-300 hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)] md:mt-0 md:p-7"
-        >
-          Już niedługo :)
-        </Button>
-      )}
-    </div>
-  </Block>
-);
+              ),
+            })}
+          >
+            Zaloguj się
+          </Link>
+        ) : (
+          <Link
+            href="/app/plans"
+            data-umami-event="Landing - Go to planning"
+            className={buttonVariants({
+              size: "lg",
+              variant: "outline",
+              className: cn(
+                "h-20 cursor-wait self-center border-4 text-xl opacity-80 transition-all duration-300 md:mt-0 md:p-7",
+                "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+              ),
+            })}
+          >
+            Twoje plany
+          </Link>
+        )}
+      </div>
+    </Block>
+  );
+};
 
 const Logo = () => {
   return (

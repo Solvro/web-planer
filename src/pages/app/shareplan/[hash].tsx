@@ -64,7 +64,7 @@ const SharePlan = ({
     });
 
     setTimeout(() => {
-      void router.push(`/createplan/${newPlan.id}`);
+      void router.push(`/app/createplan/${newPlan.id}`);
     }, 200);
   };
   return (
