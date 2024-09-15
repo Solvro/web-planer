@@ -87,8 +87,7 @@ export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get("name");
 
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-  if (name) {
+  if (name !== null) {
     const registration = mockRegistrations.find(
       (reg) => reg.registration.name === name,
     );

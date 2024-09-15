@@ -1,16 +1,3 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import html2canvas from "html2canvas";
 import { useAtom } from "jotai";
 import { atomFamily, atomWithStorage } from "jotai/utils";
@@ -19,6 +6,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { as } from "vitest/dist/chunks/reporters.C_zwCd4j.js";
 
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { Seo } from "@/components/SEO";
@@ -29,12 +17,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { encodeToBase64 } from "@/lib/sharingUtils";
-import type {
-  ClassBlockProps,
-  Course,
-  MockRegistration,
-  Registration,
-} from "@/lib/types";
+import type { ClassBlockProps, Course, Group, Registration } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export interface ExtendedCourse extends Course {
@@ -127,7 +110,7 @@ const CreatePlan = ({
   const handleDepartmentChange = async (
     facultyName: string,
   ): Promise<Registration[]> => {
-    const facultyID = facultyName.match(/\[(.*?)\]/)?.[1];
+    const facultyID = /\[(.*?)\]/.exec(facultyName)?.[1] ?? "";
 
     setPlan({
       ...plan,
@@ -143,13 +126,18 @@ const CreatePlan = ({
       throw new Error("Failed to fetch data");
     }
 
-    const data = await res.json();
+    const data = (await res.json()) as { registrations: unknown[] };
 
     const registrations: Registration[] = data.registrations.map(
-      (reg: any) => ({
-        name: reg.registration.description.pl,
-        id: reg.registration.id,
-      }),
+      (reg: unknown) => {
+        const typedReg = reg as {
+          registration: { description: { pl: string }; id: string };
+        };
+        return {
+          name: typedReg.registration.description.pl,
+          id: typedReg.registration.id,
+        };
+      },
     );
 
     return registrations;
@@ -168,50 +156,62 @@ const CreatePlan = ({
         throw new Error("Failed to fetch data");
       }
 
-      const data = await res.json();
+      const data = (await res.json()) as { registrations: unknown[] };
 
-      const selectedRegistration = data.registrations.find(
-        (reg: any) => reg.registration.id === registrationId,
-      );
+      const selectedRegistration = data.registrations.find((reg: unknown) => {
+        const typedReg = reg as {
+          registration: { id: string };
+        };
+        return typedReg.registration.id === registrationId;
+      }) as
+        | {
+            registration: { id: string };
+            courses: Array<{ course: { name: string; groups: Group[] } }>;
+          }
+        | undefined;
 
-      if (!selectedRegistration) {
+      if (selectedRegistration === undefined) {
         setIsError(true);
         throw new Error(`Registration with ID ${registrationId} not found`);
       }
 
       const courses: ExtendedCourse[] = selectedRegistration.courses.map(
-        (course: any) => ({
-          name: course.course.name,
-          registrationName: selectedRegistration.registration.id,
-          isChecked: false,
-        }),
+        (course) =>
+          ({
+            name: course.course.name,
+            registrationName: selectedRegistration.registration.id,
+            isChecked: false,
+          }) satisfies ExtendedCourse,
       );
 
       const groups: ExtendedGroup[] = selectedRegistration.courses.flatMap(
-        (course: any) =>
-          course.groups.map((group: any) => ({
-            startTime: `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`,
-            endTime: `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`,
-            day: group.day,
-            group: `gr. ${group.groupNumber}`,
-            courseName: course.course.name,
-            courseID: course.course.id,
-            lecturer: group.person,
-            week:
-              group.frequency === "każd"
-                ? ""
-                : group.frequency === "nieparzyst"
-                  ? "TN"
-                  : "TP",
-            courseType: group.type.charAt(0).toUpperCase() as
-              | "C"
-              | "L"
-              | "P"
-              | "S"
-              | "W",
-            registrationName: selectedRegistration.registration.id,
-            isChecked: false,
-          })),
+        (course) => course.groups.map((group: Group) => {
+          const startTime = `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`;
+          const endTime = `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`;
+          const day = group.day;
+          const courseType = group.type.charAt(0).toUpperCase() as "C" | "L" | "P" | "S" | "W";
+          const courseName = course.course.name;
+          const courseID = course.course.id;
+          const lecturer = group.person;
+          const week = group.frequency === "każd" ? "" : group.frequency === "nieparzyst" ? "TN" : "TP";
+          const groupNumber = `gr. ${group.groupNumber}`;
+          const registrationName = selectedRegistration.registration.id;
+          const isChecked = false;
+      
+          return {
+            startTime,
+            endTime,
+            day,
+            courseType,
+            courseName,
+            courseID,
+            lecturer,
+            week,
+            group: groupNumber,
+            registrationName,
+            isChecked,
+          } as ExtendedGroup;
+        })
       );
 
       setPlan({
@@ -220,7 +220,6 @@ const CreatePlan = ({
         groups,
       });
     } catch (error) {
-      console.error("Error fetching department data: ", error);
       throw error;
     }
   };

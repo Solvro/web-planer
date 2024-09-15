@@ -25,11 +25,21 @@ export interface Registration {
 export interface Course {
   name: string;
   registrationName: string;
-  ects: number;
 }
 
 export interface MockRegistration {
   registration: Registration;
   courses: Course[];
   groups: ClassBlockProps[];
+}
+
+export interface Group {
+  day: string;
+  groupNumber: string;
+  person: string;
+  course: { name: string, id: string };
+  hourStartTime: { hours: string, minutes: string };
+  hourEndTime: { hours: string, minutes: string };
+  frequency: string;
+  type: string;
 }

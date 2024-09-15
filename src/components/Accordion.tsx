@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Combobox } from "@/components/ui/combobox";
-import type { MockRegistration, Registration } from "@/lib/types";
+import type { Registration } from "@/lib/types";
 
 const departmentOptions = [
   "Filia w Legnicy [FLG]",
@@ -93,8 +93,12 @@ export const GroupsAccordion = ({
                 id={`department-select-${index}`}
                 options={departmentOptions}
                 value={selectedDepartment ?? ""}
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onChange={handleDepartmentChange}
+                onChange={(value) => {
+                  handleDepartmentChange(value).catch((error) => {
+                    // eslint-disable-next-line no-console
+                    console.error((error as Error).message);
+                  });
+                }}
               />
             </div>
 

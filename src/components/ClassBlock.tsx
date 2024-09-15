@@ -34,7 +34,6 @@ const ClassBlock = ({
   lecturer,
   week,
   courseType,
-  courses,
   groups,
   onClick,
 }: {
