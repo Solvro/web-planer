@@ -2,9 +2,9 @@ import React from "react";
 
 import { GroupsAccordion } from "@/components/Accordion";
 import type { Registration } from "@/lib/types";
-import type { ExtendedCourse } from "@/pages/app/createplan/[id]";
+import type { ExtendedCourse } from "@/atoms/planFamily";
 
-export const SelectGroups = ({
+export const SelectCourses = ({
   registrations,
   courses,
   checkCourse,

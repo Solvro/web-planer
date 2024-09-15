@@ -1,10 +1,6 @@
 import React from "react";
 
-import type { ClassBlockProps } from "@/lib/types";
-import type {
-  ExtendedCourse,
-  ExtendedGroup,
-} from "@/pages/app/createplan/[id]";
+import type { ExtendedGroup } from "@/atoms/planFamily";
 
 import { ClassBlock } from "./ClassBlock";
 import { Hour } from "./Hour";
@@ -47,17 +43,13 @@ const bottomHours = [
 ] as const;
 
 const ClassSchedule = ({
-  schedule,
   day,
-  courses,
   groups,
-  onClick,
+  onSelectGroup,
 }: {
-  schedule: ClassBlockProps[];
   day: string;
-  courses: ExtendedCourse[];
   groups: ExtendedGroup[];
-  onClick: (id: string) => void;
+  onSelectGroup: (groupId: string) => void;
 }) => {
   return (
     <div className="flex min-w-fit flex-col rounded-xl border-2 p-1">
@@ -75,13 +67,14 @@ const ClassSchedule = ({
         </div>
         <div className="grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5">
           <div className="absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200" />
-          {schedule.map((block, index) => (
+          {groups.map((block) => (
             <ClassBlock
-              key={index}
+              key={block.groupId + block.courseId + block.registrationId}
               {...block}
-              courses={courses}
               groups={groups}
-              onClick={onClick}
+              onClick={() => {
+                onSelectGroup(block.groupId);
+              }}
             />
           ))}
         </div>

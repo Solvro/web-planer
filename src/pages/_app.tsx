@@ -1,8 +1,11 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import { QueryClient } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import type { AppProps } from "next/app";
 import { Space_Grotesk } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
+import { useState } from "react";
 
 import { Seo } from "@/components/SEO";
 import { cn } from "@/lib/utils";
@@ -11,7 +14,13 @@ import type { UmamiTracker } from "@/types/umami";
 
 const inter = Space_Grotesk({ subsets: ["latin"] });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+});
 
 declare global {
   interface Window {
@@ -20,8 +29,17 @@ declare global {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [persister] = useState(() =>
+    createSyncStoragePersister({
+      storage: typeof window !== "undefined" ? window.localStorage : null,
+    }),
+  );
+
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister }}
+    >
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,6 +55,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={cn(inter.className, "min-h-screen")}>
         <Component {...pageProps} />
       </div>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
