@@ -122,6 +122,10 @@ const CreatePlan = ({
 
       pdf.save("plan.pdf");
     });
+
+    classBlocks.forEach((block: HTMLElement) => {
+      block.style.display = "";
+    });
   };
 
   const handleDepartmentChange = async (
