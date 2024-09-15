@@ -57,14 +57,17 @@ const ClassBlock = ({
       g.courseType === courseType && courseID === g.courseID && g.isChecked,
   );
 
-  const isThisGroupChecked = checkedGroupFromCourse ? checkedGroupFromCourse.group === group : false;
+  const isThisGroupChecked = checkedGroupFromCourse
+    ? checkedGroupFromCourse.group === group
+    : false;
 
   return (
     <button
-        suppressHydrationWarning={true}
+      suppressHydrationWarning={true}
       disabled={
         checkedGroupFromCourse?.isChecked === true ? !isThisGroupChecked : false
       }
+      data-is-checked={isThisGroupChecked}
       onClick={() => {
         onClick(courseID, courseType, group);
       }}
@@ -73,6 +76,7 @@ const ClassBlock = ({
         gridColumnEnd: `span ${durationSpan}`,
       }}
       className={cn(
+        "class-block",
         position,
         typeClasses[courseType],
         `relative flex flex-col truncate rounded-lg p-2 shadow-md`,
@@ -87,8 +91,8 @@ const ClassBlock = ({
         <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
         <p>{`Grupa ${group}`}</p>
       </div>
-      <p className="truncate font-bold">{courseName}</p>
-      <p className="truncate font-semibold">{lecturer}</p>
+      <p className="font-bold">{courseName}</p>
+      <p className="font-semibold">{lecturer}</p>
     </button>
   );
 };

@@ -11,8 +11,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import html2canvas from "html2canvas";
 import { useAtom } from "jotai";
 import { atomFamily, atomWithStorage } from "jotai/utils";
+import jsPDF from "jspdf";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -79,6 +81,48 @@ const CreatePlan = ({
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
   const inputRef = useRef<HTMLInputElement>(null);
   const [isError, setIsError] = useState(false);
+  const scheduleRef = useRef(null);
+
+  const handleSaveAsPDF = () => {
+    const input = scheduleRef.current;
+
+    const classBlocks = input.querySelectorAll(".class-block");
+
+    console.log(classBlocks);
+
+    classBlocks.forEach((block: HTMLElement) => {
+      const isDisabled = block.hasAttribute("disabled");
+      const isChecked = block.getAttribute("data-is-checked") === "true";
+
+      if (isDisabled || !isChecked) {
+        block.style.display = "none";
+      }
+    });
+
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save("plan.pdf");
+    });
+  };
 
   const handleDepartmentChange = async (
     facultyName: string,
@@ -281,6 +325,12 @@ const CreatePlan = ({
                 </div>
 
                 <div className="flex w-full items-center justify-between gap-1 md:flex-col lg:flex-row">
+                  <button
+                    className={cn(buttonVariants({ variant: "primary" }))}
+                    onClick={handleSaveAsPDF}
+                  >
+                    Zapisz jako PDF
+                  </button>
                   {/* <PlanDisplayLink
                     hash={encodeToBase64(JSON.stringify(plan))}
                   /> */}
@@ -298,7 +348,10 @@ const CreatePlan = ({
             </div>
           </div>
           <hr />
-          <div className="flex w-11/12 items-start overflow-x-auto md:ml-0">
+          <div
+            ref={scheduleRef}
+            className="flex w-11/12 items-start overflow-x-auto md:ml-0"
+          >
             <ScheduleTest
               schedule={plan.groups}
               courses={plan.courses}
