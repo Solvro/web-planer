@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
-import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
 import type { ApiFacultyDataGet } from "@/app/api/data/[facultyId]/route";
+import { type ExtendedGroup, planFamily } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
+import { RegistrationCombobox } from "@/components/RegistrationCombobox";
 import { Seo } from "@/components/SEO";
-import { SelectGroups } from "@/components/SelectGroups";
+import { SelectCourses } from "@/components/SelectGroups";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,101 +23,94 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { encodeToBase64 } from "@/lib/sharingUtils";
-import type { ClassBlockProps, Course } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Frequency, LessonType } from "@/services/usos/types";
-
-export interface ExtendedCourse extends Course {
-  isChecked: boolean;
-}
-
-export interface ExtendedGroup extends ClassBlockProps {
-  isChecked: boolean;
-}
-
-export const planFamily = atomFamily(
-  ({ id }: { id: number }) =>
-    atomWithStorage(
-      `${id}-plan`,
-      {
-        id,
-        name: `Nowy plan - ${id}`,
-        courses: [] as Course[],
-        groups: [] as ExtendedGroup[],
-      },
-      undefined,
-      { getOnInit: true },
-    ),
-  (a, b) => a.id === b.id,
-);
+import { Day, Frequency, LessonType } from "@/services/usos/types";
 
 const faculties = [
   {
-    name: "Studium Języków Obcych [PRD/S1]",
+    name: "[PRD/S1] Studium Języków Obcych",
     value: "PRD/S1",
   },
   {
-    name: "Studium Wychowania Fizycznego i Sportu [PRD/S3]",
+    name: "[PRD/S3] Studium Wychowania Fizycznego i Sportu",
     value: "PRD/S3",
   },
   {
-    name: "Politechnika Wrocławska [PWR]",
-    value: "PWR",
-  },
-  {
-    name: "Wydział Architektury [W1]",
+    name: "[W1] Wydział Architektury",
     value: "W1",
   },
   {
-    name: "Wydział Budownictwa Lądowego i Wodnego [W2]",
+    name: "[W2] Wydział Budownictwa Lądowego i Wodnego",
     value: "W2",
   },
   {
-    name: "Wydział Chemiczny [W3]",
+    name: "[W3] Wydział Chemiczny",
     value: "W3",
   },
   {
-    name: "Wydział Informatyki i Telekomunikacji [W4N]",
+    name: "[W4N] Wydział Informatyki i Telekomunikacji",
     value: "W4N",
   },
   {
-    name: "Wydział Elektryczny [W5]",
+    name: "[W5] Wydział Elektryczny",
     value: "W5",
   },
   {
-    name: "Wydział Geoinżynierii, Górnictwa i Geologii [W6]",
+    name: "[W6] Wydział Geoinżynierii, Górnictwa i Geologii",
     value: "W6",
   },
   {
-    name: "Wydział Zarządzania [W8N]",
+    name: "[W8N] Wydział Zarządzania",
     value: "W8N",
   },
   {
-    name: "Wydział Mechaniczno-Energetyczny [W9]",
+    name: "[W9] Wydział Mechaniczno-Energetyczny",
     value: "W9",
   },
   {
-    name: "Wydział Mechaniczny [W10]",
+    name: "[W10] Wydział Mechaniczny",
     value: "W10",
   },
   {
-    name: "Wydział Podstawowych Problemów Techniki [W11]",
+    name: "[W11] Wydział Podstawowych Problemów Techniki",
     value: "W11",
   },
   {
-    name: "Wydział Elektroniki, Fotoniki i Mikrosystemów [W12N]",
+    name: "[W12N] Wydział Elektroniki, Fotoniki i Mikrosystemów",
     value: "W12N",
   },
   {
-    name: "Wydział Matematyki [W13]",
+    name: "[W13] Wydział Matematyki",
     value: "W13",
   },
   {
-    name: "Filia w Legnicy [FLG]",
+    name: "[FLG] Filia w Legnicy",
     value: "FLG",
   },
+  {
+    name: "[PWR] Politechnika Wrocławska",
+    value: "PWR",
+  },
 ];
+
+const lessonTypeToName = (lessonType: LessonType) => {
+  switch (lessonType) {
+    case LessonType.EXERCISES:
+      return "Ć";
+    case LessonType.LABORATORY:
+      return "L";
+    case LessonType.PROJECT:
+      return "P";
+    case LessonType.SEMINAR:
+      return "S";
+    case LessonType.LECTURE:
+      return "W";
+    default:
+      return "";
+  }
+};
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps = (async (context) => {
@@ -139,12 +133,16 @@ const CreatePlan = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [faculty, setFaculty] = useState<string | null>(null);
-
+  const [selectedRegistrationId, setSelectedRegistrationId] = useState<
+    string | null
+  >(null);
   const data = useQuery({
     enabled: faculty !== null,
     queryKey: ["registrations", faculty],
     queryFn: async () => {
-      const response = await fetch(`/api/data/${faculty}`);
+      const response = await fetch(
+        `/api/data/${encodeURIComponent(faculty ?? "")}`,
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -161,6 +159,7 @@ const CreatePlan = ({
         name: c.course.name,
         isChecked: plan.courses.some((p) => p.id === c.course.id),
         registrationId: r.registration.id,
+        type: lessonTypeToName(c.groups.at(0)?.type ?? ("" as LessonType)),
       })),
     ) ?? [];
 
@@ -193,10 +192,11 @@ const CreatePlan = ({
               id: allCourses.find((c) => c.id === courseId)?.id ?? "",
               name: allCourses.find((c) => c.id === courseId)?.name ?? "",
               registrationId: courseId,
+              type: allCourses.find((c) => c.id === courseId)?.type ?? "",
             },
           ],
       groups: isAlreadyChecked
-        ? plan.groups.filter((g) => g.courseId === courseId)
+        ? plan.groups.filter((g) => g.courseId !== courseId)
         : [
             ...plan.groups,
             ...allCourses
@@ -222,8 +222,9 @@ const CreatePlan = ({
                                   : g.type === LessonType.SEMINAR
                                     ? "S"
                                     : "W",
-                          groupId: g.groupNumber.toString(),
-
+                          groupNumber: g.groupNumber.toString(),
+                          groupId: g.groupNumber + g.courseId + g.type,
+                          day: g.day,
                           lecturer: g.person,
                           registrationId: c.registrationId,
                           week:
@@ -288,7 +289,7 @@ const CreatePlan = ({
         </div>
 
         <div className="flex w-full flex-col items-center justify-center gap-2 md:flex-row md:items-start">
-          <div className="flex w-9/12 max-w-[400px] flex-col items-center justify-center gap-2 md:ml-4 md:w-4/12 md:flex-col">
+          <div className="flex w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
             <div className="w-full rounded-xl border-2 p-5">
               <div className="flex flex-col justify-start gap-3 md:w-full">
                 <div className="flex w-full">
@@ -332,67 +333,81 @@ const CreatePlan = ({
                 setFaculty(v);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="pl-2" isLoading={data.isLoading}>
                 <SelectValue placeholder="Wydział" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-w-full">
                 {faculties.map((f) => (
-                  <SelectItem key={f.value} value={f.value}>
+                  <SelectItem
+                    className="mr-2 max-w-full truncate"
+                    key={f.value}
+                    value={f.value}
+                  >
                     {f.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {data.isLoading ? (
+              <Skeleton className="h-[40px] w-full rounded-sm" />
+            ) : allRegistrations.length > 0 ? (
+              <RegistrationCombobox
+                registrations={allRegistrations.map((r) => ({
+                  value: r.id,
+                  label: r.name,
+                }))}
+                selectedRegistrationId={selectedRegistrationId}
+                setSelectedRegistrationId={setSelectedRegistrationId}
+              />
+            ) : null}
 
             <div className="w-full items-center justify-center">
-              <SelectGroups
-                registrations={allRegistrations}
-                courses={allCourses}
+              <SelectCourses
+                registrations={allRegistrations.filter(
+                  (r) =>
+                    r.id === selectedRegistrationId ||
+                    plan.courses.some((c) => c.registrationId === r.id),
+                )}
+                courses={allCourses.filter(
+                  (c) =>
+                    c.registrationId === selectedRegistrationId ||
+                    plan.courses.some((course) => c.id === course.id),
+                )}
                 checkCourse={checkCourse}
               />
             </div>
           </div>
           <hr />
-          <div className="flex w-11/12 items-start overflow-x-auto md:ml-0">
+          <div className="ml-2 flex w-full items-start overflow-x-auto md:ml-0">
             <div className="overflow-x flex flex-col gap-3 overflow-auto scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
-              {/* {/* <ClassSchedule
-                schedule={schedule}
-                day="Poniedziałek"
-                courses={courses}
-                groups={groups}
-                onClick={onClick}
-              /> */}
-              <ClassSchedule
-                schedule={plan.groups}
-                day="Wtorek"
-                courses={plan.courses.map((c) => ({
-                  ...c,
-                  isChecked: true,
-                }))}
-                groups={plan.groups}
-                onClick={checkGroup}
-              />
-              {/* <ClassSchedule
-                schedule={schedule}
-                day="Środa"
-                courses={courses}
-                groups={groups}
-                onClick={onClick}
-              />
-              <ClassSchedule
-                schedule={schedule}
-                day="Czwartek"
-                courses={courses}
-                groups={groups}
-                onClick={onClick}
-              />
-              <ClassSchedule
-                schedule={schedule}
-                day="Piątek"
-                courses={courses}
-                groups={groups}
-                onClick={onClick}
-              /> */}
+              {[
+                { day: Day.MONDAY, label: "Poniedziałek" },
+                { day: Day.TUESDAY, label: "Wtorek" },
+                { day: Day.WEDNESDAY, label: "Środa" },
+                { day: Day.THURSDAY, label: "Czwartek" },
+                { day: Day.FRIDAY, label: "Piątek" },
+              ].map(({ day, label }) => (
+                <ClassSchedule
+                  key={day}
+                  day={label}
+                  groups={plan.groups.filter((g) => g.day === day)}
+                  onSelectGroup={checkGroup}
+                />
+              ))}
+              {[
+                { day: Day.SATURDAY, label: "Sobota" },
+                { day: Day.SUNDAY, label: "Niedziela" },
+              ].map(
+                ({ day, label }) =>
+                  plan.groups.some((g) => g.day === day) && (
+                    <ClassSchedule
+                      key={day}
+                      day={label}
+                      groups={plan.groups.filter((g) => g.day === day)}
+                      onSelectGroup={checkGroup}
+                    />
+                  ),
+              )}
             </div>
           </div>
         </div>

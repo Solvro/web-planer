@@ -4,13 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { planFamily } from "@/atoms/planFamily";
 import { Plan } from "@/components/Plan";
 import { Seo } from "@/components/SEO";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-import { planFamily } from "./createplan/[id]";
 
 export const plansIds = atomWithStorage<Array<{ id: number }>>("plansIds", []);
 

@@ -1,10 +1,10 @@
+import type { ExtendedCourse } from "@/atoms/planFamily";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type { ExtendedCourse } from "@/pages/app/createplan/[id]";
 
 export const GroupsAccordion = ({
   registrationId,
@@ -20,15 +20,15 @@ export const GroupsAccordion = ({
   courses: ExtendedCourse[];
 }) => {
   return (
-    <div className="">
+    <div>
       <Accordion type="single" collapsible={true} className="">
         <AccordionItem value="item-1">
           <AccordionTrigger className="px-4 hover:no-underline">
             <div className="flex items-center gap-4">
-              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-primary font-bold text-white">
+              <div className="flex h-[50px] w-[50px] min-w-[50px] items-center justify-center rounded-[50px] bg-primary font-bold text-white">
                 {index + 1}
               </div>
-              {registrationName}
+              <span className="text-left text-sm">{registrationName}</span>
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -38,15 +38,15 @@ export const GroupsAccordion = ({
                   <div key={course.name}>
                     <div className="grid grid-cols-[1fr_5fr] items-center justify-between break-all p-4 py-2 text-base hover:cursor-pointer hover:bg-stone-300">
                       <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-secondary">
-                        {course.name.slice(0, 1).toUpperCase()}
+                        {course.type}
                       </div>
                       <label
-                        htmlFor={`${index}-${course.name}`}
+                        htmlFor={`course-${course.id}`}
                         className="ml-4 flex justify-between hover:cursor-pointer"
                       >
                         {course.name}
                         <input
-                          id={`${index}-${course.name}`}
+                          id={`course-${course.id}`}
                           type="checkbox"
                           onChange={() => {
                             onClick(course.id);
