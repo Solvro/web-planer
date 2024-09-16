@@ -1,42 +1,33 @@
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { LuDownloadCloud } from "react-icons/lu";
 
+import { planFamily } from "@/atoms/planFamily";
 import { ReadonlyScheduleTest } from "@/components/ReadonlyScheduleTest";
-import { SharePlanResponsiveDialog } from "@/components/SharePlanResponsiveDialog";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { decodeFromBase64 } from "@/lib/sharingUtils";
 import { cn } from "@/lib/utils";
 
-import type { ExtendedCourse, ExtendedGroup } from "../createplan/[id]";
-import { planFamily } from "../createplan/[id]";
 import { plansIds } from "../plans";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps = (async (context) => {
-  const { hash } = context.query;
+  const { id } = context.query;
 
-  if (typeof hash !== "string") {
-    throw new Error(`Invalid hash ${hash?.toString()}`);
+  if (typeof id !== "string") {
+    throw new Error(`Invalid hash ${id?.toString()}`);
   }
-  const plan = JSON.parse(decodeFromBase64(hash)) as {
-    courses: ExtendedCourse[];
-    groups: ExtendedGroup[];
-  };
-  return { props: { plan, hash } };
-}) satisfies GetServerSideProps<{
-  plan: { courses: ExtendedCourse[]; groups: ExtendedGroup[] };
-}>;
+
+  return { props: { id: parseInt(id) } };
+}) satisfies GetServerSideProps;
 
 const SharePlan = ({
-  plan,
-  hash,
+  id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plans, setPlans] = useAtom(plansIds);
+  const plan = useAtomValue(planFamily({ id }));
   const [planToCopy, setPlanToCopy] = useAtom(
     planFamily({ id: plans.length + 1 }),
   );
@@ -94,17 +85,9 @@ const SharePlan = ({
           >
             <span className="text-nowrap">Strona główna</span>
           </Link>
-          <Image
-            src="https://github.com/shadcn.png"
-            width={40}
-            height={40}
-            className="rounded-full"
-            alt="Picture of the author"
-          />
         </div>
       </div>
       <div className="flex items-center justify-center gap-4 p-2">
-        <SharePlanResponsiveDialog hash={hash} />
         <Button
           onClick={copyPlan}
           className="flex items-center justify-center gap-4 text-nowrap rounded-md text-lg"

@@ -1,6 +1,5 @@
 import React from "react";
 
-import type { ExtendedGroup } from "@/atoms/planFamily";
 import { cn } from "@/lib/utils";
 
 const typeClasses = {
@@ -28,40 +27,33 @@ function calculatePosition(startTime: string, endTime: string) {
 export const ClassBlock = ({
   startTime,
   endTime,
-  groupId,
   groupNumber,
-  courseId,
   courseName,
   lecturer,
   week,
   courseType,
-  groups,
+  isChecked,
+  isDisabled,
   onClick,
 }: {
   startTime: string;
   endTime: string;
-  groupId: string;
   groupNumber: string;
   courseName: string;
-  courseId: string;
   lecturer: string;
   week: "" | "TN" | "TP";
   courseType: "C" | "L" | "P" | "S" | "W";
-  groups: ExtendedGroup[];
+  isChecked: boolean;
+  isDisabled: boolean;
   onClick: () => void;
 }) => {
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
-  const checkedGroupFromCourse = groups.find(
-    (g) => groupId === g.groupId && g.isChecked,
-  );
-  const isThisGroupChecked = checkedGroupFromCourse?.groupId === groupId;
+
   return (
     <button
       suppressHydrationWarning={true}
-      disabled={
-        checkedGroupFromCourse?.isChecked === true ? !isThisGroupChecked : false
-      }
+      disabled={isDisabled}
       onClick={onClick}
       style={{
         gridColumnStart: startGrid,
@@ -71,11 +63,11 @@ export const ClassBlock = ({
         position,
         typeClasses[courseType],
         `relative flex flex-col truncate rounded-lg p-2 shadow-md`,
-        checkedGroupFromCourse?.isChecked === true
-          ? isThisGroupChecked
-            ? "cursor-pointer"
-            : "opacity-20"
-          : "cursor-pointer opacity-60",
+        isChecked
+          ? "cursor-pointer"
+          : isDisabled
+            ? "opacity-20"
+            : "cursor-pointer opacity-60",
       )}
     >
       <div className="flex w-full justify-between">

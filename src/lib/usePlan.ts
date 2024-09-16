@@ -1,0 +1,78 @@
+import { useAtom } from "jotai";
+
+import { type ExtendedCourse, planFamily } from "@/atoms/planFamily";
+
+import type { Course, Registration } from "./types";
+
+export const usePlan = ({ planId }: { planId: number }) => {
+  const [plan, setPlan] = useAtom(planFamily({ id: planId }));
+
+  return {
+    ...plan,
+    allGroups: plan.courses.flatMap((c) => c.groups),
+    setPlan,
+    selectGroup: (groupId: string, isChecked?: boolean) => {
+      void window.umami?.track("Change group");
+      setPlan({
+        ...plan,
+        courses: plan.courses.map((course) => ({
+          ...course,
+          groups: course.groups.map((group) =>
+            group.groupId === groupId
+              ? { ...group, isChecked: isChecked ?? !group.isChecked }
+              : group,
+          ),
+        })),
+      });
+    },
+    checkAllCourses: (registrationId: string, isChecked?: boolean) => {
+      setPlan({
+        ...plan,
+        courses: plan.courses.map((course) =>
+          course.registrationId === registrationId
+            ? { ...course, isChecked: isChecked ?? !course.isChecked }
+            : course,
+        ),
+      });
+    },
+    addRegistration: (
+      registration: Registration,
+      courses: ExtendedCourse[],
+    ) => {
+      setPlan({
+        ...plan,
+        registrations: [...plan.registrations, registration],
+        courses: [...plan.courses, ...courses],
+      });
+    },
+    removeRegistration: (registrationId: string) => {
+      setPlan({
+        ...plan,
+        registrations: plan.registrations.filter(
+          (r) => r.id !== registrationId,
+        ),
+        courses: plan.courses.filter(
+          (c) => c.registrationId !== registrationId,
+        ),
+      });
+    },
+    changeName: (newName: string) => {
+      void window.umami?.track("Change plan name");
+      setPlan({
+        ...plan,
+        name: newName,
+      });
+    },
+    selectCourse: (courseId: string, isChecked?: boolean) => {
+      void window.umami?.track("Check course");
+      setPlan({
+        ...plan,
+        courses: plan.courses.map((course) =>
+          course.id === courseId
+            ? { ...course, isChecked: isChecked ?? !course.isChecked }
+            : course,
+        ),
+      });
+    },
+  };
+};

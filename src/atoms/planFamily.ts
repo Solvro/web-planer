@@ -1,9 +1,10 @@
 import { atomFamily, atomWithStorage } from "jotai/utils";
 
-import type { ClassBlockProps, Course } from "@/lib/types";
+import type { ClassBlockProps, Course, Registration } from "@/lib/types";
 
 export interface ExtendedCourse extends Course {
   isChecked: boolean;
+  groups: ExtendedGroup[];
 }
 
 export interface ExtendedGroup extends ClassBlockProps {
@@ -17,8 +18,8 @@ export const planFamily = atomFamily(
       {
         id,
         name: `Nowy plan - ${id}`,
-        courses: [] as Course[],
-        groups: [] as ExtendedGroup[],
+        courses: [] as ExtendedCourse[],
+        registrations: [] as Registration[],
       },
       undefined,
       { getOnInit: true },
