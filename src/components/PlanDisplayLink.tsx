@@ -1,19 +1,15 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
 import { buttonVariants } from "./ui/button";
 
-export function PlanDisplayLink({ hash }: { hash: string }) {
-  const [linkURL, setLinkURL] = useState("");
-
-  useEffect(() => {
-    setLinkURL(`${window.location.origin}/app/shareplan/${hash}`);
-  }, [hash]);
-
+export function PlanDisplayLink({ id }: { id: number }) {
   return (
-    <Link href={linkURL} className={cn(buttonVariants(), "font-semibold")}>
+    <Link
+      href={`/app/preview/${id}`}
+      className={cn(buttonVariants(), "font-semibold")}
+    >
       <span>Podgląd</span>
     </Link>
   );

@@ -45,10 +45,12 @@ const bottomHours = [
 const ClassSchedule = ({
   day,
   groups,
+  selectedGroups,
   onSelectGroup,
 }: {
   day: string;
   groups: ExtendedGroup[];
+  selectedGroups: ExtendedGroup[];
   onSelectGroup: (groupId: string) => void;
 }) => {
   return (
@@ -67,16 +69,24 @@ const ClassSchedule = ({
         </div>
         <div className="grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5">
           <div className="absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200" />
-          {groups.map((block) => (
-            <ClassBlock
-              key={block.groupId + block.courseId + block.registrationId}
-              {...block}
-              groups={groups}
-              onClick={() => {
-                onSelectGroup(block.groupId);
-              }}
-            />
-          ))}
+          {groups.map((block) => {
+            const isThisCourseChecked = selectedGroups.some(
+              (g) =>
+                g.courseId === block.courseId &&
+                g.courseType === block.courseType,
+            );
+
+            return (
+              <ClassBlock
+                isDisabled={block.isChecked ? false : isThisCourseChecked}
+                key={block.groupId + block.courseId + block.registrationId}
+                {...block}
+                onClick={() => {
+                  onSelectGroup(block.groupId);
+                }}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

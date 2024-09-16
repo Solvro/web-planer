@@ -24,35 +24,38 @@ interface Option {
 }
 
 export function RegistrationCombobox({
+  name,
   registrations,
-  selectedRegistrationId,
-  setSelectedRegistrationId,
+  selectedRegistrations,
+  onSelect,
 }: {
+  name: string;
   registrations: Option[];
-  selectedRegistrationId: string | null;
-  setSelectedRegistrationId: (id: string) => void;
+  selectedRegistrations: string[] | null;
+  onSelect: (id: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  const selectedRegistration =
-    typeof selectedRegistrationId === "string"
-      ? registrations.find((option) => option.value === selectedRegistrationId)
-      : undefined;
 
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild={true}>
-          <Button variant="outline" className="w-full justify-start truncate">
-            {selectedRegistration ? selectedRegistration.label : "Rejestracja"}
+          <Button
+            name={name}
+            variant="outline"
+            className="w-full justify-start truncate font-normal"
+          >
+            {selectedRegistrations
+              ? `${selectedRegistrations.length} rejestracji`
+              : "Rejestracja"}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
           <RegistrationList
             allRegistrations={registrations}
             setSelectedRegistrationId={(id) => {
-              setSelectedRegistrationId(id);
+              onSelect(id);
               setOpen(false);
             }}
           />
@@ -64,8 +67,14 @@ export function RegistrationCombobox({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild={true}>
-        <Button variant="outline" className="w-full justify-start truncate">
-          {selectedRegistration ? selectedRegistration.label : "Rejestracja"}
+        <Button
+          name={name}
+          variant="outline"
+          className="w-full justify-start truncate font-normal"
+        >
+          {selectedRegistrations
+            ? `${selectedRegistrations.length} rejestracji`
+            : "Wybierz rejestracje"}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -73,7 +82,7 @@ export function RegistrationCombobox({
           <RegistrationList
             allRegistrations={registrations}
             setSelectedRegistrationId={(id) => {
-              setSelectedRegistrationId(id);
+              onSelect(id);
               setOpen(false);
             }}
           />

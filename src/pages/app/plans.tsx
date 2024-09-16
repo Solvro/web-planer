@@ -1,6 +1,5 @@
 import { atom, useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -58,13 +57,6 @@ const Plans = () => {
             >
               <span className="text-nowrap">Strona główna</span>
             </Link>
-            <Image
-              src="https://github.com/shadcn.png"
-              width={40}
-              height={40}
-              className="rounded-full"
-              alt="Picture of the author"
-            />
           </div>
         </div>
 
