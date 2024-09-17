@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { planFamily } from "@/pages/createplan/[id]";
 import { plansIds } from "@/pages/plans";
 
+import { DeletePlanConfirmationResponsiveDialog } from "./DeletePlanConfirmationResponsiveDialog";
 import { buttonVariants } from "./ui/button";
 
 export const Plan = ({ id, name }: { id: string; name: string }) => {
@@ -60,12 +61,7 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
               >
                 Kopiuj
               </button>
-              <button
-                onClick={deletePlan}
-                className="w-full rounded-md rounded-t-none p-2 text-left hover:bg-slate-200"
-              >
-                Usuń
-              </button>
+              <DeletePlanConfirmationResponsiveDialog deletePlan={deletePlan} />
             </div>
           </PopoverContent>
         </Popover>

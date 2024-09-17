@@ -7,7 +7,7 @@ import { planFamily } from "@/atoms/planFamily";
 import { Plan } from "@/components/Plan";
 import { Seo } from "@/components/SEO";
 import { SolvroLogo } from "@/components/SolvroLogo";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const plansIds = atomWithStorage<Array<{ id: number }>>("plansIds", []);
@@ -61,12 +61,9 @@ const Plans = () => {
 
         <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">
           <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-start">
-            <button
-              onClick={addNewPlan}
-              className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl"
-            >
-              <span>Dodaj nowy plan</span>
-            </button>
+            <div className="flex h-[200px] w-[200px] items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-xl">
+              <Button onClick={addNewPlan}>Dodaj nowy plan</Button>
+            </div>
             {plans.map((plan) => (
               <Plan key={plan.id} id={plan.id} name={plan.name} />
             ))}
