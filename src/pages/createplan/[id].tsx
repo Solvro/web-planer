@@ -6,9 +6,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { as } from "vitest/dist/chunks/reporters.C_zwCd4j.js";
 
-import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { Seo } from "@/components/SEO";
 import { ScheduleTest } from "@/components/Schedule";
 import { SelectGroups } from "@/components/SelectGroups";
@@ -16,7 +14,6 @@ import { SolvroLogo } from "@/components/SolvroLogo";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { encodeToBase64 } from "@/lib/sharingUtils";
 import type { ClassBlockProps, Course, Group, Registration } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -47,6 +44,8 @@ export const planFamily = atomFamily(
 );
 
 export const getServerSideProps = (async (context) => {
+  await Promise.resolve(); // Placeholder to satisfy ESLint
+
   const { id } = context.query;
 
   if (typeof id !== "string") {
@@ -69,20 +68,17 @@ const CreatePlan = ({
   const handleSaveAsPDF = () => {
     const input = scheduleRef.current;
 
-    const classBlocks = input.querySelectorAll(".class-block");
+    const classBlocks = (input as HTMLElement | null)?.querySelectorAll(
+      ".class-block",
+    ) as NodeListOf<HTMLElement>;
 
-    classBlocks.forEach(
-      (block: {
-        getAttribute: (arg0: string) => string;
-        style: { display: string };
-      }) => {
-        if (block.getAttribute("data-disabled") === "true") {
-          block.style.display = "none";
-        }
-      },
-    );
+    classBlocks.forEach((block) => {
+      if (block.getAttribute("data-disabled") === "true") {
+        block.style.display = "none";
+      }
+    });
 
-    html2canvas(input, { scale: 2 }).then((canvas) => {
+    void html2canvas(input, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
 
@@ -166,7 +162,7 @@ const CreatePlan = ({
       }) as
         | {
             registration: { id: string };
-            courses: Array<{ course: { name: string; groups: Group[] } }>;
+            courses: Array<{ name: string; groups: Group[] }>;
           }
         | undefined;
 
@@ -178,40 +174,51 @@ const CreatePlan = ({
       const courses: ExtendedCourse[] = selectedRegistration.courses.map(
         (course) =>
           ({
-            name: course.course.name,
+            name: course.name,
             registrationName: selectedRegistration.registration.id,
             isChecked: false,
           }) satisfies ExtendedCourse,
       );
 
       const groups: ExtendedGroup[] = selectedRegistration.courses.flatMap(
-        (course) => course.groups.map((group: Group) => {
-          const startTime = `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`;
-          const endTime = `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`;
-          const day = group.day;
-          const courseType = group.type.charAt(0).toUpperCase() as "C" | "L" | "P" | "S" | "W";
-          const courseName = course.course.name;
-          const courseID = course.course.id;
-          const lecturer = group.person;
-          const week = group.frequency === "każd" ? "" : group.frequency === "nieparzyst" ? "TN" : "TP";
-          const groupNumber = `gr. ${group.groupNumber}`;
-          const registrationName = selectedRegistration.registration.id;
-          const isChecked = false;
-      
-          return {
-            startTime,
-            endTime,
-            day,
-            courseType,
-            courseName,
-            courseID,
-            lecturer,
-            week,
-            group: groupNumber,
-            registrationName,
-            isChecked,
-          } as ExtendedGroup;
-        })
+        (course) =>
+          course.groups.map((group: Group) => {
+            const startTime = `${group.hourStartTime.hours}:${group.hourStartTime.minutes}`;
+            const endTime = `${group.hourEndTime.hours}:${group.hourEndTime.minutes}`;
+            const day = group.day;
+            const courseType = group.type.charAt(0).toUpperCase() as
+              | "C"
+              | "L"
+              | "P"
+              | "S"
+              | "W";
+            const courseName = group.course.name;
+            const courseID = group.course.id;
+            const lecturer = group.person;
+            const week =
+              group.frequency === "każd"
+                ? ""
+                : group.frequency === "nieparzyst"
+                  ? "TN"
+                  : "TP";
+            const groupNumber = `gr. ${group.groupNumber}`;
+            const registrationName = selectedRegistration.registration.id;
+            const isChecked = false;
+
+            return {
+              startTime,
+              endTime,
+              day,
+              courseType,
+              courseName,
+              courseID,
+              lecturer,
+              week,
+              group: groupNumber,
+              registrationName,
+              isChecked,
+            };
+          }),
       );
 
       setPlan({
@@ -343,7 +350,7 @@ const CreatePlan = ({
                 handleDepartmentChange={handleDepartmentChange}
                 handleRegistrationChange={handleRegistrationChange}
               />
-              {isError && <div>Wystąpił błąd</div>}
+              {isError ? <div>Wystąpił błąd</div> : null}
             </div>
           </div>
           <hr />
