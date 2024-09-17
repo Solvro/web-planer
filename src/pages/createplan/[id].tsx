@@ -66,7 +66,7 @@ const CreatePlan = ({
   const scheduleRef = useRef(null);
 
   const handleSaveAsPDF = () => {
-    const input = scheduleRef.current;
+    const input = scheduleRef.current as unknown as HTMLElement;
 
     const classBlocks = (input as HTMLElement | null)?.querySelectorAll(
       ".class-block",
@@ -232,7 +232,7 @@ const CreatePlan = ({
   };
 
   const changePlanName = (newName: string) => {
-    void window.umami.track("Change plan name");
+    void window.umami?.track("Change plan name");
     setPlan({
       ...plan,
       name: newName,
@@ -240,7 +240,7 @@ const CreatePlan = ({
   };
 
   const checkCourse = (id: string) => {
-    void window.umami.track("Check course");
+    void window.umami?.track("Check course");
     setPlan({
       ...plan,
       courses: plan.courses.map((course) =>
@@ -252,7 +252,7 @@ const CreatePlan = ({
   };
 
   const checkGroup = (id: string, courseType: string, groupNumber: string) => {
-    void window.umami.track("Change group");
+    void window.umami?.track("Change group");
     setPlan({
       ...plan,
       groups: plan.groups.map((group) =>
@@ -332,7 +332,7 @@ const CreatePlan = ({
 
                 <div className="flex w-full items-center justify-between gap-1 md:flex-col lg:flex-row">
                   <button
-                    className={cn(buttonVariants({ variant: "primary" }))}
+                    className={cn(buttonVariants({ variant: "default" }))}
                     onClick={handleSaveAsPDF}
                   >
                     Zapisz jako PDF

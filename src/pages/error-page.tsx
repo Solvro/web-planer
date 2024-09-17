@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const ErrorPage = () => {
   const router = useRouter();
@@ -13,21 +13,21 @@ const ErrorPage = () => {
   }, [router.query]);
 
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
+    <div style={{ padding: "20px", textAlign: "center" }}>
       <h1>Wystąpił błąd</h1>
-      {(errorMessage !== null) ? (
+      {errorMessage !== null ? (
         <p>{errorMessage}</p>
       ) : (
         <p>Nie udało się załadować szczegółów błędu.</p>
       )}
       <button
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        onClick={() => router.push('/')}
+        onClick={() => router.push("/")}
         style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          cursor: 'pointer',
-          marginTop: '20px',
+          padding: "10px 20px",
+          fontSize: "16px",
+          cursor: "pointer",
+          marginTop: "20px",
         }}
       >
         Powrót na stronę główną

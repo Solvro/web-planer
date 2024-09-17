@@ -13,7 +13,7 @@ export const ScheduleTest = ({
   schedule: ClassBlockProps[];
   courses: ExtendedCourse[];
   groups: ExtendedGroup[];
-  onClick: (id: string) => void;
+  onClick: (id: string, courseType: string, groupNumber: string) => void;
 }) => {
   const filterScheduleByDay = (dayCode: string) => {
     return schedule.filter((item) => item.day === dayCode);

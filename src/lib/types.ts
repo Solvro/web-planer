@@ -37,9 +37,9 @@ export interface Group {
   day: string;
   groupNumber: string;
   person: string;
-  course: { name: string, id: string };
-  hourStartTime: { hours: string, minutes: string };
-  hourEndTime: { hours: string, minutes: string };
+  course: { name: string; id: string };
+  hourStartTime: { hours: string; minutes: string };
+  hourEndTime: { hours: string; minutes: string };
   frequency: string;
   type: string;
 }

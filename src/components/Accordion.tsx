@@ -33,15 +33,11 @@ export const GroupsAccordion = ({
   index,
   onDepartmentChange,
   onRegistrationChange,
-  updateDepartmentSelection,
-  updateRegistrationSelection,
 }: {
   registrationName: string;
   index: number;
   onDepartmentChange: (value: string) => Promise<Registration[]>;
   onRegistrationChange: (value: string) => Promise<void>;
-  updateDepartmentSelection: (value: string) => void;
-  updateRegistrationSelection: (value: string) => void;
 }) => {
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
     null,
@@ -57,7 +53,6 @@ export const GroupsAccordion = ({
 
   const handleDepartmentChange = async (value: string) => {
     setSelectedDepartment(value);
-    updateDepartmentSelection(value);
     const registrations = await onDepartmentChange(value);
     setShowRegistrationSelect(true);
     setRegistrationOptions(registrations.map((r) => r.id));
@@ -65,7 +60,6 @@ export const GroupsAccordion = ({
 
   const handleRegistrationChange = async (value: string) => {
     setSelectedRegistration(value);
-    updateRegistrationSelection(value);
     await onRegistrationChange(value);
   };
 

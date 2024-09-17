@@ -8,7 +8,7 @@ import { type ComponentProps, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { Seo } from "@/components/SEO";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
@@ -250,16 +250,25 @@ export const Footer = () => {
 };
 
 const Home = () => {
-  const query = useQuery({
+  interface ProfileData {
+    first_name?: string;
+  }
+
+  const query = useQuery<ProfileData>({
     queryKey: ["profile"],
     queryFn: async () => {
       const response = await fetch("/api/profile");
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile");
+      }
       return response.json();
     },
   });
+
   const isLoading = query.isLoading;
-  let canPlan = false;
-  canPlan = Boolean(query.data?.first_name);
+  const profileData = query.data ?? {};
+  const canPlan = Boolean(profileData.first_name);
+
   return (
     <>
       <Seo />

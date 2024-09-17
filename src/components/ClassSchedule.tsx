@@ -54,7 +54,7 @@ const ClassSchedule = ({
   day: string;
   courses: ExtendedCourse[];
   groups: ExtendedGroup[];
-  onClick: (id: string) => void;
+  onClick: (id: string, courseType: string, groupNumber: string) => void;
 }) => {
   return (
     <div className="flex min-w-fit flex-col rounded-xl border-2 p-1">
