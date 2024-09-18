@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAtom } from "jotai";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
 import type { ApiFacultyDataGet } from "@/app/api/data/[facultyId]/route";
-import { type ExtendedGroup, planFamily } from "@/atoms/planFamily";
+import { type ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { GroupsAccordion } from "@/components/GroupsAccordion";
 import { RegistrationCombobox } from "@/components/RegistrationCombobox";
@@ -194,8 +193,6 @@ const CreatePlan = ({
       })),
     })) ?? [];
 
-  const allCourses = allRegistrations.flatMap((r) => r.courses);
-
   return (
     <>
       <Seo
@@ -302,9 +299,20 @@ const CreatePlan = ({
                     if (registration === undefined) {
                       return;
                     }
-                    plan.addRegistration(registration, registration.courses);
+
+                    if (
+                      plan.registrations.some((r) => r.id === registration.id)
+                    ) {
+                      plan.removeRegistration(registration.id);
+                    } else {
+                      plan.addRegistration(registration, registration.courses);
+                    }
                   }}
                 />
+              </div>
+            ) : allRegistrations.length === 0 ? (
+              <div className="w-full items-center justify-center">
+                <p className="text-center">Brak rejestracji</p>
               </div>
             ) : null}
 
