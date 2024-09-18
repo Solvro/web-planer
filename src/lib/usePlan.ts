@@ -2,14 +2,14 @@ import { useAtom } from "jotai";
 
 import { type ExtendedCourse, planFamily } from "@/atoms/planFamily";
 
-import type { Course, Registration } from "./types";
+import type { Registration } from "./types";
 
 export const usePlan = ({ planId }: { planId: number }) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
 
   return {
     ...plan,
-    allGroups: plan.courses.flatMap((c) => c.groups),
+    allGroups: plan.courses.filter((c) => c.isChecked).flatMap((c) => c.groups),
     setPlan,
     selectGroup: (groupId: string, isChecked?: boolean) => {
       void window.umami?.track("Change group");
@@ -41,7 +41,9 @@ export const usePlan = ({ planId }: { planId: number }) => {
     ) => {
       setPlan({
         ...plan,
-        registrations: [...plan.registrations, registration],
+        registrations: [...plan.registrations, registration].filter(
+          (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
+        ),
         courses: [...plan.courses, ...courses],
       });
     },

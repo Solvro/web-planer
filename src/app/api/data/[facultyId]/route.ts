@@ -9,7 +9,7 @@ export async function GET(
   _request: Request,
   { params }: { params: { facultyId: string } },
 ) {
-
+  const service = createUsosService();
   return NextResponse.json(
     {
       registrations: await Promise.all(
