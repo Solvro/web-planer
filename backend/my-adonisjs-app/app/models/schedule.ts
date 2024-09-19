@@ -10,6 +10,9 @@ export default class Schedule extends BaseModel {
   @column()
   declare name: string
 
+  @column()
+  declare userId: number
+
   @manyToMany(() => Course, {
     localKey: 'id',
     pivotForeignKey: 'schedule_id',
