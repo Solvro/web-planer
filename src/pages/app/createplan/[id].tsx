@@ -119,10 +119,8 @@ export const getServerSideProps = (async (context) => {
     throw new Error(`Invalid id ${id?.toString()}`);
   }
 
-  const planId = parseInt(id);
-
-  return { props: { planId } };
-}) satisfies GetServerSideProps<{ planId: number }>;
+  return { props: { planId: id } };
+}) satisfies GetServerSideProps<{ planId: string }>;
 
 const registrationReplacer = (name: string) => {
   const newName = name
@@ -227,7 +225,7 @@ const CreatePlan = ({
           </div>
           <div className="mr-4 flex w-1/4 items-center justify-end">
             <Link
-              href="/plans"
+              href="/app/plans"
               data-umami-event="Back to plans"
               className={cn(buttonVariants({ variant: "link" }), "text-white")}
             >

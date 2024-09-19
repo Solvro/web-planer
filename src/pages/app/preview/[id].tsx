@@ -6,14 +6,13 @@ import * as React from "react";
 import { LuDownloadCloud } from "react-icons/lu";
 
 import { planFamily } from "@/atoms/planFamily";
+import { plansIds } from "@/atoms/plansIds";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { usePlan } from "@/lib/usePlan";
 import { cn } from "@/lib/utils";
 import { Day } from "@/services/usos/types";
-
-import { plansIds } from "../plans";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export const getServerSideProps = (async (context) => {
@@ -23,7 +22,7 @@ export const getServerSideProps = (async (context) => {
     throw new Error(`Invalid hash ${id?.toString()}`);
   }
 
-  return { props: { id: parseInt(id) } };
+  return { props: { id } };
 }) satisfies GetServerSideProps;
 
 const SharePlan = ({
@@ -32,15 +31,13 @@ const SharePlan = ({
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId: id });
-  const [planToCopy, setPlanToCopy] = useAtom(
-    planFamily({ id: plans.length + 1 }),
-  );
+  const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
 
   const router = useRouter();
 
   const copyPlan = () => {
     const newPlan = {
-      id: plans.length + 1,
+      id: uuid,
       courses: plan.courses,
     };
 
@@ -66,7 +63,7 @@ const SharePlan = ({
         </div>
         <div className="mr-4 flex items-center justify-end gap-4">
           <Link
-            href="/plans"
+            href="/app/plans"
             data-umami-event="Back to plans"
             className={cn(
               buttonVariants({ variant: "link" }),
