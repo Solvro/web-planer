@@ -35,6 +35,7 @@ export const ClassBlock = ({
   isChecked,
   isDisabled,
   onClick,
+  isReadonly = false,
 }: {
   startTime: string;
   endTime: string;
@@ -45,6 +46,7 @@ export const ClassBlock = ({
   courseType: "C" | "L" | "P" | "S" | "W";
   isChecked: boolean;
   isDisabled: boolean;
+  isReadonly?: boolean;
   onClick: () => void;
 }) => {
   const position = calculatePosition(startTime, endTime);
@@ -54,7 +56,7 @@ export const ClassBlock = ({
     <button
       suppressHydrationWarning={true}
       disabled={isDisabled}
-      onClick={onClick}
+      onClick={isReadonly ? undefined : onClick}
       style={{
         gridColumnStart: startGrid,
         gridColumnEnd: `span ${durationSpan}`,
@@ -68,6 +70,7 @@ export const ClassBlock = ({
           : isDisabled
             ? "opacity-20"
             : "cursor-pointer opacity-60",
+        isReadonly ? "cursor-default" : null,
       )}
     >
       <div className="flex w-full justify-between">

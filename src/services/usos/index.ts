@@ -140,7 +140,7 @@ export const usosService = (usosClient: UsosClient) => {
       const data = await fetchWithCookie(
         `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=${courseId}`,
         {
-          signal: AbortSignal.timeout(5000),
+          signal: AbortSignal.timeout(10000),
         },
       );
 

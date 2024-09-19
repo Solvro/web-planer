@@ -1,14 +1,16 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { LuDownloadCloud } from "react-icons/lu";
 
 import { planFamily } from "@/atoms/planFamily";
-import { ReadonlyScheduleTest } from "@/components/ReadonlyScheduleTest";
+import { ClassSchedule } from "@/components/ClassSchedule";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { usePlan } from "@/lib/usePlan";
 import { cn } from "@/lib/utils";
+import { Day } from "@/services/usos/types";
 
 import { plansIds } from "../plans";
 
@@ -27,19 +29,16 @@ const SharePlan = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [plans, setPlans] = useAtom(plansIds);
-  const plan = useAtomValue(planFamily({ id }));
+  const plan = usePlan({ planId: id });
   const [planToCopy, setPlanToCopy] = useAtom(
     planFamily({ id: plans.length + 1 }),
   );
 
   const router = useRouter();
 
-  const mondaySchedule = plan.groups.filter((group) => group.isChecked);
-
   const copyPlan = () => {
     const newPlan = {
       id: plans.length + 1,
-      groups: plan.groups,
       courses: plan.courses,
     };
 
@@ -51,7 +50,6 @@ const SharePlan = ({
     setPlanToCopy({
       ...planToCopy,
       courses: plan.courses,
-      groups: plan.groups,
     });
 
     setTimeout(() => {
@@ -96,7 +94,43 @@ const SharePlan = ({
           <LuDownloadCloud />
         </Button>
       </div>
-      <ReadonlyScheduleTest schedule={mondaySchedule} />
+      <div className="flex flex-col gap-2 overflow-auto p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
+        {[
+          { day: Day.MONDAY, label: "Poniedziałek" },
+          { day: Day.TUESDAY, label: "Wtorek" },
+          { day: Day.WEDNESDAY, label: "Środa" },
+          { day: Day.THURSDAY, label: "Czwartek" },
+          { day: Day.FRIDAY, label: "Piątek" },
+        ].map(({ day, label }) => (
+          <ClassSchedule
+            key={day}
+            day={label}
+            isReadonly={true}
+            selectedGroups={[]}
+            groups={plan.allGroups.filter((g) => g.day === day && g.isChecked)}
+            onSelectGroup={(groupdId) => {
+              plan.selectGroup(groupdId);
+            }}
+          />
+        ))}
+        {[
+          { day: Day.SATURDAY, label: "Sobota" },
+          { day: Day.SUNDAY, label: "Niedziela" },
+        ].map(
+          ({ day, label }) =>
+            plan.allGroups.some((g) => g.day === day) && (
+              <ClassSchedule
+                key={day}
+                day={label}
+                isReadonly={true}
+                selectedGroups={[]}
+                groups={plan.allGroups.filter(
+                  (g) => g.day === day && g.isChecked,
+                )}
+              />
+            ),
+        )}
+      </div>
       <div className="flex w-full flex-1 items-center justify-center bg-mainbutton7 p-2">
         <p className="text-center text-white">
           Made with ❤️ by{" "}

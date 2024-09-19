@@ -31,9 +31,3 @@ export interface Course {
   type: string;
   registrationId: string;
 }
-
-export interface MockRegistration {
-  registration: Registration;
-  courses: Course[];
-  groups: ClassBlockProps[];
-}
