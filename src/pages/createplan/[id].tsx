@@ -94,7 +94,7 @@ const CreatePlan = ({
       throw new Error(`Invalid faculty name: ${facultyName}`);
     }
 
-    const res = await fetch(`/api/data/${facultyID}`);
+    const res = await fetch(`/api/data/${encodeURIComponent(facultyID)}`);
     if (!res.ok) {
       throw new Error("Failed to fetch data");
     }

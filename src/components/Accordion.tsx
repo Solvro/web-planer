@@ -11,8 +11,8 @@ import type { MockRegistration, Registration } from "@/lib/types";
 
 const departmentOptions = [
   "Filia w Legnicy [FLG]",
-  "Studium Języków Obcych [PRD/S1]",
-  "Studium Wychowania Fizycznego i Sportu [PRD/S3]",
+  "Studium Języków Obcych [PRK24/S1]",
+  "Studium Wychowania Fizycznego i Sportu [PRK24/S3]",
   "Politechnika Wrocławska [PWR]",
   "Wydział Architektury [W1]",
   "Wydział Mechaniczny [W10]",
