@@ -47,11 +47,13 @@ const ClassSchedule = ({
   groups,
   selectedGroups,
   onSelectGroup,
+  isReadonly = false,
 }: {
   day: string;
   groups: ExtendedGroup[];
   selectedGroups: ExtendedGroup[];
-  onSelectGroup: (groupId: string) => void;
+  onSelectGroup?: (groupId: string) => void;
+  isReadonly?: boolean;
 }) => {
   return (
     <div className="flex min-w-fit flex-col rounded-xl border-2 p-1">
@@ -78,11 +80,12 @@ const ClassSchedule = ({
 
             return (
               <ClassBlock
+                isReadonly={isReadonly}
                 isDisabled={block.isChecked ? false : isThisCourseChecked}
                 key={block.groupId + block.courseId + block.registrationId}
                 {...block}
                 onClick={() => {
-                  onSelectGroup(block.groupId);
+                  onSelectGroup?.(block.groupId);
                 }}
               />
             );

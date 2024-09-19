@@ -6,10 +6,12 @@ import { useRef, useState } from "react";
 import type { ApiFacultyDataGet } from "@/app/api/data/[facultyId]/route";
 import { type ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
-import { GroupsAccordion } from "@/components/GroupsAccordion";
+import { GroupsAccordionItem } from "@/components/GroupsAccordion";
+import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { RegistrationCombobox } from "@/components/RegistrationCombobox";
 import { Seo } from "@/components/SEO";
 import { SolvroLogo } from "@/components/SolvroLogo";
+import { Accordion } from "@/components/ui/accordion";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -122,6 +124,16 @@ export const getServerSideProps = (async (context) => {
   return { props: { planId } };
 }) satisfies GetServerSideProps<{ planId: number }>;
 
+const registrationReplacer = (name: string) => {
+  const newName = name
+    .replace("W04 zapisy wydziałowe dla kierunku", "")
+    .replace("zapisy wydziałowe na ", "")
+    .replace("W04 ", "")
+    .replace("2024/25-Z", "")
+    .trim();
+  return newName.charAt(0).toUpperCase() + newName.slice(1);
+};
+
 const CreatePlan = ({
   planId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -150,48 +162,52 @@ const CreatePlan = ({
   });
 
   const allRegistrations =
-    registrations.data?.map((r) => ({
-      name: r.registration.description.pl,
-      id: r.registration.id,
-      courses: r.courses.map((c) => ({
-        id: c.course.id,
-        name: c.course.name,
-        isChecked: false,
-        registrationId: r.registration.id,
-        type: lessonTypeToName(c.groups.at(0)?.type ?? ("" as LessonType)),
-        groups: c.groups.map(
-          (g) =>
-            ({
-              groupId: g.groupNumber + c.course.id + g.type,
-              groupNumber: g.groupNumber.toString(),
-              courseId: c.course.id,
-              courseName: c.course.name,
-              isChecked: false,
-              courseType:
-                g.type === LessonType.EXERCISES
-                  ? "C"
-                  : g.type === LessonType.LABORATORY
-                    ? "L"
-                    : g.type === LessonType.PROJECT
-                      ? "P"
-                      : g.type === LessonType.SEMINAR
-                        ? "S"
-                        : "W",
-              day: g.day,
-              lecturer: g.person,
-              registrationId: r.registration.id,
-              week:
-                g.frequency === Frequency.EVEN
-                  ? "TP"
-                  : g.frequency === Frequency.ODD
-                    ? "TN"
-                    : "",
-              endTime: `${g.hourEndTime.hours}:${g.hourEndTime.minutes}`,
-              startTime: `${g.hourStartTime.hours}:${g.hourStartTime.minutes}`,
-            }) satisfies ExtendedGroup,
-        ),
-      })),
-    })) ?? [];
+    registrations.data
+      ?.map((r) => ({
+        name: registrationReplacer(r.registration.description.pl),
+        id: r.registration.id,
+        courses: r.courses.map((c) => ({
+          id: c.course.id,
+          name: c.course.name,
+          isChecked: false,
+          registrationId: r.registration.id,
+          type: lessonTypeToName(c.groups.at(0)?.type ?? ("" as LessonType)),
+          groups: c.groups.map(
+            (g) =>
+              ({
+                groupId: g.groupNumber + c.course.id + g.type,
+                groupNumber: g.groupNumber.toString(),
+                courseId: c.course.id,
+                courseName: c.course.name,
+                isChecked: false,
+                courseType:
+                  g.type === LessonType.EXERCISES
+                    ? "C"
+                    : g.type === LessonType.LABORATORY
+                      ? "L"
+                      : g.type === LessonType.PROJECT
+                        ? "P"
+                        : g.type === LessonType.SEMINAR
+                          ? "S"
+                          : "W",
+                day: g.day,
+                lecturer: g.person,
+                registrationId: r.registration.id,
+                week:
+                  g.frequency === Frequency.EVEN
+                    ? "TP"
+                    : g.frequency === Frequency.ODD
+                      ? "TN"
+                      : "",
+                endTime: `${g.hourEndTime.hours}:${g.hourEndTime.minutes}`,
+                startTime: `${g.hourStartTime.hours}:${g.hourStartTime.minutes}`,
+              }) satisfies ExtendedGroup,
+          ),
+        })),
+      }))
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      }) ?? [];
 
   return (
     <>
@@ -223,7 +239,7 @@ const CreatePlan = ({
         <div className="flex w-full flex-col items-center justify-center gap-2 md:flex-row md:items-start">
           <div className="flex w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
             <div className="flex flex-col justify-start gap-3 md:w-full">
-              <div className="flex w-full">
+              <div className="flex w-full items-end gap-2">
                 <form
                   className="flex w-full items-center justify-center"
                   onSubmit={(e) => {
@@ -250,6 +266,7 @@ const CreatePlan = ({
                     />
                   </div>
                 </form>
+                <PlanDisplayLink id={plan.id} />
               </div>
             </div>
 
@@ -318,22 +335,26 @@ const CreatePlan = ({
 
             <div className="w-full items-center justify-center">
               <div className="w-full overflow-auto">
-                {plan.registrations.map((registration, index) => (
-                  <GroupsAccordion
-                    key={registration.id}
-                    index={index}
-                    registrationName={registration.name}
-                    onCourseCheck={(courseId) => {
-                      plan.selectCourse(courseId);
-                    }}
-                    onCheckAll={(isChecked) => {
-                      plan.checkAllCourses(registration.id, isChecked);
-                    }}
-                    courses={plan.courses.filter(
-                      (c) => c.registrationId === registration.id,
-                    )}
-                  />
-                ))}
+                <Accordion type="single" collapsible={true}>
+                  {plan.registrations.map((registration) => (
+                    <GroupsAccordionItem
+                      key={registration.id}
+                      registrationName={registration.name}
+                      onCourseCheck={(courseId) => {
+                        plan.selectCourse(courseId);
+                      }}
+                      onDelete={() => {
+                        plan.removeRegistration(registration.id);
+                      }}
+                      onCheckAll={(isChecked) => {
+                        plan.checkAllCourses(registration.id, isChecked);
+                      }}
+                      courses={plan.courses.filter(
+                        (c) => c.registrationId === registration.id,
+                      )}
+                    />
+                  ))}
+                </Accordion>
               </div>
             </div>
           </div>
