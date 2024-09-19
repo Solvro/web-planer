@@ -12,12 +12,12 @@ export interface ExtendedGroup extends ClassBlockProps {
 }
 
 export const planFamily = atomFamily(
-  ({ id }: { id: number }) =>
+  ({ id }: { id: string }) =>
     atomWithStorage(
-      `${id}-plan`,
+      `${id}-plan-v2`,
       {
         id,
-        name: `Nowy plan - ${id}`,
+        name: `Nowy plan`,
         courses: [] as ExtendedCourse[],
         registrations: [] as Registration[],
       },

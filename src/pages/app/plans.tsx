@@ -1,16 +1,14 @@
 import { atom, useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { planFamily } from "@/atoms/planFamily";
+import { plansIds } from "@/atoms/plansIds";
 import { Plan } from "@/components/Plan";
 import { Seo } from "@/components/SEO";
 import { SolvroLogo } from "@/components/SolvroLogo";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-export const plansIds = atomWithStorage<Array<{ id: number }>>("plansIds", []);
 
 const plansAtom = atom(
   (get) => get(plansIds).map((id) => get(planFamily(id))),

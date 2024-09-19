@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 import { buttonVariants } from "./ui/button";
 
-export function PlanDisplayLink({ id }: { id: number }) {
+export function PlanDisplayLink({ id }: { id: string }) {
   return (
     <Link
       href={`/app/preview/${id}`}

@@ -4,13 +4,16 @@ import { type ExtendedCourse, planFamily } from "@/atoms/planFamily";
 
 import type { Registration } from "./types";
 
-export const usePlan = ({ planId }: { planId: number }) => {
+export const usePlan = ({ planId }: { planId: string }) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
 
   return {
     ...plan,
     allGroups: plan.courses.filter((c) => c.isChecked).flatMap((c) => c.groups),
     setPlan,
+    remove: () => {
+      planFamily.remove({ id: planId });
+    },
     selectGroup: (groupId: string, isChecked?: boolean) => {
       void window.umami?.track("Change group");
       setPlan({

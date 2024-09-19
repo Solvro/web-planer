@@ -4,14 +4,14 @@ import Link from "next/link";
 import router from "next/router";
 import React from "react";
 
+import { plansIds } from "@/atoms/plansIds";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { usePlan } from "@/lib/usePlan";
 import { cn } from "@/lib/utils";
-import { planFamily } from "@/pages/createplan/[id]";
-import { plansIds } from "@/pages/plans";
 
 import { DeletePlanConfirmationResponsiveDialog } from "./DeletePlanConfirmationResponsiveDialog";
 import { buttonVariants } from "./ui/button";
@@ -19,8 +19,8 @@ import { buttonVariants } from "./ui/button";
 export const Plan = ({ id, name }: { id: string; name: string }) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
-  const [plan] = useAtom(planFamily({ id }));
-  const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
+  const plan = usePlan({ planId: id });
+  const planToCopy = usePlan({ planId: uuid });
 
   const copyPlan = () => {
     const newPlan = {
@@ -32,10 +32,9 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
     });
 
     setPlans([...plans, newPlan]);
-    setPlanToCopy({
+    planToCopy.setPlan({
       ...planToCopy,
       courses: plan.courses,
-      groups: plan.groups,
     });
 
     setTimeout(() => {
@@ -43,10 +42,12 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
     }, 200);
   };
   const deletePlan = () => {
-    planFamily.remove({ id });
+    plan.remove();
     setPlans(plans.filter((p) => p.id !== id));
   };
-  const groupCount = plan.groups.filter((group) => group.isChecked).length;
+  const groupCount = plan.courses
+    .flatMap((c) => c.groups)
+    .filter((group) => group.isChecked).length;
   return (
     <div className="flex h-[200px] w-[200px] flex-col items-center justify-between rounded-lg border-gray-400 bg-white p-4 text-center shadow-[0_0_5px_5px_rgba(0,0,0,0.10)]">
       <div className="flex w-full justify-between">
