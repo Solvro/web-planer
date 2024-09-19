@@ -25,12 +25,13 @@ The goal of the Solvro Planer project is to create an intuitive and user-friendl
 - Coolify
 
 ## Links
+
 - https://planer.solvro.pl
 - https://solvro.pwr.edu.pl/portfolio/planer/
-  
+
 ## Analitics
 
-We have analytics available at https://analytics.solvro.pl
+We have analytics available at https://analytics.solvro.pl/share/FlXFbZth4tByVpog/planer.solvro.pl
 
 For Solvro Planer version 1.0 below.
 
@@ -56,7 +57,9 @@ npm install
 ```
 
 ### Fill .env file
+
 To configure the application, you need to create a .env file in the root directory of the project and fill it with the following environment variables:
+
 ```bash
 SITE_URL=http://localhost:3000
 USOS_CONSUMER_KEY=<your-key>
@@ -85,6 +88,7 @@ If you would like to contribute to the development of this project, we encourage
 - Test and provide feedback on the project.
 
 ## Github workflow
+
 Don't worry if you've forgotten about the steps, automatic gh action will run the checks for you and notify if somthing's wrong.
 
 ## Working with git
@@ -118,7 +122,6 @@ Connecting to Github(Gh) repository via SSH on Windows, tutorial: https://www.yo
 
 1. git branch -d WEB-x_my_feature_branch -> deletes our local branch
 2. git push origin --delete WEB-x_my_feature_branch -> delete our remote branch
-
 
 ## Contact
 
