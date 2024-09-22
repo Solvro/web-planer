@@ -29,12 +29,12 @@ import { Day, Frequency, LessonType } from "@/services/usos/types";
 
 const faculties = [
   {
-    name: "[PRD/S1] Studium Języków Obcych",
-    value: "PRD/S1",
+    name: "[PRK24/S1] Studium Języków Obcych",
+    value: "PRK24/S1",
   },
   {
-    name: "[PRD/S3] Studium Wychowania Fizycznego i Sportu",
-    value: "PRD/S3",
+    name: "[PRK24/S3] Studium Wychowania Fizycznego i Sportu",
+    value: "PRK24/S3",
   },
   {
     name: "[W1] Wydział Architektury",
