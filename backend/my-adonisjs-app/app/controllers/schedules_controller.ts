@@ -5,14 +5,12 @@ export default class SchedulesController {
   /**
    * Display a list of resource
    */
-  async index({ params, request }: HttpContext) {
+  async index({ params }: HttpContext) {
     const userId = params.user_id
-    const page = request.input('page', 1)
-    const limit = 10
     if (userId) {
-      return Schedule.query().where('userId', userId).paginate(page, limit)
+      return Schedule.query().where('userId', userId)
     }
-    return []
+    return {}
   }
 
   /**
@@ -28,7 +26,13 @@ export default class SchedulesController {
    * Show individual record
    */
   async show({ params }: HttpContext) {
-    return await Schedule.findOrFail(params.index)
+    const schedule = await Schedule.query()
+      .where('id', params.id)
+      .andWhere('userId', params.user_id)
+      .preload('courses')
+      .firstOrFail()
+
+    return schedule
   }
 
   /**
@@ -36,7 +40,7 @@ export default class SchedulesController {
    */
   async update({ params, request }: HttpContext) {
     const payload = await request.validateUsing(updateScheduleValidator)
-    const currSchedule = await Schedule.findOrFail(params.index)
+    const currSchedule = await Schedule.findOrFail(params.id)
     currSchedule.merge(payload)
     await currSchedule.save()
     return { message: 'Schedule updated successfully.', currSchedule }

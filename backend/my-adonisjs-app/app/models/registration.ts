@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import Course from '#models/course'
+import Course from '#models/group'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 export default class Registration extends BaseModel {
   @column({ isPrimary: true })

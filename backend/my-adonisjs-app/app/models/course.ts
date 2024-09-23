@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Group from '#models/group'
 export default class Course extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -9,28 +10,10 @@ export default class Course extends BaseModel {
   declare name: string
 
   @column()
-  declare startTime: string
-
-  @column()
-  declare endTime: string
-
-  @column()
-  declare group: string
-
-  @column()
-  declare lecturer: string
-
-  @column()
-  declare week: '' | 'TP' | 'TN'
-
-  @column()
-  declare day: string
-
-  @column()
-  declare type: string
-
-  @column()
   declare registrationId: number
+
+  @hasMany(() => Group)
+  declare courses: HasMany<typeof Group>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
