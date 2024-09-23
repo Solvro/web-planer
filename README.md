@@ -1,134 +1,148 @@
-# Planer - University Scheduler
+# 🎓 Planer - University Scheduler
 
-Welcome to the repository of the Solvro project, a student organization at the Wrocław University of Science and Technology!
+> Welcome to the repository of the Solvro project, a student organization at the Wrocław University of Science and Technology!
 
 [![Welcome Page](https://i.imgur.com/PSnVCNN.png)](https://i.imgur.com)
 
-## Project Goal
+## 🎯 Project Goal
 
-The goal of the Solvro Planer project is to create an intuitive and user-friendly application that helps students plan their academic schedule. The planer is designed to minimize the time spent manually adjusting the timetable while giving full control over the schedule.
+The Solvro Planer project aims to create an intuitive and user-friendly application that helps students plan their academic schedule. Our planer is designed to:
 
-## Current Team
+- Minimize time spent on manual timetable adjustments
+- Provide full control over your schedule
 
-- @Szymczek - Project Manager
-- @Rei-x - Techlead
-- @unewMe - Fullstack Developer
-- @D0dii - Fullstack Developer
-- @olekszczepanowski - Fullstack Developer
+## 👥 Current Team
 
-## Technologies
+| Role | Member |
+|------|--------|
+| Project Manager | @Szymczek |
+| Techlead | @Rei-x |
+| Fullstack Developer | @unewMe |
+| Fullstack Developer | @D0dii |
+| Fullstack Developer | @olekszczepanowski |
 
-- Next.js
-- React.js
-- Tailwind
-- Typescript
-- Coolify
+## 🚀 Technologies
 
-## Links
+- ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+- ![React.js](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+- ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+- ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+- ![Coolify](https://img.shields.io/badge/Coolify-FF0000?style=for-the-badge&logo=coolify&logoColor=white)
 
-- https://planer.solvro.pl
-- https://solvro.pwr.edu.pl/portfolio/planer/
+## 🔗 Links
 
-## Analitics
+- [Live Application](https://planer.solvro.pl)
+- [Project Portfolio](https://solvro.pwr.edu.pl/portfolio/planer/)
 
-We have analytics available at https://analytics.solvro.pl/share/FlXFbZth4tByVpog/planer.solvro.pl
+## 📊 Analytics
 
-For Solvro Planer version 1.0 below.
+We have analytics available at [our analytics dashboard](https://analytics.solvro.pl/share/FlXFbZth4tByVpog/planer.solvro.pl).
 
-[![Analitics](https://i.imgur.com/My4U8lY.png)](https://i.imgur.com)
+For Solvro Planer version 1.0:
 
-## Getting Started
+[![Analytics](https://i.imgur.com/My4U8lY.png)](https://i.imgur.com)
 
-### Clone the Repository
+## 🚀 Getting Started
 
-Clone this repository to your local machine:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Solvro/web-planer.git
 ```
 
-### Install Dependencies
-
-Go to the project directory and install all required dependencies using npm:
+### 2. Install Dependencies
 
 ```bash
 cd web-planer
 npm install
 ```
 
-### Fill .env file
+### 3. Configure Environment
 
-To configure the application, you need to create a .env file in the root directory of the project and fill it with the following environment variables:
+Create a `.env` file in the root directory with the following content:
 
-```bash
+```env
 SITE_URL=http://localhost:3000
 USOS_CONSUMER_KEY=<your-key>
 USOS_CONSUMER_SECRET=<your-key>
 USOS_BASE_URL=<your-key-default-for-pwr:usos.pwr.edu.pl>
 ```
 
-### Run the Project
-
-After installing the dependencies, run the project locally on your computer:
+### 4. Run the Project
 
 ```bash
 npm run dev
 ```
 
-### View the Application
+### 5. View the Application
 
-After starting the project, open your web browser and navigate to http://localhost:3000 to see the running application.
+Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
 
-## Contributing to the Project
+## 🤝 Contributing
 
-If you would like to contribute to the development of this project, we encourage you to:
+We welcome contributions! Here's how you can help:
 
-- Report issues related to bugs or improvement suggestions,
-- Request features by creating pull requests,
-- Test and provide feedback on the project.
+- 🐛 Report bugs or suggest improvements
+- 🌟 Request new features
+- 🧪 Test and provide feedback
 
-## Github workflow
+## 🔄 Git Workflow
 
-Don't worry if you've forgotten about the steps, automatic gh action will run the checks for you and notify if somthing's wrong.
+> Don't worry if you forget any steps – our automatic GitHub Action will run checks and notify you of any issues.
 
-## Working with git
+### 📘 Solvro GitHub Handbook
 
-### Github Solvro Handbook 🔥
+Check out our [detailed GitHub workflow guide](https://docs.google.com/document/d/1Sb5lYqYLnYuecS1Essn3YwietsbuLPCTsTuW0EMpG5o/edit?usp=sharing).
 
-https://docs.google.com/document/d/1Sb5lYqYLnYuecS1Essn3YwietsbuLPCTsTuW0EMpG5o/edit?usp=sharing
+### 🔐 SSH Setup
 
-### SSH
+For Windows users, follow this [SSH setup tutorial](https://www.youtube.com/watch?v=vExsOTgIOGw).
 
-Connecting to Github(Gh) repository via SSH on Windows, tutorial: https://www.youtube.com/watch?v=vExsOTgIOGw
+### 🌿 Feature Development Workflow
 
-### Building new feature
+1. Checkout and update main:
+   ```bash
+   git checkout main
+   git pull origin main
+   git fetch
+   ```
 
-1. git checkout main -> checkout main branch
-2. git pull origin main -> pull current changes from main branch
-3. git fetch -> be up to date with remote branches
-4. git checkout -b WEB-x_my_feature_branch -> x - stands for issue number; it is going to checkout and create new branch name WEB-x_my_feature_branch
-   (... working on the feature, we are still on our branch named WEB-x_my_feature_branch)
-5. git add . -> add all changes we have made
-6. git commit -m "My changes description" -> commit made changes with proper description
-7. git push origin WEB-x_my_feature_branch -> pushing our changes to remote branch
-8. On Github we are going to make Pull Request (PR) from our remote branch
+2. Create a feature branch:
+   ```bash
+   git checkout -b WEB-x_my_feature_branch
+   ```
 
-### Remarks
+3. Make your changes and commit:
+   ```bash
+   git add .
+   git commit -m "My changes description"
+   ```
 
-- Do not push directly to main branch!!! This is bad practice!
-- local branch - is our branch on our computer not on the server if we do some chagnes and do checkout to diffrent branch without saving them(commiting) we might loose them, commit before checkout to different branch!
-- remote branch - this is branch with our code in github's servers
-- After code review which was successful, we can merge from our feature branch to main branch. After merging we should clean after ourself.
+4. Push to remote:
+   ```bash
+   git push origin WEB-x_my_feature_branch
+   ```
 
-1. git branch -d WEB-x_my_feature_branch -> deletes our local branch
-2. git push origin --delete WEB-x_my_feature_branch -> delete our remote branch
+5. Create a Pull Request on GitHub
 
-## Contact
+### ⚠️ Important Reminders
 
-If you have any questions, suggestions, or would like to learn more about the project, contact us:
+- Never push directly to the main branch
+- Always commit before checking out to a different branch
+- After successful merge, clean up:
+  ```bash
+  git branch -d WEB-x_my_feature_branch
+  git push origin --delete WEB-x_my_feature_branch
+  ```
 
-- Email: kn.solvro@pwr.edu.pl
-- Website: [solvro.pwr.edu.pl](https://solvro.pwr.edu.pl/)
-- Facebook: https://www.facebook.com/knsolvro
+## 📞 Contact
 
-Thank you for your interest in our project!
+For questions or suggestions, reach out to us:
+
+- ✉️ Email: kn.solvro@pwr.edu.pl
+- 🌐 Website: [solvro.pwr.edu.pl](https://solvro.pwr.edu.pl/)
+- 📘 Facebook: [KN Solvro](https://www.facebook.com/knsolvro)
+
+---
+
+Thank you for your interest in our project! 🙌
