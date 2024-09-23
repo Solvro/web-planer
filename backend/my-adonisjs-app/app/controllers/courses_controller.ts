@@ -4,16 +4,14 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CoursesController {
   /**
-   * Display a list of resource
+   * Display a list of courses in matching registration
    */
-  async index({ request, params }: HttpContext) {
+  async index({ params }: HttpContext) {
     const registrationId = params.registration_id
-    const page = request.input('page', 1)
-    const limit = 10
     if (registrationId) {
-      return Course.query().where('registrationId', registrationId).paginate(page, limit)
+      return Course.query().where('registrationId', registrationId)
     }
-    return []
+    return {}
   }
 
   /**
@@ -26,10 +24,14 @@ export default class CoursesController {
   }
 
   /**
-   * Show individual record
+   * Show individual record of course in matching registration
    */
   async show({ params }: HttpContext) {
-    return await Course.findOrFail(params.index)
+    const registrationId = params.registration_id
+    if (registrationId) {
+      return await Course.query().where('registrationId', registrationId).andWhere('id', params.id)
+    }
+    return {}
   }
 
   /**
@@ -37,7 +39,7 @@ export default class CoursesController {
    */
   async update({ params, request }: HttpContext) {
     const payload = await request.validateUsing(createCourseValidator)
-    const currCourse = await Course.findOrFail(params.index)
+    const currCourse = await Course.findOrFail(params.id)
     currCourse.merge(payload)
     await currCourse.save()
     return { message: 'Course updated successfully.', currCourse }
@@ -46,8 +48,8 @@ export default class CoursesController {
   /**
    * Delete record
    */
-  async destroy(ctx: HttpContext) {
-    const course = await this.show(ctx)
+  async destroy({ params }: HttpContext) {
+    const course = await Course.findOrFail(params.id)
     await course.delete()
     return { message: 'Course successfully deleted.' }
   }

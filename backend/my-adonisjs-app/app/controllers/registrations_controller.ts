@@ -4,12 +4,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class RegistrationsController {
   /**
-   * Display a list of resource
+   * Display a list of all registrations
    */
-  async index({ request }: HttpContext) {
-    const page = request.input('page', 1)
-    const limit = 10
-    return Registration.query().paginate(page, limit)
+  async index({}: HttpContext) {
+    return Registration.query()
   }
 
   /**
@@ -22,10 +20,10 @@ export default class RegistrationsController {
   }
 
   /**
-   * Show individual record
+   * Show individual registration
    */
   async show({ params }: HttpContext) {
-    return await Registration.findOrFail(params.index)
+    return await Registration.findOrFail(params.id)
   }
 
   /**
@@ -33,7 +31,7 @@ export default class RegistrationsController {
    */
   async update({ params, request }: HttpContext) {
     const payload = await request.validateUsing(createRegistrationValidator)
-    const currRegistration = await Registration.findOrFail(params.index)
+    const currRegistration = await Registration.findOrFail(params.id)
     currRegistration.merge(payload)
     await currRegistration.save()
     return { message: 'Registration updated successfully.', currRegistration }

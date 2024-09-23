@@ -3,12 +3,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
   /**
-   * Display a list of resource
+   * Display a list of all users
    */
-  async index({ request }: HttpContext) {
-    const page = request.input('page', 1)
-    const limit = 10
-    return User.query().paginate(page, limit)
+  async index({}: HttpContext) {
+    return User.query()
   }
 
   /**
@@ -21,10 +19,10 @@ export default class UsersController {
   }
 
   /**
-   * Show individual record
+   * Show individual user
    */
   async show({ params }: HttpContext) {
-    return await User.findOrFail(params.index)
+    return await User.findOrFail(params.id)
   }
 
   /**
