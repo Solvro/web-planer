@@ -13,12 +13,12 @@ The Solvro Planer project aims to create an intuitive and user-friendly applicat
 
 ## 👥 Current Team
 
-| Role | Member |
-|------|--------|
-| Project Manager | @Szymczek |
-| Techlead | @Rei-x |
-| Fullstack Developer | @unewMe |
-| Fullstack Developer | @D0dii |
+| Role                | Member             |
+| ------------------- | ------------------ |
+| Project Manager     | @Szymczek          |
+| Techlead            | @Rei-x             |
+| Fullstack Developer | @unewMe            |
+| Fullstack Developer | @D0dii             |
 | Fullstack Developer | @olekszczepanowski |
 
 ## 🚀 Technologies
@@ -101,6 +101,7 @@ For Windows users, follow this [SSH setup tutorial](https://www.youtube.com/watc
 ### 🌿 Feature Development Workflow
 
 1. Checkout and update main:
+
    ```bash
    git checkout main
    git pull origin main
@@ -108,17 +109,20 @@ For Windows users, follow this [SSH setup tutorial](https://www.youtube.com/watc
    ```
 
 2. Create a feature branch:
+
    ```bash
    git checkout -b WEB-x_my_feature_branch
    ```
 
 3. Make your changes and commit:
+
    ```bash
    git add .
    git commit -m "My changes description"
    ```
 
 4. Push to remote:
+
    ```bash
    git push origin WEB-x_my_feature_branch
    ```
