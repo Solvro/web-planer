@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
-import Course from '#models/group'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
 import Group from '#models/group'
 
