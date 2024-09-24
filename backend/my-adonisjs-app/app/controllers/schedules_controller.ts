@@ -3,7 +3,7 @@ import Schedule from '#models/schedule'
 import { createScheduleValidator, updateScheduleValidator } from '#validators/schedule'
 export default class SchedulesController {
   /**
-   * Display a list of resource
+   * Display a list of user schedules
    */
   async index({ params }: HttpContext) {
     const userId = params.user_id
@@ -23,7 +23,7 @@ export default class SchedulesController {
   }
 
   /**
-   * Show individual record
+   * Show schedule with matching courses
    */
   async show({ params }: HttpContext) {
     const schedule = await Schedule.query()
