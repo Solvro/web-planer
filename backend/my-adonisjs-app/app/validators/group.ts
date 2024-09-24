@@ -11,6 +11,6 @@ export const createGroupValidator = vine.compile(
     lecturer: vine.string(),
     week: vine.enum(['', 'TP', 'TN']),
     day: vine.string(),
-    courseId: vine.number(),
+    courseId: vine.string(),
   })
 )

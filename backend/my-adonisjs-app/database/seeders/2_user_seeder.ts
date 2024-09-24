@@ -3,6 +3,9 @@ import User from '#models/user'
 import { DateTime } from 'luxon'
 export default class extends BaseSeeder {
   async run() {
-    await User.createMany([{ updatedAt: DateTime.now() }, { updatedAt: DateTime.now() }])
+    await User.createMany([
+      { id: '123', updatedAt: DateTime.now() },
+      { id: '234', updatedAt: DateTime.now() },
+    ])
   }
 }

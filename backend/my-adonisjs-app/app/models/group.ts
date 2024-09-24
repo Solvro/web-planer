@@ -29,7 +29,7 @@ export default class Group extends BaseModel {
   declare type: string
 
   @column()
-  declare courseId: number
+  declare courseId: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
