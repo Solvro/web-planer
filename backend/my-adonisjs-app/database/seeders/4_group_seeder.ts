@@ -13,7 +13,7 @@ export default class extends BaseSeeder {
         week: 'TN',
         day: 'Monday',
         type: 'L',
-        courseId: 1,
+        courseId: 'usos.mathematics.com',
       },
       {
         name: 'Physics 202',
@@ -24,7 +24,7 @@ export default class extends BaseSeeder {
         week: '',
         day: 'Wednesday',
         type: 'W',
-        courseId: 2,
+        courseId: 'usos.physics.com',
       },
     ])
   }

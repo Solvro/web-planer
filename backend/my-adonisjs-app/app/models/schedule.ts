@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
 import Course from '#models/group'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import Group from '#models/group'
 
 export default class Schedule extends BaseModel {
   @column({ isPrimary: true })
@@ -11,17 +12,17 @@ export default class Schedule extends BaseModel {
   declare name: string
 
   @column()
-  declare userId: number
+  declare userId: string
 
-  @manyToMany(() => Course, {
+  @manyToMany(() => Group, {
     localKey: 'id',
     pivotForeignKey: 'schedule_id',
     relatedKey: 'id',
-    pivotRelatedForeignKey: 'course_id',
-    pivotTable: 'schedule_courses',
+    pivotRelatedForeignKey: 'group_id',
+    pivotTable: 'schedule_groups',
     pivotTimestamps: true,
   })
-  declare courses: ManyToMany<typeof Course>
+  declare courses: ManyToMany<typeof Group>
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

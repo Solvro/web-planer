@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.string('id').primary()
       table.string('name')
       table.integer('registration_id').references('registrations.id').onDelete('CASCADE')
       table.timestamp('created_at')
