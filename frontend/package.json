@@ -57,7 +57,6 @@
     "@typescript-eslint/parser": "^8.3.0",
     "eslint": "^8",
     "knip": "^5.27.4",
-    "lint-staged": "^15.2.9",
     "postcss": "^8",
     "postcss-load-config": "^6.0.1",
     "prettier": "^3.3.3",
