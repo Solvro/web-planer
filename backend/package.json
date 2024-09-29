@@ -1,9 +1,9 @@
 {
-  "name": "my-adonisjs-app",
+  "name": "backend",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
