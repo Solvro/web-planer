@@ -14,6 +14,7 @@ export const env = createEnv({
     USOS_CONSUMER_KEY: process.env.USOS_CONSUMER_KEY,
     USOS_CONSUMER_SECRET: process.env.USOS_CONSUMER_SECRET,
   },
+  skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });
 
 export const USOS_APPS_URL = `https://apps.${env.USOS_BASE_URL}`;
