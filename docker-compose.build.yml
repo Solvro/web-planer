@@ -1,19 +1,56 @@
 services:
-  db:
+  postgresql:
     image: postgres:16-alpine
-    restart: always
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgresql-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=$SERVICE_USER_POSTGRES
+      - POSTGRES_PASSWORD=$SERVICE_PASSWORD_POSTGRES
+      - POSTGRES_DB=${POSTGRES_DB:-planer}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      - SERVICE_FQDN_BACKEND_3333
+      - PORT=3333
+      - HOST=0.0.0.0
+      - LOG_LEVEL=debug
+      - APP_KEY=$SERVICE_PASSWORD_64_BACKEND
+      - DB_USER=$SERVICE_USER_POSTGRES
+      - DB_PASSWORD=$SERVICE_PASSWORD_POSTGRES
+      - DB_DATABASE=${POSTGRES_DB:-planer}
+      - SESSION_DRIVER=cookie
+      - DB_HOST=postgresql
+      - DB_PORT=5432
     depends_on:
-      - db
+      - postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3333/healthcheck || exit 1"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    environment:
+      - SERVICE_FQDN_FRONTEND_3000
+      - SITE_URL=$SERVICE_FQDN_FRONTEND_3000
+      - USOS_CONSUMER_KEY
+      - USOS_CONSUMER_SECRET
+      - USOS_BASE_URL
+      - NEXT_PUBLIC_BACKEND_URL=$SERVICE_FQDN_BACKEND_3333
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
 
 volumes:
-  db-data:
+  postgresql-data:
