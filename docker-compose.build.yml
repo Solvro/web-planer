@@ -42,9 +42,9 @@ services:
     environment:
       - SERVICE_FQDN_FRONTEND_3000
       - SITE_URL=$SERVICE_FQDN_FRONTEND_3000
-      - USOS_CONSUMER_KEY
-      - USOS_CONSUMER_SECRET
-      - USOS_BASE_URL
+      - USOS_CONSUMER_KEY=$USOS_CONSUMER_KEY
+      - USOS_CONSUMER_SECRET=$USOS_CONSUMER_SECRET
+      - USOS_BASE_URL=${USOS_BASE_URL:-usos.pwr.edu.pl}
       - NEXT_PUBLIC_BACKEND_URL=$SERVICE_FQDN_BACKEND_3333
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
