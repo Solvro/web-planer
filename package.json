@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cd frontend && npm install && cd ../backend && npm install",
-    "db": "docker compose up"
+    "db": "docker compose up",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",

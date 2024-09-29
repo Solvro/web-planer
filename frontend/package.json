@@ -12,8 +12,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "knip": "knip",
-    "typecheck": "tsc",
-    "prepare": "husky"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
@@ -57,7 +56,6 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/parser": "^8.3.0",
     "eslint": "^8",
-
     "knip": "^5.27.4",
     "lint-staged": "^15.2.9",
     "postcss": "^8",
