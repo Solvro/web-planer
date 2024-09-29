@@ -12,6 +12,7 @@
   "author": "",
   "license": "AGPL-3.0-only",
   "devDependencies": {
+    "husky": "^9.1.5",
     "lint-staged": "^15.2.10"
   }
 }
