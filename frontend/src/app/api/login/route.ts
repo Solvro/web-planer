@@ -4,7 +4,12 @@ import { redirect } from "next/navigation";
 import { USOS_APPS_URL } from "@/env.mjs";
 import { getRequestToken } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
+  if (process.env.SKIP_ENV_VALIDATION === "true") {
+    return redirect(`/`);
+  }
   const token = await getRequestToken();
 
   if (typeof token.token !== "string" || typeof token.secret !== "string") {
