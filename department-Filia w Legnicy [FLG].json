@@ -1,0 +1,2656 @@
+{
+  "name": "Filia w Legnicy [FLG]",
+  "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=FLG",
+  "registrations": [
+    {
+      "name": "W5/APR/Legnica Rejestracja na zajęcia sportowe APR 3 etap  oraz 5 etap [FLG-APR-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLG-APR-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SWFFLG-SI3052C&callback=g_ccdac2f7",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73762",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Kulturystyka",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:00",
+                  "endTime": "12:30",
+                  "lecturer": "Bolesław Pałka"
+                }
+              ]
+            }
+          ],
+          "name": "Kulturystyka"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SWFFLG-SI5032C&callback=g_ccdac2f7",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73764",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Piłka siatkowa",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:00",
+                  "endTime": "16:30",
+                  "lecturer": "Bolesław Pałka"
+                }
+              ]
+            }
+          ],
+          "name": "Piłka siatkowa"
+        }
+      ]
+    },
+    {
+      "name": "W10/MBM/LEGNICA [1 etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW10-MBM-1I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW10-MBM-1I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MBMLG-SI0004C&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68790",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Algebra liniowa z geometrią analityczną B",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "10:00",
+                  "endTime": "10:45",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra liniowa z geometrią analityczną B"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MBMLG-SI0004W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68791",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Algebra liniowa z geometrią analityczną B",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "8:15",
+                  "endTime": "9:45",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra liniowa z geometrią analityczną B"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MBMLG-SI0005C&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68792",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Analiza matematyczna 1A",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "10:00",
+                  "endTime": "11:30",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna 1A"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MBMLG-SI0005W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68793",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Analiza matematyczna 1A",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "8:15",
+                  "endTime": "9:45",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna 1A"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0066W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66953",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Chemia",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Agnieszka Baszczuk"
+                },
+                {
+                  "courseName": "Chemia",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Marek Jasiorski"
+                }
+              ]
+            }
+          ],
+          "name": "Chemia"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0062W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66948",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Ergonomia i BHP",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Jacek Iwko"
+                },
+                {
+                  "courseName": "Ergonomia i BHP",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Jacek Iwko"
+                }
+              ]
+            }
+          ],
+          "name": "Ergonomia i BHP"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11MBMLG-SI0002C&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68787",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Fizyka 1A",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:30",
+                  "endTime": "14:15",
+                  "lecturer": "Wojciech Magierski"
+                }
+              ]
+            }
+          ],
+          "name": "Fizyka 1A"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11MBMLG-SI0002W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68788",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Fizyka 1A",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:45",
+                  "endTime": "13:15",
+                  "lecturer": "Wojciech Magierski"
+                }
+              ]
+            }
+          ],
+          "name": "Fizyka 1A"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0065C&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68784",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Grafika inżynierska - geometria wykreślna",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "10:15",
+                  "endTime": "11:45",
+                  "lecturer": "Andrzej Figiel"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska - geometria wykreślna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0065W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68785",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Grafika inżynierska - geometria wykreślna",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "10:00",
+                  "lecturer": "Andrzej Figiel"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska - geometria wykreślna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11MBMLG-SI0003L&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68789",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Laboratorium podstaw fizyki",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "14:30",
+                  "endTime": "16:00",
+                  "lecturer": "Wojciech Magierski"
+                },
+                {
+                  "courseName": "Laboratorium podstaw fizyki",
+                  "groupType": "L",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "14:30",
+                  "endTime": "16:00",
+                  "lecturer": "Wojciech Magierski"
+                }
+              ]
+            }
+          ],
+          "name": "Laboratorium podstaw fizyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0063W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66949",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy metrologii",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": ""
+                },
+                {
+                  "courseName": "Podstawy metrologii",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy metrologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0103W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68786",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Technika wojskowa w konfliktach zbrojnych",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:00",
+                  "endTime": "12:30",
+                  "lecturer": "Krzysztof Jamroziak"
+                }
+              ]
+            }
+          ],
+          "name": "Technika wojskowa w konfliktach zbrojnych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0064W&callback=g_a3b51f5c",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68783",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Technologie informacyjne",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "12:00",
+                  "endTime": "15:15",
+                  "lecturer": "Jerzy Detyna"
+                }
+              ]
+            }
+          ],
+          "name": "Technologie informacyjne"
+        }
+      ]
+    },
+    {
+      "name": "W10/MBM/LEGNICA [3 etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW10-MBM-3I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW10-MBM-3I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05MBMLG-SI0004L&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52191",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Elektrotechnika",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "14:30",
+                  "endTime": "16:45",
+                  "lecturer": "Maciej Gwoździewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Elektrotechnika"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0074P&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52130",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Grafika inżynierska 3D",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:00",
+                  "endTime": "12:30",
+                  "lecturer": "Tadeusz Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska 3D"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0079P&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52136",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Informatyka podstawy programowania (Matlab)",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "12:30",
+                  "lecturer": "Michał Karoluk"
+                }
+              ]
+            }
+          ],
+          "name": "Informatyka podstawy programowania (Matlab)"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0076L&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52150",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Materiałoznawstwo",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "12:45",
+                  "endTime": "14:15",
+                  "lecturer": "Dominika Grygier"
+                }
+              ]
+            }
+          ],
+          "name": "Materiałoznawstwo"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0076W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52273",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Materiałoznawstwo",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "12:30",
+                  "lecturer": "Dominika Grygier"
+                }
+              ]
+            }
+          ],
+          "name": "Materiałoznawstwo"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0083C&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52213",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mechanika II",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "14:30",
+                  "endTime": "16:00",
+                  "lecturer": "Krzysztof Jamroziak"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0083W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52234",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mechanika II",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "12:45",
+                  "endTime": "14:15",
+                  "lecturer": "Krzysztof Jamroziak"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0075C&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52149",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mechanika płynów",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "12:45",
+                  "endTime": "14:15",
+                  "lecturer": "Maciej Zawiślak"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika płynów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0075W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52212",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mechanika płynów",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "12:30",
+                  "lecturer": "Maciej Zawiślak"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika płynów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0081C&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52246",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy wytrzymałości materiałów",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "12:45",
+                  "endTime": "14:15",
+                  "lecturer": "Grzegorz Lesiuk"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy wytrzymałości materiałów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0081W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52120",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy wytrzymałości materiałów",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "12:30",
+                  "lecturer": "Grzegorz Lesiuk"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy wytrzymałości materiałów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0077C&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52121",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Równania różniczkowe zwyczajne",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "17:10",
+                  "endTime": "18:40",
+                  "lecturer": "Jerzy Detyna"
+                }
+              ]
+            }
+          ],
+          "name": "Równania różniczkowe zwyczajne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0077W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52226",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Równania różniczkowe zwyczajne",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "15:30",
+                  "endTime": "17:00",
+                  "lecturer": "Jerzy Detyna"
+                }
+              ]
+            }
+          ],
+          "name": "Równania różniczkowe zwyczajne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0082P&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52233",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Statystyka inżynierska",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Andrzej Figiel"
+                }
+              ]
+            }
+          ],
+          "name": "Statystyka inżynierska"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0082W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52256",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Statystyka inżynierska",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Andrzej Figiel"
+                }
+              ]
+            }
+          ],
+          "name": "Statystyka inżynierska"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0080W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=50845",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Techniki wytwarzania - odlewnictwo",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Adam Kurzawa"
+                }
+              ]
+            }
+          ],
+          "name": "Techniki wytwarzania - odlewnictwo"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0080L&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52235",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Techniki wytwarzania - odlewnictwo",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Adam Kurzawa,                                    Bartłomiej Samociuk,                                    Joanna Warycha"
+                }
+              ]
+            }
+          ],
+          "name": "Techniki wytwarzania - odlewnictwo"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0078W&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=50869",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Tworzywa sztuczne",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Oliwia Trzaska"
+                }
+              ]
+            }
+          ],
+          "name": "Tworzywa sztuczne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0078L&callback=g_079d5b6e",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=52151",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Tworzywa sztuczne",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jacek Iwko"
+                }
+              ]
+            }
+          ],
+          "name": "Tworzywa sztuczne"
+        }
+      ]
+    },
+    {
+      "name": "W10/MBM/LEGNICA [5/KMP etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW10-MBM-5I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW10-MBM-5I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI1000W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68843",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Budowa pojazdów samochodowych",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "12:00",
+                  "endTime": "13:30",
+                  "lecturer": "Monika Andrych-Zalewska"
+                }
+              ]
+            }
+          ],
+          "name": "Budowa pojazdów samochodowych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0030W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66963",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Hydrostatyczne układy napędowe",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Michał Stosiak"
+                }
+              ]
+            }
+          ],
+          "name": "Hydrostatyczne układy napędowe"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0030L&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68834",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Hydrostatyczne układy napędowe",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Rafał Cieślicki"
+                }
+              ]
+            }
+          ],
+          "name": "Hydrostatyczne układy napędowe"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJOFLG-SI0040C&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68833",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski / B2.2",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "16:20",
+                  "endTime": "17:50",
+                  "lecturer": "Agnieszka Krężel"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski / B2.2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0031P&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68835",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Metoda elementów skończonych",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "14:45",
+                  "endTime": "16:15",
+                  "lecturer": "Jerzy Czmochowski"
+                }
+              ]
+            }
+          ],
+          "name": "Metoda elementów skończonych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0031W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68836",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Metoda elementów skończonych",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:45",
+                  "endTime": "14:30",
+                  "lecturer": "Jerzy Czmochowski"
+                }
+              ]
+            }
+          ],
+          "name": "Metoda elementów skończonych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0034W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66971",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy automatyki",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy automatyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0034L&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68840",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy automatyki",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy automatyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0032P&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68837",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy konstrukcji maszyn II",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "10:15",
+                  "endTime": "11:45",
+                  "lecturer": "Tadeusz Leśniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy konstrukcji maszyn II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0032W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68838",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy konstrukcji maszyn II",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "8:30",
+                  "endTime": "10:00",
+                  "lecturer": "Tadeusz Leśniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy konstrukcji maszyn II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI1001L&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68844",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy tribologii",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tadeusz Leśniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy tribologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI1001W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68845",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy tribologii",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "7:30",
+                  "endTime": "8:15",
+                  "lecturer": "Tadeusz Leśniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy tribologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0035L&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68841",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Techniki wytwarzania - obróbka ubytkowa",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Paweł Karolczak,                                    Marek Kołodziej,                                    Maciej Kowalski,                                    Kamil Waszczuk,                                    Magdalena Wiśniewska"
+                }
+              ]
+            }
+          ],
+          "name": "Techniki wytwarzania - obróbka ubytkowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0035W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68842",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Techniki wytwarzania - obróbka ubytkowa",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "8:15",
+                  "endTime": "10:45",
+                  "lecturer": "Marek Kołodziej"
+                }
+              ]
+            }
+          ],
+          "name": "Techniki wytwarzania - obróbka ubytkowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0033W&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66969",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Układy napędowe pojazdów",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Aleksander Skurjat"
+                }
+              ]
+            }
+          ],
+          "name": "Układy napędowe pojazdów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0033L&callback=g_4aafbfd2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68839",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Układy napędowe pojazdów",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Jakub Chołodowski,                                    Andrzej Kosiara,                                    Aleksander Skurjat"
+                }
+              ]
+            }
+          ],
+          "name": "Układy napędowe pojazdów"
+        }
+      ]
+    },
+    {
+      "name": "W10/MBM/LEGNICA [7/KMP etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW10-MBM-7I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW10-MBM-7I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI1007P&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68855",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Modelowanie obciążeń pojazdów samochodowych",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "9:30",
+                  "endTime": "11:45",
+                  "lecturer": "Monika Andrych-Zalewska"
+                }
+              ]
+            }
+          ],
+          "name": "Modelowanie obciążeń pojazdów samochodowych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI1007W&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68856",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Modelowanie obciążeń pojazdów samochodowych",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "9:30",
+                  "endTime": "11:45",
+                  "lecturer": "Monika Andrych-Zalewska"
+                }
+              ]
+            }
+          ],
+          "name": "Modelowanie obciążeń pojazdów samochodowych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0040L&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68852",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy eksploatacji i remontów maszyn",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:45",
+                  "lecturer": "Andrzej Figiel,                                    Paweł Turek"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy eksploatacji i remontów maszyn"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0040W&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68853",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy eksploatacji i remontów maszyn",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "12:00",
+                  "endTime": "14:15",
+                  "lecturer": "Andrzej Figiel,                                    Paweł Turek"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy eksploatacji i remontów maszyn"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI0042D&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68854",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Praca dyplomowa",
+                  "groupType": "Unknown",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "unknown",
+                  "startTime": "00:00",
+                  "endTime": "00:00",
+                  "lecturer": ""
+                },
+                {
+                  "courseName": "Praca dyplomowa",
+                  "groupType": "Unknown",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "unknown",
+                  "startTime": "00:00",
+                  "endTime": "00:00",
+                  "lecturer": ""
+                },
+                {
+                  "courseName": "Praca dyplomowa",
+                  "groupType": "Unknown",
+                  "groupNumber": "3",
+                  "week": "",
+                  "day": "unknown",
+                  "startTime": "00:00",
+                  "endTime": "00:00",
+                  "lecturer": ""
+                },
+                {
+                  "courseName": "Praca dyplomowa",
+                  "groupType": "Unknown",
+                  "groupNumber": "4",
+                  "week": "",
+                  "day": "unknown",
+                  "startTime": "00:00",
+                  "endTime": "00:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Praca dyplomowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI1006W&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66992",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Projektowanie elementów z tworzyw sztucznych",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "10:15",
+                  "endTime": "13:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Projektowanie elementów z tworzyw sztucznych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBMLG-SI1008S&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=68857",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Seminarium dyplomowe",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "12:00",
+                  "endTime": "13:30",
+                  "lecturer": "Jerzy Czmochowski"
+                }
+              ]
+            }
+          ],
+          "name": "Seminarium dyplomowe"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI1010W&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66996",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Technika w medycynie",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "7:30",
+                  "endTime": "10:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Technika w medycynie"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10MBM-SI0041W&callback=g_1d574bba",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=66983",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Zarządzanie w produkcji",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "7:45",
+                  "endTime": "10:00",
+                  "lecturer": "Joanna Kochańska"
+                }
+              ]
+            }
+          ],
+          "name": "Zarządzanie w produkcji"
+        }
+      ]
+    },
+    {
+      "name": "W5/APR/Legnica [1 etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW5-APR-1I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW5-APR-1I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13APRLG-SI1736C&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71108",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Algebra z geometrią analityczną",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:45",
+                  "endTime": "12:30",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13FLG-SI0001W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71110",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Algebra z geometrią analityczną",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "8:15",
+                  "endTime": "9:45",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13APRLG-SI1737C&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71109",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Analiza matematyczna 1",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:45",
+                  "endTime": "13:15",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13FLG-SI0002W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71111",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Analiza matematyczna 1",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "10:00",
+                  "endTime": "11:30",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08W05-SI2011W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70343",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Filozofia",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jan Wadowski"
+                }
+              ]
+            }
+          ],
+          "name": "Filozofia"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11APRLG-SI3067C&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71106",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Fizyka E5",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "10:45",
+                  "endTime": "11:30",
+                  "lecturer": "Wojciech Magierski"
+                }
+              ]
+            }
+          ],
+          "name": "Fizyka E5"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11APRLG-SI3067W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71107",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Fizyka E5",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:00",
+                  "endTime": "10:30",
+                  "lecturer": "Wojciech Magierski"
+                }
+              ]
+            }
+          ],
+          "name": "Fizyka E5"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI1312W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70456",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy elektrotechniki",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Paweł Kostyła"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy elektrotechniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI1312C&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71103",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy elektrotechniki",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Agnieszka Mirkowska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy elektrotechniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3301W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70458",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy metrologii",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Daniel Dusza"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy metrologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3301L&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71104",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy metrologii",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:30",
+                  "endTime": "15:45",
+                  "lecturer": "Maciej Gwoździewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy metrologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05W05-SI2501W&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70340",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Technologie informacyjne",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Okoń"
+                },
+                {
+                  "courseName": "Technologie informacyjne",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Tomasz Okoń"
+                },
+                {
+                  "courseName": "Technologie informacyjne",
+                  "groupType": "W",
+                  "groupNumber": "3",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Tomasz Okoń"
+                },
+                {
+                  "courseName": "Technologie informacyjne",
+                  "groupType": "W",
+                  "groupNumber": "4",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Okoń"
+                }
+              ]
+            }
+          ],
+          "name": "Technologie informacyjne\t"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05W05LG-SI2501L&callback=g_81a7b79d",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71105",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Technologie informacyjne",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Agnieszka Mirkowska"
+                }
+              ]
+            }
+          ],
+          "name": "Technologie informacyjne"
+        }
+      ]
+    },
+    {
+      "name": "W5/APR/Legnica [3 etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW5-APR-3I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW5-APR-3I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05W05-SI1306W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70359",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Bazy danych w technice",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Leszek Woźny"
+                },
+                {
+                  "courseName": "Bazy danych w technice",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Leszek Woźny"
+                }
+              ]
+            }
+          ],
+          "name": "Bazy danych w technice"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05W05LG-SI1306P&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71119",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Bazy danych w technice",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Leszek Woźny"
+                }
+              ]
+            }
+          ],
+          "name": "Bazy danych w technice"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3304W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70468",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Czujniki i przetworniki",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Grzegorz Kosobudzki"
+                }
+              ]
+            }
+          ],
+          "name": "Czujniki i przetworniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3304L&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71118",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Czujniki i przetworniki",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Mateusz Żychlewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Czujniki i przetworniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJOFLG-SI0005C&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71112",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski / B2.1",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:30",
+                  "endTime": "13:00",
+                  "lecturer": "Agnieszka Krężel"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski / B2.1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10APRLG-SI2014C&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71120",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mechanika i wytrzymałość materiałów",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "12:45",
+                  "endTime": "14:15",
+                  "lecturer": "Grzegorz Lesiuk"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika i wytrzymałość materiałów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10APRLG-SI2014W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71121",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mechanika i wytrzymałość materiałów",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "12:30",
+                  "lecturer": "Grzegorz Lesiuk"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika i wytrzymałość materiałów"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI1304W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70462",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Obwody elektryczne i magnetyczne",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Adam Gubański,                                    Tomasz Sikorski"
+                }
+              ]
+            }
+          ],
+          "name": "Obwody elektryczne i magnetyczne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI1304C&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71114",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Obwody elektryczne i magnetyczne",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Dominika Kaczorowska"
+                }
+              ]
+            }
+          ],
+          "name": "Obwody elektryczne i magnetyczne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3303L&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71117",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy elektroniki 2",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Piotr Derugo"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy elektroniki 2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI1201W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70460",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy inżynierii materiałowej",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Paweł Żyłka"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy inżynierii materiałowej"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI1201L&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71113",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy inżynierii materiałowej",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "17:30",
+                  "lecturer": "Adam Pelesz"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy inżynierii materiałowej"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3238L&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71115",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy techniki mikroprocesorowej 1",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:00",
+                  "endTime": "11:15",
+                  "lecturer": "Grzegorz Ilgiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy techniki mikroprocesorowej 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3238W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71116",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy techniki mikroprocesorowej 1",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "10:00",
+                  "endTime": "13:15",
+                  "lecturer": "Wojciech Dawidowski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy techniki mikroprocesorowej 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13APRLG-SI1500W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71122",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Równania różniczkowe zwyczajne A",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "14:45",
+                  "lecturer": "Maciej Lewandowski"
+                }
+              ]
+            }
+          ],
+          "name": "Równania różniczkowe zwyczajne A"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI2301W&callback=g_0efad851",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70463",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Urządzenia i stacje",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Waldemar Dołęga"
+                }
+              ]
+            }
+          ],
+          "name": "Urządzenia i stacje"
+        }
+      ]
+    },
+    {
+      "name": "W5/APR/Legnica [5 etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW5-APR-5I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW5-APR-5I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI1311P&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71125",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Cyfrowe przetwarzanie sygnałów 2",
+                  "groupType": "P",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Zbigniew Wacławek"
+                }
+              ]
+            }
+          ],
+          "name": "Cyfrowe przetwarzanie sygnałów 2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3206W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70484",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Energoelektronika 1",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Leszek Pawlaczyk"
+                }
+              ]
+            }
+          ],
+          "name": "Energoelektronika 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3103L&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71129",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Maszyny elektryczne 2",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "19:40",
+                  "lecturer": "Aleksander Leicht"
+                }
+              ]
+            }
+          ],
+          "name": "Maszyny elektryczne 2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI2103W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70476",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Metody i algorytmy sterowania cyfrowego",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Daniel Bejmert"
+                }
+              ]
+            }
+          ],
+          "name": "Metody i algorytmy sterowania cyfrowego"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI2103L&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71128",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Metody i algorytmy sterowania cyfrowego",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "19:40",
+                  "lecturer": "Daniel Bejmert"
+                }
+              ]
+            }
+          ],
+          "name": "Metody i algorytmy sterowania cyfrowego"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3205W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70483",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Napęd elektryczny 1",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Paweł Ewert"
+                }
+              ]
+            }
+          ],
+          "name": "Napęd elektryczny 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3205C&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71132",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Napęd elektryczny 1",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Paweł Ewert"
+                }
+              ]
+            }
+          ],
+          "name": "Napęd elektryczny 1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05W05-SI1206W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70383",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Ochrona własności intelektualnej",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Anna Kisiel"
+                }
+              ]
+            }
+          ],
+          "name": "Ochrona własności intelektualnej"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI2102W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70474",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy automatyki 2",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Mirosław Łukowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy automatyki 2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI2102C&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71126",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy automatyki 2",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Daniel Bejmert"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy automatyki 2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI2102L&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71127",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Podstawy automatyki 2",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Łukasz Staszewski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy automatyki 2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3204W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70481",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Programowanie w środowisku MATLAB",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Marcin Wolkiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Programowanie w środowisku MATLAB"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3204L&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71131",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Programowanie w środowisku MATLAB",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "8:30",
+                  "endTime": "10:45",
+                  "lecturer": "Krzysztof Szabat"
+                }
+              ]
+            }
+          ],
+          "name": "Programowanie w środowisku MATLAB"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3202W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70479",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Sterowniki programowalne",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Piotr Serkies"
+                }
+              ]
+            }
+          ],
+          "name": "Sterowniki programowalne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3202L&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71130",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Sterowniki programowalne",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Karol Wróbel"
+                }
+              ]
+            }
+          ],
+          "name": "Sterowniki programowalne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05W05-SI2508W&callback=g_32ed8015",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70388",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Zarządzanie marketingowe",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Artur Wilczyński"
+                }
+              ]
+            }
+          ],
+          "name": "Zarządzanie marketingowe"
+        }
+      ]
+    },
+    {
+      "name": "W5/APR/AMU/Legnica [7 etap_2024/25Z]- rejestracja na przedmioty obowiązkowe [FLGW5-APR-7I-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=FLGW5-APR-7I-24%2F25Z&callback=g_b5918c25",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3219L&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=48218",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Komputerowo wspomagane projektowanie napędów przemysłowych",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "8:45",
+                  "endTime": "11:00",
+                  "lecturer": "Piotr Serkies"
+                }
+              ]
+            }
+          ],
+          "name": "Komputerowo wspomagane projektowanie napędów przemysłowych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3214W&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70493",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Metody sztucznej inteligencji",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "14:00",
+                  "lecturer": "Maciej Skowron,                                    Krzysztof Szabat"
+                }
+              ]
+            }
+          ],
+          "name": "Metody sztucznej inteligencji"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3214L&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=48215",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Metody sztucznej inteligencji",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:30",
+                  "endTime": "15:45",
+                  "lecturer": "Krzysztof Szabat"
+                }
+              ]
+            }
+          ],
+          "name": "Metody sztucznej inteligencji"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3213W&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70491",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Przemysłowe układy napędowe",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "14:15",
+                  "endTime": "16:55",
+                  "lecturer": "Krzysztof Pieńkowski"
+                }
+              ]
+            }
+          ],
+          "name": "Przemysłowe układy napędowe"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3213S&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=48213",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Przemysłowe układy napędowe",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:30",
+                  "endTime": "15:45",
+                  "lecturer": "Maciej Gwoździewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Przemysłowe układy napędowe"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APR-SI3215W&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70495",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Rozproszone systemy automatyki",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Krzysztof Dyrcz"
+                }
+              ]
+            }
+          ],
+          "name": "Rozproszone systemy automatyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3215L&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=48217",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Rozproszone systemy automatyki",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:30",
+                  "lecturer": "Krzysztof Dyrcz"
+                }
+              ]
+            }
+          ],
+          "name": "Rozproszone systemy automatyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05APRLG-SI3058S&callback=g_14ebb3e6",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=48211",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Seminarium dyplomowe",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:00",
+                  "endTime": "13:15",
+                  "lecturer": "Krzysztof Szabat"
+                }
+              ]
+            }
+          ],
+          "name": "Seminarium dyplomowe"
+        }
+      ]
+    }
+  ]
+}

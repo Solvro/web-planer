@@ -1,0 +1,1630 @@
+{
+  "name": "Politechnika Wrocławska [PWR]",
+  "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=PWR",
+  "registrations": [
+    {
+      "name": "Szkoła Doktorska - obowiązkowe kursy dydaktyczne [SD1-SD6KO-2024/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=SD1-SD6KO-2024%2F25Z&callback=g_f854a6ce",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08000-SD0087W&callback=g_81aed1f1",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72805",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Ethical and legal aspects of scientific activity",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Berenika Kaczmarek-Templin,                                    Adriana Merta-Staszczak"
+                },
+                {
+                  "courseName": "Ethical and legal aspects of scientific activity",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Berenika Kaczmarek-Templin,                                    Adriana Merta-Staszczak"
+                },
+                {
+                  "courseName": "Ethical and legal aspects of scientific activity",
+                  "groupType": "W",
+                  "groupNumber": "3",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Berenika Kaczmarek-Templin,                                    Adriana Merta-Staszczak"
+                },
+                {
+                  "courseName": "Ethical and legal aspects of scientific activity",
+                  "groupType": "W",
+                  "groupNumber": "4",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Berenika Kaczmarek-Templin,                                    Adriana Merta-Staszczak"
+                }
+              ]
+            }
+          ],
+          "name": "Ethical and legal aspects of scientific activity"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08000-SD0089W&callback=g_81aed1f1",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72806",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Personal development",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Katarzyna Zahorodna"
+                },
+                {
+                  "courseName": "Personal development",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Katarzyna Zahorodna"
+                },
+                {
+                  "courseName": "Personal development",
+                  "groupType": "W",
+                  "groupNumber": "3",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Katarzyna Zahorodna"
+                },
+                {
+                  "courseName": "Personal development",
+                  "groupType": "W",
+                  "groupNumber": "4",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Katarzyna Zahorodna"
+                },
+                {
+                  "courseName": "Personal development",
+                  "groupType": "W",
+                  "groupNumber": "5",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Katarzyna Zahorodna"
+                },
+                {
+                  "courseName": "Personal development",
+                  "groupType": "W",
+                  "groupNumber": "6",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Katarzyna Zahorodna"
+                }
+              ]
+            }
+          ],
+          "name": "Personal development"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08000-SD0088W&callback=g_81aed1f1",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72807",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Teaching skills",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Malwina Łuszkiewicz"
+                },
+                {
+                  "courseName": "Teaching skills",
+                  "groupType": "W",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Malwina Łuszkiewicz"
+                },
+                {
+                  "courseName": "Teaching skills",
+                  "groupType": "W",
+                  "groupNumber": "3",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Malwina Łuszkiewicz"
+                },
+                {
+                  "courseName": "Teaching skills",
+                  "groupType": "W",
+                  "groupNumber": "4",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Malwina Łuszkiewicz"
+                },
+                {
+                  "courseName": "Teaching skills",
+                  "groupType": "W",
+                  "groupNumber": "5",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Malwina Łuszkiewicz"
+                },
+                {
+                  "courseName": "Teaching skills",
+                  "groupType": "W",
+                  "groupNumber": "6",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Malwina Łuszkiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Teaching skills"
+        }
+      ]
+    },
+    {
+      "name": "Szkoła Doktorska - kursy wybieralne [SD1-SD6KW]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=SD1-SD6KW&callback=g_f854a6ce",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0058W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73012",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Advanced analytical methods with use of mass  spectrometry and NMR spectroscopy",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Karolina Mielko-Niziałek,                                    Jerzy Wiśniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Advanced analytical methods with use of mass  spectrometry and NMR spectroscopy"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03INC-SD0108W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71882",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Advanced chemical analysis and imaging methods in scientific research",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Grzegorz Izydorczyk"
+                }
+              ]
+            }
+          ],
+          "name": "Advanced chemical analysis and imaging methods in scientific research"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0059W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72926",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Advanced materials in biophotonics",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "11:00",
+                  "lecturer": "Konrad Cyprych"
+                }
+              ]
+            }
+          ],
+          "name": "Advanced materials in biophotonics"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0060W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73020",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Advanced Organic Chemistry",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Rafał Kowalczyk"
+                }
+              ]
+            }
+          ],
+          "name": "Advanced Organic Chemistry"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W02ILT-SD0143W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=70868",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Advanced steel-concrete composite constructions",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Wojciech Lorenc"
+                }
+              ]
+            }
+          ],
+          "name": "Advanced steel-concrete composite constructions"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MTM-SD0134W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73053",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Applied Partial Differential Equations",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Łukasz Płociniczak"
+                }
+              ]
+            }
+          ],
+          "name": "Applied Partial Differential Equations"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0033S&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72900",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Artificial Intelligence for engineers",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Marek Mysior"
+                }
+              ]
+            }
+          ],
+          "name": "Artificial Intelligence for engineers"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0149L&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72899",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Artificial Inventiveness for engineers",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Marek Mysior"
+                }
+              ]
+            }
+          ],
+          "name": "Artificial Inventiveness for engineers"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W04ITT-SD0162W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71859",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Chatbot – a modern researcher's tool",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Jakub Klikowski"
+                }
+              ]
+            }
+          ],
+          "name": "Chatbot – a modern researcher's tool"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05AEE-SD0121W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73060",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Control and Reliability of Electrical Power System",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:30",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Control and Reliability of Electrical Power System"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W04ITT-SD0050S&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71855",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Digital healthcare: conceptual approaches, technological and computational challenges",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Remigiusz Szczepanowski"
+                }
+              ]
+            }
+          ],
+          "name": "Digital healthcare: conceptual approaches, technological and computational challenges"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MTM-SD0166W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73050",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Dynamical Systems and Ergodic Theory",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Tomasz Downarowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Dynamical Systems and Ergodic Theory"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W01ARU-SD0160S&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72842",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Emerging trends in contemporary urban theory and practice",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "15:30",
+                  "endTime": "17:00",
+                  "lecturer": "Magdalena Belof"
+                }
+              ]
+            }
+          ],
+          "name": "Emerging trends in contemporary urban theory and practice"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0034W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71887",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Finite Element Analysis",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Artur Iluk"
+                }
+              ]
+            }
+          ],
+          "name": "Finite Element Analysis"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0036L&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72902",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Finite Element Analysis in Practice",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Damian Pietrusiak"
+                }
+              ]
+            }
+          ],
+          "name": "Finite Element Analysis in Practice"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W09ISG-SD0127W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73000",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Grant Writing for Early-Stage Researchers",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Bartosz Zajączkowski"
+                }
+              ]
+            }
+          ],
+          "name": "Grant Writing for Early-Stage Researchers"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08NZJ-SD0152S&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73009",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Innovation design",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Adam Dzidowski"
+                }
+              ]
+            }
+          ],
+          "name": "Innovation design"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03INC-SD0109W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71878",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Innovations in circular economy",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Grzegorz Izydorczyk"
+                }
+              ]
+            }
+          ],
+          "name": "Innovations in circular economy"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W04ITT-SD0163W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71860",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Interdisciplinary applications of artificial intelligence not requiring a computer science background",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Paweł Zyblewski"
+                }
+              ]
+            }
+          ],
+          "name": "Interdisciplinary applications of artificial intelligence not requiring a computer science background"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0065S&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73016",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Interdisciplinary seminar on new materials II",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Katarzyna Matczyszyn"
+                }
+              ]
+            }
+          ],
+          "name": "Interdisciplinary seminar on new materials II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0066S&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73014",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Interdyscyplinary seminar - in the field of functional materials - physicochemical and mechanical properties",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Jarosław Myśliwiec"
+                }
+              ]
+            }
+          ],
+          "name": "Interdyscyplinary seminar - in the field of functional materials - physicochemical and mechanical properties"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W04ITT-SD0116W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71858",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Introduction to artificial intelligence",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Krzysztof Brzostowski,                                    Dariusz Król,                                    Ngoc Nguyen,                                    Maciej Piasecki,                                    Olgierd Unold"
+                }
+              ]
+            }
+          ],
+          "name": "Introduction to artificial intelligence"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13MTM-SD0141W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73051",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Kurs krytycznego myślenia",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Andrzej Kisielewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Kurs krytycznego myślenia"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W12AEE-SD0006W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73057",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Microsystems and microengineering",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Rafał Walczak"
+                }
+              ]
+            }
+          ],
+          "name": "Microsystems and microengineering"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W110NAF-SD0076W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72897",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Mini-kompendium of Classical Theoretical Physics",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "16:10",
+                  "endTime": "17:50",
+                  "lecturer": "Antoni Mituś"
+                }
+              ]
+            }
+          ],
+          "name": "Mini-kompendium of Classical Theoretical Physics"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W09ISG-SD0044W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72999",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Modelling of selected thermal-fluid processes using advanced numerical tools such as CFD",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "18:55",
+                  "endTime": "20:35",
+                  "lecturer": "Sławomir Pietrowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Modelling of selected thermal-fluid processes using advanced numerical tools such as CFD"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W04ITT-SD0053W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71856",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Modern Evolutionary Computation",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Michał Przewoźniczek"
+                }
+              ]
+            }
+          ],
+          "name": "Modern Evolutionary Computation"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W12AEE-SD0130W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71872",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Money! How to write your first research grant proposal and obtain funding",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Grzegorz Soboń"
+                }
+              ]
+            }
+          ],
+          "name": "Money! How to write your first research grant proposal and obtain funding"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11IBI-SD0016W&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72850",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Nanomedicine",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Marek Langner"
+                }
+              ]
+            }
+          ],
+          "name": "Nanomedicine"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0029L&callback=g_1c2f6cb2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72901",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Parametric modeling in CATIA",
+                  "groupType": "L",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Damian Pietrusiak"
+                }
+              ]
+            }
+          ],
+          "name": "Parametric modeling in CATIA"
+        }
+      ]
+    },
+    {
+      "name": "Szkoła Doktorska - Warsztat Badacza [SD1-SD6WB-2024/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=SD1-SD6WB-2024%2F25Z&callback=g_f854a6ce",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03INC-SD0088W&callback=g_37ae7e4b",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71880",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Research skills",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Marcin Drąg"
+                }
+              ]
+            }
+          ],
+          "name": "Research skills"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0091W&callback=g_37ae7e4b",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73101",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Research skills",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Marcin Drąg"
+                }
+              ]
+            }
+          ],
+          "name": "Research skills"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W07ISG-SD0122W&callback=g_37ae7e4b",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72994",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Research skills",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Renata Krzyżyńska"
+                }
+              ]
+            }
+          ],
+          "name": "Research skills"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08NZJ-SD0092W&callback=g_37ae7e4b",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72785",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Research skills",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Katarzyna Tworek"
+                }
+              ]
+            }
+          ],
+          "name": "Research skills"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0089W&callback=g_37ae7e4b",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71885",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Research skills",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Grzegorz Lesiuk,                                    Mariusz Ptak"
+                }
+              ]
+            }
+          ],
+          "name": "Research skills"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W01ARU-SD0115W&callback=g_37ae7e4b",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73066",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Warsztat badacza",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:30",
+                  "endTime": "17:00",
+                  "lecturer": "Ewa Łużyniecka"
+                }
+              ]
+            }
+          ],
+          "name": "Warsztat badacza"
+        }
+      ]
+    },
+    {
+      "name": "Szkoła Doktorska - Dydaktyka Szkoły Wyższej [SD1-SDDSW-2024/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=SD1-SDDSW-2024%2F25Z&callback=g_f854a6ce",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08000-SD0154S&callback=g_2814dd6f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72809",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Didactic of higher education -part II",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Joanna Klisowska,                                    Malwina Łuszkiewicz,                                    Łukasz Mścisławski,                                    Katarzyna Zahorodna"
+                }
+              ]
+            }
+          ],
+          "name": "Didactic of higher education -part II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08000-SD0086S&callback=g_2814dd6f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72808",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Didactics of Higher Education  - part I (45)",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Malwina Łuszkiewicz,                                    Katarzyna Zahorodna"
+                },
+                {
+                  "courseName": "Didactics of Higher Education  - part I (45)",
+                  "groupType": "S",
+                  "groupNumber": "2",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Malwina Łuszkiewicz,                                    Katarzyna Zahorodna"
+                }
+              ]
+            }
+          ],
+          "name": "Didactics of Higher Education  - part I (45)"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08000-SD0155S&callback=g_2814dd6f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72810",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Evaluation classes",
+                  "groupType": "S",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Malwina Łuszkiewicz"
+                },
+                {
+                  "courseName": "Evaluation classes",
+                  "groupType": "S",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Malwina Łuszkiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Evaluation classes"
+        }
+      ]
+    },
+    {
+      "name": "Szkoła Doktorska - lektoraty [SD1-SDLEK-2024/24Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=SD1-SDLEK-2024%2F24Z&callback=g_f854a6ce",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00009C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72550",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski B2 w kontekście naukowym – doskonalenie zintegrowanych sprawności językowych",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Elżbieta Szczawińska"
+                },
+                {
+                  "courseName": "Język angielski B2 w kontekście naukowym – doskonalenie zintegrowanych sprawności językowych",
+                  "groupType": "C",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "17:05",
+                  "endTime": "18:35",
+                  "lecturer": "Joanna Leszkiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski B2 w kontekście naukowym – doskonalenie zintegrowanych sprawności językowych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00007C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72549",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski B2 w kontekście naukowym – pisanie",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "17:05",
+                  "endTime": "18:35",
+                  "lecturer": "Monika Szela-Badzińska"
+                },
+                {
+                  "courseName": "Język angielski B2 w kontekście naukowym – pisanie",
+                  "groupType": "C",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "17:05",
+                  "endTime": "18:35",
+                  "lecturer": "Aleksander Brzózka"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski B2 w kontekście naukowym – pisanie"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00008C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72600",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski B2 w kontekście naukowym – prezentacje",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Michael Fyall"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski B2 w kontekście naukowym – prezentacje"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00006C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72514",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski C1 w kontekście naukowym – doskonalenie zintegrowanych sprawności językowych",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:45",
+                  "lecturer": "Adriana Wojcieszyn"
+                },
+                {
+                  "courseName": "Język angielski C1 w kontekście naukowym – doskonalenie zintegrowanych sprawności językowych",
+                  "groupType": "C",
+                  "groupNumber": "2",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "14:45",
+                  "lecturer": "Alicja Mazurkiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski C1 w kontekście naukowym – doskonalenie zintegrowanych sprawności językowych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00004C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72565",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski C1 w kontekście naukowym – pisanie",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "18:45",
+                  "endTime": "20:15",
+                  "lecturer": "Aleksander Brzózka"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski C1 w kontekście naukowym – pisanie"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00005C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72623",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski C1 w kontekście naukowym – prezentacje",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "17:05",
+                  "endTime": "18:35",
+                  "lecturer": "Renata Kasprzak"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski C1 w kontekście naukowym – prezentacje"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00001C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72564",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski w nauczaniu akademickim - kurs tutoringowy",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:45",
+                  "lecturer": "Adriana Wojcieszyn"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski w nauczaniu akademickim - kurs tutoringowy"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00003C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72585",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język angielski w networkingu akademickim - kurs tutoringowy",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "14:45",
+                  "lecturer": "Alicja Mazurkiewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Język angielski w networkingu akademickim - kurs tutoringowy"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00025C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72602",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język francuski A2",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "14:45",
+                  "lecturer": "Zofia Paroń"
+                }
+              ]
+            }
+          ],
+          "name": "Język francuski A2"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00016C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72588",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język hiszpański A1",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "14:45",
+                  "lecturer": "Magdalena Zalewska"
+                }
+              ]
+            }
+          ],
+          "name": "Język hiszpański A1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=SJO0SD-24SD00014C&callback=g_533be130",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72516",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Język niemiecki A2+/2",
+                  "groupType": "C",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:45",
+                  "lecturer": "Natalia Ziobrowska"
+                }
+              ]
+            }
+          ],
+          "name": "Język niemiecki A2+/2"
+        }
+      ]
+    },
+    {
+      "name": "Szkoła Doktorska - Najnowsze Kierunki Badań [SD1-SDNKB-2024/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=SD1-SDNKB-2024%2F25Z&callback=g_f854a6ce",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11IBI-SD0136W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72849",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in  biomedical engineering",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Halina Podbielska"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in  biomedical engineering"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W01ARU-SD0009W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72848",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in architecture and urban planning",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "18:30",
+                  "endTime": "20:00",
+                  "lecturer": "Magdalena Baborska-Narożny,                                    Joanna Jabłońska,                                    Marzanna Jagiełło,                                    Ewa Łużyniecka,                                    Joanna Majczyk,                                    Tomasz Ossowicz,                                    Marta Rusnak,                                    Romuald Tarczewski,                                    Agnieszka Tomaszewicz,                                    Barbara Widera"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in architecture and urban planning"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W05AEE-SD0001W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73059",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in automation, electronic and electrical engineering",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in automation, electronic and electrical engineering"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03INC-SD0017W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71874",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in chemical engineering",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Piotr Cyganowski,                                    Marta Huculak-Mączka,                                    Grzegorz Izydorczyk,                                    Karolina Labus,                                    Agata Łamacz,                                    Izabela Michalak,                                    Małgorzata Mironiuk,                                    Grzegorz Pasternak,                                    Izabela Pawlaczyk-Graja,                                    Dawid Skrzypczak,                                    Konrad Szustakiewicz,                                    Juliusz Winiarski,                                    Anna Witek-Krowiak,                                    Joanna Wolska,                                    Irena Žižović"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in chemical engineering"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03NCH-SD0057W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73013",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in chemical sciences",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Artur Mucha,                                    Krzysztof Strasburger,                                    Ewa Żymańczyk-Duda"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in chemical sciences"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W07ISG-SD0038W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72993",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in environmental, engineering, mining and energy",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Kazimierz Bęcek,                                    Maciej Chorowski,                                    Leszek Jurdziak,                                    Małgorzata Kabsch-Korbutowicz,                                    Małgorzata Kutyłowska,                                    Norbert Modliński,                                    Sławomir Pietrowicz,                                    Jarosław Poliński,                                    Tadeusz Przylibski,                                    Marderos Sayegh,                                    Izabela Sówka,                                    Andrzej Szczurek,                                    Bartosz Zajączkowski"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in environmental, engineering, mining and energy"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W04ITT-SD0047W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71857",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in information and communication technology",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Anna Kamińska-Chuchmała,                                    Marcin Maleszka,                                    Kamil Staniec,                                    Krzysztof Walkowiak"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in information and communication technology"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08NZJ-SD0082W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72787",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in management and quality studies",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Aldona Dereń,                                    Magdalena Gądek,                                    Liliana Hawrysz,                                    Katarzyna Jach,                                    Adam Kasperski,                                    Anna Kowalska-Pyzalska,                                    Dorota Kuchta,                                    Jolanta Maj,                                    Zbigniew Michna,                                    Bożena Mielczarek,                                    Sylwia Przytuła,                                    Edyta Ropuszyńska-Surma,                                    Katarzyna Weron,                                    Rafał Weron"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in management and quality studies"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W03IMA-SD002W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72925",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in materials engineering",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Mariusz Hasiak,                                    Joanna Olesiak-Bańska,                                    Paweł Scharoch,                                    Jarosław Serafińczuk,                                    Lech Sznitko"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in materials engineering"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W10IME-SD0030W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=71886",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in mechanical engineering",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Mariusz Ptak"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in mechanical engineering"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11NAF-SD0071W&callback=g_c7c923b2",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72896",
+              "details": {},
+              "littleGroups": [
+                {
+                  "courseName": "Recent research trends in physical sciences",
+                  "groupType": "W",
+                  "groupNumber": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Alessandro Surrente"
+                }
+              ]
+            }
+          ],
+          "name": "Recent research trends in physical sciences"
+        }
+      ]
+    }
+  ]
+}

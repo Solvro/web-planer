@@ -1,0 +1,3184 @@
+{
+  "name": "Wydział Geoinżynierii, Górnictwa i Geologii  [W6]",
+  "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=W6",
+  "registrations": [
+    {
+      "name": "Korekty dla kierunku geoenergetyka, I stopień, 2024/25Z [W06-GEN-SI-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=W06-GEN-SI-24%2F25Z&callback=g_93ab6695",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GEN-SI1402C&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72675",
+              "groups": [
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Michał Kijaczko"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GEN-SI1431C&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72676",
+              "groups": [
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Justyna Hebda-Sobkowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna I"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0021C&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73137",
+              "groups": [
+                {
+                  "name": "Bilans energetyczny górotworu",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "16:10",
+                  "endTime": "17:50",
+                  "lecturer": "Sebastian Gola"
+                }
+              ]
+            }
+          ],
+          "name": "Bilans energetyczny górotworu"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0021W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73138",
+              "groups": [
+                {
+                  "name": "Bilans energetyczny górotworu",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "16:10",
+                  "endTime": "17:50",
+                  "lecturer": "Sebastian Gola"
+                }
+              ]
+            }
+          ],
+          "name": "Bilans energetyczny górotworu"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11W06-SI2072L&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72952",
+              "groups": [
+                {
+                  "name": "Fizyka 2.1",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Klara Verheles"
+                },
+                {
+                  "name": "Fizyka 2.1",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Maciej Chrzanowski"
+                },
+                {
+                  "name": "Fizyka 2.1",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Anna Hajdusianek"
+                },
+                {
+                  "name": "Fizyka 2.1",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Zbigniew Gumienny"
+                },
+                {
+                  "name": "Fizyka 2.1",
+                  "type": "L",
+                  "group": "5",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Agata Tołłoczko"
+                }
+              ]
+            }
+          ],
+          "name": "Fizyka 2.1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W11W06-SI2072W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72953",
+              "groups": [
+                {
+                  "name": "Fizyka 2.1",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Robert Kudrawiec"
+                }
+              ]
+            }
+          ],
+          "name": "Fizyka 2.1"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0001C&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72668",
+              "groups": [
+                {
+                  "name": "Geodezja i kartografia cyfrowa",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Joanna Bac-Bronowicz,                                    Marek Zygmunt"
+                },
+                {
+                  "name": "Geodezja i kartografia cyfrowa",
+                  "type": "C",
+                  "group": "2",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Joanna Bac-Bronowicz,                                    Marek Zygmunt"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja i kartografia cyfrowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0001W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72669",
+              "groups": [
+                {
+                  "name": "Geodezja i kartografia cyfrowa",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Joanna Bac-Bronowicz,                                    Marek Zygmunt"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja i kartografia cyfrowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0011L&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72945",
+              "groups": [
+                {
+                  "name": "Geologia złożowa",
+                  "type": "L",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Paweł Zagożdżon"
+                }
+              ]
+            }
+          ],
+          "name": "Geologia złożowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0011P&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72946",
+              "groups": [
+                {
+                  "name": "Geologia złożowa",
+                  "type": "P",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Paweł Zagożdżon"
+                }
+              ]
+            }
+          ],
+          "name": "Geologia złożowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0011W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72947",
+              "groups": [
+                {
+                  "name": "Geologia złożowa",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Paweł Zagożdżon"
+                }
+              ]
+            }
+          ],
+          "name": "Geologia złożowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0012L&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72948",
+              "groups": [
+                {
+                  "name": "Hydrogeologia z hydrogeochemią",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Barbara Kiełczawa"
+                }
+              ]
+            }
+          ],
+          "name": "Hydrogeologia z hydrogeochemią"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0012W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72949",
+              "groups": [
+                {
+                  "name": "Hydrogeologia z hydrogeochemią",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Barbara Kiełczawa"
+                }
+              ]
+            }
+          ],
+          "name": "Hydrogeologia z hydrogeochemią"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0003P&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72671",
+              "groups": [
+                {
+                  "name": "LCA Geotermii",
+                  "type": "P",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Herbert Wirth"
+                },
+                {
+                  "name": "LCA Geotermii",
+                  "type": "P",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Herbert Wirth"
+                }
+              ]
+            }
+          ],
+          "name": "LCA Geotermii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0003W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72672",
+              "groups": [
+                {
+                  "name": "LCA Geotermii",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Herbert Wirth"
+                }
+              ]
+            }
+          ],
+          "name": "LCA Geotermii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0023S&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73140",
+              "groups": [
+                {
+                  "name": "Metody udostepniania złóż energii",
+                  "type": "S",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Herbert Wirth"
+                }
+              ]
+            }
+          ],
+          "name": "Metody udostepniania złóż energii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0023W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73141",
+              "groups": [
+                {
+                  "name": "Metody udostepniania złóż energii",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Herbert Wirth"
+                }
+              ]
+            }
+          ],
+          "name": "Metody udostepniania złóż energii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0025L&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73144",
+              "groups": [
+                {
+                  "name": "Modelowanie przepływu energii cieplnej i mechanicznej górotworu",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Adam Wróblewski"
+                }
+              ]
+            }
+          ],
+          "name": "Modelowanie przepływu energii cieplnej i mechanicznej górotworu"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0025W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73145",
+              "groups": [
+                {
+                  "name": "Modelowanie przepływu energii cieplnej i mechanicznej górotworu",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Sebastian Gola"
+                }
+              ]
+            }
+          ],
+          "name": "Modelowanie przepływu energii cieplnej i mechanicznej górotworu"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0010P&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72943",
+              "groups": [
+                {
+                  "name": "Podstawy budowy maszyn i urządzeń energetycznych",
+                  "type": "P",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Piotr Bortnowski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy budowy maszyn i urządzeń energetycznych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0010W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72944",
+              "groups": [
+                {
+                  "name": "Podstawy budowy maszyn i urządzeń energetycznych",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Maksymilian Ozdoba"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy budowy maszyn i urządzeń energetycznych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0049P&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72673",
+              "groups": [
+                {
+                  "name": "Podstawy geologii",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Monika Derkowska-Sitarz,                                    Elżbieta Liber-Makowska"
+                },
+                {
+                  "name": "Podstawy geologii",
+                  "type": "P",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "18:55",
+                  "endTime": "20:35",
+                  "lecturer": "Monika Derkowska-Sitarz,                                    Elżbieta Liber-Makowska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0049W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72674",
+              "groups": [
+                {
+                  "name": "Podstawy geologii",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Elżbieta Liber-Makowska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geologii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0002W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72670",
+              "groups": [
+                {
+                  "name": "Podstawy OZE",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Herbert Wirth"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy OZE"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0022P&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73139",
+              "groups": [
+                {
+                  "name": "Projekt poszukiwawczo-rozpoznawczy złóż energii",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Elżbieta Liber-Makowska"
+                }
+              ]
+            }
+          ],
+          "name": "Projekt poszukiwawczo-rozpoznawczy złóż energii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GEN-SI1456C&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72954",
+              "groups": [
+                {
+                  "name": "Statystyka matematyczna",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Skalski"
+                }
+              ]
+            }
+          ],
+          "name": "Statystyka matematyczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13W06-SI1456W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72955",
+              "groups": [
+                {
+                  "name": "Statystyka matematyczna",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Skalski"
+                }
+              ]
+            }
+          ],
+          "name": "Statystyka matematyczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0024P&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73142",
+              "groups": [
+                {
+                  "name": "Techniki i technologie ujęcia i dystrybucji energii",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Piotr Kolasiński"
+                }
+              ]
+            }
+          ],
+          "name": "Techniki i technologie ujęcia i dystrybucji energii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GEN-SI0024W&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73143",
+              "groups": [
+                {
+                  "name": "Techniki i technologie ujęcia i dystrybucji energii",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Piotr Kolasiński"
+                }
+              ]
+            }
+          ],
+          "name": "Techniki i technologie ujęcia i dystrybucji energii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06W06-SI0048L&callback=g_afd22b11",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72661",
+              "groups": [
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Adam Wróblewski"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Piotr Bortnowski"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Adam Wróblewski"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Piotr Bortnowski"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "6",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Paweł Bęś"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "7",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Piotr Bortnowski"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "8",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Adam Wróblewski"
+                },
+                {
+                  "name": "Technologie informacyjne",
+                  "type": "L",
+                  "group": "9",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Paweł Bęś"
+                }
+              ]
+            }
+          ],
+          "name": "Technologie informacyjne"
+        }
+      ]
+    },
+    {
+      "name": "Korekty dla kierunku GÓRNICTWO I GEOLOGIA, I stopień, 2024/25Z [W06-GIG-SI-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=W06-GIG-SI-24%2F25Z&callback=g_93ab6695",
+      "courses": []
+    },
+    {
+      "name": "Korekty dla kierunku geodezja i kartografia, I stopień, 2024/25Z [W06-GIK-SI-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=W06-GIK-SI-24%2F25Z&callback=g_93ab6695",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GIK-SI1402C&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72743",
+              "groups": [
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Dariusz Kosz"
+                },
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Dariusz Kosz"
+                },
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Mariusz Grech"
+                },
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "4",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Mariusz Grech"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13W06-SI1402W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72666",
+              "groups": [
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Dariusz Kosz"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GIK-SI1431C&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72744",
+              "groups": [
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Justyna Hebda-Sobkowicz"
+                },
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "2",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Justyna Hebda-Sobkowicz"
+                },
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "3",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Mariusz Olszewski"
+                },
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "4",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Miłosz Baraniewicz"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna I"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0065L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72835",
+              "groups": [
+                {
+                  "name": "BHP i ergonomia",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Żaklina Konopacka"
+                },
+                {
+                  "name": "BHP i ergonomia",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Żaklina Konopacka"
+                },
+                {
+                  "name": "BHP i ergonomia",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Żaklina Konopacka"
+                }
+              ]
+            }
+          ],
+          "name": "BHP i ergonomia"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0065W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72836",
+              "groups": [
+                {
+                  "name": "BHP i ergonomia",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "17:05",
+                  "endTime": "19:40",
+                  "lecturer": "Żaklina Konopacka"
+                }
+              ]
+            }
+          ],
+          "name": "BHP i ergonomia"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0073C&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72765",
+              "groups": [
+                {
+                  "name": "Budownictwo ogólne",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Ryszard Antonowicz"
+                },
+                {
+                  "name": "Budownictwo ogólne",
+                  "type": "C",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Ryszard Antonowicz"
+                },
+                {
+                  "name": "Budownictwo ogólne",
+                  "type": "C",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Ryszard Antonowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Budownictwo ogólne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0073W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72766",
+              "groups": [
+                {
+                  "name": "Budownictwo ogólne",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Ryszard Antonowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Budownictwo ogólne"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0023L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72761",
+              "groups": [
+                {
+                  "name": "Fotogrametria",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Izabela Piech"
+                },
+                {
+                  "name": "Fotogrametria",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Izabela Piech"
+                },
+                {
+                  "name": "Fotogrametria",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Izabela Piech"
+                },
+                {
+                  "name": "Fotogrametria",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Jarosław Wajs"
+                },
+                {
+                  "name": "Fotogrametria",
+                  "type": "L",
+                  "group": "5",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Martyna Siejek"
+                }
+              ]
+            }
+          ],
+          "name": "Fotogrametria"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0023W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72762",
+              "groups": [
+                {
+                  "name": "Fotogrametria",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jarosław Wajs"
+                }
+              ]
+            }
+          ],
+          "name": "Fotogrametria"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0047L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72816",
+              "groups": [
+                {
+                  "name": "Geodezja inżynieryjna II",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "14:00",
+                  "lecturer": "Robert Gradka,                                    Andrzej Kwinta"
+                },
+                {
+                  "name": "Geodezja inżynieryjna II",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "8:15",
+                  "endTime": "11:00",
+                  "lecturer": "Robert Gradka,                                    Andrzej Kwinta"
+                },
+                {
+                  "name": "Geodezja inżynieryjna II",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "14:00",
+                  "lecturer": "Robert Gradka,                                    Andrzej Kwinta"
+                },
+                {
+                  "name": "Geodezja inżynieryjna II",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "8:15",
+                  "endTime": "11:00",
+                  "lecturer": "Robert Gradka,                                    Andrzej Kwinta"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja inżynieryjna II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0047W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72817",
+              "groups": [
+                {
+                  "name": "Geodezja inżynieryjna II",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Andrzej Kwinta"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja inżynieryjna II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0049L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72820",
+              "groups": [
+                {
+                  "name": "Geodezja satelitarna",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Marcin Zając"
+                },
+                {
+                  "name": "Geodezja satelitarna",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Marcin Zając"
+                },
+                {
+                  "name": "Geodezja satelitarna",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Marek Zygmunt"
+                },
+                {
+                  "name": "Geodezja satelitarna",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Marek Zygmunt"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja satelitarna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0049W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72821",
+              "groups": [
+                {
+                  "name": "Geodezja satelitarna",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "8:15",
+                  "endTime": "11:00",
+                  "lecturer": "Roman Galas"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja satelitarna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0048L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72818",
+              "groups": [
+                {
+                  "name": "Geodezja wyższa",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Edward Osada"
+                },
+                {
+                  "name": "Geodezja wyższa",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Marek Zygmunt"
+                },
+                {
+                  "name": "Geodezja wyższa",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Marek Zygmunt"
+                },
+                {
+                  "name": "Geodezja wyższa",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Edward Osada"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja wyższa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0048W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72819",
+              "groups": [
+                {
+                  "name": "Geodezja wyższa",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Edward Osada"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezja wyższa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0017L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72752",
+              "groups": [
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "L",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Aleksandra Kaczmarek"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "L",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Natalia Bugajska-Jędraszek"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "L",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Natalia Bugajska-Jędraszek"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "L",
+                  "group": "4",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Natalia Bugajska-Jędraszek"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "L",
+                  "group": "5",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Aleksandra Kaczmarek"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezyjne pomiary szczegółowe II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0017P&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72753",
+              "groups": [
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "P",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Ewa Sudoł"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "P",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Ewa Sudoł"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "P",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Ewa Sudoł"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "P",
+                  "group": "4",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Ewa Sudoł"
+                },
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "P",
+                  "group": "5",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Ewa Sudoł"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezyjne pomiary szczegółowe II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0017W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72754",
+              "groups": [
+                {
+                  "name": "Geodezyjne pomiary szczegółowe II",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Zbigniew Muszyński,                                    Ewa Sudoł"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezyjne pomiary szczegółowe II"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0024L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72763",
+              "groups": [
+                {
+                  "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej",
+                  "type": "L",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Barbara Wiatkowska"
+                },
+                {
+                  "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej",
+                  "type": "L",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Marcin Zając"
+                },
+                {
+                  "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej",
+                  "type": "L",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Barbara Wiatkowska"
+                },
+                {
+                  "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej",
+                  "type": "L",
+                  "group": "4",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Barbara Wiatkowska"
+                },
+                {
+                  "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej",
+                  "type": "L",
+                  "group": "5",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Marcin Zając"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0024W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72764",
+              "groups": [
+                {
+                  "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Marcin Zając"
+                }
+              ]
+            }
+          ],
+          "name": "Geodezyjne układy odniesień z elementami kartografii matematycznej"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0001P&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72732",
+              "groups": [
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "16:10",
+                  "lecturer": "Martyna Konieczna-Fuławka"
+                },
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "14:00",
+                  "lecturer": "Mirosław Bajda"
+                },
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "3",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "17:50",
+                  "lecturer": "Dariusz Woźniak"
+                },
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "14:00",
+                  "lecturer": "Dariusz Woźniak"
+                },
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "5",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "14:15",
+                  "endTime": "16:55",
+                  "lecturer": "Mirosław Bajda"
+                },
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "6",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "17:50",
+                  "lecturer": "Mirosław Bajda"
+                },
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "P",
+                  "group": "7",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "12:00",
+                  "lecturer": "Mirosław Bajda"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska i rysunek techniczny"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0001W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72733",
+              "groups": [
+                {
+                  "name": "Grafika inżynierska i rysunek techniczny",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Dariusz Woźniak"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska i rysunek techniczny"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0004L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72737",
+              "groups": [
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Tomasz Ratajczak"
+                },
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Tomasz Ratajczak"
+                },
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Ratajczak"
+                },
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Tomasz Ratajczak"
+                },
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "5",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Ratajczak"
+                },
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "6",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Tomasz Ratajczak"
+                },
+                {
+                  "name": "Informatyka I",
+                  "type": "L",
+                  "group": "7",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Tomasz Ratajczak"
+                }
+              ]
+            }
+          ],
+          "name": "Informatyka I"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0074P&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72826",
+              "groups": [
+                {
+                  "name": "Inżynieria Lądowa",
+                  "type": "P",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Jarosław Kuźniewski"
+                },
+                {
+                  "name": "Inżynieria Lądowa",
+                  "type": "P",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Jarosław Kuźniewski"
+                },
+                {
+                  "name": "Inżynieria Lądowa",
+                  "type": "P",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jarosław Kuźniewski"
+                },
+                {
+                  "name": "Inżynieria Lądowa",
+                  "type": "P",
+                  "group": "4",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jarosław Kuźniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Inżynieria Lądowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0074W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72827",
+              "groups": [
+                {
+                  "name": "Inżynieria Lądowa",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Jarosław Kuźniewski"
+                }
+              ]
+            }
+          ],
+          "name": "Inżynieria Lądowa"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0072L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72840",
+              "groups": [
+                {
+                  "name": "Kartografia tematyczna z geowizualizacją",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Paulina Bidzińska"
+                },
+                {
+                  "name": "Kartografia tematyczna z geowizualizacją",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Paulina Bidzińska"
+                },
+                {
+                  "name": "Kartografia tematyczna z geowizualizacją",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Adam Górecki"
+                }
+              ]
+            }
+          ],
+          "name": "Kartografia tematyczna z geowizualizacją"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0072W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72841",
+              "groups": [
+                {
+                  "name": "Kartografia tematyczna z geowizualizacją",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Joanna Bac-Bronowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Kartografia tematyczna z geowizualizacją"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W08GIK-SI0033W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73135",
+              "groups": [
+                {
+                  "name": "Komunikacja społeczna",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Zdzisław Ilski"
+                }
+              ]
+            }
+          ],
+          "name": "Komunikacja społeczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0086L&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72830",
+              "groups": [
+                {
+                  "name": "Lotniczy i satelitarny skaning laserowy",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Aleksandra Smentek"
+                },
+                {
+                  "name": "Lotniczy i satelitarny skaning laserowy",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Aleksandra Smentek"
+                },
+                {
+                  "name": "Lotniczy i satelitarny skaning laserowy",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Michał Tympalski"
+                },
+                {
+                  "name": "Lotniczy i satelitarny skaning laserowy",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Michał Tympalski"
+                }
+              ]
+            }
+          ],
+          "name": "Lotniczy i satelitarny skaning laserowy"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIK-SI0086W&callback=g_2134b95f",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72831",
+              "groups": [
+                {
+                  "name": "Lotniczy i satelitarny skaning laserowy",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Kazimierz Bęcek"
+                }
+              ]
+            }
+          ],
+          "name": "Lotniczy i satelitarny skaning laserowy"
+        }
+      ]
+    },
+    {
+      "name": "Korekty dla kierunku geoinformatyka, I stopień, 2024/25Z [W06-GIT-SI-24/25Z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=W06-GIT-SI-24%2F25Z&callback=g_93ab6695",
+      "courses": [
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GIT-SI1757C&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72938",
+              "groups": [
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Anna Michalak"
+                },
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "2",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Anna Michalak"
+                },
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "3",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Anna Michalak"
+                },
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "C",
+                  "group": "4",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Anna Michalak"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GIT-SI1757W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72939",
+              "groups": [
+                {
+                  "name": "Algebra z geometrią analityczną",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Tomasz Skalski"
+                }
+              ]
+            }
+          ],
+          "name": "Algebra z geometrią analityczną"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W13GIT-SI1431C&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72937",
+              "groups": [
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Paweł Zimroz"
+                },
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "2",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Janusz Grabski"
+                },
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "3",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Paweł Zimroz"
+                },
+                {
+                  "name": "Analiza matematyczna I",
+                  "type": "C",
+                  "group": "4",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Justyna Hebda-Sobkowicz"
+                }
+              ]
+            }
+          ],
+          "name": "Analiza matematyczna I"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0051C&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=43671",
+              "groups": [
+                {
+                  "name": "Bazy Danych",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Zygmunt Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "C",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Zygmunt Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "C",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Zygmunt Mazur"
+                }
+              ]
+            }
+          ],
+          "name": "Bazy Danych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0051L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=43670",
+              "groups": [
+                {
+                  "name": "Bazy Danych",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Hanna Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Hanna Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Hanna Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Hanna Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "L",
+                  "group": "5",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Hanna Mazur"
+                },
+                {
+                  "name": "Bazy Danych",
+                  "type": "L",
+                  "group": "6",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Hanna Mazur"
+                }
+              ]
+            }
+          ],
+          "name": "Bazy Danych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0051W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=43669",
+              "groups": [
+                {
+                  "name": "Bazy Danych",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Zygmunt Mazur"
+                }
+              ]
+            }
+          ],
+          "name": "Bazy Danych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0046P&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72933",
+              "groups": [
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Monika Derkowska-Sitarz"
+                },
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "2",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jurand Wojewoda"
+                },
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "3",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Monika Derkowska-Sitarz"
+                },
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "4",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Jurand Wojewoda"
+                },
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "5",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Jurand Wojewoda"
+                },
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "6",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Jurand Wojewoda"
+                },
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "P",
+                  "group": "7",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Jurand Wojewoda"
+                }
+              ]
+            }
+          ],
+          "name": "Geologia fizyczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0046W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72934",
+              "groups": [
+                {
+                  "name": "Geologia fizyczna",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Jurand Wojewoda"
+                }
+              ]
+            }
+          ],
+          "name": "Geologia fizyczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0045C&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72930",
+              "groups": [
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "14:15",
+                  "endTime": "16:00",
+                  "lecturer": "Dariusz Woźniak"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "C",
+                  "group": "2",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Dariusz Woźniak"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "C",
+                  "group": "3",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Mirosław Bajda"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "C",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Mirosław Bajda"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0045L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72931",
+              "groups": [
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Martyna Konieczna-Fuławka"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Natalia Suchorab-Matuszewska"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Natalia Suchorab-Matuszewska"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Martyna Konieczna-Fuławka"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "5",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Natalia Suchorab-Matuszewska"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "6",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Martyna Konieczna-Fuławka"
+                },
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "L",
+                  "group": "7",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Martyna Konieczna-Fuławka"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0045W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72932",
+              "groups": [
+                {
+                  "name": "Grafika inżynierska",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Dariusz Woźniak"
+                }
+              ]
+            }
+          ],
+          "name": "Grafika inżynierska"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0013C&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72988",
+              "groups": [
+                {
+                  "name": "Mechanika techniczna",
+                  "type": "C",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Natalia Suchorab-Matuszewska"
+                },
+                {
+                  "name": "Mechanika techniczna",
+                  "type": "C",
+                  "group": "2",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Natalia Suchorab-Matuszewska"
+                },
+                {
+                  "name": "Mechanika techniczna",
+                  "type": "C",
+                  "group": "3",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Monika Bartlewska-Urban"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika techniczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0013W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72989",
+              "groups": [
+                {
+                  "name": "Mechanika techniczna",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Monika Bartlewska-Urban"
+                }
+              ]
+            }
+          ],
+          "name": "Mechanika techniczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0025L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73032",
+              "groups": [
+                {
+                  "name": "Modelowanie wolumetryczne obiektów przestrzennych",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Anna Nowak-Szpak"
+                },
+                {
+                  "name": "Modelowanie wolumetryczne obiektów przestrzennych",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Anna Nowak-Szpak"
+                },
+                {
+                  "name": "Modelowanie wolumetryczne obiektów przestrzennych",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Anna Nowak-Szpak"
+                }
+              ]
+            }
+          ],
+          "name": "Modelowanie wolumetryczne obiektów przestrzennych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0025W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73033",
+              "groups": [
+                {
+                  "name": "Modelowanie wolumetryczne obiektów przestrzennych",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Anna Nowak-Szpak"
+                }
+              ]
+            }
+          ],
+          "name": "Modelowanie wolumetryczne obiektów przestrzennych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06W06-SI0001S&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72656",
+              "groups": [
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "5",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "6",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "7",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "8",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "9",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "10",
+                  "week": "TN",
+                  "day": "czwartek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "11",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "12",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "13",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "14",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "S",
+                  "group": "15",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Leszek Jurdziak"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy ekonomii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06W06-SI0001W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72657",
+              "groups": [
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Leszek Jurdziak"
+                },
+                {
+                  "name": "Podstawy ekonomii",
+                  "type": "W",
+                  "group": "2",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Leszek Jurdziak"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy ekonomii"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0021C&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73023",
+              "groups": [
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "C",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Anna Gogolewska"
+                },
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "C",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Anna Gogolewska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geofizyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0021L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73024",
+              "groups": [
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "L",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Anna Gogolewska"
+                },
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "L",
+                  "group": "2",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Anna Gogolewska"
+                },
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "L",
+                  "group": "3",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Anna Gogolewska"
+                },
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "L",
+                  "group": "4",
+                  "week": "TN",
+                  "day": "wtorek",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Anna Gogolewska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geofizyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0021W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73025",
+              "groups": [
+                {
+                  "name": "Podstawy geofizyki",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "wtorek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Anna Gogolewska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geofizyki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0027L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73037",
+              "groups": [
+                {
+                  "name": "Podstawy geomechaniki",
+                  "type": "L",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "7:30",
+                  "endTime": "9:00",
+                  "lecturer": ""
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geomechaniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0027P&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73038",
+              "groups": [
+                {
+                  "name": "Podstawy geomechaniki",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Bogumiła Pałac-Walko"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geomechaniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0027W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73039",
+              "groups": [
+                {
+                  "name": "Podstawy geomechaniki",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Jan Butra"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geomechaniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0029L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73042",
+              "groups": [
+                {
+                  "name": "Podstawy geotechniki",
+                  "type": "L",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "piątek",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Irena Bagińska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geotechniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0029P&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73043",
+              "groups": [
+                {
+                  "name": "Podstawy geotechniki",
+                  "type": "P",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Irena Bagińska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geotechniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0029W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73044",
+              "groups": [
+                {
+                  "name": "Podstawy geotechniki",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Irena Bagińska"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy geotechniki"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0024L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73030",
+              "groups": [
+                {
+                  "name": "Podstawy przetwarzania geodanych",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Piotr Grzempowski"
+                },
+                {
+                  "name": "Podstawy przetwarzania geodanych",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "piątek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Piotr Grzempowski"
+                },
+                {
+                  "name": "Podstawy przetwarzania geodanych",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "17:05",
+                  "endTime": "18:45",
+                  "lecturer": "Piotr Grzempowski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy przetwarzania geodanych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0024W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=73031",
+              "groups": [
+                {
+                  "name": "Podstawy przetwarzania geodanych",
+                  "type": "W",
+                  "group": "1",
+                  "week": "TN",
+                  "day": "środa",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Piotr Grzempowski"
+                }
+              ]
+            }
+          ],
+          "name": "Podstawy przetwarzania geodanych"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0012L&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72986",
+              "groups": [
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "L",
+                  "group": "1",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "9:15",
+                  "endTime": "11:00",
+                  "lecturer": "Zbigniew Krysa"
+                },
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "L",
+                  "group": "2",
+                  "week": "",
+                  "day": "środa",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Zbigniew Krysa"
+                },
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "L",
+                  "group": "3",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Zbigniew Krysa"
+                },
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "L",
+                  "group": "4",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Zbigniew Krysa"
+                },
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "L",
+                  "group": "5",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "13:15",
+                  "endTime": "15:00",
+                  "lecturer": "Zbigniew Krysa"
+                },
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "L",
+                  "group": "6",
+                  "week": "",
+                  "day": "poniedziałek",
+                  "startTime": "15:15",
+                  "endTime": "16:55",
+                  "lecturer": "Zbigniew Krysa"
+                }
+              ]
+            }
+          ],
+          "name": "Rachunek prawdopodobieństwa i statystyka matematyczna"
+        },
+        {
+          "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=W06GIT-SI0012W&callback=g_25842965",
+          "groups": [
+            {
+              "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazGrupyZajec&zaj_cyk_id=72987",
+              "groups": [
+                {
+                  "name": "Rachunek prawdopodobieństwa i statystyka matematyczna",
+                  "type": "W",
+                  "group": "1",
+                  "week": "",
+                  "day": "czwartek",
+                  "startTime": "11:15",
+                  "endTime": "13:00",
+                  "lecturer": "Maciej Wilczyński"
+                }
+              ]
+            }
+          ],
+          "name": "Rachunek prawdopodobieństwa i statystyka matematyczna"
+        }
+      ]
+    },
+    {
+      "name": "Korekty dla kierunku INŻYNIERIA SUROWCÓW MINERALNYCH, I stopień, 2024/25Z [W06-ISM-SI-2024/25z]",
+      "url": "https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=W06-ISM-SI-2024%2F25z&callback=g_93ab6695",
+      "courses": []
+    }
+  ]
+}
