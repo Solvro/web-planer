@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import Course from '#models/group'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
-export default class Registration extends BaseModel {
+import Registration from '#models/registration'
+
+export default class Department extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
@@ -10,16 +11,14 @@ export default class Registration extends BaseModel {
   declare name: string
 
   @column()
-  declare departmentId: string
+  declare url: string
 
-  @column()
-  declare round: number
+  @hasMany(() => Registration)
+  declare courses: HasMany<typeof Registration>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
-  @hasMany(() => Course)
-  declare courses: HasMany<typeof Course>
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
