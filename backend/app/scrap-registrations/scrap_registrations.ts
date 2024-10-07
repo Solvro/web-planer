@@ -1,10 +1,4 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
-/* eslint-disable no-console */
-
-/* eslint-disable consistent-return */
 import * as cheerio from 'cheerio'
-import fs from 'fs'
 
 interface GroupDetails {
   name: string
@@ -23,6 +17,7 @@ interface Group {
 
 interface Course {
   name: string
+  courseCode: string
   url: string
   groups: Group[]
 }
@@ -45,7 +40,6 @@ const fetchData = async (url: string) => {
   return response
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const scrapDepartments = async () => {
   const departments: Department[] = []
   const response = await fetchData(DEPARTMENTS_URL)
@@ -128,6 +122,7 @@ const scrapCourses = async (registrationUrl: string) => {
 const scrapCourseNameGroupsUrls = async (courseUrl: string) => {
   let courseName = ''
   const urls: string[] = []
+  let courseCode = ''
   const response = await fetchData(courseUrl)
   if (!response.ok) {
     console.log('Something went wrong in fetching groups')
@@ -136,8 +131,19 @@ const scrapCourseNameGroupsUrls = async (courseUrl: string) => {
 
   const body = await response.text()
   const $ = cheerio.load(body)
-
   courseName = $('main-panel#main').find('h1').text()
+
+  courseCode = $('div#layout-c22')
+    .find('div.usos-ui')
+    .find('usos-frame')
+    .find('table')
+    .find('tbody')
+    .find('tr')
+    .eq(0)
+    .find('td')
+    .eq(1)
+    .text()
+    .trim()
   const groups = $('div#layout-c22').find('div.usos-ui').children('usos-frame')
   groups.each((_, element) => {
     const title = $(element).find('h2')
@@ -151,7 +157,7 @@ const scrapCourseNameGroupsUrls = async (courseUrl: string) => {
       })
     }
   })
-  return { courseName, urls }
+  return { courseName, urls, courseCode }
 }
 
 const scrapGroupsUrls = async (groupUrl: string) => {
@@ -286,116 +292,6 @@ const checkDay = (day: string) => {
     return 'niedziela'
   }
   return 'unknown'
-}
-
-//'https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/szukajPrzedmiotu&method=rej&rej_kod=W09ZARZ-SI7-24%2F25Zv&callback=g_f04839bf'
-
-// eslint-disable-next-line complexity
-const scrap = async () => {
-  //scrap departments
-  // const { departmentsNames, departmentsUrls } = await scrapDepartments();
-  // const departemnts = departmentsNames.map((name, index) => {
-  //   return { name, url: departmentsUrls[index], registrations: [] };
-  // });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  //   const departments: Department[] = JSON.parse(fs.readFileSync('departments.json', 'utf8'))
-  //   let i = 1
-  //   for (const department of departments) {
-  //     console.log(`scrapping department ${department.name}`)
-  //     const registrationsNamesUrls = await scrapRegistrations(department.url)
-  //     let registrationsNames: string[] = []
-  //     let registrationsUrls: string[] = []
-  //     if (registrationsNamesUrls !== undefined) {
-  //       registrationsNames = registrationsNamesUrls.registrationsNames
-  //       registrationsUrls = registrationsNamesUrls.registrationsUrls
-  //     }
-  //     department.registrations = registrationsNames.map((name, index) => {
-  //       return { name, url: registrationsUrls[index], courses: [] }
-  //     })
-  //     for (const registration of department.registrations) {
-  //       const coursesUrls = await scrapCourses(registration.url)
-  //       if (coursesUrls !== undefined) {
-  //         registration.courses = coursesUrls.map((url) => {
-  //           return { url, groups: [], name: '' }
-  //         })
-  //       }
-  //       for (const course of registration.courses) {
-  //         let courseName = ''
-  //         let urls: string[] = []
-  //         const courseNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url)
-  //         if (courseNameGroupsUrls !== undefined) {
-  //           courseName = courseNameGroupsUrls.courseName
-  //           urls = courseNameGroupsUrls.urls
-  //         }
-  //         course.name = courseName
-  //         course.groups = urls.map((url) => {
-  //           return { url, groups: [] }
-  //         })
-  //         for (const group of course.groups) {
-  //           const detailsUrls = await scrapGroupsUrls(group.url)
-  //           if (detailsUrls !== undefined) {
-  //             for (const url of detailsUrls) {
-  //               const details = await scrapGroupDetails(url)
-  //               if (details !== undefined) {
-  //                 group.groups.push(details)
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //     const dataToSave = JSON.stringify(department, null, 2)
-  //     fs.writeFileSync(`${i}.json`, dataToSave, 'utf8')
-  //     i++
-  //   }
-  // const departments: Department[] = JSON.parse(
-  //   fs.readFileSync("departments.json", "utf8"),
-  // );
-  // const department1 = departments[2];
-  // const registrationsNamesUrls = await scrapRegistrations(department1.url);
-  // let registrationsNames: string[] = [];
-  // let registrationsUrls: string[] = [];
-  // if (registrationsNamesUrls !== undefined) {
-  //   registrationsNames = registrationsNamesUrls.registrationsNames;
-  //   registrationsUrls = registrationsNamesUrls.registrationsUrls;
-  // }
-  // department1.registrations = registrationsNames.map((name, index) => {
-  //   return { name, url: registrationsUrls[index], courses: [] };
-  // });
-  // for (const registration of department1.registrations) {
-  //   const coursesUrls = await scrapCourses(registration.url);
-  //   if (coursesUrls !== undefined) {
-  //     registration.courses = coursesUrls.map((url) => {
-  //       return { url, groups: [], name: "" };
-  //     });
-  //   }
-  //   for (const course of registration.courses) {
-  //     let courseName = "";
-  //     let urls: string[] = [];
-  //     const courseNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url);
-  //     if (courseNameGroupsUrls !== undefined) {
-  //       courseName = courseNameGroupsUrls.courseName;
-  //       urls = courseNameGroupsUrls.urls;
-  //     }
-  //     course.name = courseName;
-  //     course.groups = urls.map((url) => {
-  //       return { url, groups: [] };
-  //     });
-  //     for (const group of course.groups) {
-  //       const detailsUrls = await scrapGroupsUrls(group.url);
-  //       if (detailsUrls !== undefined) {
-  //         for (const url of detailsUrls) {
-  //           const details = await scrapGroupDetails(url);
-  //           if (details !== undefined) {
-  //             group.groups.push(details);
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // const dataToSave = JSON.stringify(department1, null, 2);
-  // fs.writeFileSync("dep-test-wf.json", dataToSave, "utf8");
 }
 
 export {

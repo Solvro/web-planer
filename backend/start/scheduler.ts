@@ -6,7 +6,7 @@ import {
   scrapCourseNameGroupsUrls,
   scrapGroupsUrls,
   scrapGroupDetails,
-} from '../app/scrap-registrations/scrapRegistrations.js'
+} from '../app/scrap-registrations/scrap_registrations.js'
 import Department from '#models/department'
 import Registration from '#models/registration'
 import Course from '#models/course'
@@ -23,33 +23,37 @@ const scrapData = async () => {
   console.log('Scraping registrations')
   for (const department of departments) {
     const registrations = await scrapRegistrations(department.url)
-    if (!registrations) continue
+    if (!registrations) return
     department.registrations = registrations
     for (const registration of registrations) {
       await Registration.updateOrCreate(
-        { name: registration.name },
-        { department: department.name }
+        { id: extractLastStringInBrackets(registration.name) ?? registration.name },
+        {
+          name: registration.name,
+          departmentId: extractLastStringInBrackets(department.name) ?? department.name,
+        }
       )
       const coursesUrls = await scrapCourses(registration.url)
       if (!coursesUrls) continue
-      registration.courses
       registration.courses = coursesUrls.map((courseUrl) => {
-        return { url: courseUrl, groups: [], name: '' }
+        return { url: courseUrl, courseCode: '', groups: [], name: '' }
       })
       console.log('Scraping courses')
       for (const course of registration.courses) {
-        let courseName = ''
-        let urls: string[] = []
-        const courseNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url)
-        if (!courseNameGroupsUrls) continue
-        urls = courseNameGroupsUrls.urls
-        course.name = courseNameGroupsUrls.courseName
+        const courseCodeNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url)
+        if (!courseCodeNameGroupsUrls) continue
+        const urls = courseCodeNameGroupsUrls.urls
+        course.courseCode = courseCodeNameGroupsUrls.courseCode
+        course.name = courseCodeNameGroupsUrls.courseName
         course.groups = urls.map((url) => {
           return { url, groups: [] }
         })
         await Course.updateOrCreate(
-          { id: course.url },
-          { name: course.name, registrationId: registration.name }
+          { id: courseCodeNameGroupsUrls.courseCode },
+          {
+            name: course.name,
+            registrationId: extractLastStringInBrackets(registration.name) ?? registration.name,
+          }
         )
         for (const group of course.groups) {
           const detailsUrls = await scrapGroupsUrls(group.url)
@@ -58,16 +62,27 @@ const scrapData = async () => {
             const details = await scrapGroupDetails(url)
             if (!details) continue
             await Group.updateOrCreate(
-              { name: details.name },
               {
+                id:
+                  course.courseCode +
+                  details.name +
+                  details.startTime +
+                  details.endTime +
+                  details.day +
+                  details.lecturer.trim().replace(/\s+/g, ' ') +
+                  details.type +
+                  details.group,
+              },
+              {
+                name: details.name,
                 startTime: details.startTime,
                 endTime: details.endTime,
                 group: details.group,
-                lecturer: details.lecturer,
+                lecturer: details.lecturer.trim().replace(/\s+/g, ' '),
                 week: details.week,
                 day: details.day,
                 type: details.type,
-                courseId: course.url,
+                courseId: course.courseCode,
               }
             )
             group.groups.push(details)
@@ -90,13 +105,6 @@ function extractLastStringInBrackets(input: string): string | null {
   }
 
   return lastMatch
-}
-
-function extractCourseCode(url: string): string | null {
-  const regex = /[?&_]prz_kod=([^&]+)/
-  const match = url.match(regex)
-
-  return match ? match[1] : null
 }
 
 const scrapDataTest = async () => {
@@ -129,19 +137,20 @@ const scrapDataTest = async () => {
     const coursesUrls = await scrapCourses(registration.url)
     if (!coursesUrls) continue
     registration.courses = coursesUrls.map((courseUrl) => {
-      return { url: courseUrl, groups: [], name: '' }
+      return { url: courseUrl, courseCode: '', groups: [], name: '' }
     })
     console.log('Scraping courses')
     for (const course of registration.courses) {
-      const courseNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url)
-      if (!courseNameGroupsUrls) continue
-      const urls = courseNameGroupsUrls.urls
-      course.name = courseNameGroupsUrls.courseName
+      const courseCodeNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url)
+      if (!courseCodeNameGroupsUrls) continue
+      const urls = courseCodeNameGroupsUrls.urls
+      course.courseCode = courseCodeNameGroupsUrls.courseCode
+      course.name = courseCodeNameGroupsUrls.courseName
       course.groups = urls.map((url) => {
         return { url, groups: [] }
       })
       await Course.updateOrCreate(
-        { id: extractCourseCode(course.url) ?? course.url },
+        { id: courseCodeNameGroupsUrls.courseCode },
         {
           name: course.name,
           registrationId: extractLastStringInBrackets(registration.name) ?? registration.name,
@@ -154,8 +163,19 @@ const scrapDataTest = async () => {
           const details = await scrapGroupDetails(url)
           if (!details) continue
           await Group.updateOrCreate(
-            { name: details.name },
             {
+              id:
+                course.courseCode +
+                details.name +
+                details.startTime +
+                details.endTime +
+                details.day +
+                details.lecturer.trim().replace(/\s+/g, ' ') +
+                details.type +
+                details.group,
+            },
+            {
+              name: details.name,
               startTime: details.startTime,
               endTime: details.endTime,
               group: details.group,
@@ -163,7 +183,7 @@ const scrapDataTest = async () => {
               week: details.week,
               day: details.day,
               type: details.type,
-              courseId: extractCourseCode(course.url) ?? course.url,
+              courseId: course.courseCode,
             }
           )
           group.groups.push(details)
@@ -177,57 +197,3 @@ const scrapDataTest = async () => {
 }
 scrapDataTest()
 scheduler.call(scrapDataTest).everyTwoHours()
-
-// scheduler
-//   .call(async () => {
-//     console.log('Scraping departments')
-//     const departments = await scrapDepartments()
-//     if (!departments) return
-//     departments.forEach(async (department) => {
-//       await Department.updateOrCreate({ name: department.name }, { url: department.url })
-//     })
-//     console.log('Departments scraped')
-//     console.log('Scraping registrations')
-//     for (const department of departments) {
-//       const registrations = await scrapRegistrations(department.url)
-//       if (!registrations) continue
-//       department.registrations = registrations
-//       for (const registration of registrations) {
-//         await Registration.updateOrCreate(
-//           { name: registration.name },
-//           { department: department.name }
-//         )
-//         const coursesUrls = await scrapCourses(registration.url)
-//         if (!coursesUrls) continue
-//         registration.courses
-//         registration.courses = coursesUrls.map((courseUrl) => {
-//           return { url: courseUrl, groups: [], name: '' }
-//         })
-//         console.log('Scraping courses')
-//         for (const course of registration.courses) {
-//           let courseName = ''
-//           let urls: string[] = []
-//           const courseNameGroupsUrls = await scrapCourseNameGroupsUrls(course.url)
-//           if (!courseNameGroupsUrls) continue
-//           courseName = courseNameGroupsUrls.courseName
-//           urls = courseNameGroupsUrls.urls
-//           course.name = courseName
-//           course.groups = urls.map((url) => {
-//             return { url, groups: [] }
-//           })
-//           for (const group of course.groups) {
-//             const detailsUrls = await scrapGroupsUrls(group.url)
-//             if (!detailsUrls) continue
-//             for (const url of detailsUrls) {
-//               const details = await scrapGroupDetails(url)
-//               if (!details) continue
-//               group.groups.push(details)
-//             }
-//           }
-//         }
-//         console.log('Courses scraped')
-//       }
-//     }
-//     console.log('Registrations scraped')
-//   })
-//   .everyMinute()
