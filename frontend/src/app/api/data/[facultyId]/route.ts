@@ -5,15 +5,20 @@ import { createUsosService } from "@/lib/usos";
 
 export const revalidate = 3600;
 
+interface PageProps {
+  params: Promise<{ facultyId: string }>;
+}
+
 export async function GET(
   _request: Request,
-  { params }: { params: { facultyId: string } },
+  { params }: PageProps,
 ) {
-  const service = createUsosService();
+  const { facultyId } = await params;
+  const service = await createUsosService();
   return NextResponse.json(
     {
       registrations: await Promise.all(
-        (await service.getRegistrations(params.facultyId)).map(async (r) => ({
+        (await service.getRegistrations(facultyId)).map(async (r) => ({
           registration: r,
           courses: await Promise.all(
             r.related_courses.flatMap(async (c) => ({

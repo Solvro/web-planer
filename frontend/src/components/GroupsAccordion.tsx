@@ -7,8 +7,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { Button } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import { cn } from "@/lib/utils";
 
 export const GroupsAccordionItem = ({
   registrationName,
@@ -27,17 +28,26 @@ export const GroupsAccordionItem = ({
     <AccordionItem value={registrationName}>
       <AccordionTrigger className="px-4 hover:no-underline">
         <div className="flex items-center gap-4">
-          <Button
+          <div
+            role="button"
+            tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               onDelete?.();
             }}
-            variant="outline"
-            size="icon"
-            className="min-h-10 min-w-10"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.stopPropagation();
+                onDelete?.();
+              }
+            }}
+            className={cn(buttonVariants({
+              size: "icon",
+              variant: "outline",
+            }), "min-h-10 min-w-10")}
           >
             <XIcon className="min-h-4 min-w-6" />
-          </Button>
+          </div>
           <span className="text-left text-sm">{registrationName}</span>
         </div>
       </AccordionTrigger>
@@ -55,7 +65,7 @@ export const GroupsAccordionItem = ({
           </label>
         </div>
         {courses.map((course) => (
-          <div key={course.name}>
+          <div key={crypto.randomUUID()}>
             <div className="grid grid-cols-[1fr_5fr] items-center justify-between p-4 py-2 text-base transition-colors hover:cursor-pointer hover:bg-blue-100">
               <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-secondary">
                 {course.type}

@@ -69,7 +69,7 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
       </div>
       <div className="mt-2 text-gray-600">Wybrane grupy: {groupCount}</div>
       <Link
-        href={`/app/createplan/${id}`}
+        href={`/plans/create/${id}`}
         className={buttonVariants({
           className: cn(
             "flex items-center gap-2 text-nowrap rounded-md text-lg",
