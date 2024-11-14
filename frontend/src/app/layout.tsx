@@ -89,9 +89,9 @@ declare global {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
       <ClientProviders>

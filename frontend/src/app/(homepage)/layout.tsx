@@ -6,7 +6,9 @@ import { Navbar } from "./_components/navbar";
 
 export default function LayoutHomePage({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-mainbutton7">
       {/* Blobs */}

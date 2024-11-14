@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils";
 
 export default function PlansLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex min-h-screen flex-col items-center gap-3 overflow-x-hidden">
       <div className="flex max-h-20 min-h-20 w-full items-center justify-between bg-mainbutton7">

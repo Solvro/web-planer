@@ -28,7 +28,7 @@ import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import { Day, Frequency, LessonType } from "@/services/usos/types";
 
-export default function CreateNewPlanPage({ planId }: { planId: string }) {
+export function CreateNewPlanPage({ planId }: { planId: string }) {
   const plan = usePlan({
     planId,
   });
@@ -107,11 +107,11 @@ export default function CreateNewPlanPage({ planId }: { planId: string }) {
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
             <div className="flex items-end gap-2">
-              <Link href="/plans">
-                <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" asChild={true}>
+                <Link href="/plans">
                   <MdArrowBack size={20} />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
               <form
                 className="flex w-full items-center justify-center"
                 onSubmit={(e) => {

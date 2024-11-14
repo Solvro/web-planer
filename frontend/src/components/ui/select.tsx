@@ -13,7 +13,7 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
-    isLoading?: boolean;
+    disabled?: boolean;
   }
   // eslint-disable-next-line react/prop-types
 >(({ className, children, ...props }, ref) => (
@@ -28,7 +28,7 @@ const SelectTrigger = React.forwardRef<
     {children}
     <SelectPrimitive.Icon asChild={true}>
       {/* eslint-disable-next-line react/prop-types */}
-      {props.isLoading === true ? (
+      {props.disabled === true ? (
         <Loader2Icon className="h-4 w-4 animate-spin" />
       ) : (
         <ChevronDown className="h-4 w-4 opacity-50" />

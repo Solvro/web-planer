@@ -5,7 +5,9 @@ import type React from "react";
 
 export default function ClientProviders({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

@@ -5,11 +5,10 @@ import { createUsosService } from "@/lib/usos";
 
 export const revalidate = 3600;
 
-interface PageProps {
-  params: Promise<{ facultyId: string }>;
-}
-
-export async function GET(_request: Request, { params }: PageProps) {
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ facultyId: string }> },
+) {
   const { facultyId } = await params;
   const service = await createUsosService();
   return NextResponse.json(

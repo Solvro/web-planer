@@ -68,7 +68,7 @@ export const GroupsAccordionItem = ({
           </label>
         </div>
         {courses.map((course) => (
-          <div key={crypto.randomUUID()}>
+          <div key={course.id}>
             <div className="grid grid-cols-[1fr_5fr] items-center justify-between p-4 py-2 text-base transition-colors hover:cursor-pointer hover:bg-blue-100">
               <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-secondary">
                 {course.type}

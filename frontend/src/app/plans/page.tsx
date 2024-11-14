@@ -14,11 +14,11 @@ const plansAtom = atom(
     set(plansIds, values);
   },
 );
-const Plans = () => {
+export default function Plans() {
   const [plans, setPlans] = useAtom(plansAtom);
   const router = useRouter();
-  const uuid = crypto.randomUUID();
   const addNewPlan = () => {
+    const uuid = crypto.randomUUID();
     const newPlan = {
       id: uuid,
     };
@@ -46,6 +46,4 @@ const Plans = () => {
       </div>
     </div>
   );
-};
-
-export default Plans;
+}

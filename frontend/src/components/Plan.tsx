@@ -1,7 +1,9 @@
+"use client";
+
 import { useAtom } from "jotai";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 import { plansIds } from "@/atoms/plansIds";
@@ -21,6 +23,7 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId: id });
   const planToCopy = usePlan({ planId: uuid });
+  const router = useRouter();
 
   const copyPlan = () => {
     const newPlan = {
@@ -38,7 +41,7 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
     });
 
     setTimeout(() => {
-      void router.push(`/createplan/${newPlan.id}`);
+      router.push(`/createplan/${newPlan.id}`);
     }, 200);
   };
   const deletePlan = () => {

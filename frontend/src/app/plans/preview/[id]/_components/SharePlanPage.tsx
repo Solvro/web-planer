@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { usePlan } from "@/lib/usePlan";
 import { Day } from "@/services/usos/types";
 
-export default function SharePlanPage({ planId }: { planId: string }) {
+export function SharePlanPage({ planId }: { planId: string }) {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId });
