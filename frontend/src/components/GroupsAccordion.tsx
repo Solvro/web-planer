@@ -6,10 +6,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 
 import { buttonVariants } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
-import { cn } from "@/lib/utils";
 
 export const GroupsAccordionItem = ({
   registrationName,
@@ -36,15 +36,18 @@ export const GroupsAccordionItem = ({
               onDelete?.();
             }}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+              if (e.key === "Enter" || e.key === " ") {
                 e.stopPropagation();
                 onDelete?.();
               }
             }}
-            className={cn(buttonVariants({
-              size: "icon",
-              variant: "outline",
-            }), "min-h-10 min-w-10")}
+            className={cn(
+              buttonVariants({
+                size: "icon",
+                variant: "outline",
+              }),
+              "min-h-10 min-w-10",
+            )}
           >
             <XIcon className="min-h-4 min-w-6" />
           </div>

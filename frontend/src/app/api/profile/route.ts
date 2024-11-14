@@ -7,14 +7,8 @@ export const GET = async () => {
     const usos = await createUsosService();
     await usos.getProfile();
 
-    return NextResponse.json(
-      { msg: "Authorized" },
-      { status: 200 }
-    );
+    return NextResponse.json({ msg: "Authorized" }, { status: 200 });
   } catch (e) {
-    return NextResponse.json(
-      { msg: "Unauthorized" },
-      { status: 401 }
-    );
+    return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
   }
 };

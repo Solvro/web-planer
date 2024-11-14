@@ -33,7 +33,7 @@ export default function PlansLayout({
 
       {children}
 
-      <div className="flex w-full py-10 items-center justify-center bg-mainbutton7 p-2">
+      <div className="flex w-full items-center justify-center bg-mainbutton7 p-2 py-10">
         <p className="text-center text-white">
           Made with ❤️ by{" "}
           <a

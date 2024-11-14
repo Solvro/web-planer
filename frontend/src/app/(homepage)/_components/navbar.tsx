@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 
 const Logo = () => {
   return (
@@ -24,8 +24,8 @@ export const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
   return (
-    <div className="relative z-50 h-20 backdrop-blur-[12px] border-b border-white/10">
-      <div className="flex items-center justify-between container mx-auto">
+    <div className="relative z-50 h-20 border-b border-white/10 backdrop-blur-[12px]">
+      <div className="container mx-auto flex items-center justify-between">
         <Logo />
 
         <nav className="hidden h-20 flex-row items-center gap-10 pr-10 text-white md:flex lg:pr-40">
@@ -54,7 +54,10 @@ export const Navbar = () => {
 
         {/* Mobile Menu Icon */}
         <div className="flex items-center md:hidden">
-          <button onClick={toggleMenu} className="text-white focus:outline-none">
+          <button
+            onClick={toggleMenu}
+            className="text-white focus:outline-none"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-8 w-8"

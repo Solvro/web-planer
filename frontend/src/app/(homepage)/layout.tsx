@@ -1,6 +1,8 @@
 import Image from "next/image";
-import { Navbar } from "./_components/navbar";
+
 import { Footer } from "@/components/footer";
+
+import { Navbar } from "./_components/navbar";
 
 export default function LayoutHomePage({
   children,

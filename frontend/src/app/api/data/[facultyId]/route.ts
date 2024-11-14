@@ -9,10 +9,7 @@ interface PageProps {
   params: Promise<{ facultyId: string }>;
 }
 
-export async function GET(
-  _request: Request,
-  { params }: PageProps,
-) {
+export async function GET(_request: Request, { params }: PageProps) {
   const { facultyId } = await params;
   const service = await createUsosService();
   return NextResponse.json(

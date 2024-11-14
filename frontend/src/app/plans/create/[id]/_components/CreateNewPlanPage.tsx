@@ -1,7 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRef, useState } from "react";
+import { MdArrowBack } from "react-icons/md";
 
 import type { ApiFacultyDataGet } from "@/app/api/data/[facultyId]/route";
 import { type ExtendedGroup } from "@/atoms/planFamily";
@@ -10,6 +12,7 @@ import { GroupsAccordionItem } from "@/components/GroupsAccordion";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
 import { RegistrationCombobox } from "@/components/RegistrationCombobox";
 import { Accordion } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -24,9 +27,6 @@ import { faculties, lessonTypeToName } from "@/constants";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import { Day, Frequency, LessonType } from "@/services/usos/types";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { MdArrowBack } from "react-icons/md";
 
 export default function CreateNewPlanPage({ planId }: { planId: string }) {
   const plan = usePlan({
@@ -106,9 +106,11 @@ export default function CreateNewPlanPage({ planId }: { planId: string }) {
       <div className="flex w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
-            <div className="flex gap-2 items-end">
+            <div className="flex items-end gap-2">
               <Link href="/plans">
-                <Button variant="outline" size="icon"><MdArrowBack size={20} /></Button>
+                <Button variant="outline" size="icon">
+                  <MdArrowBack size={20} />
+                </Button>
               </Link>
               <form
                 className="flex w-full items-center justify-center"
@@ -127,7 +129,9 @@ export default function CreateNewPlanPage({ planId }: { planId: string }) {
                     name="name"
                     id="name"
                     placeholder="Wolne poniedziałki"
-                    defaultValue={typeof window === "undefined" ? "" : plan.name}
+                    defaultValue={
+                      typeof window === "undefined" ? "" : plan.name
+                    }
                     onChange={(e) => {
                       plan.changeName(e.currentTarget.value);
                     }}

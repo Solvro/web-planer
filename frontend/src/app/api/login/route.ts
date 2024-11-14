@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { USOS_APPS_URL } from "@/env.mjs";
@@ -11,6 +11,7 @@ export async function GET() {
     return redirect(`/`);
   }
   const token = await getRequestToken();
+  const cookies = await cookiesPromise();
 
   if (typeof token.token !== "string" || typeof token.secret !== "string") {
     return Response.json(
@@ -23,13 +24,13 @@ export async function GET() {
     );
   }
 
-  cookies().set("oauth_token", token.token, {
+  cookies.set("oauth_token", token.token, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
   });
 
-  cookies().set("oauth_token_secret", token.secret, {
+  cookies.set("oauth_token_secret", token.secret, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
