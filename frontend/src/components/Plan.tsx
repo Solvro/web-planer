@@ -41,7 +41,7 @@ export const Plan = ({ id, name }: { id: string; name: string }) => {
     });
 
     setTimeout(() => {
-      router.push(`/createplan/${newPlan.id}`);
+      router.push(`/plans/create/${newPlan.id}`);
     }, 200);
   };
   const deletePlan = () => {
