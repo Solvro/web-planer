@@ -111,8 +111,8 @@ export default function LayoutHomePage({
         </div>
       </div>
 
+      <Navbar />
       <div className="container mx-auto">
-        <Navbar />
         {children}
         <Footer />
       </div>

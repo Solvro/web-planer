@@ -24,6 +24,9 @@ import { faculties, lessonTypeToName } from "@/constants";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import { Day, Frequency, LessonType } from "@/services/usos/types";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { MdArrowBack } from "react-icons/md";
 
 export default function CreateNewPlanPage({ planId }: { planId: string }) {
   const plan = usePlan({
@@ -103,30 +106,35 @@ export default function CreateNewPlanPage({ planId }: { planId: string }) {
       <div className="flex w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
-            <form
-              className="flex w-full items-center justify-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                plan.changeName(formData.get("name")?.toString() ?? "");
-                inputRef.current?.blur();
-              }}
-            >
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="name">Nazwa</Label>
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Wolne poniedziałki"
-                  defaultValue={typeof window === "undefined" ? "" : plan.name}
-                  onChange={(e) => {
-                    plan.changeName(e.currentTarget.value);
-                  }}
-                />
-              </div>
-            </form>
+            <div className="flex gap-2 items-end">
+              <Link href="/plans">
+                <Button variant="outline" size="icon"><MdArrowBack size={20} /></Button>
+              </Link>
+              <form
+                className="flex w-full items-center justify-center"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  plan.changeName(formData.get("name")?.toString() ?? "");
+                  inputRef.current?.blur();
+                }}
+              >
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="name">Nazwa</Label>
+                  <Input
+                    ref={inputRef}
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Wolne poniedziałki"
+                    defaultValue={typeof window === "undefined" ? "" : plan.name}
+                    onChange={(e) => {
+                      plan.changeName(e.currentTarget.value);
+                    }}
+                  />
+                </div>
+              </form>
+            </div>
             <PlanDisplayLink id={plan.id} />
           </div>
         </div>
@@ -139,7 +147,7 @@ export default function CreateNewPlanPage({ planId }: { planId: string }) {
               setFaculty(v);
             }}
           >
-            <SelectTrigger className="pl-2" isLoading={registrations.isLoading}>
+            <SelectTrigger className="pl-2" disabled={registrations.isLoading}>
               <SelectValue placeholder="Wydział" />
             </SelectTrigger>
             <SelectContent className="max-w-full">
