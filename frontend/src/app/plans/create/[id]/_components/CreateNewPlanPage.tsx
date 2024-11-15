@@ -102,12 +102,17 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       }) ?? [];
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-2 md:flex-row md:items-start flex-1">
+    <div className="flex w-full flex-1 flex-col items-center justify-center gap-2 md:flex-row md:items-start">
       <div className="flex w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
             <div className="flex items-end gap-2">
-              <Button variant="outline" className="aspect-square" size="icon" asChild={true}>
+              <Button
+                variant="outline"
+                className="aspect-square"
+                size="icon"
+                asChild={true}
+              >
                 <Link href="/plans">
                   <MdArrowBack size={20} />
                 </Link>
