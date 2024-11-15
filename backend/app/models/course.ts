@@ -10,7 +10,7 @@ export default class Course extends BaseModel {
   declare name: string
 
   @column()
-  declare registrationId: number
+  declare registrationId: string
 
   @hasMany(() => Group)
   declare courses: HasMany<typeof Group>
