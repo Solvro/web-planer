@@ -1,3 +1,4 @@
+//@ts-ignore
 import scheduler from 'adonisjs-scheduler/services/main'
 import {
   scrapDepartments,
@@ -107,7 +108,7 @@ function extractLastStringInBrackets(input: string): string | null {
 
   return lastMatch
 }
-
+//@ts-ignore
 const scrapDataTest = async () => {
   console.log('Scraping departments')
   const departments = await scrapDepartments()
@@ -196,5 +197,3 @@ const scrapDataTest = async () => {
 
   console.log('Registrations scraped')
 }
-scrapDataTest()
-scheduler.call(scrapDataTest).everyTwoHours()
