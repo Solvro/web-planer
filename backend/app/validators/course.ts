@@ -6,6 +6,6 @@ export const createCourseValidator = vine.compile(
       .string()
       .unique(async (db, value) => !(await db.from('courses').where('id', value).first())),
     name: vine.string(),
-    registrationId: vine.number(),
+    registrationId: vine.string(),
   })
 )

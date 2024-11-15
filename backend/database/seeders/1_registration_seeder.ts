@@ -6,17 +6,17 @@ export default class extends BaseSeeder {
     await Registration.createMany([
       {
         name: 'W05-EBR-SI-3',
-        department: 'Wydział Elektryczny [W5]',
+        departmentId: 'Wydział Elektryczny [W5]',
         round: 1,
       },
       {
         name: 'W13-HWDP-SI-3',
-        department: 'Wydział Matematyki [W13]',
+        departmentId: 'Wydział Matematyki [W13]',
         round: 2,
       },
       {
         name: 'W4-IST-SI-3',
-        department: 'Wydział Informatyki i Telekomunikacji [W4N]',
+        departmentId: 'Wydział Informatyki i Telekomunikacji [W4N]',
         round: 1,
       },
     ])
