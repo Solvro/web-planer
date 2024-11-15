@@ -47,7 +47,7 @@ export function RegistrationCombobox({
             className="w-full justify-start truncate font-normal"
           >
             {selectedRegistrations
-              ? `${selectedRegistrations.length} rejestracji`
+              ? `${selectedRegistrations.length} wybranych`
               : "Rejestracja"}
           </Button>
         </PopoverTrigger>
@@ -73,7 +73,7 @@ export function RegistrationCombobox({
           className="w-full justify-start truncate font-normal"
         >
           {selectedRegistrations
-            ? `${selectedRegistrations.length} rejestracji`
+            ? `${selectedRegistrations.length} wybranych`
             : "Wybierz rejestracje"}
         </Button>
       </DrawerTrigger>

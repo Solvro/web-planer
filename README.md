@@ -15,11 +15,10 @@ The Solvro Planer project aims to create an intuitive and user-friendly applicat
 
 | Role                | Member             |
 | ------------------- | ------------------ |
-| Project Manager     | @Szymczek          |
-| Techlead            | @Rei-x             |
-| Fullstack Developer | @unewMe            |
+| Project Manager     | @unewMe            |
 | Fullstack Developer | @D0dii             |
 | Fullstack Developer | @olekszczepanowski |
+| Fullstack Developer | @qamarq            |
 
 ## 🚀 Technologies
 
@@ -59,7 +58,7 @@ npm install
 
 ### 3. Configure Environment
 
-Create a `.env` file in the root directory with the following content:
+Create a `.env` file in the `frontend` directory with the following content:
 
 ```env
 SITE_URL=http://localhost:3000
@@ -71,7 +70,7 @@ USOS_BASE_URL=<your-key-default-for-pwr:usos.pwr.edu.pl>
 ### 4. Run the Project
 
 ```bash
-npm run dev
+cd frontend && npm run dev
 ```
 
 ### 5. View the Application

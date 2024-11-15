@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
 
@@ -16,7 +16,9 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  const secret = cookies().get("oauth_token_secret")?.value;
+  const cookies = await cookiesPromise();
+
+  const secret = cookies.get("oauth_token_secret")?.value;
 
   if (typeof secret !== "string") {
     return new Response("Another bad request", {
@@ -24,8 +26,8 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  cookies().delete({ name: "oauth_token", path: "/" });
-  cookies().delete({
+  cookies.delete({ name: "oauth_token", path: "/" });
+  cookies.delete({
     name: "oauth_token_secret",
     path: "/",
   });
@@ -45,16 +47,16 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  cookies().set("access_token", access_token.token, {
+  cookies.set("access_token", access_token.token, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
   });
-  cookies().set("access_token_secret", access_token.secret, {
+  cookies.set("access_token_secret", access_token.secret, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
   });
 
-  return redirect("/app/plans");
+  return redirect("/plans");
 };
