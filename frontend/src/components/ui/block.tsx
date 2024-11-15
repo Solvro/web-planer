@@ -6,7 +6,7 @@ import { type ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
-const Block = ({
+export const Block = ({
   className,
   ...rest
 }: ComponentProps<(typeof motion)["div"]> & { className: string }) => {
@@ -35,5 +35,3 @@ const Block = ({
     />
   );
 };
-
-export default Block;

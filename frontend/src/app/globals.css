@@ -63,3 +63,17 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+* {
+  &::-webkit-scrollbar {
+    width: 6px; /* Szerokość scrollbara */
+    height: 6px; /* Wysokość scrollbara (dla osi X) */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #a0aec0; /* Kolor paska przewijania */
+    border-radius: 8px; /* Zaokrąglenia */
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #edf2f7; /* Kolor tła scrollbara */
+  }
+}

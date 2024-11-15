@@ -4,7 +4,7 @@ import Link from "next/link";
 import type React from "react";
 import { Suspense } from "react";
 
-import Block from "@/components/ui/block";
+import { Block } from "@/components/ui/block";
 import { buttonVariants } from "@/components/ui/button";
 import { createUsosService } from "@/lib/usos";
 import { cn } from "@/lib/utils";

@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { DeletePlanConfirmationResponsiveDialog } from "./DeletePlanConfirmationResponsiveDialog";
 import { buttonVariants } from "./ui/button";
 
-export const Plan = ({ id, name }: { id: string; name: string }) => {
+export const PlanItem = ({ id, name }: { id: string; name: string }) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId: id });
