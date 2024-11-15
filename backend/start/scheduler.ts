@@ -12,6 +12,7 @@ import Registration from '#models/registration'
 import Course from '#models/course'
 import Group from '#models/group'
 
+//@ts-ignore
 const scrapData = async () => {
   console.log('Scraping departments')
   const departments = await scrapDepartments()
