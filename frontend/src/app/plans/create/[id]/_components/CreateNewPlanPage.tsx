@@ -102,8 +102,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       }) ?? [];
 
   return (
-    <div className="flex w-full h-full flex-col items-center justify-center gap-2 py-3 md:flex-row md:items-start">
-      <div className="flex w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col h-full">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 py-3 md:flex-row md:items-start">
+      <div className="flex h-full w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
             <div className="flex items-end gap-2">
@@ -206,7 +206,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
           </div>
         ) : null}
 
-        <div className="w-full flex flex-col flex-1 overflow-y-scroll">
+        <div className="flex w-full flex-1 flex-col overflow-y-scroll">
           <Accordion type="single" collapsible={true}>
             {plan.registrations.map((registration) => (
               <GroupsAccordionItem
