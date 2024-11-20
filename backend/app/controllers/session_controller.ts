@@ -2,7 +2,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import { createClient } from '../usos/usos_client.js'
 
 export default class SessionController {
-  async store({ request, auth, response }: HttpContext) {
+  async store({ request, response }: HttpContext) {
     /**
      * Step 1: Get credentials from the request body
      */
