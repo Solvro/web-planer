@@ -20,6 +20,7 @@ export const planFamily = atomFamily(
         name: `Nowy plan`,
         courses: [] as ExtendedCourse[],
         registrations: [] as Registration[],
+        createdAt: new Date(),
       },
       undefined,
       { getOnInit: true },
