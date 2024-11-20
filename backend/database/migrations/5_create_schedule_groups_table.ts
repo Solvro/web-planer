@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('schedule_id').references('schedules.id').onDelete('CASCADE')
-      table.string('group_id').references('groups.id').onDelete('CASCADE')
+      table.integer('group_id').references('groups.id').onDelete('CASCADE')
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

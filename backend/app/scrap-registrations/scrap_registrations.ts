@@ -35,9 +35,23 @@ interface Department {
 
 const DEPARTMENTS_URL = 'https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/index'
 
-const fetchData = async (url: string) => {
-  const response = await fetch(url)
-  return response
+async function fetchData(url: string, options = {}, timeout = 10000) {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeout)
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+    clearTimeout(timeoutId)
+    return response
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out')
+    }
+    throw error
+  }
 }
 
 const scrapDepartments = async () => {
@@ -109,7 +123,8 @@ const scrapCourses = async (registrationUrl: string) => {
   const body = await response.text()
   const $ = cheerio.load(body)
 
-  const courses = $('main#layout-main-content').find('table.wrnav').find('tbody').children('tr')
+  const courses = $('main#layout-main-content').find('table').find('tbody').children('tr')
+
   courses.each((_, element) => {
     const courseUrl = $(element).find('usos-link').find('a').attr('href')
     if (courseUrl !== undefined) {
@@ -266,13 +281,13 @@ const getGroupNumber = (groupInfo: string) => {
   return match ? match[1] : '1'
 }
 
-const checkWeek = (week: string): 'TN' | 'TP' | '' => {
+const checkWeek = (week: string): 'TN' | 'TP' | '-' => {
   if (week.includes('(nieparzyste)')) {
     return 'TN'
   } else if (week.includes('(parzyste)')) {
     return 'TP'
   }
-  return ''
+  return '-'
 }
 
 const checkDay = (day: string) => {
