@@ -11,6 +11,7 @@ import Department from '#models/department'
 import Registration from '#models/registration'
 import Course from '#models/course'
 import Group from '#models/group'
+import env from './env.js'
 
 function extractLastStringInBrackets(input: string): string | null {
   const regex = /\[([^\]]+)\]/g
@@ -25,6 +26,9 @@ function extractLastStringInBrackets(input: string): string | null {
 }
 
 const scrapData = async () => {
+  if (env.get('NODE_ENV') !== 'production') {
+    return
+  }
   console.log('Scraping departments')
   const departments = await scrapDepartments()
   if (!departments) return
@@ -126,5 +130,5 @@ const scrapData = async () => {
   console.log('Groups details scraped')
 }
 
-// scrapData()
-// scheduler.call(scrapData).everyTwoHours()
+scrapData()
+scheduler.call(scrapData).everySixHours()

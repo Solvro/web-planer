@@ -51,15 +51,18 @@
     "typescript": "~5.5"
   },
   "dependencies": {
-    "@adonisjs/auth": "^9.2.3",
+    "@adonisjs/auth": "^9.2.4",
     "@adonisjs/core": "^6.12.1",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.2.0",
     "@adonisjs/session": "^7.5.0",
+    "@maximemrf/adonisjs-jwt": "^0.2.2",
     "@vinejs/vine": "^2.1.0",
     "adonisjs-scheduler": "^1.0.5",
     "cheerio": "^1.0.0",
     "luxon": "^3.5.0",
+    "node-fetch": "^3.3.2",
+    "oauth-1.0a": "^2.2.6",
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2"
   },
