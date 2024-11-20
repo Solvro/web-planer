@@ -24,6 +24,7 @@ export default class extends BaseSeeder {
         week: '-',
         day: 'Wednesday',
         type: 'W',
+        courseId: 'usos.chemistry.com',
       },
       {
         name: 'Chemistry 303',
@@ -56,7 +57,7 @@ export default class extends BaseSeeder {
         week: 'TN',
         day: 'Thursday',
         type: 'L',
-        courseId: 'usos.compsci.com',
+        courseId: 'usos.mathematics.com',
       },
     ])
   }

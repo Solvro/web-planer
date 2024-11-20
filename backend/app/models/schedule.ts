@@ -21,7 +21,7 @@ export default class Schedule extends BaseModel {
     pivotTable: 'schedule_groups',
     pivotTimestamps: true,
   })
-  declare courses: ManyToMany<typeof Group>
+  declare groups: ManyToMany<typeof Group>
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

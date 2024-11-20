@@ -5,12 +5,9 @@ export default class SchedulesController {
   /**
    * Display a list of user schedules
    */
-  async index({ params, auth }: HttpContext) {
+  async index({ params }: HttpContext) {
     const userId = params.user_id
-    const authUserId = auth.user?.id
-    if (userId !== authUserId) {
-      return 'Unauthorized access'
-    }
+
     if (userId) {
       return Schedule.query().where('userId', userId)
     }
@@ -20,30 +17,21 @@ export default class SchedulesController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, auth, params }: HttpContext) {
-    const userId = params.user_id
-    const authUserId = auth.user?.id
-    if (userId !== authUserId) {
-      return 'Unauthorized access'
-    }
+  async store({ request }: HttpContext) {
     const payload = await request.validateUsing(createScheduleValidator)
     const schedule = await Schedule.create(payload)
     return { message: 'Schedule created.', schedule }
   }
 
   /**
-   * Show schedule with matching courses
+   * Show schedule with matching groups
    */
-  async show({ params, auth }: HttpContext) {
+  async show({ params }: HttpContext) {
     const userId = params.user_id
-    const authUserId = auth.user?.id
-    if (userId !== authUserId) {
-      return
-    }
     const schedule = await Schedule.query()
       .where('id', params.id)
       .andWhere('userId', userId)
-      .preload('courses')
+      .preload('groups')
       .firstOrFail()
 
     return schedule
@@ -52,12 +40,7 @@ export default class SchedulesController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request, auth }: HttpContext) {
-    const userId = params.user_id
-    const authUserId = auth.user?.id
-    if (userId !== authUserId) {
-      return 'Unauthorized access'
-    }
+  async update({ params, request }: HttpContext) {
     const payload = await request.validateUsing(updateScheduleValidator)
     const currSchedule = await Schedule.findOrFail(params.id)
     currSchedule.merge(payload)
@@ -68,11 +51,6 @@ export default class SchedulesController {
    * Delete record
    */
   async destroy(ctx: HttpContext) {
-    const userId = ctx.params.user_id
-    const authUserId = ctx.auth.user?.id
-    if (userId !== authUserId) {
-      return 'Unauthorized access'
-    }
     const schedule = await this.show(ctx)
     if (!schedule) {
       return 'Schedule not found'
