@@ -126,5 +126,5 @@ const scrapData = async () => {
   console.log('Groups details scraped')
 }
 
-scrapData()
-scheduler.call(scrapData).everyTwoHours()
+// scrapData()
+// scheduler.call(scrapData).everyTwoHours()

@@ -6,8 +6,12 @@ export default class RegistrationsController {
   /**
    * Display a list of all registrations
    */
-  async index({}: HttpContext) {
-    return Registration.query()
+  async index({ params }: HttpContext) {
+    const departmentId = params.department_id
+    if (departmentId) {
+      return Registration.query().where('departmentId', departmentId)
+    }
+    return {}
   }
 
   /**

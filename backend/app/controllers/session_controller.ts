@@ -21,6 +21,6 @@ export default class SessionController {
     /**
      * Step 4: Send them to a protected route
      */
-    response.redirect(`users/${id}/schedules`)
+    console.log(response)
   }
 }
