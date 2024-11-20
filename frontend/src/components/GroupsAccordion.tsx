@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import { XIcon } from "lucide-react";
 
 import type { ExtendedCourse } from "@/atoms/planFamily";
@@ -28,8 +29,7 @@ export const GroupsAccordionItem = ({
     <AccordionItem value={registrationName}>
       <AccordionTrigger className="px-4 hover:no-underline">
         <div className="flex items-center gap-4">
-          <div
-            role="button"
+          <Slot
             tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
@@ -50,7 +50,7 @@ export const GroupsAccordionItem = ({
             )}
           >
             <XIcon className="min-h-4 min-w-6" />
-          </div>
+          </Slot>
           <span className="text-left text-sm">{registrationName}</span>
         </div>
       </AccordionTrigger>
