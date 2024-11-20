@@ -7,7 +7,6 @@ export default class SessionController {
      * Step 1: Get credentials from the request body
      */
     const { accessToken, accessSecret } = request.only(['accessToken', 'accessSecret'])
-
     try {
       const usosClient = createClient({
         token: accessToken,
@@ -23,5 +22,6 @@ export default class SessionController {
     } catch (error) {
       return response.unauthorized({ accessToken, accessSecret })
     }
+
   }
 }
