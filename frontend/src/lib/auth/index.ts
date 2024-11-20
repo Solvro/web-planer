@@ -2,6 +2,8 @@ import crypto from "crypto";
 import OAuth from "oauth-1.0a";
 
 import { env } from "@/env.mjs";
+import { createUsosService } from "../usos";
+import type { GetProfile } from "@/services/usos/getProfile";
 
 export const oauth = new OAuth({
   consumer: { key: env.USOS_CONSUMER_KEY, secret: env.USOS_CONSUMER_SECRET },
@@ -85,4 +87,10 @@ export async function getRequestToken() {
     token: params.get("oauth_token"),
     secret: params.get("oauth_token_secret"),
   };
+}
+
+export const userProfile = async (): Promise<GetProfile> => {
+  const usos = await createUsosService();
+  const profile = await usos.getProfile();
+  return profile;
 }
