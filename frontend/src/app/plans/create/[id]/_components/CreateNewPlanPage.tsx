@@ -102,8 +102,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       }) ?? [];
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2 py-3 md:flex-row md:items-start">
-      <div className="flex h-full w-full max-w-[350px] flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-4/12 md:flex-col">
+    <div className="flex w-full flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
+      <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
             <div className="flex items-end gap-2">
@@ -229,9 +229,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
           </Accordion>
         </div>
       </div>
-      <hr />
-      <div className="ml-2 flex w-full items-start overflow-x-auto md:ml-0">
-        <div className="overflow-x flex flex-col gap-3 overflow-auto scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
+      <div className="ml-2 flex grow items-start overflow-x-scroll md:ml-0">
+        <div className="flex flex-col gap-3">
           {[
             { day: Day.MONDAY, label: "Poniedziałek" },
             { day: Day.TUESDAY, label: "Wtorek" },

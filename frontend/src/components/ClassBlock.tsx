@@ -64,7 +64,7 @@ export const ClassBlock = ({
       className={cn(
         position,
         typeClasses[courseType],
-        `relative flex flex-col truncate rounded-lg p-2 shadow-md`,
+        `relative flex flex-col truncate rounded-md p-2 shadow-md`,
         isChecked
           ? "cursor-pointer"
           : isDisabled
