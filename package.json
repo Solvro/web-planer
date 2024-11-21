@@ -15,5 +15,8 @@
   "devDependencies": {
     "husky": "^9.1.5",
     "lint-staged": "^15.2.10"
+  },
+  "dependencies": {
+    "adonis-autoswagger": "^3.64.0"
   }
 }
