@@ -16,8 +16,8 @@ The Solvro Planer project aims to create an intuitive and user-friendly applicat
 | Role                | Member             |
 | ------------------- | ------------------ |
 | Project Manager     | @unewMe            |
-| Fullstack Developer | @D0dii             |
-| Fullstack Developer | @olekszczepanowski |
+| Fullstack Developer / Commander of the Unexpected | @D0dii             |
+| Fullstack Developer / Solution Wizard | @olekszczepanowski |
 | Fullstack Developer / Engineer of the Impossible / Everyday Superhero | @qamarq            |
 
 ## 🚀 Technologies
