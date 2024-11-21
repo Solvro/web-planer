@@ -11,5 +11,9 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
+  app:
+    build: .
+    command: sh -c "node ace migration:run --force && node server.js"
+
 volumes:
   db-data:
