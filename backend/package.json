@@ -58,6 +58,7 @@
     "@adonisjs/session": "^7.5.0",
     "@maximemrf/adonisjs-jwt": "^0.2.2",
     "@vinejs/vine": "^2.1.0",
+    "adonis-autoswagger": "^3.64.0",
     "adonisjs-scheduler": "^1.0.5",
     "cheerio": "^1.0.0",
     "luxon": "^3.5.0",
