@@ -12,6 +12,43 @@ import Registration from '#models/registration'
 import Course from '#models/course'
 import Group from '#models/group'
 import env from './env.js'
+import db from '@adonisjs/lucid/services/db'
+
+async function hasTable(tableName: string): Promise<boolean> {
+  const query = db.rawQuery(
+    `SELECT * 
+     FROM information_schema.tables 
+     WHERE table_name = ? 
+     AND table_schema = ?`,
+    [tableName, db.config.connection!]
+  )
+
+  const result = await query
+  return result.rows.length > 0
+}
+
+async function migrationComplete(): Promise<boolean> {
+  const requiredTables = [
+    'departments',
+    'registrations',
+    'courses',
+    'groups',
+    'users',
+    'schedules',
+    'schedule_groups',
+  ]
+
+  for (const table of requiredTables) {
+    const exists = await hasTable(table)
+    if (!exists) {
+      console.log(`Table "${table}" is missing.`)
+      return false
+    }
+  }
+
+  console.log('All required tables are present.')
+  return true
+}
 
 function extractLastStringInBrackets(input: string): string | null {
   const regex = /\[([^\]]+)\]/g
@@ -128,6 +165,11 @@ const scrapData = async () => {
     }
   }
   console.log('Groups details scraped')
+}
+
+while (!(await migrationComplete())) {
+  console.log('Waiting for migrations to complete...')
+  await new Promise((resolve) => setTimeout(resolve, 5000))
 }
 
 scrapData()
