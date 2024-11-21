@@ -23,11 +23,8 @@ export default class DepartmentsController {
    * Show individual record
    */
   async show({ params }: HttpContext) {
-    const departmentId = params.department_id
-    if (departmentId) {
-      return await Department.query().where('departmentId', departmentId).andWhere('id', params.id)
-    }
-    return {}
+    return await Department.findOrFail(params.id)
+
   }
 
   /**
