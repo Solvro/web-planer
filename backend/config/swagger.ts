@@ -6,14 +6,14 @@ import url from 'node:url'
 export default {
   // path: __dirname + "/../", for AdonisJS v5
   path: path.dirname(url.fileURLToPath(import.meta.url)) + '/../', // for AdonisJS v6
-  title: 'Foo', // use info instead
-  version: '1.0.0', // use info instead
-  description: '', // use info instead
+  title: 'Planer v1.5 API Docs', // use info instead
+  version: '1.5.1', // use info instead
+  description: 'The best planning tool for students. Made with <3', // use info instead
   tagIndex: 2,
   info: {
-    title: 'title',
-    version: '1.0.0',
-    description: '',
+    title: 'Planer v1.5 API Docs',
+    version: '1.5.1',
+    description: 'The best planning tool for students. Made with <3',
   },
   snakeCase: true,
 
