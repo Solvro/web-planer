@@ -95,54 +95,6 @@ export function CreateNewPlanPage({
     },
   });
 
-  // const allRegistrations =
-  //   registrations.data
-  //     ?.map((r) => ({
-  //       name: registrationReplacer(r.registration.description.pl),
-  //       id: r.registration.id,
-  //       courses: r.courses.map((c) => ({
-  //         id: c.course.id,
-  //         name: c.course.name,
-  //         isChecked: false,
-  //         registrationId: r.registration.id,
-  //         type: lessonTypeToName(c.groups.at(0)?.type ?? ("" as LessonType)),
-  //         groups: c.groups.map(
-  //           (g) =>
-  //             ({
-  //               groupId: g.groupNumber + c.course.id + g.type,
-  //               groupNumber: g.groupNumber.toString(),
-  //               courseId: c.course.id,
-  //               courseName: c.course.name,
-  //               isChecked: false,
-  //               courseType:
-  //                 g.type === LessonType.EXERCISES
-  //                   ? "C"
-  //                   : g.type === LessonType.LABORATORY
-  //                     ? "L"
-  //                     : g.type === LessonType.PROJECT
-  //                       ? "P"
-  //                       : g.type === LessonType.SEMINAR
-  //                         ? "S"
-  //                         : "W",
-  //               day: g.day,
-  //               lecturer: g.person,
-  //               registrationId: r.registration.id,
-  //               week:
-  //                 g.frequency === Frequency.EVEN
-  //                   ? "TP"
-  //                   : g.frequency === Frequency.ODD
-  //                     ? "TN"
-  //                     : "",
-  //               endTime: `${g.hourEndTime.hours}:${g.hourEndTime.minutes}`,
-  //               startTime: `${g.hourStartTime.hours}:${g.hourStartTime.minutes}`,
-  //             }) satisfies ExtendedGroup,
-  //         ),
-  //       })),
-  //     }))
-  //     .sort((a, b) => {
-  //       return a.name.localeCompare(b.name);
-  //     }) ?? [];
-
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
