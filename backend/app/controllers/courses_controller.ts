@@ -33,6 +33,7 @@ export default class CoursesController {
       return await Course.query()
         .where('registrationId', registrationId)
         .andWhere('id', params.id)
+        .preload('groups')
         .firstOrFail()
     }
     return {}

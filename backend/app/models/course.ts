@@ -13,7 +13,7 @@ export default class Course extends BaseModel {
   declare registrationId: string
 
   @hasMany(() => Group)
-  declare courses: HasMany<typeof Group>
+  declare groups: HasMany<typeof Group>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
