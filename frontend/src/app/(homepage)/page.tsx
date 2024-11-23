@@ -66,20 +66,37 @@ const JoinUsBlock = async () => {
     );
   } catch (e) {
     return (
-      <Link
-        href="/api/login"
-        data-umami-event="Landing - Go to planning"
-        className={buttonVariants({
-          size: "lg",
-          variant: "outline",
-          className: cn(
-            "h-20 cursor-wait self-center border-4 text-xl transition-all duration-300 md:mt-0 md:p-7",
-            "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
-          ),
-        })}
-      >
-        Zaloguj się
-      </Link>
+      <div className="flex items-center gap-6">
+        <Link
+          href="/api/login"
+          data-umami-event="Landing - Go to login"
+          className={buttonVariants({
+            size: "lg",
+            variant: "outline",
+            className: cn(
+              "h-20 cursor-wait self-center border-4 text-xl transition-all duration-300 md:mt-0 md:p-7",
+              "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+            ),
+          })}
+        >
+          Zaloguj się
+        </Link>
+        <p className="text-sm text-white">lub</p>
+        <Link
+          href="/plans"
+          data-umami-event="Landing - Go to planning wihout login"
+          className={buttonVariants({
+            size: "lg",
+            variant: "outline",
+            className: cn(
+              "h-20 cursor-wait self-center border-4 text-xl transition-all duration-300 md:mt-0 md:p-7",
+              "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+            ),
+          })}
+        >
+          Kontynuuj bez logowania
+        </Link>
+      </div>
     );
   }
 };
