@@ -9,7 +9,7 @@ export default class CoursesController {
   async index({ params }: HttpContext) {
     const registrationId = decodeURIComponent(params.registration_id)
     if (registrationId) {
-      return await Course.query().where('registrationId', registrationId)
+      return await Course.query().where('registrationId', registrationId).preload('courses')
     }
     return []
   }
