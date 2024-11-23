@@ -1,12 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 
-import type { ApiFacultyDataGet } from "@/app/api/data/[facultyId]/route";
-import { type ExtendedGroup } from "@/atoms/planFamily";
+import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { GroupsAccordionItem } from "@/components/GroupsAccordion";
 import { PlanDisplayLink } from "@/components/PlanDisplayLink";
@@ -23,12 +22,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { faculties, lessonTypeToName } from "@/constants";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
-import { Day, Frequency, LessonType } from "@/services/usos/types";
+import type { LessonType } from "@/services/usos/types";
+import { Day } from "@/services/usos/types";
 
-export function CreateNewPlanPage({ planId }: { planId: string }) {
+type CourseType = Array<{
+  id: string;
+  name: string;
+  registrationId: string;
+  groups: Array<{
+    id: number;
+    name: string;
+    startTime: string;
+    endTime: string;
+    group: string;
+    lecturer: string;
+    week: "-" | "TN" | "TP";
+    day: Day;
+    type: "C" | "L" | "P" | "S" | "W";
+    url: string;
+    courseId: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+}>;
+
+type FacultyType = Array<{ id: string; name: string; departmentId: string }>;
+
+export function CreateNewPlanPage({
+  planId,
+  faculties,
+}: {
+  planId: string;
+  faculties: Array<{ name: string; value: string }>;
+}) {
   const plan = usePlan({
     planId,
   });
@@ -41,68 +69,82 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `/api/data/${encodeURIComponent(faculty ?? "")}`,
+        `https://planer.solvro.pl/api/v1/departments/${faculty}/registrations`,
       );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
-      return response.json() as Promise<ApiFacultyDataGet>;
+      return response.json() as Promise<FacultyType>;
     },
-    select: (d) => d.registrations,
   });
 
-  const allRegistrations =
-    registrations.data
-      ?.map((r) => ({
-        name: registrationReplacer(r.registration.description.pl),
-        id: r.registration.id,
-        courses: r.courses.map((c) => ({
-          id: c.course.id,
-          name: c.course.name,
-          isChecked: false,
-          registrationId: r.registration.id,
-          type: lessonTypeToName(c.groups.at(0)?.type ?? ("" as LessonType)),
-          groups: c.groups.map(
-            (g) =>
-              ({
-                groupId: g.groupNumber + c.course.id + g.type,
-                groupNumber: g.groupNumber.toString(),
-                courseId: c.course.id,
-                courseName: c.course.name,
-                isChecked: false,
-                courseType:
-                  g.type === LessonType.EXERCISES
-                    ? "C"
-                    : g.type === LessonType.LABORATORY
-                      ? "L"
-                      : g.type === LessonType.PROJECT
-                        ? "P"
-                        : g.type === LessonType.SEMINAR
-                          ? "S"
-                          : "W",
-                day: g.day,
-                lecturer: g.person,
-                registrationId: r.registration.id,
-                week:
-                  g.frequency === Frequency.EVEN
-                    ? "TP"
-                    : g.frequency === Frequency.ODD
-                      ? "TN"
-                      : "",
-                endTime: `${g.hourEndTime.hours}:${g.hourEndTime.minutes}`,
-                startTime: `${g.hourStartTime.hours}:${g.hourStartTime.minutes}`,
-              }) satisfies ExtendedGroup,
-          ),
-        })),
-      }))
-      .sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      }) ?? [];
+  const coursesFn = useMutation({
+    mutationKey: ["courses"],
+    mutationFn: async (registrationId: string) => {
+      const response = await fetch(
+        `https://planer.solvro.pl/api/v1/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.json() as Promise<CourseType>;
+    },
+  });
+
+  // const allRegistrations =
+  //   registrations.data
+  //     ?.map((r) => ({
+  //       name: registrationReplacer(r.registration.description.pl),
+  //       id: r.registration.id,
+  //       courses: r.courses.map((c) => ({
+  //         id: c.course.id,
+  //         name: c.course.name,
+  //         isChecked: false,
+  //         registrationId: r.registration.id,
+  //         type: lessonTypeToName(c.groups.at(0)?.type ?? ("" as LessonType)),
+  //         groups: c.groups.map(
+  //           (g) =>
+  //             ({
+  //               groupId: g.groupNumber + c.course.id + g.type,
+  //               groupNumber: g.groupNumber.toString(),
+  //               courseId: c.course.id,
+  //               courseName: c.course.name,
+  //               isChecked: false,
+  //               courseType:
+  //                 g.type === LessonType.EXERCISES
+  //                   ? "C"
+  //                   : g.type === LessonType.LABORATORY
+  //                     ? "L"
+  //                     : g.type === LessonType.PROJECT
+  //                       ? "P"
+  //                       : g.type === LessonType.SEMINAR
+  //                         ? "S"
+  //                         : "W",
+  //               day: g.day,
+  //               lecturer: g.person,
+  //               registrationId: r.registration.id,
+  //               week:
+  //                 g.frequency === Frequency.EVEN
+  //                   ? "TP"
+  //                   : g.frequency === Frequency.ODD
+  //                     ? "TN"
+  //                     : "",
+  //               endTime: `${g.hourEndTime.hours}:${g.hourEndTime.minutes}`,
+  //               startTime: `${g.hourStartTime.hours}:${g.hourStartTime.minutes}`,
+  //             }) satisfies ExtendedGroup,
+  //         ),
+  //       })),
+  //     }))
+  //     .sort((a, b) => {
+  //       return a.name.localeCompare(b.name);
+  //     }) ?? [];
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
+    <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-2">
@@ -166,7 +208,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
                   key={f.value}
                   value={f.value}
                 >
-                  {f.name}
+                  {registrationReplacer(f.name)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -174,33 +216,81 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
         </div>
         {registrations.isLoading ? (
           <Skeleton className="h-[40px] w-full rounded-sm" />
-        ) : allRegistrations.length > 0 ? (
+        ) : registrations.data && registrations.data.length > 0 ? (
           <div className="w-full">
             <Label htmlFor="registration">Rejestracja</Label>
             <RegistrationCombobox
               name="registration"
-              registrations={allRegistrations.map((r) => ({
+              registrations={registrations.data.map((r) => ({
                 value: r.id,
-                label: r.name,
+                label: registrationReplacer(r.name),
               }))}
               selectedRegistrations={plan.registrations.map((r) => r.id)}
               onSelect={(registrationId) => {
-                const registration = allRegistrations.find(
+                const selectedRegistration = registrations.data.find(
                   (r) => r.id === registrationId,
                 );
-                if (registration === undefined) {
+                if (selectedRegistration === undefined) {
                   return;
                 }
 
-                if (plan.registrations.some((r) => r.id === registration.id)) {
-                  plan.removeRegistration(registration.id);
+                if (
+                  plan.registrations.some(
+                    (r) => r.id === selectedRegistration.id,
+                  )
+                ) {
+                  plan.removeRegistration(selectedRegistration.id);
                 } else {
-                  plan.addRegistration(registration, registration.courses);
+                  coursesFn.mutate(selectedRegistration.id, {
+                    onSuccess: (data) => {
+                      const extendedCourses: ExtendedCourse[] = data
+                        .map((c) => ({
+                          id: c.id,
+                          name: c.name,
+                          isChecked: false,
+                          registrationId: c.registrationId,
+                          type: c.groups.at(0)?.type ?? ("" as LessonType),
+                          groups: c.groups.map(
+                            (g) =>
+                              ({
+                                groupId: g.group + c.id + g.type,
+                                groupNumber: g.group.toString(),
+                                courseId: c.id,
+                                courseName: c.name,
+                                isChecked: false,
+                                courseType: g.type,
+                                day: g.day,
+                                lecturer: g.lecturer,
+                                registrationId: c.registrationId,
+                                week: g.week.replace("-", "") as
+                                  | ""
+                                  | "TN"
+                                  | "TP",
+                                endTime: g.endTime
+                                  .split(":")
+                                  .slice(0, 2)
+                                  .join(":"),
+                                startTime: g.startTime
+                                  .split(":")
+                                  .slice(0, 2)
+                                  .join(":"),
+                              }) satisfies ExtendedGroup,
+                          ),
+                        }))
+                        .sort((a, b) => {
+                          return a.name.localeCompare(b.name);
+                        });
+                      plan.addRegistration(
+                        selectedRegistration,
+                        extendedCourses,
+                      );
+                    },
+                  });
                 }
               }}
             />
           </div>
-        ) : allRegistrations.length === 0 ? (
+        ) : registrations.data && registrations.data.length === 0 ? (
           <div className="w-full items-center justify-center">
             <p className="text-center">Brak wybranych</p>
           </div>
@@ -211,7 +301,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
             {plan.registrations.map((registration) => (
               <GroupsAccordionItem
                 key={registration.id}
-                registrationName={registration.name}
+                registrationName={registrationReplacer(registration.name)}
                 onCourseCheck={(courseId) => {
                   plan.selectCourse(courseId);
                 }}
@@ -242,7 +332,9 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
               key={day}
               day={label}
               selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
-              groups={plan.allGroups.filter((g) => g.day === day)}
+              groups={plan.allGroups.filter(
+                (g) => g.day.toLocaleLowerCase() === day,
+              )}
               onSelectGroup={(groupdId) => {
                 plan.selectGroup(groupdId);
               }}

@@ -8,9 +8,7 @@ export function middleware(request: NextRequest) {
     fetch,
   };
 
-  const isProtectedRoute =
-    request.nextUrl.pathname.startsWith("/account") ||
-    request.nextUrl.pathname.startsWith("/plans");
+  const isProtectedRoute = request.nextUrl.pathname.startsWith("/account");
 
   if (!isProtectedRoute) {
     return NextResponse.next();

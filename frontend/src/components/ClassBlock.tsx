@@ -2,7 +2,7 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-const typeClasses = {
+export const typeClasses = {
   W: "bg-red-300",
   L: "bg-blue-300",
   C: "bg-green-300",

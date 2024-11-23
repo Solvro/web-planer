@@ -6,7 +6,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 
+import { typeClasses } from "./ClassBlock";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
@@ -58,10 +60,15 @@ export const GroupsAccordionItem = ({
         {courses.map((course) => (
           <div key={course.id}>
             <div className="grid grid-cols-[1fr_5fr] items-center justify-between p-4 py-2 text-base transition-colors hover:cursor-pointer hover:bg-blue-100">
-              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-[50px] bg-secondary">
+              <div
+                className={cn(
+                  "flex size-[45px] items-center justify-center rounded-full bg-secondary",
+                  typeClasses[course.type as keyof typeof typeClasses],
+                )}
+              >
                 {course.type}
               </div>
-              <label className="ml-4 flex h-full items-center justify-between text-wrap hover:cursor-pointer">
+              <label className="ml-4 flex h-full items-center justify-between text-wrap leading-tight hover:cursor-pointer">
                 {course.name}
 
                 <Checkbox
