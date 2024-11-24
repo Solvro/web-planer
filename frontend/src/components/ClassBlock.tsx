@@ -2,7 +2,7 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-const typeClasses = {
+export const typeClasses = {
   W: "bg-red-300",
   L: "bg-blue-300",
   C: "bg-green-300",
@@ -64,7 +64,7 @@ export const ClassBlock = ({
       className={cn(
         position,
         typeClasses[courseType],
-        `relative flex flex-col truncate rounded-lg p-2 shadow-md`,
+        `relative flex flex-col truncate rounded-md p-2 shadow-md`,
         isChecked
           ? "cursor-pointer"
           : isDisabled

@@ -1,10 +1,4 @@
-import type { NextResponse } from "next/server";
-
 import type { Day } from "@/services/usos/types";
-
-export type ApiResponse<
-  T extends (...args: never[]) => NextResponse | Promise<NextResponse>,
-> = Awaited<ReturnType<T>> extends NextResponse<infer Y> ? Y : never;
 
 export interface ClassBlockProps {
   startTime: string;

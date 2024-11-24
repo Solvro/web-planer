@@ -1,19 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 const Logo = () => {
   return (
-    <a href="https://solvro.pwr.edu.pl/">
+    <Link href="https://solvro.pwr.edu.pl/">
       <Image
         src="/assets/logo/solvro_white.png"
         alt="Logo Koła Naukowego Solvro"
         width={150}
         height={150}
-        className="mx-auto ml-20 cursor-pointer"
+        className="mx-auto cursor-pointer"
       />
-    </a>
+    </Link>
   );
 };
 
@@ -25,29 +26,28 @@ export const Navbar = () => {
   };
   return (
     <div className="relative z-50 h-20 border-b border-white/10 backdrop-blur-[12px]">
-      <div className="container mx-auto flex items-center justify-between">
+      <div className="container mx-auto flex items-center justify-between px-20">
         <Logo />
 
-        <nav className="hidden h-20 flex-row items-center gap-10 pr-10 text-white md:flex lg:pr-40">
+        <nav className="hidden h-20 items-center text-white md:flex">
           <ul className="flex gap-6">
-            <li className="cursor-pointer">
-              <a href="https://www.facebook.com/knsolvro">Aktualności</a>
+            <li>
+              <Link href="https://www.facebook.com/knsolvro">Aktualności</Link>
             </li>
 
-            <li className="cursor-pointer">
-              <a
-                target="_blank"
+            <li>
+              <Link
                 href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
-                rel="noreferrer"
+                target="_blank"
               >
                 Terminarz USOS
-              </a>
+              </Link>
             </li>
-            <li className="cursor-pointer">
-              <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+            <li>
+              <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
             </li>
-            <li className="cursor-pointer">
-              <a href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</a>
+            <li>
+              <Link href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</Link>
             </li>
           </ul>
         </nav>
@@ -79,24 +79,28 @@ export const Navbar = () => {
         {isMenuOpen ? (
           <div className="absolute left-0 top-full w-full animate-fade-in bg-mainbutton6 shadow-lg md:hidden">
             <ul className="flex flex-col gap-4 p-4 text-center uppercase text-white">
-              <li className="cursor-pointer p-2">
-                <a href="https://www.facebook.com/knsolvro">Aktualności</a>
+              <li className="p-2">
+                <Link href="https://www.facebook.com/knsolvro">
+                  Aktualności
+                </Link>
               </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
+              <li className="p-2">
+                <Link href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
                   Instrukcje
-                </a>
+                </Link>
               </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
+              <li className="p-2">
+                <Link href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
                   Terminarz
-                </a>
+                </Link>
               </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://solvro.pwr.edu.pl/contact/">Kontakt</a>
+              <li className="p-2">
+                <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
               </li>
-              <li className="cursor-pointer p-2">
-                <a href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</a>
+              <li className="p-2">
+                <Link href="https://forms.gle/4tBCPkLMFKptB1iZ7">
+                  Zgłoś błąd
+                </Link>
               </li>
             </ul>
           </div>

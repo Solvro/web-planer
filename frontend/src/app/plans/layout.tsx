@@ -1,9 +1,6 @@
-import Link from "next/link";
 import type React from "react";
 
-import { SolvroLogo } from "@/components/SolvroLogo";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { PlansTopbar } from "./_components/PlansTopbar";
 
 export default function PlansLayout({
   children,
@@ -12,26 +9,7 @@ export default function PlansLayout({
 }) {
   return (
     <div className="flex h-screen min-h-screen flex-col items-center overflow-x-hidden">
-      <div className="flex w-full items-center justify-between bg-mainbutton7 py-4 shadow-sm">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="ml-4 flex items-center gap-2 text-2xl font-bold text-white md:w-1/4">
-            <SolvroLogo />
-            <div className="md:hidden">Kreator</div>
-          </div>
-          <div className="hidden w-1/2 items-center justify-center font-bold text-white md:flex md:text-3xl">
-            Kreator
-          </div>
-          <div className="mr-4 flex w-1/4 items-center justify-end">
-            <Link
-              href="/plans"
-              data-umami-event="Back to plans"
-              className={cn(buttonVariants({ variant: "link" }), "text-white")}
-            >
-              <span className="text-nowrap">Moje plany</span>
-            </Link>
-          </div>
-        </div>
-      </div>
+      <PlansTopbar />
 
       {children}
 

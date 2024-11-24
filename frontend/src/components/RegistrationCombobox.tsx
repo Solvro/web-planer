@@ -108,9 +108,12 @@ const RegistrationList = ({
           {allRegistrations.map((option) => (
             <CommandItem
               key={option.value}
-              value={option.value}
+              value={option.label}
               onSelect={(value) => {
-                setSelectedRegistrationId(value);
+                const id = allRegistrations.find(
+                  (r) => r.label === value,
+                )?.value;
+                setSelectedRegistrationId(id ?? "");
               }}
             >
               {option.label}

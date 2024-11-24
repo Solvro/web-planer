@@ -18,5 +18,35 @@ export default async function CreateNewPlan({ params }: PageProps) {
     return notFound();
   }
 
-  return <CreateNewPlanPage planId={id} />;
+  const facultiesRes = (await fetch(
+    "https://planer.solvro.pl/api/v1/departments",
+  ).then((r) => r.json())) as Array<{ id: string; name: string }> | null;
+  if (!facultiesRes) {
+    return notFound();
+  }
+
+  const faculties = facultiesRes
+    .map((f) => {
+      return { name: f.name, value: f.id };
+    })
+    .sort((a, b) => {
+      const extractNumber = (value: string): number | null => {
+        const match = /W(\d+)/.exec(value);
+        return match ? parseInt(match[1], 10) : null;
+      };
+
+      const numA = extractNumber(a.value);
+      const numB = extractNumber(b.value);
+
+      if (numA !== null && numB !== null) {
+        return numA - numB;
+      } else if (numA !== null) {
+        return -1;
+      } else if (numB !== null) {
+        return 1;
+      }
+      return a.value.localeCompare(b.value);
+    });
+
+  return <CreateNewPlanPage planId={id} faculties={faculties} />;
 }
