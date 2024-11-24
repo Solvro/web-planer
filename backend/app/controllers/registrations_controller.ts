@@ -27,26 +27,52 @@ export default class RegistrationsController {
    * Show individual registration
    */
   async show({ params }: HttpContext) {
-    return await Registration.findOrFail(params.id)
+    const departmentId = decodeURIComponent(params.department_id)
+    const registrationId = decodeURIComponent(params.id)
+
+    if (departmentId && registrationId) {
+      return await Registration.query()
+        .where('departmentId', departmentId)
+        .andWhere('id', registrationId)
+    }
+
+    return {}
   }
 
   /**
    * Handle form submission for the edit action
    */
   async update({ params, request }: HttpContext) {
+    const departmentId = decodeURIComponent(params.department_id)
+    const registrationId = decodeURIComponent(params.id)
+
     const payload = await request.validateUsing(createRegistrationValidator)
-    const currRegistration = await Registration.findOrFail(params.id)
+
+    const currRegistration = await Registration.query()
+      .where('departmentId', departmentId)
+      .andWhere('id', registrationId)
+      .firstOrFail()
+
     currRegistration.merge(payload)
     await currRegistration.save()
+
     return { message: 'Registration updated successfully.', currRegistration }
   }
 
   /**
    * Delete record
    */
-  async destroy(ctx: HttpContext) {
-    const registration = await this.show(ctx)
+  async destroy({ params }: HttpContext) {
+    const departmentId = decodeURIComponent(params.department_id)
+    const registrationId = decodeURIComponent(params.id)
+
+    const registration = await Registration.query()
+      .where('departmentId', departmentId)
+      .andWhere('id', registrationId)
+      .firstOrFail()
+
     await registration.delete()
+
     return { message: 'Registration successfully deleted.' }
   }
 }

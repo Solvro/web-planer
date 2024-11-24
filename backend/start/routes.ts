@@ -7,6 +7,9 @@
 |
 */
 
+import AutoSwagger from 'adonis-autoswagger'
+import swagger from '#config/swagger'
+
 import router from '@adonisjs/core/services/router'
 // import { middleware } from './kernel.js'
 const DepartmentsController = () => import('#controllers/departments_controller')
@@ -17,6 +20,17 @@ const ScheduleGroupsController = () => import('#controllers/schedule_groups_cont
 const RegistrationsController = () => import('#controllers/registrations_controller')
 const CoursesController = () => import('#controllers/courses_controller')
 const GroupsController = () => import('#controllers/groups_controller')
+
+router.get('/swagger', async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger)
+})
+
+// Renders Swagger-UI and passes YAML-output of /swagger
+router.get('/docs', async () => {
+  return AutoSwagger.default.ui('/swagger', swagger)
+  // return AutoSwagger.default.scalar("/swagger"); to use Scalar instead
+  // return AutoSwagger.default.rapidoc("/swagger", "view"); to use RapiDoc instead (pass "view" default, or "read" to change the render-style)
+})
 
 router.resource('users', UsersController).apiOnly()
 router.resource('users.schedules', SchedulesController).apiOnly()

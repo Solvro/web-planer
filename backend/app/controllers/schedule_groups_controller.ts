@@ -24,6 +24,16 @@ export default class ScheduleGroupsController {
     const schedule = await Schedule.findOrFail(scheduleId)
     const group = await Group.findOrFail(groupId)
 
+    const isAlreadyAttached = await schedule
+      .related('groups')
+      .query()
+      .where('group_id', groupId)
+      .first()
+
+    if (isAlreadyAttached) {
+      return { message: 'Group is already added to this schedule.' }
+    }
+
     await schedule.related('groups').attach([group.id])
 
     return { message: 'Group added to schedule successfully.' }
