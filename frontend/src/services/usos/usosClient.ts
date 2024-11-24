@@ -1,6 +1,5 @@
-import 'server-only'
-
 import fetch from "node-fetch";
+
 import { USOS_APPS_URL } from "@/env.mjs";
 import { oauth } from "@/lib/auth";
 
@@ -17,9 +16,7 @@ export const createClient = ({
     throw new Error("No token or secret provided");
   }
   return {
-    async get<R = unknown>(
-      endpoint: string,
-    ): Promise<R> {
+    async get<R = unknown>(endpoint: string): Promise<R> {
       const url = `${baseUrl}/${endpoint}`;
 
       const data = oauth.authorize(
@@ -49,7 +46,7 @@ export const createClient = ({
         throw new Error("Unauthorized");
       }
 
-      const json = await response.json() as R;
+      const json = (await response.json()) as R;
 
       return json as Promise<R>;
     },

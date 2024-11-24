@@ -55,7 +55,7 @@ export const GET = async (request: NextRequest) => {
 
   const tokens = {
     token: access_token.token,
-    secret: access_token.secret
+    secret: access_token.secret,
   };
 
   const usos = usosService(createClient(tokens));
