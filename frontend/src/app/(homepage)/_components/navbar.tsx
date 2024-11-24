@@ -53,7 +53,7 @@ export const Navbar = () => {
         </nav>
 
         {/* Mobile Menu Icon */}
-        <div className="flex items-center md:hidden">
+        <div className="flex h-20 items-center md:hidden">
           <button
             onClick={toggleMenu}
             className="text-white focus:outline-none"

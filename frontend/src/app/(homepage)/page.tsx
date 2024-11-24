@@ -66,10 +66,11 @@ const JoinUsBlock = async () => {
     );
   } catch (e) {
     return (
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
         <Link
           href="/api/login"
           data-umami-event="Landing - Go to login"
+          prefetch={false}
           className={buttonVariants({
             size: "lg",
             variant: "outline",
@@ -112,7 +113,7 @@ export default function HomePage() {
       <section className="flex justify-center">
         <Block className="flex flex-col items-center justify-center gap-6 md:gap-10">
           <div className="">
-            <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
+            <h1 className="text-center text-4xl font-medium leading-tight">
               <span className="font-inter tracking-wide text-white animate-in">
                 Stwórz swój plan używając{" "}
                 <span className="font-bold uppercase">darmowego</span>{" "}
@@ -121,7 +122,7 @@ export default function HomePage() {
             </h1>
           </div>
           <div className="">
-            <p className="text-center text-white md:mr-4 md:text-2xl">
+            <p className="text-balance text-center text-white md:mr-4 md:text-2xl">
               Zaloguj się do platformy USOS i stwórz swój plan na semestr!
             </p>
           </div>

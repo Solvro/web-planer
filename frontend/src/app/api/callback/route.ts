@@ -6,6 +6,8 @@ import { getAccessToken } from "@/lib/auth";
 import { usosService } from "@/services/usos";
 import { createClient } from "@/services/usos/usosClient";
 
+export const dynamic = "force-dynamic";
+
 const BLACKLIST = ["272695"];
 
 export const GET = async (request: NextRequest) => {
