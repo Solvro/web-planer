@@ -15,6 +15,7 @@ export default function LoginPage() {
 
       <Link
         href="/api/login"
+        prefetch={false}
         data-umami-event="Login"
         className={buttonVariants({
           size: "lg",

@@ -1,38 +1,23 @@
-import { LRUCache } from "lru-cache";
+import fetch from "node-fetch";
 
 import { USOS_APPS_URL } from "@/env.mjs";
 import { oauth } from "@/lib/auth";
 
 const baseUrl = `${USOS_APPS_URL}/services`;
 
-const cache = new LRUCache<string, object>({
-  ttl: 60 * 60 * 1000,
-  ttlAutopurge: false,
-  max: 10000,
-});
-
 export const createClient = ({
   token,
   secret,
-  fetch,
 }: {
   token?: string;
   secret?: string;
-  fetch: typeof window.fetch;
 }) => {
   if (typeof token !== "string" || typeof secret !== "string") {
     throw new Error("No token or secret provided");
   }
   return {
-    async get<R = unknown>(
-      endpoint: string,
-      { shouldCache }: { shouldCache: boolean } = { shouldCache: true },
-    ): Promise<R> {
+    async get<R = unknown>(endpoint: string): Promise<R> {
       const url = `${baseUrl}/${endpoint}`;
-
-      if (cache.has(url) && shouldCache) {
-        return cache.get(url) as R;
-      }
 
       const data = oauth.authorize(
         {
@@ -61,12 +46,7 @@ export const createClient = ({
         throw new Error("Unauthorized");
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const json: object = await response.json();
-
-      if (shouldCache) {
-        cache.set(url, json);
-      }
+      const json = (await response.json()) as R;
 
       return json as Promise<R>;
     },

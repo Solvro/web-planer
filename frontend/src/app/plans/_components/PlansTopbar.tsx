@@ -56,7 +56,9 @@ const UserProfile = async () => {
   } catch (error) {
     return (
       <Button variant="default" size="sm" asChild={true}>
-        <Link href="/api/login">Zaloguj się</Link>
+        <Link href="/api/login" prefetch={false}>
+          Zaloguj się
+        </Link>
       </Button>
     );
   }
