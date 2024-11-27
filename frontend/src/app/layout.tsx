@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import Head from "next/head";
 import type React from "react";
 
 import ClientProviders from "@/components/Providers";
@@ -94,6 +95,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
+      <Head>
+        <script
+          async={true}
+          defer={true}
+          src="https://analytics.solvro.pl/script.js"
+          data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
+          data-domains="planer.solvro.pl"
+        />
+      </Head>
       <ClientProviders>
         <body className={cn(inter.className, "min-h-screen")}>{children}</body>
       </ClientProviders>
