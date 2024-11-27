@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
 
 import "./globals.css";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: {
@@ -94,6 +95,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
+      <Head>
+        <script
+          async={true}
+          defer={true}
+          src="https://analytics.solvro.pl/script.js"
+          data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
+          data-domains="planer.solvro.pl"
+        />
+      </Head>
       <ClientProviders>
         <body className={cn(inter.className, "min-h-screen")}>{children}</body>
       </ClientProviders>
