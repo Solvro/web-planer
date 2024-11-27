@@ -12,10 +12,20 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  declare id: string
+  declare id: number
 
   @column()
-  declare password: string
+  declare usosId: string
+  @column()
+  declare firstName: string
+  @column()
+  declare lastName: string
+  @column()
+  declare studentNumber: string
+  @column()
+  declare accessToken: string
+  @column()
+  declare accessSecret: string
 
   @hasMany(() => Schedule)
   declare schedules: HasMany<typeof Schedule>
@@ -25,4 +35,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  public getId() {
+    return this.id
+  }
+  public getOriginal() {
+    return this
+  }
 }

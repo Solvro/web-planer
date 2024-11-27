@@ -11,7 +11,7 @@ import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
 
 import router from '@adonisjs/core/services/router'
-// import { middleware } from './kernel.js'
+import { middleware } from './kernel.js'
 const DepartmentsController = () => import('#controllers/departments_controller')
 const SessionController = () => import('#controllers/session_controller')
 const UsersController = () => import('#controllers/users_controller')
@@ -38,10 +38,15 @@ router.resource('departments', DepartmentsController).apiOnly()
 router.resource('departments.registrations', RegistrationsController).apiOnly()
 router.resource('departments.registrations.courses', CoursesController).apiOnly()
 router.resource('departments.registrations.courses.groups', GroupsController).apiOnly()
-router.post('/login', [SessionController, 'store'])
+router.post('/login', [SessionController, 'store']).use(middleware.guest())
 router.get('/users/:user_id/schedules/:schedule_id/groups', [ScheduleGroupsController, 'index'])
 router.post('/users/:user_id/schedules/:schedule_id/groups', [ScheduleGroupsController, 'store'])
 router.delete('/users/:user_id/schedules/:schedule_id/groups/:group_id', [
   ScheduleGroupsController,
   'destroy',
 ])
+router
+  .get('/secretroute', async ({ auth }) => {
+    return auth.getUserOrFail()
+  })
+  .use(middleware.usosAuth())
