@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import Head from "next/head";
 import type React from "react";
 
 import ClientProviders from "@/components/Providers";
@@ -8,7 +9,6 @@ import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
 
 import "./globals.css";
-import Head from "next/head";
 
 export const metadata: Metadata = {
   title: {
