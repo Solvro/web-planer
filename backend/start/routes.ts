@@ -54,13 +54,11 @@ router.get(
   [GroupsController, 'show']
 )
 
-router.get('/users/schedules', [SchedulesController, 'index']).use(middleware.usosAuth())
+router.get('/user/schedules', [SchedulesController, 'index']).use(middleware.usosAuth())
+router.get('/user/schedules/:schedule_id', [SchedulesController, 'show']).use(middleware.usosAuth())
+router.post('/user/schedules', [SchedulesController, 'store']).use(middleware.usosAuth())
 router
-  .get('/users/schedules/:schedule_id', [SchedulesController, 'show'])
-  .use(middleware.usosAuth())
-router.post('/users/schedules', [SchedulesController, 'store']).use(middleware.usosAuth())
-router
-  .patch('/users/schedules/:schedule_id', [SchedulesController, 'update'])
+  .patch('/user/schedules/:schedule_id', [SchedulesController, 'update'])
   .use(middleware.usosAuth())
 
 router.post('user/login', [AuthController, 'store']).use(middleware.guest())
