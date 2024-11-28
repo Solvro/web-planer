@@ -63,5 +63,5 @@ router
   .patch('/users/schedules/:schedule_id', [SchedulesController, 'update'])
   .use(middleware.usosAuth())
 
-router.post('/login', [AuthController, 'store']).use(middleware.guest())
-router.delete('/logout', [AuthController, 'destroy']).use(middleware.usosAuth())
+router.post('user/login', [AuthController, 'store']).use(middleware.guest())
+router.delete('user/logout', [AuthController, 'destroy']).use(middleware.usosAuth())

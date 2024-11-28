@@ -30,7 +30,7 @@ export default class SchedulesController {
 
     const schedule = await Schedule.create({
       ...payload,
-      userId: userId as unknown as string,
+      userId: userId,
     })
 
     return { message: 'Schedule created.', schedule }
