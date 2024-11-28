@@ -17,7 +17,7 @@ const authConfig = defineConfig({
     // add the jwt guard
     jwt: jwtGuard({
       // tokenExpiresIn can be a string or a number, it can be optional
-      tokenExpiresIn: '1h',
+      tokenExpiresIn: 60 * 60 * 24 * 7,
       // if you want to use cookies for the authentication instead of the bearer token (optional)
       useCookies: true,
       provider: sessionUserProvider({
