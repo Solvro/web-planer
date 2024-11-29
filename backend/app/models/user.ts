@@ -22,10 +22,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare lastName: string
   @column()
   declare studentNumber: string
-  @column()
-  declare accessToken: string
-  @column()
-  declare accessSecret: string
 
   @hasMany(() => Schedule)
   declare schedules: HasMany<typeof Schedule>

@@ -23,6 +23,9 @@ export default class AuthController {
       if (!user) {
         user = await User.create({
           usos_id: profile.id,
+          studentNumber: profile.student_number,
+          firstName: profile.first_name,
+          lastName: profile.last_name,
         })
       }
       const token = await auth.use('jwt').generate(user)
