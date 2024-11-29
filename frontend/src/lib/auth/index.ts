@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import OAuth from "oauth-1.0a";
 import { cookies as cookiesPromise } from "next/headers";
+import OAuth from "oauth-1.0a";
 
 import { env } from "@/env.mjs";
 
@@ -110,10 +110,10 @@ export const auth = async ({
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
       });
     return true;
   } catch (error) {
     return false;
   }
-}
+};
