@@ -12,6 +12,7 @@ export const signOutFunction = async () => {
     name: "access_token_secret",
     path: "/",
   });
+  await fetch("/api/v1/user", { method: "DELETE" });
 
   return true;
 };

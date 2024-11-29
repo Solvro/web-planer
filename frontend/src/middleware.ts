@@ -1,11 +1,11 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { auth } from "./lib/auth";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const tokens = {
     token: request.cookies.get("access_token")?.value,
-    secret: request.cookies.get("access_token_secret")?.value,
-    fetch,
+    secret: request.cookies.get("access_token_secret")?.value
   };
 
   const isProtectedRoute = request.nextUrl.pathname.startsWith("/account");
@@ -14,9 +14,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isFailed = tokens.token === undefined || tokens.secret === undefined;
+  const isLogged = await auth(tokens);
 
-  if (isFailed) {
+  if (!isLogged) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import OAuth from "oauth-1.0a";
+import { cookies as cookiesPromise } from "next/headers";
 
 import { env } from "@/env.mjs";
 
@@ -85,4 +86,34 @@ export async function getRequestToken() {
     token: params.get("oauth_token"),
     secret: params.get("oauth_token_secret"),
   };
+}
+
+export const auth = async ({
+  token,
+  secret,
+}: {
+  token?: string | null;
+  secret?: string | null;
+}) => {
+  const cookies = await cookiesPromise();
+  const accessToken = token ?? cookies.get("access_token")?.value;
+  const accessTokenSecret = secret ?? cookies.get("access_token_secret")?.value;
+
+  if (accessToken === "" || accessTokenSecret === "") {
+    return false;
+  }
+
+  try {
+    await fetch("https://planer.solvro.pl/api/v1/user/login", {
+      method: "POST",
+      body: JSON.stringify({ accessToken, accessTokenSecret }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+      });
+    return true;
+  } catch (error) {
+    return false;
+  }
 }
