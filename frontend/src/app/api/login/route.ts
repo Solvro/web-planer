@@ -28,12 +28,14 @@ export async function GET() {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
+    secure: true,
   });
 
   cookies.set("oauth_token_secret", token.secret, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
+    secure: true,
   });
 
   return redirect(

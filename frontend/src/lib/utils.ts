@@ -14,3 +14,25 @@ export const registrationReplacer = (name: string) => {
     .trim();
   return newName.charAt(0).toUpperCase() + newName.slice(1);
 };
+
+export function pluralize(
+  number: number,
+  singular: string,
+  plural: string,
+  genitivePlural: string,
+): string {
+  const newNumber = Math.abs(number); // only if negative numbers can occur
+  if (newNumber === 1) {
+    return singular;
+  }
+  const remainder10 = newNumber % 10;
+  const remainder100 = newNumber % 100;
+  if (
+    remainder10 > 4 ||
+    remainder10 < 2 ||
+    (remainder100 < 15 && remainder100 > 11)
+  ) {
+    return genitivePlural;
+  }
+  return plural;
+}

@@ -66,20 +66,38 @@ const JoinUsBlock = async () => {
     );
   } catch (e) {
     return (
-      <Link
-        href="/api/login"
-        data-umami-event="Landing - Go to planning"
-        className={buttonVariants({
-          size: "lg",
-          variant: "outline",
-          className: cn(
-            "h-20 cursor-wait self-center border-4 text-xl transition-all duration-300 md:mt-0 md:p-7",
-            "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
-          ),
-        })}
-      >
-        Zaloguj się
-      </Link>
+      <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
+        <Link
+          href="/api/login"
+          data-umami-event="Landing - Go to login"
+          prefetch={false}
+          className={buttonVariants({
+            size: "lg",
+            variant: "outline",
+            className: cn(
+              "h-20 cursor-wait self-center border-4 text-xl transition-all duration-300 md:mt-0 md:p-7",
+              "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+            ),
+          })}
+        >
+          Zaloguj się
+        </Link>
+        <p className="text-sm text-white">lub</p>
+        <Link
+          href="/plans"
+          data-umami-event="Landing - Go to planning wihout login"
+          className={buttonVariants({
+            size: "lg",
+            variant: "outline",
+            className: cn(
+              "h-20 cursor-wait self-center border-4 text-xl transition-all duration-300 md:mt-0 md:p-7",
+              "cursor-pointer hover:bg-white hover:shadow-[0_0_5px_rgb(200,200,255),0_0_10px_rgb(164,200,255)]",
+            ),
+          })}
+        >
+          Kontynuuj bez logowania
+        </Link>
+      </div>
     );
   }
 };
@@ -95,7 +113,7 @@ export default function HomePage() {
       <section className="flex justify-center">
         <Block className="flex flex-col items-center justify-center gap-6 md:gap-10">
           <div className="">
-            <h1 className="text-center text-4xl font-medium leading-tight md:text-left">
+            <h1 className="text-center text-4xl font-medium leading-tight">
               <span className="font-inter tracking-wide text-white animate-in">
                 Stwórz swój plan używając{" "}
                 <span className="font-bold uppercase">darmowego</span>{" "}
@@ -104,7 +122,7 @@ export default function HomePage() {
             </h1>
           </div>
           <div className="">
-            <p className="text-center text-white md:mr-4 md:text-2xl">
+            <p className="text-balance text-center text-white md:mr-4 md:text-2xl">
               Zaloguj się do platformy USOS i stwórz swój plan na semestr!
             </p>
           </div>

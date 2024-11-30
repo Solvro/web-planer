@@ -3,6 +3,12 @@ import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
 
 import { getAccessToken } from "@/lib/auth";
+import { usosService } from "@/services/usos";
+import { createClient } from "@/services/usos/usosClient";
+
+export const dynamic = "force-dynamic";
+
+const BLACKLIST = ["272695"];
 
 export const GET = async (request: NextRequest) => {
   const url = request.nextUrl;
@@ -47,15 +53,33 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
+  const tokens = {
+    token: access_token.token,
+    secret: access_token.secret,
+  };
+
+  const usos = usosService(createClient(tokens));
+  const profile = await usos.getProfile();
+  if (BLACKLIST.includes(profile.student_number)) {
+    return new Response(
+      `Sorry ${profile.first_name}, ale ciebie nie obsługujemy 😘`,
+      {
+        status: 403,
+      },
+    );
+  }
+
   cookies.set("access_token", access_token.token, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
+    secure: true,
   });
   cookies.set("access_token_secret", access_token.secret, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
+    secure: true,
   });
 
   return redirect("/plans");

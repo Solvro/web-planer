@@ -6,13 +6,13 @@ export enum Frequency {
 }
 
 export enum Day {
-  MONDAY = "poniedzi",
-  TUESDAY = "wtor",
-  WEDNESDAY = "środ",
-  THURSDAY = "czwart",
-  FRIDAY = "piąt",
-  SATURDAY = "sobot",
-  SUNDAY = "niedziel",
+  MONDAY = "poniedziałek",
+  TUESDAY = "wtorek",
+  WEDNESDAY = "środa",
+  THURSDAY = "czwartek",
+  FRIDAY = "piątek",
+  SATURDAY = "sobota",
+  SUNDAY = "niedziela",
   NEVER = "NEVER",
 }
 

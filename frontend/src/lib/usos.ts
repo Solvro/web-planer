@@ -8,7 +8,6 @@ export const createUsosService = async () => {
   const tokens = {
     token: cookies.get("access_token")?.value,
     secret: cookies.get("access_token_secret")?.value,
-    fetch,
   };
 
   return usosService(createClient(tokens));
