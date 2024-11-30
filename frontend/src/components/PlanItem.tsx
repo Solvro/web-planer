@@ -3,14 +3,18 @@
 import { format } from "date-fns";
 import { useAtom } from "jotai";
 import {
+  AlertTriangleIcon,
+  CloudIcon,
   CopyIcon,
   EllipsisVerticalIcon,
   Pencil,
+  RefreshCwOffIcon,
   TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 import { plansIds } from "@/atoms/plansIds";
 import {
@@ -42,7 +46,17 @@ import {
   CardTitle,
 } from "./ui/card";
 
-export const PlanItem = ({ id, name }: { id: string; name: string }) => {
+export const PlanItem = ({
+  id,
+  name,
+  synced,
+  onlineId,
+}: {
+  id: string;
+  name: string;
+  synced: boolean;
+  onlineId: string | null;
+}) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId: id });
@@ -69,13 +83,14 @@ export const PlanItem = ({ id, name }: { id: string; name: string }) => {
     });
 
     setTimeout(() => {
-      router.push(`/plans/create/${newPlan.id}`);
+      router.push(`/plans/edit/${newPlan.id}`);
     }, 200);
   };
 
   const deletePlan = () => {
     plan.remove();
     setPlans(plans.filter((p) => p.id !== id));
+    toast.success("Plan został usunięty.");
   };
 
   const groupCount = plan.courses
@@ -83,7 +98,7 @@ export const PlanItem = ({ id, name }: { id: string; name: string }) => {
     .filter((group) => group.isChecked).length;
 
   return (
-    <Card className="flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
+    <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
       <CardHeader className="p-4">
         <CardTitle>{name}</CardTitle>
         <CardDescription>
@@ -134,12 +149,22 @@ export const PlanItem = ({ id, name }: { id: string; name: string }) => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Button size="sm" asChild={true}>
-          <Link href={`/plans/create/${id}`}>
+          <Link href={`/plans/edit/${id}`}>
             <Pencil className="h-4 w-4" />
             Edytuj
           </Link>
         </Button>
       </CardFooter>
+
+      <div className="absolute right-2 top-2 flex size-[40px] items-center justify-center backdrop-blur-md">
+        {synced ? (
+          <CloudIcon className="size-4 text-emerald-500" />
+        ) : !(onlineId ?? "") ? (
+          <AlertTriangleIcon className="size-4 text-rose-500" />
+        ) : (
+          <RefreshCwOffIcon className="size-4 text-amber-500" />
+        )}
+      </div>
 
       <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
         <DialogContent

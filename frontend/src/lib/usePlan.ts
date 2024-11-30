@@ -26,6 +26,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
               : group,
           ),
         })),
+        synced: false,
       });
     },
     checkAllCourses: (registrationId: string, isChecked?: boolean) => {
@@ -36,6 +37,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
             ? { ...course, isChecked: isChecked ?? !course.isChecked }
             : course,
         ),
+        synced: false,
       });
     },
     addRegistration: (
@@ -48,6 +50,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
           (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
         ),
         courses: [...plan.courses, ...courses],
+        synced: false,
       });
     },
     removeRegistration: (registrationId: string) => {
@@ -59,6 +62,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
         courses: plan.courses.filter(
           (c) => c.registrationId !== registrationId,
         ),
+        synced: false,
       });
     },
     changeName: (newName: string) => {
@@ -66,6 +70,20 @@ export const usePlan = ({ planId }: { planId: string }) => {
       setPlan({
         ...plan,
         name: newName,
+        synced: false,
+      });
+    },
+    setOnlineId: (onlineId: string) => {
+      setPlan({
+        ...plan,
+        onlineId,
+        synced: true,
+      });
+    },
+    setSynced: (synced: boolean) => {
+      setPlan({
+        ...plan,
+        synced,
       });
     },
     selectCourse: (courseId: string, isChecked?: boolean) => {
@@ -77,6 +95,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
             ? { ...course, isChecked: isChecked ?? !course.isChecked }
             : course,
         ),
+        synced: false,
       });
     },
   };

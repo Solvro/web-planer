@@ -4,6 +4,7 @@ import Script from "next/script";
 import type React from "react";
 
 import ClientProviders from "@/components/Providers";
+import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
 import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
@@ -105,6 +106,7 @@ export default function RootLayout({
             data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
             data-domains="planer.solvro.pl"
           />
+          <Toaster richColors={true} />
         </body>
       </ClientProviders>
     </html>

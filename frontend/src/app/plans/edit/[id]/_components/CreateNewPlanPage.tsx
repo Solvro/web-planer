@@ -2,9 +2,11 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
+import { toast } from "sonner";
 
+import { createNewPlan, updatePlan } from "@/actions/plans";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { GroupsAccordionItem } from "@/components/GroupsAccordion";
@@ -26,6 +28,8 @@ import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
+
+import { SyncedButton } from "./SyncedButton";
 
 type CourseType = Array<{
   id: string;
@@ -57,9 +61,50 @@ export function CreateNewPlanPage({
   planId: string;
   faculties: Array<{ name: string; value: string }>;
 }) {
+  const [syncing, setSyncing] = useState(false);
+  const firstTime = useRef(true);
+
   const plan = usePlan({
     planId,
   });
+
+  const handleCreateOnlinePlan = async () => {
+    firstTime.current = false;
+    const res = await createNewPlan({ name: plan.name });
+    if (res === false) {
+      return toast.error("Nie udało się utworzyć planu");
+    }
+    plan.setOnlineId(res.schedule.id.toString());
+    toast.success("Utworzono plan");
+    return true;
+  };
+
+  const handleUpdatePlan = async () => {
+    const res = await updatePlan({
+      id: Number(plan.onlineId),
+      name: plan.name,
+      courses: plan.courses,
+      registrations: plan.registrations,
+    });
+    if (res === false) {
+      return toast.error("Nie udało się zaktualizować planu");
+    }
+    toast.success("Zaktualizowano plan");
+    plan.setSynced(true);
+    return true;
+  };
+
+  useEffect(() => {
+    if (plan.onlineId === null && firstTime.current) {
+      void handleCreateOnlinePlan();
+    }
+  }, [plan]);
+
+  // useEffect(() => {
+  //   if (!plan.synced && plan.onlineId !== null && !firstTime.current) {
+  //     void handleUpdatePlan();
+  //   }
+  // }, [plan.onlineId, plan.synced, firstTime]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -99,8 +144,8 @@ export function CreateNewPlanPage({
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
         <div className="flex flex-col justify-start gap-3 md:w-full">
-          <div className="flex w-full items-end gap-2">
-            <div className="flex items-end gap-2">
+          <div className="flex w-full items-end gap-1">
+            <div className="flex items-end gap-1">
               <Button
                 variant="outline"
                 className="aspect-square"
@@ -138,6 +183,12 @@ export function CreateNewPlanPage({
                 </div>
               </form>
             </div>
+            <SyncedButton
+              synced={plan.synced}
+              onlineId={plan.onlineId}
+              syncing={syncing}
+              onClick={handleUpdatePlan}
+            />
             <PlanDisplayLink id={plan.id} />
           </div>
         </div>

@@ -21,6 +21,8 @@ export const planFamily = atomFamily(
         courses: [] as ExtendedCourse[],
         registrations: [] as Registration[],
         createdAt: new Date(),
+        onlineId: null as string | null,
+        synced: false,
       },
       undefined,
       { getOnInit: true },

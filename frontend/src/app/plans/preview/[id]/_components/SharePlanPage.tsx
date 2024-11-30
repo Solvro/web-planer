@@ -37,7 +37,7 @@ export function SharePlanPage({ planId }: { planId: string }) {
     });
 
     setTimeout(() => {
-      router.push(`/plans/create/${newPlan.id}`);
+      router.push(`/plans/edit/${newPlan.id}`);
     }, 200);
   };
   return (

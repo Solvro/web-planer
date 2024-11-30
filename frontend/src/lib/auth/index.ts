@@ -97,23 +97,85 @@ export const auth = async ({
 }) => {
   const cookies = await cookiesPromise();
   const accessToken = token ?? cookies.get("access_token")?.value;
-  const accessTokenSecret = secret ?? cookies.get("access_token_secret")?.value;
+  const accessSecret = secret ?? cookies.get("access_token_secret")?.value;
 
-  if (accessToken === "" || accessTokenSecret === "") {
+  if (accessToken === "" || accessSecret === "") {
     return false;
   }
 
   try {
-    await fetch("https://planer.solvro.pl/api/v1/user/login", {
+    const response = await fetch("https://planer.solvro.pl/api/v1/user/login", {
       method: "POST",
-      body: JSON.stringify({ accessToken, accessTokenSecret }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ accessToken, accessSecret }),
+      credentials: "include",
+    });
+    const data = (await response.json()) as { error?: string };
+    if (data.error !== undefined) {
+      cookies.delete({
+        name: "access_token",
+        path: "/",
       });
+      cookies.delete({
+        name: "access_token_secret",
+        path: "/",
+      });
+      throw new Error(data.error);
+    }
+    const setCookieHeaders = response.headers.getSetCookie();
+    setCookieHeaders.forEach((setCookie) => {
+      const name = setCookie.split("=")[0];
+      const value = setCookie.split("=")[1].split(";")[0];
+      cookies.set({
+        name,
+        value,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+        secure: true,
+      });
+    });
     return true;
   } catch (error) {
     return false;
+  }
+};
+
+export const fetchToAdonis = async <T>({
+  url,
+  method,
+  body,
+}: {
+  url: string;
+  method: RequestInit["method"];
+  body?: string | null;
+}): Promise<T | null> => {
+  try {
+    const cookies = await cookiesPromise();
+    const adonisSession = cookies.get("adonis-session")?.value;
+    const token = cookies.get("token")?.value;
+    const fetchOptions: RequestInit = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `adonis-session=${adonisSession}; token=${token}`,
+      },
+      credentials: "include",
+    };
+
+    if (method !== "GET" && method !== "HEAD" && body !== undefined) {
+      fetchOptions.body = body;
+    }
+
+    const response = await fetch(
+      `https://planer.solvro.pl/api/v1${url}`,
+      fetchOptions,
+    );
+    const data = (await response.json()) as T;
+    return data;
+  } catch (error) {
+    return null;
   }
 };
