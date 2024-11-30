@@ -14,10 +14,7 @@ export default class AuthController {
         secret: accessSecret,
       })
       const profile: any = await usosClient.get(
-        'users/user?fields=id|student_number|first_name|last_name',
-        {
-          shouldCache: false, // We do not use cache for this query
-        }
+        'users/user?fields=id|student_number|first_name|last_name'
       )
       let user = await User.findBy('usos_id', profile.id)
       if (!user) {
