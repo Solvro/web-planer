@@ -2,7 +2,7 @@
 
 > Welcome to the repository of the Solvro project, a student organization at the Wrocław University of Science and Technology!
 
-[![Welcome Page](https://i.imgur.com/PSnVCNN.png)](https://i.imgur.com)
+[![Welcome Page](https://i.imgur.com/PSnVCNN.png)](https://planer.solvro.pl)
 
 ## 🎯 Project Goal
 
@@ -13,11 +13,11 @@ The Solvro Planer project aims to create an intuitive and user-friendly applicat
 
 ## 👥 Current Team
 
-| Role                | Member             |
-| ------------------- | ------------------ |
-| Project Manager     | @unewMe            |
-| Fullstack Developer / Commander of the Unexpected | @D0dii             |
-| Fullstack Developer / Solution Wizard | @olekszczepanowski |
+| Role                                                                  | Member             |
+| --------------------------------------------------------------------- | ------------------ |
+| Project Manager                                                       | @unewMe            |
+| Fullstack Developer / Commander of the Unexpected                     | @D0dii             |
+| Fullstack Developer / Solution Wizard                                 | @olekszczepanowski |
 | Fullstack Developer / Engineer of the Impossible / Everyday Superhero | @qamarq            |
 
 ## 🚀 Technologies
@@ -29,6 +29,8 @@ The Solvro Planer project aims to create an intuitive and user-friendly applicat
 - ![Coolify](https://img.shields.io/badge/Coolify-FF0000?style=for-the-badge&logo=coolify&logoColor=white)
 
 ## 🔗 Links
+
+[![docs.solvro.pl](https://i.imgur.com/fuV0gra.png)](https://docs.solvro.pl)
 
 - [Live Application](https://planer.solvro.pl)
 - [Project Portfolio](https://solvro.pwr.edu.pl/portfolio/planer/)
@@ -133,6 +135,7 @@ For Windows users, follow this [SSH setup tutorial](https://www.youtube.com/watc
 - Never push directly to the main branch
 - Always commit before checking out to a different branch
 - After successful merge, clean up:
+
   ```bash
   git branch -d WEB-x_my_feature_branch
   git push origin --delete WEB-x_my_feature_branch
@@ -142,7 +145,7 @@ For Windows users, follow this [SSH setup tutorial](https://www.youtube.com/watc
 
 For questions or suggestions, reach out to us:
 
-- ✉️ Email: kn.solvro@pwr.edu.pl
+- ✉️ Email: <kn.solvro@pwr.edu.pl>
 - 🌐 Website: [solvro.pwr.edu.pl](https://solvro.pwr.edu.pl/)
 - 📘 Facebook: [KN Solvro](https://www.facebook.com/knsolvro)
 
