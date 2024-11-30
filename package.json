@@ -18,6 +18,7 @@
     "prettier": "^3.4.1"
   },
   "dependencies": {
+    "@maximemrf/adonisjs-jwt": "^0.2.2",
     "adonis-autoswagger": "^3.64.0"
   }
 }

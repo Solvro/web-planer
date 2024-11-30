@@ -11,7 +11,7 @@ export default class Schedule extends BaseModel {
   declare name: string
 
   @column()
-  declare userId: string
+  declare userId: number
 
   @manyToMany(() => Group, {
     localKey: 'id',

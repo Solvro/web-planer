@@ -54,12 +54,10 @@ export const createClient = ({ token, secret }: { token?: string; secret?: strin
       }
 
       if (!response.ok) {
-        // eslint-disable-next-line no-console
         console.log('Not ok', await response.text())
         throw new Error('Unauthorized')
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const json: any = await response.json()
 
       if (shouldCache) {
