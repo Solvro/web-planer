@@ -1,15 +1,9 @@
 import crypto from 'node:crypto'
 import OAuth from 'oauth-1.0a'
-import { LRUCache } from 'lru-cache'
 import env from '#start/env'
 import fetch from 'node-fetch'
 const baseUrl = `https://apps.usos.pwr.edu.pl/services`
 
-const cache = new LRUCache<string, object>({
-  ttl: 60 * 60 * 1000,
-  ttlAutopurge: false,
-  max: 10000,
-})
 const oauth = new OAuth({
   consumer: { key: env.get('USOS_CONSUMER_KEY'), secret: env.get('USOS_CONSUMER_SECRET') },
   signature_method: 'HMAC-SHA1',
@@ -22,15 +16,8 @@ export const createClient = ({ token, secret }: { token?: string; secret?: strin
     throw new Error('No token or secret provided')
   }
   return {
-    async get<R = unknown>(
-      endpoint: string,
-      { shouldCache }: { shouldCache: boolean } = { shouldCache: true }
-    ): Promise<R> {
+    async get<R = unknown>(endpoint: string): Promise<R> {
       const url = `${baseUrl}/${endpoint}`
-
-      if (cache.has(url) && shouldCache) {
-        return cache.get(url) as R
-      }
 
       const data = oauth.authorize(
         {
@@ -54,17 +41,11 @@ export const createClient = ({ token, secret }: { token?: string; secret?: strin
       }
 
       if (!response.ok) {
-        // eslint-disable-next-line no-console
         console.log('Not ok', await response.text())
         throw new Error('Unauthorized')
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const json: any = await response.json()
-
-      if (shouldCache) {
-        cache.set(url, json)
-      }
 
       return json as Promise<R>
     },

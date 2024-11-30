@@ -1,15 +1,34 @@
 import { defineConfig } from '@adonisjs/auth'
+import { InferAuthEvents, Authenticators } from '@adonisjs/auth/types'
 import { sessionGuard, sessionUserProvider } from '@adonisjs/auth/session'
-import type { InferAuthEvents, Authenticators } from '@adonisjs/auth/types'
+import { jwtGuard } from '@maximemrf/adonisjs-jwt/jwt_config'
+import { JwtGuardUser, BaseJwtContent } from '@maximemrf/adonisjs-jwt/types'
+import User from '#models/user'
 
 const authConfig = defineConfig({
-  default: 'web',
+  default: 'jwt',
   guards: {
     web: sessionGuard({
       useRememberMeTokens: false,
       provider: sessionUserProvider({
         model: () => import('#models/user'),
       }),
+    }),
+    // add the jwt guard
+    jwt: jwtGuard({
+      // tokenExpiresIn can be a string or a number, it can be optional
+      tokenExpiresIn: 60 * 60 * 24 * 7,
+      // if you want to use cookies for the authentication instead of the bearer token (optional)
+      useCookies: true,
+      provider: sessionUserProvider({
+        model: () => import('#models/user'),
+      }),
+      content: (user: JwtGuardUser<unknown>): BaseJwtContent => {
+        const typedUser = user.getOriginal() as User
+        return {
+          userId: typedUser.getId(),
+        }
+      },
     }),
   },
 })

@@ -14,9 +14,11 @@
   "license": "AGPL-3.0-only",
   "devDependencies": {
     "husky": "^9.1.5",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.4.1"
   },
   "dependencies": {
+    "@maximemrf/adonisjs-jwt": "^0.2.2",
     "adonis-autoswagger": "^3.64.0"
   }
 }
