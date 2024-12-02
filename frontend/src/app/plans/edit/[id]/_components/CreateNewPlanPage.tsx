@@ -79,19 +79,24 @@ export function CreateNewPlanPage({
     return true;
   };
 
-  const handleUpdatePlan = async () => {
-    const res = await updatePlan({
-      id: Number(plan.onlineId),
-      name: plan.name,
-      courses: plan.courses,
-      registrations: plan.registrations,
-    });
-    if (res === false) {
-      return toast.error("Nie udało się zaktualizować planu");
+  const handleSyncPlan = async () => {
+    setSyncing(true);
+    try {
+      const res = await updatePlan({
+        id: Number(plan.onlineId),
+        name: plan.name,
+        courses: plan.courses,
+        registrations: plan.registrations,
+      });
+      if (res === false) {
+        return toast.error("Nie udało się zaktualizować planu");
+      }
+      toast.success("Zaktualizowano plan");
+      plan.setSynced(true);
+      return true;
+    } finally {
+      setSyncing(false);
     }
-    toast.success("Zaktualizowano plan");
-    plan.setSynced(true);
-    return true;
   };
 
   useEffect(() => {
@@ -187,7 +192,7 @@ export function CreateNewPlanPage({
               synced={plan.synced}
               onlineId={plan.onlineId}
               syncing={syncing}
-              onClick={handleUpdatePlan}
+              onClick={handleSyncPlan}
             />
             <PlanDisplayLink id={plan.id} />
           </div>

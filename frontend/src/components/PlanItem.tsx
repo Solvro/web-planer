@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
+import { deletePlan } from "@/actions/plans";
 import { plansIds } from "@/atoms/plansIds";
 import {
   Dialog,
@@ -87,9 +88,10 @@ export const PlanItem = ({
     }, 200);
   };
 
-  const deletePlan = () => {
+  const handleDeletePlan = async () => {
     plan.remove();
     setPlans(plans.filter((p) => p.id !== id));
+    await deletePlan({ id: Number(plan.onlineId ?? "0") });
     toast.success("Plan został usunięty.");
   };
 
@@ -186,7 +188,7 @@ export const PlanItem = ({
             </Button>
             <Button
               onClick={() => {
-                deletePlan();
+                void handleDeletePlan();
               }}
               variant="destructive"
             >

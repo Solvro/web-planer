@@ -3,10 +3,15 @@
 import { atom, useAtom } from "jotai";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 
+import type { ExtendedCourse } from "@/atoms/planFamily";
 import { planFamily } from "@/atoms/planFamily";
 import { plansIds } from "@/atoms/plansIds";
 import { PlanItem } from "@/components/PlanItem";
+import type { Registration } from "@/lib/types";
+
+import type { PlanResponseDataType } from "../page";
 
 const plansAtom = atom(
   (get) => get(plansIds).map((id) => get(planFamily(id))),
@@ -14,9 +19,15 @@ const plansAtom = atom(
     set(plansIds, values);
   },
 );
-export function PlansPage() {
+export function PlansPage({
+  plans: onlinePlans,
+}: {
+  plans: PlanResponseDataType[];
+}) {
   const [plans, setPlans] = useAtom(plansAtom);
   const router = useRouter();
+  const firstTime = useRef(true);
+
   const addNewPlan = () => {
     const uuid = crypto.randomUUID();
     const newPlan = {
@@ -30,6 +41,46 @@ export function PlansPage() {
     router.push(`/plans/edit/${newPlan.id}`);
     setPlans([...plans, newPlan]);
   };
+
+  const handleCreateOfflinePlansIfNotExists = () => {
+    if (firstTime.current) {
+      firstTime.current = false;
+      const tmpPlans: Array<{
+        id: string;
+        name: string;
+        synced: boolean;
+        onlineId: string;
+        courses: ExtendedCourse[];
+        registrations: Registration[];
+        createdAt: Date;
+        updatedAt: Date;
+      }> = [];
+      onlinePlans.forEach((onlinePlan) => {
+        if (plans.some((plan) => plan.onlineId === onlinePlan.id.toString())) {
+          return;
+        }
+
+        const uuid = crypto.randomUUID();
+        const newPlan = {
+          id: uuid,
+          name: onlinePlan.name,
+          synced: true,
+          onlineId: onlinePlan.id.toString(),
+          courses: onlinePlan.courses,
+          registrations: onlinePlan.registrations,
+          createdAt: new Date(onlinePlan.createdAt),
+          updatedAt: new Date(onlinePlan.updatedAt),
+        };
+
+        tmpPlans.push(newPlan);
+      });
+      setPlans([...plans, ...tmpPlans]);
+    }
+  };
+
+  useEffect(() => {
+    handleCreateOfflinePlansIfNotExists();
+  }, []);
 
   return (
     <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">

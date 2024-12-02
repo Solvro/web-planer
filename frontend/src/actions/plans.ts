@@ -1,8 +1,8 @@
 "use server";
 
-import { ExtendedCourse } from "@/atoms/planFamily";
+import type { ExtendedCourse } from "@/atoms/planFamily";
 import { auth, fetchToAdonis } from "@/lib/auth";
-import { Registration } from "@/lib/types";
+import type { Registration } from "@/lib/types";
 
 interface CreatePlanResponseType {
   message: string;
@@ -53,7 +53,22 @@ export const updatePlan = async ({
     method: "PATCH",
     body: JSON.stringify({ name, courses, registrations }),
   });
-  console.log("updatePlan data", data);
+  if (!data) {
+    return false;
+  }
+  return data;
+};
+
+export const deletePlan = async ({ id }: { id: number }) => {
+  const isLogged = await auth({});
+  if (!isLogged) {
+    return false;
+  }
+
+  const data = await fetchToAdonis<CreatePlanResponseType>({
+    url: `/user/schedules/${id}`,
+    method: "DELETE",
+  });
   if (!data) {
     return false;
   }
