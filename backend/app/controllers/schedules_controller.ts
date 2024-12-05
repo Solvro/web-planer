@@ -52,9 +52,6 @@ export default class SchedulesController {
       .preload('courses') // Preload courses (grupy powiązane z kursami zostaną załadowane osobno)
       .firstOrFail()
 
-    // Pobranie grup powiązanych z harmonogramem (schedule_groups)
-    const relatedGroups = await schedule.related('groups').query()
-
     // Pobranie grup powiązanych z kursami z uwzględnieniem schedule_id
     const courseGroups = await schedule
       .related('courses')
