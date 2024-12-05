@@ -25,9 +25,8 @@ export default class AuthController {
           lastName: profile.last_name,
         })
       }
-      const token = await auth.use('jwt').generate(user)
+      await auth.use('jwt').generate(user)
       return response.ok({
-        token: token,
         ...user.serialize(),
       })
     } catch (error) {
