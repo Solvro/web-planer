@@ -48,10 +48,50 @@ export default class SchedulesController {
     const schedule = await Schedule.query()
       .where('id', params.schedule_id)
       .andWhere('userId', userId)
-      .preload('groups')
+      .preload('registrations') // Preload registrations
+      .preload('courses') // Preload courses (grupy powiązane z kursami zostaną załadowane osobno)
       .firstOrFail()
 
-    return schedule
+    // Pobranie grup powiązanych z harmonogramem (schedule_groups)
+    const relatedGroups = await schedule.related('groups').query()
+
+    // Pobranie grup powiązanych z kursami z uwzględnieniem schedule_id
+    const courseGroups = await schedule
+      .related('courses')
+      .query()
+      .preload('groups', (groupQuery) => {
+        groupQuery.whereExists((subQuery) => {
+          subQuery
+            .from('schedule_groups')
+            .whereRaw('schedule_groups.group_id = groups.id')
+            .andWhere('schedule_groups.schedule_id', params.schedule_id)
+        })
+      })
+
+    // Transformacja danych do żądanej struktury
+    const transformedSchedule = {
+      name: schedule.name,
+      registrations: schedule.registrations.map((reg) => ({
+        id: reg.id,
+        ...reg.serialize(),
+      })),
+      courses: courseGroups.map((course) => ({
+        id: course.id,
+        name: course.name,
+        groups: course.groups.map((group) => ({
+          id: group.id,
+          name: group.name,
+          ...group.serialize(),
+        })),
+      })),
+      // groups: relatedGroups.map((group) => ({
+      //   id: group.id,
+      //   name: group.name,
+      //   ...group.serialize(),
+      // })),
+    }
+
+    return transformedSchedule
   }
 
   /**
@@ -80,6 +120,24 @@ export default class SchedulesController {
         await currSchedule.related('groups').sync([])
       } else {
         await currSchedule.related('groups').sync(payload.groups.map((group) => group.id))
+      }
+    }
+
+    if (payload.registrations !== undefined) {
+      if (payload.registrations.length === 0) {
+        await currSchedule.related('registrations').sync([])
+      } else {
+        await currSchedule
+          .related('registrations')
+          .sync(payload.registrations.map((group) => group.id))
+      }
+    }
+
+    if (payload.courses !== undefined) {
+      if (payload.courses.length === 0) {
+        await currSchedule.related('courses').sync([])
+      } else {
+        await currSchedule.related('courses').sync(payload.courses.map((group) => group.id))
       }
     }
 

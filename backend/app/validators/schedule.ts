@@ -16,5 +16,19 @@ export const updateScheduleValidator = vine.compile(
         })
       )
       .optional(),
+    courses: vine
+      .array(
+        vine.object({
+          id: vine.string(),
+        })
+      )
+      .optional(),
+    registrations: vine
+      .array(
+        vine.object({
+          id: vine.string(),
+        })
+      )
+      .optional(),
   })
 )
