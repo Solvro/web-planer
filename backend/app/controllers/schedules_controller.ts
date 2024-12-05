@@ -84,11 +84,6 @@ export default class SchedulesController {
           ...group.serialize(),
         })),
       })),
-      // groups: relatedGroups.map((group) => ({
-      //   id: group.id,
-      //   name: group.name,
-      //   ...group.serialize(),
-      // })),
     }
 
     return transformedSchedule
