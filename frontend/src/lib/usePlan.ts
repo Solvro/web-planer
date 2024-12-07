@@ -43,14 +43,19 @@ export const usePlan = ({ planId }: { planId: string }) => {
     addRegistration: (
       registration: Registration,
       courses: ExtendedCourse[],
+      firstTime = false,
     ) => {
       setPlan({
         ...plan,
         registrations: [...plan.registrations, registration].filter(
           (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
         ),
-        courses: [...plan.courses, ...courses],
-        synced: false,
+        courses: [...plan.courses, ...courses].filter(
+          (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
+        ),
+
+        synced: firstTime,
+        toCreate: false,
       });
     },
     removeRegistration: (registrationId: string) => {

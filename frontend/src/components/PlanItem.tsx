@@ -3,13 +3,10 @@
 import { format } from "date-fns";
 import { useAtom } from "jotai";
 import {
-  AlertTriangleIcon,
-  CloudIcon,
   CopyIcon,
   EllipsisVerticalIcon,
   Loader2Icon,
   Pencil,
-  RefreshCwOffIcon,
   TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -47,6 +44,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { StatusIcon } from "./ui/status-icon";
 
 export const PlanItem = ({
   id,
@@ -54,16 +52,21 @@ export const PlanItem = ({
   synced,
   onlineId,
   onlineOnly = false,
+  groupCount = 0,
+  registrationCount = 0,
 }: {
   id: string;
   name: string;
   synced: boolean;
   onlineId: string | null;
   onlineOnly?: boolean;
+  groupCount?: number;
+  registrationCount?: number;
 }) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
+  const uuidToCopy = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
-  const plan = usePlan({ planId: id });
+  const plan = usePlan({ planId: onlineOnly ? uuid : id });
   const planToCopy = usePlan({ planId: uuid });
   const router = useRouter();
   const [dialogOpened, setDialogOpened] = React.useState(false);
@@ -74,7 +77,7 @@ export const PlanItem = ({
     setDropdownOpened(false);
 
     const newPlan = {
-      id: uuid,
+      id: uuidToCopy,
     };
 
     void window.umami?.track("Create plan", {
@@ -85,6 +88,24 @@ export const PlanItem = ({
     planToCopy.setPlan({
       ...planToCopy,
       courses: plan.courses,
+    });
+
+    setTimeout(() => {
+      router.push(`/plans/edit/${newPlan.id}`);
+    }, 200);
+  };
+
+  const createFromOnlinePlan = () => {
+    const newPlan = {
+      id: uuid,
+    };
+
+    setPlans([...plans, newPlan]);
+    plan.setPlan({
+      ...plan,
+      id: uuid,
+      onlineId,
+      name,
     });
 
     setTimeout(() => {
@@ -104,13 +125,13 @@ export const PlanItem = ({
     toast.success("Plan został usunięty.");
   };
 
-  const groupCount = plan.courses
+  const groupCountLocal = plan.courses
     .flatMap((c) => c.groups)
     .filter((group) => group.isChecked).length;
 
   return (
     <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="p-4">
+      <CardHeader className="space-y-0 p-4">
         <CardTitle className="text-lg">{name}</CardTitle>
         <CardDescription>
           {format(
@@ -121,13 +142,18 @@ export const PlanItem = ({
       </CardHeader>
       <CardContent className="flex-1 p-4 pt-0">
         <p className="text-sm">
-          {plan.registrations.length}{" "}
-          {pluralize(plan.registrations.length, "kurs", "kursy", "kursów")}
+          {registrationCount || plan.registrations.length}{" "}
+          {pluralize(
+            registrationCount || plan.registrations.length,
+            "kurs",
+            "kursy",
+            "kursów",
+          )}
         </p>
         <p className="text-sm">
-          {groupCount}{" "}
+          {groupCount || groupCountLocal}{" "}
           {pluralize(
-            groupCount,
+            groupCount || groupCountLocal,
             "wybrana grupa",
             "wybrane grupy",
             "wybranych grup",
@@ -159,23 +185,22 @@ export const PlanItem = ({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button size="sm" asChild={true}>
-          <Link href={`/plans/edit/${id}`}>
+        {onlineOnly ? (
+          <Button size="sm" onClick={createFromOnlinePlan}>
             <Pencil className="h-4 w-4" />
             Edytuj
-          </Link>
-        </Button>
+          </Button>
+        ) : (
+          <Button size="sm" asChild={true}>
+            <Link href={`/plans/edit/${id}`}>
+              <Pencil className="h-4 w-4" />
+              Edytuj
+            </Link>
+          </Button>
+        )}
       </CardFooter>
 
-      <div className="absolute right-2 top-2 flex size-[40px] items-center justify-center backdrop-blur-md">
-        {synced ? (
-          <CloudIcon className="size-4 text-emerald-500" />
-        ) : !(onlineId ?? "") ? (
-          <AlertTriangleIcon className="size-4 text-rose-500" />
-        ) : (
-          <RefreshCwOffIcon className="size-4 text-amber-500" />
-        )}
-      </div>
+      <StatusIcon synced={synced} onlineId={onlineId} />
 
       <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
         <DialogContent

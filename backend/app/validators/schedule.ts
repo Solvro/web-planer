@@ -30,6 +30,6 @@ export const updateScheduleValidator = vine.compile(
         })
       )
       .optional(),
-    updatedAt: vine.date().optional(),
+    updatedAt: vine.string().optional(),
   })
 )

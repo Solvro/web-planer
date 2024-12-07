@@ -148,6 +148,8 @@ export default class SchedulesController {
       .andWhere('userId', userId)
       .firstOrFail()
 
+    console.log(payload)
+
     if (payload.name) {
       currSchedule.name = payload.name
     }
@@ -179,12 +181,12 @@ export default class SchedulesController {
     }
 
     if (payload.updatedAt) {
-      currSchedule.updatedAt = DateTime.fromJSDate(payload.updatedAt)
+      currSchedule.updatedAt = DateTime.fromISO(payload.updatedAt)
     }
 
     await currSchedule.save()
 
-    return { message: 'Schedule updated successfully.', currSchedule }
+    return { message: 'Schedule updated successfully.', currSchedule, payload }
   }
 
   /**

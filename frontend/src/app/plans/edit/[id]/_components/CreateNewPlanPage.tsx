@@ -1,12 +1,13 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { toast } from "sonner";
 
-import { createNewPlan, updatePlan } from "@/actions/plans";
+import { createNewPlan, getPlan, updatePlan } from "@/actions/plans";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { GroupsAccordionItem } from "@/components/GroupsAccordion";
@@ -24,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { env } from "@/env.mjs";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import type { LessonType } from "@/services/usos/types";
@@ -82,6 +82,7 @@ export function CreateNewPlanPage({
 
   const handleSyncPlan = async () => {
     setSyncing(true);
+    const updatedAtDate = new Date();
     try {
       const res = await updatePlan({
         id: Number(plan.onlineId),
@@ -93,12 +94,17 @@ export function CreateNewPlanPage({
         groups: plan.allGroups
           .filter((g) => g.isChecked)
           .map((g) => ({ id: g.groupOnlineId })),
+        updatedAt: updatedAtDate.toISOString(),
       });
       if (res === false) {
         return toast.error("Nie udało się zaktualizować planu");
       }
       toast.success("Zaktualizowano plan");
-      plan.setSynced(true);
+      plan.setPlan((prev) => ({
+        ...prev,
+        synced: true,
+        updatedAt: updatedAtDate,
+      }));
       return true;
     } finally {
       setSyncing(false);
@@ -111,12 +117,6 @@ export function CreateNewPlanPage({
     }
   }, [plan]);
 
-  // useEffect(() => {
-  //   if (!plan.synced && plan.onlineId !== null && !firstTime.current) {
-  //     void handleUpdatePlan();
-  //   }
-  // }, [plan.onlineId, plan.synced, firstTime]);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [faculty, setFaculty] = useState<string | null>(null);
@@ -125,7 +125,7 @@ export function CreateNewPlanPage({
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
+        `${process.env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
       );
 
       if (!response.ok) {
@@ -140,7 +140,7 @@ export function CreateNewPlanPage({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        `${process.env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
       );
 
       if (!response.ok) {
@@ -150,6 +150,61 @@ export function CreateNewPlanPage({
       return response.json() as Promise<CourseType>;
     },
   });
+
+  const handleUpdateLocalPlan = async () => {
+    firstTime.current = false;
+    const onlinePlan = await getPlan({ id: Number(plan.onlineId) });
+    if (onlinePlan === false) {
+      return toast.error("Nie udało się pobrać planu");
+    }
+    for (const registration of onlinePlan.registrations) {
+      coursesFn.mutate(registration.id, {
+        onSuccess: (courses) => {
+          const extendedCourses: ExtendedCourse[] = courses
+            .map((c) => {
+              const groups: ExtendedGroup[] = c.groups.map((g) => ({
+                groupId: g.group + c.id + g.type,
+                groupNumber: g.group.toString(),
+                groupOnlineId: g.id,
+                courseId: c.id,
+                courseName: c.name,
+                isChecked:
+                  onlinePlan.courses
+                    .find((oc) => oc.id === c.id)
+                    ?.groups.some((og) => og.id === g.id) ?? false,
+                courseType: g.type,
+                day: g.day,
+                lecturer: g.lecturer,
+                registrationId: c.registrationId,
+                week: g.week.replace("-", "") as "" | "TN" | "TP",
+                endTime: g.endTime.split(":").slice(0, 2).join(":"),
+                startTime: g.startTime.split(":").slice(0, 2).join(":"),
+              }));
+              return {
+                id: c.id,
+                name: c.name,
+                isChecked: onlinePlan.courses.some((oc) => oc.id === c.id),
+                registrationId: c.registrationId,
+                type: c.groups.at(0)?.type ?? ("" as LessonType),
+                groups,
+              };
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+          plan.addRegistration(registration, extendedCourses, true);
+        },
+        onError: () => {
+          toast.error("Nie udało się pobrać kursów");
+        },
+      });
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (plan.onlineId !== null && plan.toCreate && firstTime.current) {
+      void handleUpdateLocalPlan();
+    }
+  }, [plan]);
 
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
