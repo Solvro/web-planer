@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Schedule from '#models/schedule'
 import { createScheduleValidator, updateScheduleValidator } from '#validators/schedule'
+import { DateTime } from 'luxon'
 
 export default class SchedulesController {
   /**
@@ -131,6 +132,12 @@ export default class SchedulesController {
       } else {
         await currSchedule.related('courses').sync(payload.courses.map((group) => group.id))
       }
+    }
+
+    if (payload.updatedAt) {
+      currSchedule.updatedAt = DateTime.fromJSDate(payload.updatedAt)
+    } else {
+      currSchedule.updatedAt = DateTime.now()
     }
 
     await currSchedule.save()
