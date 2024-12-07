@@ -16,13 +16,17 @@ export interface PlanResponseDataType {
   registrations: Registration[];
 }
 
+export interface ErrorResponse {
+  error: string;
+}
+
+type PlanResponse = ErrorResponse | PlanResponseDataType[];
+
 export default async function Plans() {
-  const data = await fetchToAdonis<PlanResponseDataType[]>({
+  const data = await fetchToAdonis<PlanResponse>({
     url: "/user/schedules",
     method: "GET",
   });
 
-  console.log(data);
-
-  return <PlansPage plans={data ?? []} />;
+  return <PlansPage plans={Array.isArray(data) ? data : []} />;
 }

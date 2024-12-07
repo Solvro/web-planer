@@ -44,6 +44,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
       registration: Registration,
       courses: ExtendedCourse[],
       firstTime = false,
+      updatedAt?: Date,
     ) => {
       setPlan({
         ...plan,
@@ -56,6 +57,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
 
         synced: firstTime,
         toCreate: false,
+        updatedAt: updatedAt ?? plan.updatedAt,
       });
     },
     removeRegistration: (registrationId: string) => {

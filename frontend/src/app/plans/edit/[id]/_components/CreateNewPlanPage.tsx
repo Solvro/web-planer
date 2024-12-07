@@ -1,7 +1,9 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { isEqual } from "date-fns";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { toast } from "sonner";
@@ -29,6 +31,7 @@ import { registrationReplacer } from "@/lib/utils";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
 
+import { SyncErrorAlert } from "./SyncErrorAlert";
 import { SyncedButton } from "./SyncedButton";
 
 type CourseType = Array<{
@@ -62,17 +65,29 @@ export function CreateNewPlanPage({
   faculties: Array<{ name: string; value: string }>;
 }) {
   const [syncing, setSyncing] = useState(false);
+  const [bouncingAlert, setBouncingAlert] = useState(false);
   const firstTime = useRef(true);
+  const router = useRouter();
 
   const plan = usePlan({
     planId,
   });
 
+  const bounceAlert = () => {
+    setBouncingAlert(true);
+    setTimeout(() => {
+      setBouncingAlert(false);
+    }, 1000);
+  };
+
   const handleCreateOnlinePlan = async () => {
     firstTime.current = false;
     const res = await createNewPlan({ name: plan.name });
     if (res === false) {
-      return toast.error("Nie udało się utworzyć planu");
+      return toast.error("Nie udało się utworzyć planu w wersji online", {
+        description: "Zaloguj się i spróbuj ponownie",
+        duration: 5000,
+      });
     }
     plan.setOnlineId(res.schedule.id.toString());
     toast.success("Utworzono plan");
@@ -81,7 +96,6 @@ export function CreateNewPlanPage({
 
   const handleSyncPlan = async () => {
     setSyncing(true);
-    const updatedAtDate = new Date();
     try {
       const res = await updatePlan({
         id: Number(plan.onlineId),
@@ -93,16 +107,18 @@ export function CreateNewPlanPage({
         groups: plan.allGroups
           .filter((g) => g.isChecked)
           .map((g) => ({ id: g.groupOnlineId })),
-        updatedAt: updatedAtDate.toISOString(),
       });
-      if (res === false) {
+      if (res === false || !res.success) {
         return toast.error("Nie udało się zaktualizować planu");
       }
+      await refetchOnlinePlan();
       toast.success("Zaktualizowano plan");
       plan.setPlan((prev) => ({
         ...prev,
         synced: true,
-        updatedAt: updatedAtDate,
+        updatedAt: res.schedule.updatedAt
+          ? new Date(res.schedule.updatedAt)
+          : new Date(),
       }));
       return true;
     } finally {
@@ -135,6 +151,24 @@ export function CreateNewPlanPage({
     },
   });
 
+  const { data: onlinePlan, refetch: refetchOnlinePlan } = useQuery({
+    enabled: plan.onlineId !== null,
+    queryKey: ["onlinePlan", plan.onlineId],
+    queryFn: async () => {
+      const res = await getPlan({ id: Number(plan.onlineId) });
+      if (
+        res === false ||
+        (res as unknown as { status: number }).status === 404
+      ) {
+        plan.remove();
+        toast.error("Nie udało się pobrać planu");
+        router.push("/plans");
+        return null;
+      }
+      return res;
+    },
+  });
+
   const coursesFn = useMutation({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
@@ -152,62 +186,102 @@ export function CreateNewPlanPage({
 
   const handleUpdateLocalPlan = async () => {
     firstTime.current = false;
-    const onlinePlan = await getPlan({ id: Number(plan.onlineId) });
-    if (onlinePlan === false) {
-      return toast.error("Nie udało się pobrać planu");
+
+    if (!onlinePlan) {
+      return false;
     }
+
+    let updatedRegistrations: typeof plan.registrations = [];
+    let updatedCourses: typeof plan.courses = [];
+
     for (const registration of onlinePlan.registrations) {
-      coursesFn.mutate(registration.id, {
-        onSuccess: (courses) => {
-          const extendedCourses: ExtendedCourse[] = courses
-            .map((c) => {
-              const groups: ExtendedGroup[] = c.groups.map((g) => ({
-                groupId: g.group + c.id + g.type,
-                groupNumber: g.group.toString(),
-                groupOnlineId: g.id,
-                courseId: c.id,
-                courseName: c.name,
-                isChecked:
-                  onlinePlan.courses
-                    .find((oc) => oc.id === c.id)
-                    ?.groups.some((og) => og.id === g.id) ?? false,
-                courseType: g.type,
-                day: g.day,
-                lecturer: g.lecturer,
-                registrationId: c.registrationId,
-                week: g.week.replace("-", "") as "" | "TN" | "TP",
-                endTime: g.endTime.split(":").slice(0, 2).join(":"),
-                startTime: g.startTime.split(":").slice(0, 2).join(":"),
-              }));
-              return {
-                id: c.id,
-                name: c.name,
-                isChecked: onlinePlan.courses.some((oc) => oc.id === c.id),
-                registrationId: c.registrationId,
-                type: c.groups.at(0)?.type ?? ("" as LessonType),
-                groups,
-              };
-            })
-            .sort((a, b) => a.name.localeCompare(b.name));
-          plan.addRegistration(registration, extendedCourses, true);
-        },
-        onError: () => {
-          toast.error("Nie udało się pobrać kursów");
-        },
-      });
+      try {
+        const courses = await coursesFn.mutateAsync(registration.id);
+        const extendedCourses: ExtendedCourse[] = courses
+          .map((c) => {
+            const groups: ExtendedGroup[] = c.groups.map((g) => ({
+              groupId: g.group + c.id + g.type,
+              groupNumber: g.group.toString(),
+              groupOnlineId: g.id,
+              courseId: c.id,
+              courseName: c.name,
+              isChecked:
+                onlinePlan.courses
+                  .find((oc) => oc.id === c.id)
+                  ?.groups.some((og) => og.id === g.id) ?? false,
+              courseType: g.type,
+              day: g.day,
+              lecturer: g.lecturer,
+              registrationId: c.registrationId,
+              week: g.week.replace("-", "") as "" | "TN" | "TP",
+              endTime: g.endTime.split(":").slice(0, 2).join(":"),
+              startTime: g.startTime.split(":").slice(0, 2).join(":"),
+            }));
+            return {
+              id: c.id,
+              name: c.name,
+              isChecked: onlinePlan.courses.some((oc) => oc.id === c.id),
+              registrationId: c.registrationId,
+              type: c.groups.at(0)?.type ?? ("" as LessonType),
+              groups,
+            };
+          })
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        // Aktualizacja list
+        updatedRegistrations = [...updatedRegistrations, registration].filter(
+          (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
+        );
+
+        updatedCourses = [...updatedCourses, ...extendedCourses].filter(
+          (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
+        );
+      } catch {
+        toast.error("Nie udało się pobrać kursów");
+      }
     }
+
+    plan.setPlan({
+      ...plan,
+      registrations: updatedRegistrations,
+      courses: updatedCourses,
+      synced: true,
+      toCreate: false,
+      updatedAt: new Date(onlinePlan.updatedAt),
+    });
+
     return true;
   };
 
   useEffect(() => {
-    if (plan.onlineId !== null && plan.toCreate && firstTime.current) {
+    if (
+      onlinePlan &&
+      plan.onlineId !== null &&
+      plan.toCreate &&
+      firstTime.current
+    ) {
       void handleUpdateLocalPlan();
     }
-  }, [plan]);
+  }, [plan, onlinePlan]);
+
+  const downloadChanges = () => {
+    void handleUpdateLocalPlan();
+  };
+  const uploadChanges = () => {
+    void handleSyncPlan();
+  };
 
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
+        <SyncErrorAlert
+          downloadChanges={downloadChanges}
+          sendChanges={uploadChanges}
+          planDate={plan.updatedAt}
+          onlinePlan={onlinePlan}
+          bounce={bouncingAlert}
+        />
+
         <div className="flex flex-col justify-start gap-3 md:w-full">
           <div className="flex w-full items-end gap-1">
             <div className="flex items-end gap-1">
@@ -252,7 +326,12 @@ export function CreateNewPlanPage({
               synced={plan.synced}
               onlineId={plan.onlineId}
               syncing={syncing}
+              bounceAlert={bounceAlert}
               onClick={handleSyncPlan}
+              equalsDates={isEqual(
+                plan.updatedAt,
+                new Date(onlinePlan ? onlinePlan.updatedAt : plan.updatedAt),
+              )}
             />
             <PlanDisplayLink id={plan.id} />
           </div>

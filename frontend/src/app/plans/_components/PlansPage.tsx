@@ -3,6 +3,8 @@
 import { atom, useAtom } from "jotai";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 import { planFamily } from "@/atoms/planFamily";
 import { plansIds } from "@/atoms/plansIds";
@@ -38,6 +40,24 @@ export function PlansPage({
     setPlans([...plans, newPlan]);
   };
 
+  const plansExistingLocallyAndDeletedOnline = plans.filter(
+    (plan) => !onlinePlans.some((p) => p.id.toString() === plan.onlineId),
+  );
+
+  useEffect(() => {
+    if (plansExistingLocallyAndDeletedOnline.length > 0) {
+      setPlans(
+        plans.filter(
+          (plan) =>
+            !plansExistingLocallyAndDeletedOnline.some((p) => p.id === plan.id),
+        ),
+      );
+      toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
+        duration: 5000,
+      });
+    }
+  }, [plans, plansExistingLocallyAndDeletedOnline]);
+
   return (
     <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">
       <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
@@ -70,6 +90,7 @@ export function PlansPage({
               onlineOnly={true}
               groupCount={plan.courses.flatMap((c) => c.groups).length}
               registrationCount={plan.registrations.length}
+              updatedAt={new Date(plan.updatedAt)}
             />
           );
         })}

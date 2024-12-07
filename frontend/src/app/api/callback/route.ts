@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
@@ -82,5 +83,6 @@ export const GET = async (request: NextRequest) => {
     secure: true,
   });
 
+  revalidatePath("/plans");
   return redirect("/plans");
 };

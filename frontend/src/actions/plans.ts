@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth, fetchToAdonis } from "@/lib/auth";
 
 interface CreatePlanResponseType {
+  success: boolean;
   message: string;
   schedule: {
     name: string;
@@ -71,14 +72,12 @@ export const updatePlan = async ({
   courses,
   registrations,
   groups,
-  updatedAt,
 }: {
   id: number;
   name: string;
   courses: Array<{ id: string }>;
   registrations: Array<{ id: string }>;
   groups: Array<{ id: number }>;
-  updatedAt: string;
 }) => {
   const isLogged = await auth({});
   if (!isLogged) {
@@ -88,7 +87,7 @@ export const updatePlan = async ({
   const data = await fetchToAdonis<CreatePlanResponseType>({
     url: `/user/schedules/${id}`,
     method: "PATCH",
-    body: JSON.stringify({ name, courses, registrations, groups, updatedAt }),
+    body: JSON.stringify({ name, courses, registrations, groups }),
   });
   if (!data) {
     return false;

@@ -9,7 +9,7 @@ export const StatusIcon = ({
   onlineId: string | null;
 }) => {
   return (
-    <div className="absolute right-2 top-2 flex size-[40px] items-center justify-center backdrop-blur-md">
+    <div className="absolute right-4 top-4 flex size-[20px] items-center justify-center rounded-md backdrop-blur-md">
       {synced ? (
         <CloudIcon className="size-4 text-emerald-500" />
       ) : !(onlineId ?? "") ? (

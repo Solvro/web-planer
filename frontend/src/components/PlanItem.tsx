@@ -54,6 +54,7 @@ export const PlanItem = ({
   onlineOnly = false,
   groupCount = 0,
   registrationCount = 0,
+  updatedAt = new Date(),
 }: {
   id: string;
   name: string;
@@ -62,6 +63,7 @@ export const PlanItem = ({
   onlineOnly?: boolean;
   groupCount?: number;
   registrationCount?: number;
+  updatedAt?: Date;
 }) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const uuidToCopy = React.useMemo(() => crypto.randomUUID(), []);
@@ -131,11 +133,13 @@ export const PlanItem = ({
 
   return (
     <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="space-y-0 p-4">
-        <CardTitle className="text-lg">{name}</CardTitle>
+      <CardHeader className="space-y-1 p-4">
+        <CardTitle className="w-5/6 text-balance text-lg leading-4">
+          {name}
+        </CardTitle>
         <CardDescription>
           {format(
-            (plan.createdAt as Date | undefined) ?? new Date(),
+            onlineOnly ? updatedAt : plan.createdAt,
             "dd.MM.yyyy - HH:mm",
           )}
         </CardDescription>
