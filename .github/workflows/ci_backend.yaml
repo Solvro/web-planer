@@ -1,21 +1,21 @@
-name: CI
+name: CI Backend
 
 on:
   push:
     branches: ["main"]
     paths:
-      - "frontend/**"
+      - "backend/**"
   pull_request:
     branches: ["main"]
     paths:
-      - "frontend/**"
+      - "backend/**"
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,10 +29,6 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Format check
-        run: npm run format:check
-        if: always()
-
       - name: Lint
         run: npm run lint
         if: always()
@@ -41,13 +37,20 @@ jobs:
         run: npm run typecheck
         if: always()
 
-      - name: Build
+      - name: Run Test Build
         run: npm run build
         env:
-          USOS_CONSUMER_KEY: hello
-          USOS_CONSUMER_SECRET: jello
-        if: always()
-
-      - name: Find deadcode
-        run: npm run knip
+          NODE_ENV: production
+          PORT: 3333
+          HOST: 0.0.0.0
+          LOG_LEVEL: debug
+          APP_KEY: really-hard-secret-key-to-guess
+          SESSION_DRIVER: cookie
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: postgres
+          DB_DATABASE: postgres
+          DB_PASSWORD: postgres
+          USOS_CONSUMER_KEY: test
+          USOS_CONSUMER_SECRET: test
         if: always()
