@@ -1,14 +1,19 @@
-import crypto from "crypto";
+import CryptoJS, { HmacSHA1 } from "crypto-js";
 import { cookies as cookiesPromise } from "next/headers";
 import OAuth from "oauth-1.0a";
 
 import { env } from "@/env.mjs";
 
+function createHmacSha1Base64(base_string: string, key: string) {
+  const hmac: CryptoJS.lib.WordArray = HmacSHA1(base_string, key);
+  return CryptoJS.enc.Base64.stringify(hmac);
+}
+
 export const oauth = new OAuth({
   consumer: { key: env.USOS_CONSUMER_KEY, secret: env.USOS_CONSUMER_SECRET },
   signature_method: "HMAC-SHA1",
   hash_function(base_string, key) {
-    return crypto.createHmac("sha1", key).update(base_string).digest("base64");
+    return createHmacSha1Base64(base_string, key);
   },
 });
 
