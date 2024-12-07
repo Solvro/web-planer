@@ -192,12 +192,16 @@ export default class SchedulesController {
       return { message: 'User not authenticated.' }
     }
 
-    const schedule = await Schedule.query()
-      .where('id', params.schedule_id)
-      .andWhere('userId', userId)
-      .firstOrFail()
+    try {
+      const schedule = await Schedule.query()
+        .where('id', params.schedule_id)
+        .andWhere('userId', userId)
+        .firstOrFail()
 
-    await schedule.delete()
-    return { message: 'Schedule successfully deleted.' }
+      await schedule.delete()
+      return { success: true, message: 'Schedule successfully deleted.' }
+    } catch (error) {
+      return { success: false, message: 'Schedule not found.' }
+    }
   }
 }
