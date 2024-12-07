@@ -13,8 +13,48 @@ export default class SchedulesController {
       return { message: 'User not authenticated.' }
     }
 
-    const schedules = await Schedule.query().where('userId', userId)
-    return schedules
+    // Pobierz wszystkie harmonogramy użytkownika
+    const schedules = await Schedule.query()
+      .where('userId', userId)
+      .preload('registrations') // Preload registrations dla każdego harmonogramu
+      .preload('courses') // Preload courses dla każdego harmonogramu
+
+    // Przetwórz każdy harmonogram, aby uzyskać pożądaną strukturę
+    const transformedSchedules = await Promise.all(
+      schedules.map(async (schedule) => {
+        // Pobierz grupy powiązane z kursami w harmonogramie
+        const courseGroups = await schedule
+          .related('courses')
+          .query()
+          .preload('groups', (groupQuery) => {
+            groupQuery.whereExists((subQuery) => {
+              subQuery
+                .from('schedule_groups')
+                .whereRaw('schedule_groups.group_id = groups.id')
+                .andWhere('schedule_groups.schedule_id', schedule.id)
+            })
+          })
+
+        return {
+          name: schedule.name,
+          registrations: schedule.registrations.map((reg) => ({
+            id: reg.id,
+            ...reg.serialize(),
+          })),
+          courses: courseGroups.map((course) => ({
+            id: course.id,
+            name: course.name,
+            groups: course.groups.map((group) => ({
+              id: group.id,
+              name: group.name,
+              ...group.serialize(),
+            })),
+          })),
+        }
+      })
+    )
+
+    return transformedSchedules
   }
 
   /**
