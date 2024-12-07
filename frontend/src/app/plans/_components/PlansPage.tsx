@@ -3,7 +3,7 @@
 import { atom, useAtom } from "jotai";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 import { planFamily } from "@/atoms/planFamily";
@@ -25,6 +25,7 @@ export function PlansPage({
 }) {
   const [plans, setPlans] = useAtom(plansAtom);
   const router = useRouter();
+  const firstTime = useRef(true);
 
   const addNewPlan = () => {
     const uuid = crypto.randomUUID();
@@ -41,22 +42,29 @@ export function PlansPage({
   };
 
   const plansExistingLocallyAndDeletedOnline = plans.filter(
-    (plan) => !onlinePlans.some((p) => p.id.toString() === plan.onlineId),
+    (plan) =>
+      plan.onlineId !== null &&
+      !onlinePlans.some((p) => p.id.toString() === plan.onlineId),
   );
 
+  const handleDeleteDeletedPlans = () => {
+    firstTime.current = false;
+    setPlans(
+      plans.filter(
+        (plan) =>
+          !plansExistingLocallyAndDeletedOnline.some((p) => p.id === plan.id),
+      ),
+    );
+    toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
+      duration: 5000,
+    });
+  };
+
   useEffect(() => {
-    if (plansExistingLocallyAndDeletedOnline.length > 0) {
-      setPlans(
-        plans.filter(
-          (plan) =>
-            !plansExistingLocallyAndDeletedOnline.some((p) => p.id === plan.id),
-        ),
-      );
-      toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
-        duration: 5000,
-      });
+    if (firstTime.current && plansExistingLocallyAndDeletedOnline.length > 0) {
+      handleDeleteDeletedPlans();
     }
-  }, [plans, plansExistingLocallyAndDeletedOnline]);
+  }, [plansExistingLocallyAndDeletedOnline]);
 
   return (
     <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">

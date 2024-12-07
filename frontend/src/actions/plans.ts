@@ -49,7 +49,17 @@ interface DeletePlanResponseType {
   message: string;
 }
 
-export const createNewPlan = async ({ name }: { name: string }) => {
+export const createNewPlan = async ({
+  name,
+  courses,
+  registrations,
+  groups,
+}: {
+  name: string;
+  courses: Array<{ id: string }>;
+  registrations: Array<{ id: string }>;
+  groups: Array<{ id: number }>;
+}) => {
   const isLogged = await auth({});
   if (!isLogged) {
     return false;
@@ -58,7 +68,7 @@ export const createNewPlan = async ({ name }: { name: string }) => {
   const data = await fetchToAdonis<CreatePlanResponseType>({
     url: "/user/schedules",
     method: "POST",
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ name, courses, registrations, groups }),
   });
   if (!data) {
     return false;

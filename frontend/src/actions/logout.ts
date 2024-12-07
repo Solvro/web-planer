@@ -2,6 +2,8 @@
 
 import { cookies as cookiesPromise } from "next/headers";
 
+import { env } from "@/env.mjs";
+
 export const signOutFunction = async () => {
   const cookies = await cookiesPromise();
   cookies.delete({
@@ -12,7 +14,7 @@ export const signOutFunction = async () => {
     name: "access_token_secret",
     path: "/",
   });
-  await fetch("/api/v1/user", { method: "DELETE" });
+  await fetch(`${env.NEXT_PUBLIC_API_URL}/user`, { method: "DELETE" });
 
   return true;
 };

@@ -82,14 +82,31 @@ export function CreateNewPlanPage({
 
   const handleCreateOnlinePlan = async () => {
     firstTime.current = false;
-    const res = await createNewPlan({ name: plan.name });
+    const courses = plan.courses
+      .filter((c) => c.isChecked)
+      .map((c) => ({ id: c.id }));
+    const registrations = plan.registrations.map((r) => ({ id: r.id }));
+    const groups = plan.allGroups
+      .filter((g) => g.isChecked)
+      .map((g) => ({ id: g.groupOnlineId }));
+    const res = await createNewPlan({
+      name: plan.name,
+      courses,
+      registrations,
+      groups,
+    });
     if (res === false) {
       return toast.error("Nie udało się utworzyć planu w wersji online", {
         description: "Zaloguj się i spróbuj ponownie",
         duration: 5000,
       });
     }
-    plan.setOnlineId(res.schedule.id.toString());
+    plan.setPlan((prev) => ({
+      ...prev,
+      synced: true,
+      updatedAt: new Date(res.schedule.updatedAt),
+      onlineId: res.schedule.id.toString(),
+    }));
     toast.success("Utworzono plan");
     return true;
   };
@@ -151,7 +168,11 @@ export function CreateNewPlanPage({
     },
   });
 
-  const { data: onlinePlan, refetch: refetchOnlinePlan } = useQuery({
+  const {
+    data: onlinePlan,
+    refetch: refetchOnlinePlan,
+    isLoading,
+  } = useQuery({
     enabled: plan.onlineId !== null,
     queryKey: ["onlinePlan", plan.onlineId],
     queryFn: async () => {
@@ -270,6 +291,14 @@ export function CreateNewPlanPage({
   const uploadChanges = () => {
     void handleSyncPlan();
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex w-full flex-1 flex-col items-center justify-center">
+        loading...
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">

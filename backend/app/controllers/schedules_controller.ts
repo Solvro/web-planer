@@ -78,6 +78,30 @@ export default class SchedulesController {
       userId: userId,
     })
 
+    if (payload.groups !== undefined) {
+      if (payload.groups.length === 0) {
+        await schedule.related('groups').sync([])
+      } else {
+        await schedule.related('groups').sync(payload.groups.map((group) => group.id))
+      }
+    }
+
+    if (payload.registrations !== undefined) {
+      if (payload.registrations.length === 0) {
+        await schedule.related('registrations').sync([])
+      } else {
+        await schedule.related('registrations').sync(payload.registrations.map((group) => group.id))
+      }
+    }
+
+    if (payload.courses !== undefined) {
+      if (payload.courses.length === 0) {
+        await schedule.related('courses').sync([])
+      } else {
+        await schedule.related('courses').sync(payload.courses.map((group) => group.id))
+      }
+    }
+
     return { message: 'Schedule created.', schedule }
   }
 
