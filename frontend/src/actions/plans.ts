@@ -73,7 +73,7 @@ export const deletePlan = async ({ id }: { id: number }) => {
     method: "DELETE",
   });
   console.log(data);
-  if (!data) {
+  if (!data || data.success !== true) {
     return false;
   }
   revalidatePath("/plans");

@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { env } from "@/env.mjs";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import type { LessonType } from "@/services/usos/types";
@@ -124,7 +125,7 @@ export function CreateNewPlanPage({
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `https://planer.solvro.pl/api/v1/departments/${faculty}/registrations`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
       );
 
       if (!response.ok) {
@@ -139,7 +140,7 @@ export function CreateNewPlanPage({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetch(
-        `https://planer.solvro.pl/api/v1/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
       );
 
       if (!response.ok) {

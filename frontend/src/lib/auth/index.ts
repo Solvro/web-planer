@@ -104,7 +104,7 @@ export const auth = async ({
   }
 
   try {
-    const response = await fetch("https://planer.solvro.pl/api/v1/user/login", {
+    const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -170,7 +170,7 @@ export const fetchToAdonis = async <T>({
     }
 
     const response = await fetch(
-      `https://planer.solvro.pl/api/v1${url}`,
+      `${env.NEXT_PUBLIC_API_URL}${url}`,
       fetchOptions,
     );
     const data = (await response.json()) as T;
