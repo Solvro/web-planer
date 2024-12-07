@@ -136,8 +136,6 @@ export default class SchedulesController {
 
     if (payload.updatedAt) {
       currSchedule.updatedAt = DateTime.fromJSDate(payload.updatedAt)
-    } else {
-      currSchedule.updatedAt = DateTime.now()
     }
 
     await currSchedule.save()
