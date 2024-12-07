@@ -91,7 +91,9 @@ export const PlanItem = ({
   const handleDeletePlan = async () => {
     plan.remove();
     setPlans(plans.filter((p) => p.id !== id));
-    await deletePlan({ id: Number(plan.onlineId ?? "0") });
+    if (plan.onlineId !== null) {
+      await deletePlan({ id: Number(plan.onlineId) });
+    }
     toast.success("Plan został usunięty.");
   };
 

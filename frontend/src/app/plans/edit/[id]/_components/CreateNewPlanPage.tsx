@@ -85,8 +85,13 @@ export function CreateNewPlanPage({
       const res = await updatePlan({
         id: Number(plan.onlineId),
         name: plan.name,
-        courses: plan.courses,
-        registrations: plan.registrations,
+        courses: plan.courses
+          .filter((c) => c.isChecked)
+          .map((c) => ({ id: c.id })),
+        registrations: plan.registrations.map((r) => ({ id: r.id })),
+        groups: plan.allGroups
+          .filter((g) => g.isChecked)
+          .map((g) => ({ id: g.groupOnlineId })),
       });
       if (res === false) {
         return toast.error("Nie udało się zaktualizować planu");
@@ -263,6 +268,7 @@ export function CreateNewPlanPage({
                               ({
                                 groupId: g.group + c.id + g.type,
                                 groupNumber: g.group.toString(),
+                                groupOnlineId: g.id,
                                 courseId: c.id,
                                 courseName: c.name,
                                 isChecked: false,

@@ -78,9 +78,9 @@ export function PlansPage({
     }
   };
 
-  useEffect(() => {
-    handleCreateOfflinePlansIfNotExists();
-  }, []);
+  // useEffect(() => {
+  //   handleCreateOfflinePlansIfNotExists();
+  // }, []);
 
   return (
     <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">
@@ -100,6 +100,20 @@ export function PlansPage({
             onlineId={plan.onlineId}
           />
         ))}
+        {onlinePlans.map((plan) => {
+          if (plans.some((p) => p.onlineId === plan.id.toString())) {
+            return null;
+          }
+          return (
+            <PlanItem
+              key={plan.id}
+              id={plan.id.toString()}
+              name={plan.name}
+              synced={true}
+              onlineId={plan.id.toString()}
+            />
+          );
+        })}
       </div>
     </div>
   );
