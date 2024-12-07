@@ -36,6 +36,10 @@ export default class SchedulesController {
           })
 
         return {
+          id: schedule.id,
+          userId: schedule.userId,
+          createdAt: schedule.createdAt,
+          updatedAt: schedule.updatedAt,
           name: schedule.name,
           registrations: schedule.registrations.map((reg) => ({
             id: reg.id,
