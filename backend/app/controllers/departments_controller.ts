@@ -24,7 +24,6 @@ export default class DepartmentsController {
    */
   async show({ params }: HttpContext) {
     return await Department.findOrFail(params.id)
-
   }
 
   /**
