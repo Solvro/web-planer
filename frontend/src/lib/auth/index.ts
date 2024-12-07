@@ -1,13 +1,19 @@
-import crypto from "crypto";
+import CryptoJS, { HmacSHA1 } from "crypto-js";
+import { cookies as cookiesPromise } from "next/headers";
 import OAuth from "oauth-1.0a";
 
 import { env } from "@/env.mjs";
+
+function createHmacSha1Base64(base_string: string, key: string) {
+  const hmac: CryptoJS.lib.WordArray = HmacSHA1(base_string, key);
+  return CryptoJS.enc.Base64.stringify(hmac);
+}
 
 export const oauth = new OAuth({
   consumer: { key: env.USOS_CONSUMER_KEY, secret: env.USOS_CONSUMER_SECRET },
   signature_method: "HMAC-SHA1",
   hash_function(base_string, key) {
-    return crypto.createHmac("sha1", key).update(base_string).digest("base64");
+    return createHmacSha1Base64(base_string, key);
   },
 });
 
@@ -86,3 +92,95 @@ export async function getRequestToken() {
     secret: params.get("oauth_token_secret"),
   };
 }
+
+export const auth = async ({
+  token,
+  secret,
+}: {
+  token?: string | null;
+  secret?: string | null;
+}) => {
+  const cookies = await cookiesPromise();
+  const accessToken = token ?? cookies.get("access_token")?.value;
+  const accessSecret = secret ?? cookies.get("access_token_secret")?.value;
+
+  if (accessToken === "" || accessSecret === "") {
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/user/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ accessToken, accessSecret }),
+      credentials: "include",
+    });
+    const data = (await response.json()) as { error?: string };
+    if (data.error !== undefined) {
+      cookies.delete({
+        name: "access_token",
+        path: "/",
+      });
+      cookies.delete({
+        name: "access_token_secret",
+        path: "/",
+      });
+      throw new Error(data.error);
+    }
+    const setCookieHeaders = response.headers.getSetCookie();
+    setCookieHeaders.forEach((setCookie) => {
+      const name = setCookie.split("=")[0];
+      const value = setCookie.split("=")[1].split(";")[0];
+      cookies.set({
+        name,
+        value,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+        secure: true,
+      });
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const fetchToAdonis = async <T>({
+  url,
+  method,
+  body,
+}: {
+  url: string;
+  method: RequestInit["method"];
+  body?: string | null;
+}): Promise<T | null> => {
+  try {
+    const cookies = await cookiesPromise();
+    const adonisSession = cookies.get("adonis-session")?.value;
+    const token = cookies.get("token")?.value;
+    const fetchOptions: RequestInit = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `adonis-session=${adonisSession}; token=${token}`,
+      },
+      credentials: "include",
+    };
+
+    if (method !== "GET" && method !== "HEAD" && body !== undefined) {
+      fetchOptions.body = body;
+    }
+
+    const response = await fetch(
+      `${env.NEXT_PUBLIC_API_URL}${url}`,
+      fetchOptions,
+    );
+    const data = (await response.json()) as T;
+    return data;
+  } catch (error) {
+    return null;
+  }
+};

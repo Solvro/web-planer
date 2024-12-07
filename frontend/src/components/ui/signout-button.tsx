@@ -16,6 +16,7 @@ export function SignOutButton({
   if (asChild) {
     const signOut = async () => {
       await signOutFunction();
+      localStorage.clear();
       // refresh
       window.location.reload();
     };
@@ -35,6 +36,7 @@ export function SignOutButton({
     <form
       action={() => {
         void signOutFunction();
+        localStorage.clear();
       }}
     >
       <Button type="submit">{children}</Button>
