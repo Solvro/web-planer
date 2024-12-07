@@ -96,7 +96,7 @@ export function PlansPage({
             key={plan.id}
             id={plan.id}
             name={plan.name}
-            synced={plan.synced}
+            synced={false}
             onlineId={plan.onlineId}
           />
         ))}
@@ -111,6 +111,7 @@ export function PlansPage({
               name={plan.name}
               synced={true}
               onlineId={plan.id.toString()}
+              onlineOnly={true}
             />
           );
         })}

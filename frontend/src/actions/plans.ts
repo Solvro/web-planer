@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { auth, fetchToAdonis } from "@/lib/auth";
 
 interface CreatePlanResponseType {
@@ -60,6 +62,7 @@ export const updatePlan = async ({
 };
 
 export const deletePlan = async ({ id }: { id: number }) => {
+  console.log(id);
   const isLogged = await auth({});
   if (!isLogged) {
     return false;
@@ -69,8 +72,10 @@ export const deletePlan = async ({ id }: { id: number }) => {
     url: `/user/schedules/${id}`,
     method: "DELETE",
   });
+  console.log(data);
   if (!data) {
     return false;
   }
+  revalidatePath("/plans");
   return data;
 };

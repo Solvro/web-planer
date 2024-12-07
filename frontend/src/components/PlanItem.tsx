@@ -7,6 +7,7 @@ import {
   CloudIcon,
   CopyIcon,
   EllipsisVerticalIcon,
+  Loader2Icon,
   Pencil,
   RefreshCwOffIcon,
   TrashIcon,
@@ -52,11 +53,13 @@ export const PlanItem = ({
   name,
   synced,
   onlineId,
+  onlineOnly = false,
 }: {
   id: string;
   name: string;
   synced: boolean;
   onlineId: string | null;
+  onlineOnly?: boolean;
 }) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
@@ -65,6 +68,7 @@ export const PlanItem = ({
   const router = useRouter();
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [dropdownOpened, setDropdownOpened] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const copyPlan = () => {
     setDropdownOpened(false);
@@ -89,10 +93,13 @@ export const PlanItem = ({
   };
 
   const handleDeletePlan = async () => {
+    setLoading(true);
     plan.remove();
-    setPlans(plans.filter((p) => p.id !== id));
-    if (plan.onlineId !== null) {
-      await deletePlan({ id: Number(plan.onlineId) });
+    if (!onlineOnly) {
+      setPlans(plans.filter((p) => p.id !== id));
+    }
+    if (onlineId !== null) {
+      await deletePlan({ id: Number(onlineId) });
     }
     toast.success("Plan został usunięty.");
   };
@@ -104,7 +111,7 @@ export const PlanItem = ({
   return (
     <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
       <CardHeader className="p-4">
-        <CardTitle>{name}</CardTitle>
+        <CardTitle className="text-lg">{name}</CardTitle>
         <CardDescription>
           {format(
             (plan.createdAt as Date | undefined) ?? new Date(),
@@ -189,11 +196,13 @@ export const PlanItem = ({
               Anuluj
             </Button>
             <Button
+              disabled={loading}
               onClick={() => {
                 void handleDeletePlan();
               }}
               variant="destructive"
             >
+              {loading ? <Loader2Icon className="size-4 animate-spin" /> : null}
               Usuń
             </Button>
           </DialogFooter>

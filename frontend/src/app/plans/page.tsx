@@ -22,5 +22,7 @@ export default async function Plans() {
     method: "GET",
   });
 
+  console.log(data);
+
   return <PlansPage plans={data ?? []} />;
 }
