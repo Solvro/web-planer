@@ -89,26 +89,27 @@ export function CreateNewPlanPage({
     const groups = plan.allGroups
       .filter((g) => g.isChecked)
       .map((g) => ({ id: g.groupOnlineId }));
-    const res = await createNewPlan({
-      name: plan.name,
-      courses,
-      registrations,
-      groups,
-    });
-    if (res === false) {
+    try {
+      const res = await createNewPlan({
+        name: plan.name,
+        courses,
+        registrations,
+        groups,
+      });
+      plan.setPlan((prev) => ({
+        ...prev,
+        synced: true,
+        updatedAt: new Date(res.schedule.updatedAt),
+        onlineId: res.schedule.id.toString(),
+      }));
+      toast.success("Utworzono plan");
+      return true;
+    } catch (error) {
       return toast.error("Nie udało się utworzyć planu w wersji online", {
         description: "Zaloguj się i spróbuj ponownie",
         duration: 5000,
       });
     }
-    plan.setPlan((prev) => ({
-      ...prev,
-      synced: true,
-      updatedAt: new Date(res.schedule.updatedAt),
-      onlineId: res.schedule.id.toString(),
-    }));
-    toast.success("Utworzono plan");
-    return true;
   };
 
   const handleSyncPlan = async () => {
@@ -125,7 +126,7 @@ export function CreateNewPlanPage({
           .filter((g) => g.isChecked)
           .map((g) => ({ id: g.groupOnlineId })),
       });
-      if (res === false || !res.success) {
+      if (!res.success) {
         return toast.error("Nie udało się zaktualizować planu");
       }
       await refetchOnlinePlan();
@@ -138,6 +139,8 @@ export function CreateNewPlanPage({
           : new Date(),
       }));
       return true;
+    } catch (error) {
+      return toast.error("Nie udało się zaktualizować planu");
     } finally {
       setSyncing(false);
     }
