@@ -62,7 +62,7 @@ export const createNewPlan = async ({
 }) => {
   const isLogged = await auth({});
   if (!isLogged) {
-    return false;
+    throw new Error("Not logged in");
   }
 
   const data = await fetchToAdonis<CreatePlanResponseType>({
@@ -71,7 +71,7 @@ export const createNewPlan = async ({
     body: JSON.stringify({ name, courses, registrations, groups }),
   });
   if (!data) {
-    return false;
+    throw new Error("Failed to create new plan");
   }
   return data;
 };
@@ -91,7 +91,7 @@ export const updatePlan = async ({
 }) => {
   const isLogged = await auth({});
   if (!isLogged) {
-    return false;
+    throw new Error("Not logged in");
   }
 
   const data = await fetchToAdonis<CreatePlanResponseType>({
@@ -100,7 +100,7 @@ export const updatePlan = async ({
     body: JSON.stringify({ name, courses, registrations, groups }),
   });
   if (!data) {
-    return false;
+    throw new Error("Failed to update plan");
   }
   return data;
 };
@@ -108,7 +108,7 @@ export const updatePlan = async ({
 export const deletePlan = async ({ id }: { id: number }) => {
   const isLogged = await auth({});
   if (!isLogged) {
-    return false;
+    throw new Error("Not logged in");
   }
 
   const data = await fetchToAdonis<DeletePlanResponseType>({
@@ -116,7 +116,7 @@ export const deletePlan = async ({ id }: { id: number }) => {
     method: "DELETE",
   });
   if (!(data?.success ?? false)) {
-    return false;
+    throw new Error("Failed to delete plan");
   }
   revalidatePath("/plans");
   return data;

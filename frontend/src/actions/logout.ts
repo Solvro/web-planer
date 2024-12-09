@@ -23,7 +23,7 @@ export const signOutFunction = async () => {
     path: "/",
   });
 
-  await fetch(`${env.NEXT_PUBLIC_API_URL}/user`, { method: "DELETE" });
+  await fetch(`${env.NEXT_PUBLIC_API_URL}/user/logout`, { method: "DELETE" });
 
   return true;
 };

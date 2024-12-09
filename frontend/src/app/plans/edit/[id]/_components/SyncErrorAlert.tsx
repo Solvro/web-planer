@@ -3,7 +3,7 @@
 import { formatDistance, isAfter, isEqual } from "date-fns";
 import { pl } from "date-fns/locale";
 import { DownloadCloudIcon, Loader2Icon, UploadCloudIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -49,8 +49,8 @@ export const SyncErrorAlert = ({
   downloadChanges: () => void;
   sendChanges: () => void;
 }) => {
-  const [loadingSending, setLoadingSending] = React.useState(false);
-  const [loadingDownloading, setLoadingDownloading] = React.useState(false);
+  const [loadingSending, setLoadingSending] = useState(false);
+  const [loadingDownloading, setLoadingDownloading] = useState(false);
   if (!onlinePlan) {
     return null;
   }
