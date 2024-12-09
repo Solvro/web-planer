@@ -252,11 +252,19 @@ export function CreateNewPlanPage({
           })
           .sort((a, b) => a.name.localeCompare(b.name));
 
-        // Aktualizacja list
+        // List update logic:
+        // Add unique registrations to the updatedRegistrations array
+        // r - current registration
+        // i - current index
+        // a - array of registrations
         updatedRegistrations = [...updatedRegistrations, registration].filter(
           (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
         );
 
+        // Add unique courses to the updatedCourses array
+        // c - current course
+        // i - current index
+        // a - array of courses
         updatedCourses = [...updatedCourses, ...extendedCourses].filter(
           (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
         );
