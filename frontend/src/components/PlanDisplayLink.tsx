@@ -1,3 +1,4 @@
+import { FolderSearch } from "lucide-react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -8,9 +9,9 @@ export function PlanDisplayLink({ id }: { id: string }) {
   return (
     <Link
       href={`/plans/preview/${id}`}
-      className={cn(buttonVariants(), "font-semibold")}
+      className={cn(buttonVariants({ size: "icon" }), "font-semibold")}
     >
-      <span>Podgląd</span>
+      <FolderSearch className="size-4" />
     </Link>
   );
 }

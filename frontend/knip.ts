@@ -9,7 +9,7 @@ const config = {
     "lint-staged.config.mjs",
   ],
   // sharp is used in nextjs image optimization
-  ignoreDependencies: ["sharp", "@radix-ui/*", "eslint-config-next"],
+  ignoreDependencies: ["sharp", "@radix-ui/*"],
 } satisfies KnipConfig;
 
 export default config;
