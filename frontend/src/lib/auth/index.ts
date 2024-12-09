@@ -103,6 +103,9 @@ export const auth = async (tokens?: {
     tokens?.secret ?? cookies.get("access_token_secret")?.value;
 
   if (accessToken === "" || accessSecret === "") {
+    if (tokens) {
+      return null;
+    }
     throw new Error("No access token or access secret");
   }
 
@@ -132,6 +135,9 @@ export const auth = async (tokens?: {
         name: "access_token_secret",
         path: "/",
       });
+      if (tokens) {
+        return null;
+      }
       throw new Error(data.error);
     }
     const setCookieHeaders = response.headers.getSetCookie();
@@ -149,6 +155,9 @@ export const auth = async (tokens?: {
     });
     return data;
   } catch (error) {
+    if (tokens) {
+      return null;
+    }
     throw new Error("Failed to authenticate");
   }
 };

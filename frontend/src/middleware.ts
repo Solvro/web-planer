@@ -10,13 +10,13 @@ export async function middleware(request: NextRequest) {
   };
 
   const isProtectedRoute = request.nextUrl.pathname.startsWith("/account");
-  const isLogged = await auth(tokens);
+  const user = await auth(tokens);
 
   if (!isProtectedRoute) {
     return NextResponse.next();
   }
 
-  if (!isLogged) {
+  if (user === null) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
