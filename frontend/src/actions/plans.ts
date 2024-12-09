@@ -60,20 +60,22 @@ export const createNewPlan = async ({
   registrations: Array<{ id: string }>;
   groups: Array<{ id: number }>;
 }) => {
-  const isLogged = await auth({});
-  if (!isLogged) {
+  try {
+    await auth();
+
+    const data = await fetchToAdonis<CreatePlanResponseType>({
+      url: "/user/schedules",
+      method: "POST",
+      body: JSON.stringify({ name, courses, registrations, groups }),
+    });
+    if (!data) {
+      throw new Error("Failed to create new plan");
+    }
+    revalidatePath("/plans");
+    return data;
+  } catch (e) {
     throw new Error("Not logged in");
   }
-
-  const data = await fetchToAdonis<CreatePlanResponseType>({
-    url: "/user/schedules",
-    method: "POST",
-    body: JSON.stringify({ name, courses, registrations, groups }),
-  });
-  if (!data) {
-    throw new Error("Failed to create new plan");
-  }
-  return data;
 };
 
 export const updatePlan = async ({
@@ -89,10 +91,7 @@ export const updatePlan = async ({
   registrations: Array<{ id: string }>;
   groups: Array<{ id: number }>;
 }) => {
-  const isLogged = await auth({});
-  if (!isLogged) {
-    throw new Error("Not logged in");
-  }
+  await auth();
 
   const data = await fetchToAdonis<CreatePlanResponseType>({
     url: `/user/schedules/${id}`,
@@ -106,29 +105,25 @@ export const updatePlan = async ({
 };
 
 export const deletePlan = async ({ id }: { id: number }) => {
-  const isLogged = await auth({});
-  if (!isLogged) {
+  try {
+    await auth();
+    const data = await fetchToAdonis<DeletePlanResponseType>({
+      url: `/user/schedules/${id}`,
+      method: "DELETE",
+    });
+    if (!data) {
+      throw new Error("Failed to delete plan");
+    }
+    revalidatePath("/plans");
+    return data;
+  } catch (e) {
     throw new Error("Not logged in");
   }
-
-  const data = await fetchToAdonis<DeletePlanResponseType>({
-    url: `/user/schedules/${id}`,
-    method: "DELETE",
-  });
-  if (!(data?.success ?? false)) {
-    throw new Error("Failed to delete plan");
-  }
-  revalidatePath("/plans");
-  return data;
 };
 
 export const getPlan = async ({ id }: { id: number }) => {
-  const isLogged = await auth({});
-  if (!isLogged) {
-    return false;
-  }
-
   try {
+    await auth();
     const data = await fetchToAdonis<PlanResponseType>({
       url: `/user/schedules/${id}`,
       method: "GET",
@@ -138,6 +133,6 @@ export const getPlan = async ({ id }: { id: number }) => {
     }
     return data;
   } catch (e) {
-    return false;
+    return null;
   }
 };

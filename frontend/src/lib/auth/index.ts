@@ -93,19 +93,17 @@ export async function getRequestToken() {
   };
 }
 
-export const auth = async ({
-  token,
-  secret,
-}: {
-  token?: string | null;
-  secret?: string | null;
+export const auth = async (tokens?: {
+  token: string | undefined;
+  secret: string | undefined;
 }) => {
   const cookies = await cookiesPromise();
-  const accessToken = token ?? cookies.get("access_token")?.value;
-  const accessSecret = secret ?? cookies.get("access_token_secret")?.value;
+  const accessToken = tokens?.token ?? cookies.get("access_token")?.value;
+  const accessSecret =
+    tokens?.secret ?? cookies.get("access_token_secret")?.value;
 
   if (accessToken === "" || accessSecret === "") {
-    return false;
+    throw new Error("No access token or access secret");
   }
 
   try {
@@ -117,8 +115,15 @@ export const auth = async ({
       body: JSON.stringify({ accessToken, accessSecret }),
       credentials: "include",
     });
-    const data = (await response.json()) as { error?: string };
-    if (data.error !== undefined) {
+    const data = (await response.json()) as
+      | {
+          firstName: string;
+          lastName: string;
+          studentNumber: number;
+          usosId: string;
+        }
+      | { error: string };
+    if ("error" in data) {
       cookies.delete({
         name: "access_token",
         path: "/",
@@ -130,9 +135,9 @@ export const auth = async ({
       throw new Error(data.error);
     }
     const setCookieHeaders = response.headers.getSetCookie();
-    setCookieHeaders.forEach((setCookie) => {
-      const name = setCookie.split("=")[0];
-      const value = setCookie.split("=")[1].split(";")[0];
+    setCookieHeaders.forEach((cookie) => {
+      const preparedCookie = cookie.replace(";", "");
+      const [name, value] = preparedCookie.split("=");
       cookies.set({
         name,
         value,
@@ -142,9 +147,9 @@ export const auth = async ({
         secure: true,
       });
     });
-    return true;
+    return data;
   } catch (error) {
-    return false;
+    throw new Error("Failed to authenticate");
   }
 };
 
