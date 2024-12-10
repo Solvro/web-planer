@@ -142,7 +142,7 @@ export const auth = async (tokens?: {
     }
     const setCookieHeaders = response.headers.getSetCookie();
     setCookieHeaders.forEach((cookie) => {
-      const preparedCookie = cookie.replace(";", "");
+      const preparedCookie = cookie.split(";")[0];
       const [name, value] = preparedCookie.split("=");
       cookies.set({
         name,
