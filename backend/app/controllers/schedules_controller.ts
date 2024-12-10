@@ -78,6 +78,18 @@ export default class SchedulesController {
       userId: userId,
     })
 
+    if (payload.groups !== undefined) {
+      await schedule.related('groups').sync(payload.groups.map((group) => group.id))
+    }
+
+    if (payload.registrations !== undefined) {
+      await schedule.related('registrations').sync(payload.registrations.map((group) => group.id))
+    }
+
+    if (payload.courses !== undefined) {
+      await schedule.related('courses').sync(payload.courses.map((group) => group.id))
+    }
+
     return { message: 'Schedule created.', schedule }
   }
 
@@ -112,6 +124,10 @@ export default class SchedulesController {
 
     // Transformacja danych do żądanej struktury
     const transformedSchedule = {
+      id: schedule.id,
+      userId: schedule.userId,
+      createdAt: schedule.createdAt,
+      updatedAt: schedule.updatedAt,
       name: schedule.name,
       registrations: schedule.registrations.map((reg) => ({
         id: reg.id,
@@ -136,55 +152,57 @@ export default class SchedulesController {
    * Allows updating the schedule and modifying its groups
    */
   async update({ params, request, auth }: HttpContext) {
-    const userId = auth.user?.id
-    if (!userId) {
-      return { message: 'User not authenticated.' }
-    }
-
-    const payload = await request.validateUsing(updateScheduleValidator)
-
-    const currSchedule = await Schedule.query()
-      .where('id', params.schedule_id)
-      .andWhere('userId', userId)
-      .firstOrFail()
-
-    if (payload.name) {
-      currSchedule.name = payload.name
-    }
-
-    if (payload.groups !== undefined) {
-      if (payload.groups.length === 0) {
-        await currSchedule.related('groups').sync([])
-      } else {
-        await currSchedule.related('groups').sync(payload.groups.map((group) => group.id))
+    try {
+      const userId = auth.user?.id
+      if (!userId) {
+        return { message: 'User not authenticated.' }
       }
-    }
 
-    if (payload.registrations !== undefined) {
-      if (payload.registrations.length === 0) {
-        await currSchedule.related('registrations').sync([])
-      } else {
-        await currSchedule
-          .related('registrations')
-          .sync(payload.registrations.map((group) => group.id))
+      const payload = await request.validateUsing(updateScheduleValidator)
+
+      const currSchedule = await Schedule.query()
+        .where('id', params.schedule_id)
+        .andWhere('userId', userId)
+        .firstOrFail()
+
+      if (payload.name) {
+        currSchedule.name = payload.name
       }
-    }
 
-    if (payload.courses !== undefined) {
-      if (payload.courses.length === 0) {
-        await currSchedule.related('courses').sync([])
-      } else {
-        await currSchedule.related('courses').sync(payload.courses.map((group) => group.id))
+      if (payload.groups !== undefined) {
+        if (payload.groups.length === 0) {
+          await currSchedule.related('groups').sync([])
+        } else {
+          await currSchedule.related('groups').sync(payload.groups.map((group) => group.id))
+        }
       }
+
+      if (payload.registrations !== undefined) {
+        if (payload.registrations.length === 0) {
+          await currSchedule.related('registrations').sync([])
+        } else {
+          await currSchedule
+            .related('registrations')
+            .sync(payload.registrations.map((group) => group.id))
+        }
+      }
+
+      if (payload.courses !== undefined) {
+        if (payload.courses.length === 0) {
+          await currSchedule.related('courses').sync([])
+        } else {
+          await currSchedule.related('courses').sync(payload.courses.map((group) => group.id))
+        }
+      }
+
+      currSchedule.updatedAt = DateTime.fromISO(new Date().toISOString())
+
+      await currSchedule.save()
+
+      return { message: 'Schedule updated successfully.', schedule: currSchedule, success: true }
+    } catch (error) {
+      return { message: 'Schedule not found.', success: false }
     }
-
-    if (payload.updatedAt) {
-      currSchedule.updatedAt = DateTime.fromJSDate(payload.updatedAt)
-    }
-
-    await currSchedule.save()
-
-    return { message: 'Schedule updated successfully.', currSchedule }
   }
 
   /**

@@ -26,6 +26,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
               : group,
           ),
         })),
+        synced: false,
       });
     },
     checkAllCourses: (registrationId: string, isChecked?: boolean) => {
@@ -36,18 +37,27 @@ export const usePlan = ({ planId }: { planId: string }) => {
             ? { ...course, isChecked: isChecked ?? !course.isChecked }
             : course,
         ),
+        synced: false,
       });
     },
     addRegistration: (
       registration: Registration,
       courses: ExtendedCourse[],
+      firstTime = false,
+      updatedAt?: Date,
     ) => {
       setPlan({
         ...plan,
         registrations: [...plan.registrations, registration].filter(
           (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
         ),
-        courses: [...plan.courses, ...courses],
+        courses: [...plan.courses, ...courses].filter(
+          (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
+        ),
+
+        synced: firstTime,
+        toCreate: false,
+        updatedAt: updatedAt ?? plan.updatedAt,
       });
     },
     removeRegistration: (registrationId: string) => {
@@ -59,6 +69,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
         courses: plan.courses.filter(
           (c) => c.registrationId !== registrationId,
         ),
+        synced: false,
       });
     },
     changeName: (newName: string) => {
@@ -66,6 +77,20 @@ export const usePlan = ({ planId }: { planId: string }) => {
       setPlan({
         ...plan,
         name: newName,
+        synced: false,
+      });
+    },
+    setOnlineId: (onlineId: string) => {
+      setPlan({
+        ...plan,
+        onlineId,
+        synced: true,
+      });
+    },
+    setSynced: (synced: boolean) => {
+      setPlan({
+        ...plan,
+        synced,
       });
     },
     selectCourse: (courseId: string, isChecked?: boolean) => {
@@ -77,6 +102,7 @@ export const usePlan = ({ planId }: { planId: string }) => {
             ? { ...course, isChecked: isChecked ?? !course.isChecked }
             : course,
         ),
+        synced: false,
       });
     },
   };

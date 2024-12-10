@@ -5,13 +5,16 @@ import { useAtom } from "jotai";
 import {
   CopyIcon,
   EllipsisVerticalIcon,
+  Loader2Icon,
   Pencil,
   TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
+import { deletePlan } from "@/actions/plans";
 import { plansIds } from "@/atoms/plansIds";
 import {
   Dialog,
@@ -41,21 +44,42 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { StatusIcon } from "./ui/status-icon";
 
-export const PlanItem = ({ id, name }: { id: string; name: string }) => {
+export const PlanItem = ({
+  id,
+  name,
+  synced,
+  onlineId,
+  onlineOnly = false,
+  groupCount = 0,
+  registrationCount = 0,
+  updatedAt = new Date(),
+}: {
+  id: string;
+  name: string;
+  synced: boolean;
+  onlineId: string | null;
+  onlineOnly?: boolean;
+  groupCount?: number;
+  registrationCount?: number;
+  updatedAt?: Date;
+}) => {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
+  const uuidToCopy = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
-  const plan = usePlan({ planId: id });
+  const plan = usePlan({ planId: onlineOnly ? uuid : id });
   const planToCopy = usePlan({ planId: uuid });
   const router = useRouter();
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [dropdownOpened, setDropdownOpened] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const copyPlan = () => {
     setDropdownOpened(false);
 
     const newPlan = {
-      id: uuid,
+      id: uuidToCopy,
     };
 
     void window.umami?.track("Create plan", {
@@ -69,39 +93,71 @@ export const PlanItem = ({ id, name }: { id: string; name: string }) => {
     });
 
     setTimeout(() => {
-      router.push(`/plans/create/${newPlan.id}`);
+      router.push(`/plans/edit/${newPlan.id}`);
     }, 200);
   };
 
-  const deletePlan = () => {
-    plan.remove();
-    setPlans(plans.filter((p) => p.id !== id));
+  const createFromOnlinePlan = () => {
+    const newPlan = {
+      id: uuid,
+    };
+
+    setPlans([...plans, newPlan]);
+    plan.setPlan({
+      ...plan,
+      id: uuid,
+      onlineId,
+      name,
+    });
+
+    setTimeout(() => {
+      router.push(`/plans/edit/${newPlan.id}`);
+    }, 200);
   };
 
-  const groupCount = plan.courses
+  const handleDeletePlan = async () => {
+    setLoading(true);
+    plan.remove();
+    if (!onlineOnly) {
+      setPlans(plans.filter((p) => p.id !== id));
+    }
+    if (onlineId !== null) {
+      await deletePlan({ id: Number(onlineId) });
+    }
+    toast.success("Plan został usunięty.");
+  };
+
+  const groupCountLocal = plan.courses
     .flatMap((c) => c.groups)
     .filter((group) => group.isChecked).length;
 
   return (
-    <Card className="flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="p-4">
-        <CardTitle>{name}</CardTitle>
+    <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
+      <CardHeader className="space-y-1 p-4">
+        <CardTitle className="w-5/6 text-balance text-lg leading-4">
+          {name}
+        </CardTitle>
         <CardDescription>
           {format(
-            (plan.createdAt as Date | undefined) ?? new Date(),
+            onlineOnly ? updatedAt : plan.createdAt,
             "dd.MM.yyyy - HH:mm",
           )}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 p-4 pt-0">
         <p className="text-sm">
-          {plan.registrations.length}{" "}
-          {pluralize(plan.registrations.length, "kurs", "kursy", "kursów")}
+          {registrationCount || plan.registrations.length}{" "}
+          {pluralize(
+            registrationCount || plan.registrations.length,
+            "kurs",
+            "kursy",
+            "kursów",
+          )}
         </p>
         <p className="text-sm">
-          {groupCount}{" "}
+          {groupCount || groupCountLocal}{" "}
           {pluralize(
-            groupCount,
+            groupCount || groupCountLocal,
             "wybrana grupa",
             "wybrane grupy",
             "wybranych grup",
@@ -133,13 +189,22 @@ export const PlanItem = ({ id, name }: { id: string; name: string }) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button size="sm" asChild={true}>
-          <Link href={`/plans/create/${id}`}>
+        {onlineOnly ? (
+          <Button size="sm" onClick={createFromOnlinePlan}>
             <Pencil className="h-4 w-4" />
             Edytuj
-          </Link>
-        </Button>
+          </Button>
+        ) : (
+          <Button size="sm" asChild={true}>
+            <Link href={`/plans/edit/${id}`}>
+              <Pencil className="h-4 w-4" />
+              Edytuj
+            </Link>
+          </Button>
+        )}
       </CardFooter>
+
+      <StatusIcon synced={synced} onlineId={onlineId} />
 
       <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
         <DialogContent
@@ -160,11 +225,13 @@ export const PlanItem = ({ id, name }: { id: string; name: string }) => {
               Anuluj
             </Button>
             <Button
+              disabled={loading}
               onClick={() => {
-                deletePlan();
+                void handleDeletePlan();
               }}
               variant="destructive"
             >
+              {loading ? <Loader2Icon className="size-4 animate-spin" /> : null}
               Usuń
             </Button>
           </DialogFooter>

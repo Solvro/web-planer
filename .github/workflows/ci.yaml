@@ -46,6 +46,7 @@ jobs:
         env:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello
+          NEXT_PUBLIC_API_URL: http://localhost:3333
         if: always()
 
       - name: Find deadcode

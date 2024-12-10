@@ -19,7 +19,7 @@ export default async function CreateNewPlan({ params }: PageProps) {
   }
 
   const facultiesRes = (await fetch(
-    "https://planer.solvro.pl/api/v1/departments",
+    `${process.env.NEXT_PUBLIC_API_URL}/departments`,
   ).then((r) => r.json())) as Array<{ id: string; name: string }> | null;
   if (!facultiesRes) {
     return notFound();
