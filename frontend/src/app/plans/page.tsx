@@ -4,7 +4,7 @@ import type { ExtendedCourse } from "@/atoms/planFamily";
 import { fetchToAdonis } from "@/lib/auth";
 import type { Registration } from "@/lib/types";
 
-import { PlansPage } from "./_components/PlansPage";
+import { PlansPage } from "./page.client";
 
 export interface PlanResponseDataType {
   id: number;

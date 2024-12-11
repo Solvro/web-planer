@@ -10,7 +10,7 @@ import { planFamily } from "@/atoms/planFamily";
 import { plansIds } from "@/atoms/plansIds";
 import { PlanItem } from "@/components/PlanItem";
 
-import type { PlanResponseDataType } from "../page";
+import type { PlanResponseDataType } from "./page";
 
 const plansAtom = atom(
   (get) => get(plansIds).map((id) => get(planFamily(id))),
