@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, isEqual } from "date-fns";
+import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -181,7 +182,9 @@ export function CreateNewPlanPage({
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        loading...
+        <Loader2Icon size={64} className="mb-4 animate-spin text-primary" />
+        <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
+        <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
       </div>
     );
   }
