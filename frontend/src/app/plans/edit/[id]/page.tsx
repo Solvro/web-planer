@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
-import { CreateNewPlanPage } from "./_components/CreateNewPlanPage";
+import { CreateNewPlanPage } from "./page.client";
 
 interface PageProps {
   params: Promise<{ id: string }>;

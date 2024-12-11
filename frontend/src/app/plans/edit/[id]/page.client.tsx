@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { isEqual } from "date-fns";
+import { produce } from "immer";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -31,8 +32,9 @@ import { registrationReplacer } from "@/lib/utils";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
 
-import { SyncErrorAlert } from "./SyncErrorAlert";
-import { SyncedButton } from "./SyncedButton";
+import { OfflineAlert } from "./_components/OfflineAlert";
+import { SyncErrorAlert } from "./_components/SyncErrorAlert";
+import { SyncedButton } from "./_components/SyncedButton";
 
 type CourseType = Array<{
   id: string;
@@ -65,13 +67,12 @@ export function CreateNewPlanPage({
   faculties: Array<{ name: string; value: string }>;
 }) {
   const [syncing, setSyncing] = useState(false);
+  const [offlineAlert, setOfflineAlert] = useState(false);
   const [bouncingAlert, setBouncingAlert] = useState(false);
   const firstTime = useRef(true);
   const router = useRouter();
 
-  const plan = usePlan({
-    planId,
-  });
+  const plan = usePlan({ planId });
 
   const bounceAlert = () => {
     setBouncingAlert(true);
@@ -81,34 +82,44 @@ export function CreateNewPlanPage({
   };
 
   const handleCreateOnlinePlan = async () => {
-    firstTime.current = false;
-    const courses = plan.courses
-      .filter((c) => c.isChecked)
-      .map((c) => ({ id: c.id }));
-    const registrations = plan.registrations.map((r) => ({ id: r.id }));
-    const groups = plan.allGroups
-      .filter((g) => g.isChecked)
-      .map((g) => ({ id: g.groupOnlineId }));
     try {
+      firstTime.current = false;
+      const courses = plan.courses
+        .filter((c) => c.isChecked)
+        .map((c) => ({ id: c.id }));
+      const registrations = plan.registrations.map((r) => ({ id: r.id }));
+      const groups = plan.allGroups
+        .filter((g) => g.isChecked)
+        .map((g) => ({ id: g.groupOnlineId }));
+
       const res = await createNewPlan({
         name: plan.name,
         courses,
         registrations,
         groups,
       });
+
       plan.setPlan((prev) => ({
         ...prev,
         synced: true,
         updatedAt: new Date(res.schedule.updatedAt),
         onlineId: res.schedule.id.toString(),
       }));
+
       toast.success("Utworzono plan");
       return true;
-    } catch (error) {
-      return toast.error("Nie udało się utworzyć planu w wersji online", {
-        description: "Zaloguj się i spróbuj ponownie",
-        duration: 5000,
-      });
+    } catch (err) {
+      if (err instanceof Error && "message" in err) {
+        if (err.message === "Not logged in") {
+          toast.error("Nie udało się utworzyć planu w wersji online", {
+            description: "Zaloguj się i spróbuj ponownie",
+            duration: 5000,
+          });
+        } else {
+          setOfflineAlert(true);
+        }
+      }
+      return false;
     }
   };
 
@@ -126,11 +137,15 @@ export function CreateNewPlanPage({
           .filter((g) => g.isChecked)
           .map((g) => ({ id: g.groupOnlineId })),
       });
+
       if (!res.success) {
-        return toast.error("Nie udało się zaktualizować planu");
+        toast.error("Nie udało się zaktualizować planu");
+        return;
       }
+
       await refetchOnlinePlan();
       toast.success("Zaktualizowano plan");
+
       plan.setPlan((prev) => ({
         ...prev,
         synced: true,
@@ -138,9 +153,8 @@ export function CreateNewPlanPage({
           ? new Date(res.schedule.updatedAt)
           : new Date(),
       }));
-      return true;
-    } catch (error) {
-      return toast.error("Nie udało się zaktualizować planu");
+    } catch {
+      toast.error("Nie udało się zaktualizować planu");
     } finally {
       setSyncing(false);
     }
@@ -210,7 +224,6 @@ export function CreateNewPlanPage({
 
   const handleUpdateLocalPlan = async () => {
     firstTime.current = false;
-
     if (!onlinePlan) {
       return false;
     }
@@ -252,34 +265,33 @@ export function CreateNewPlanPage({
           })
           .sort((a, b) => a.name.localeCompare(b.name));
 
-        // List update logic:
         // Add unique registrations to the updatedRegistrations array
-        // r - current registration
-        // i - current index
-        // a - array of registrations
         updatedRegistrations = [...updatedRegistrations, registration].filter(
-          (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
+          (regist, index, array) =>
+            array.findIndex((t) => t.id === regist.id) === index,
         );
 
         // Add unique courses to the updatedCourses array
-        // c - current course
-        // i - current index
-        // a - array of courses
         updatedCourses = [...updatedCourses, ...extendedCourses].filter(
-          (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
+          (course, index, array) =>
+            array.findIndex((t) => t.id === course.id) === index,
         );
       } catch {
         toast.error("Nie udało się pobrać kursów");
       }
     }
 
+    const updatedData = produce((draft: typeof plan) => {
+      draft.registrations = updatedRegistrations;
+      draft.courses = updatedCourses;
+      draft.synced = true;
+      draft.toCreate = false;
+      draft.updatedAt = new Date(onlinePlan.updatedAt);
+    });
+
     plan.setPlan({
       ...plan,
-      registrations: updatedRegistrations,
-      courses: updatedCourses,
-      synced: true,
-      toCreate: false,
-      updatedAt: new Date(onlinePlan.updatedAt),
+      ...updatedData,
     });
 
     return true;
@@ -296,13 +308,6 @@ export function CreateNewPlanPage({
     }
   }, [plan, onlinePlan]);
 
-  const downloadChanges = () => {
-    void handleUpdateLocalPlan();
-  };
-  const uploadChanges = () => {
-    void handleSyncPlan();
-  };
-
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 flex-col items-center justify-center">
@@ -314,9 +319,14 @@ export function CreateNewPlanPage({
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
+        {offlineAlert ? <OfflineAlert /> : null}
         <SyncErrorAlert
-          downloadChanges={downloadChanges}
-          sendChanges={uploadChanges}
+          downloadChanges={() => {
+            void handleUpdateLocalPlan();
+          }}
+          sendChanges={() => {
+            void handleSyncPlan();
+          }}
           planDate={plan.updatedAt}
           onlinePlan={onlinePlan}
           bounce={bouncingAlert}

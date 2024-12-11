@@ -7,9 +7,14 @@ import {
   RefreshCwIcon,
   RefreshCwOffIcon,
 } from "lucide-react";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const SyncedButton = ({
   synced,
@@ -22,34 +27,53 @@ export const SyncedButton = ({
   synced: boolean;
   onlineId: string | null;
   syncing: boolean;
-  onClick: () => Promise<number | string | true>;
+  onClick: () => Promise<void>;
   bounceAlert: () => void;
   equalsDates: boolean;
 }) => {
+  const message = useMemo(() => {
+    if (synced && equalsDates) {
+      return "Zsynchronizowano";
+    } else if (!(onlineId ?? "")) {
+      return "Plan dostępny tylko lokalnie";
+    } else if (syncing) {
+      return "Synchronizowanie...";
+    } else if (!equalsDates) {
+      return "Twoja wersja różni się od wersji online";
+    }
+    return "Masz lokalne zmiany";
+  }, [synced, onlineId, syncing, equalsDates]);
   return (
-    <Button
-      size="icon"
-      variant="outline"
-      className="min-w-10"
-      onClick={() => {
-        if (!equalsDates) {
-          bounceAlert();
-        } else {
-          void onClick();
-        }
-      }}
-    >
-      {synced && equalsDates ? (
-        <CloudIcon className="size-4 text-emerald-500" />
-      ) : !(onlineId ?? "") ? (
-        <AlertTriangleIcon className="size-4 text-rose-500" />
-      ) : syncing ? (
-        <RefreshCwIcon className="size-4 animate-spin text-primary" />
-      ) : !equalsDates ? (
-        <GitPullRequestClosed className="size-4 text-primary" />
-      ) : (
-        <RefreshCwOffIcon className="size-4 text-amber-500" />
-      )}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild={true}>
+        <Button
+          size="icon"
+          variant="outline"
+          className="min-w-10"
+          onClick={() => {
+            if (!equalsDates) {
+              bounceAlert();
+            } else {
+              void onClick();
+            }
+          }}
+        >
+          {synced && equalsDates ? (
+            <CloudIcon className="size-4 text-emerald-500" />
+          ) : !(onlineId ?? "") ? (
+            <AlertTriangleIcon className="size-4 text-rose-500" />
+          ) : syncing ? (
+            <RefreshCwIcon className="size-4 animate-spin text-primary" />
+          ) : !equalsDates ? (
+            <GitPullRequestClosed className="size-4 text-primary" />
+          ) : (
+            <RefreshCwOffIcon className="size-4 text-amber-500" />
+          )}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{message}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };

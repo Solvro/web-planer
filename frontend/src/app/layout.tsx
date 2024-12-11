@@ -5,6 +5,7 @@ import type React from "react";
 
 import ClientProviders from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { env } from "@/env.mjs";
 import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
@@ -97,17 +98,19 @@ export default function RootLayout({
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
       <ClientProviders>
-        <body className={cn(inter.className, "min-h-screen")}>
-          {children}
-          <Script
-            async={true}
-            defer={true}
-            src="https://analytics.solvro.pl/script.js"
-            data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
-            data-domains="planer.solvro.pl"
-          />
-          <Toaster richColors={true} />
-        </body>
+        <TooltipProvider delayDuration={0}>
+          <body className={cn(inter.className, "min-h-screen")}>
+            {children}
+            <Script
+              async={true}
+              defer={true}
+              src="https://analytics.solvro.pl/script.js"
+              data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
+              data-domains="planer.solvro.pl"
+            />
+            <Toaster richColors={true} />
+          </body>
+        </TooltipProvider>
       </ClientProviders>
     </html>
   );
