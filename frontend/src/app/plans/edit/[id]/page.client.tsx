@@ -71,6 +71,7 @@ export function CreateNewPlanPage({
   const [bouncingAlert, setBouncingAlert] = useState(false);
   const firstTime = useRef(true);
   const router = useRouter();
+  const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const plan = usePlan({ planId });
 
@@ -111,12 +112,13 @@ export function CreateNewPlanPage({
     } catch (err) {
       if (err instanceof Error && "message" in err) {
         if (err.message === "Not logged in") {
-          toast.error("Nie udało się utworzyć planu w wersji online", {
-            description: "Zaloguj się i spróbuj ponownie",
-            duration: 5000,
-          });
-        } else {
           setOfflineAlert(true);
+        } else {
+          toast.error("Nie udało się utworzyć planu w wersji online", {
+            description:
+              "Wystąpił nieoczekiwany błąd. Skontaktuj się z zespołem developerów.",
+            duration: 10000,
+          });
         }
       }
       return false;
@@ -144,7 +146,6 @@ export function CreateNewPlanPage({
       }
 
       await refetchOnlinePlan();
-      toast.success("Zaktualizowano plan");
 
       plan.setPlan((prev) => ({
         ...prev,
@@ -308,6 +309,26 @@ export function CreateNewPlanPage({
     }
   }, [plan, onlinePlan]);
 
+  const resetInactivityTimer = () => {
+    if (inactivityTimeout.current !== null) {
+      clearTimeout(inactivityTimeout.current);
+    }
+    inactivityTimeout.current = setTimeout(() => {
+      if (!plan.synced && plan.onlineId !== null && !offlineAlert) {
+        void handleSyncPlan();
+      }
+    }, 4000);
+  };
+
+  useEffect(() => {
+    resetInactivityTimer();
+    return () => {
+      if (inactivityTimeout.current !== null) {
+        clearTimeout(inactivityTimeout.current);
+      }
+    };
+  }, [plan.name, plan.courses, plan.registrations, plan.allGroups]);
+
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 flex-col items-center justify-center">
@@ -378,6 +399,7 @@ export function CreateNewPlanPage({
               syncing={syncing}
               bounceAlert={bounceAlert}
               onClick={handleSyncPlan}
+              isOffline={offlineAlert}
               equalsDates={isEqual(
                 plan.updatedAt,
                 new Date(onlinePlan ? onlinePlan.updatedAt : plan.updatedAt),

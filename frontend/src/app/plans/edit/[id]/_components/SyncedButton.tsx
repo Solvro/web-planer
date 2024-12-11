@@ -23,6 +23,7 @@ export const SyncedButton = ({
   onClick,
   bounceAlert,
   equalsDates,
+  isOffline,
 }: {
   synced: boolean;
   onlineId: string | null;
@@ -30,6 +31,7 @@ export const SyncedButton = ({
   onClick: () => Promise<void>;
   bounceAlert: () => void;
   equalsDates: boolean;
+  isOffline: boolean;
 }) => {
   const message = useMemo(() => {
     if (synced && equalsDates) {
@@ -53,6 +55,8 @@ export const SyncedButton = ({
           onClick={() => {
             if (!equalsDates) {
               bounceAlert();
+            } else if (isOffline) {
+              return;
             } else {
               void onClick();
             }
