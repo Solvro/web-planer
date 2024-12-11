@@ -1,15 +1,14 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { isEqual } from "date-fns";
-import { produce } from "immer";
+import { format, isEqual } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { toast } from "sonner";
 
-import { createNewPlan, getPlan, updatePlan } from "@/actions/plans";
+import { getPlan } from "@/actions/plans";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { GroupsAccordionItem } from "@/components/GroupsAccordion";
@@ -29,35 +28,16 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
+import { handleCreateOnlinePlan } from "@/lib/utils/handleCreateOnlinePlan";
+import { handleSyncPlan } from "@/lib/utils/handleSyncPlan";
+import { handleUpdateLocalPlan } from "@/lib/utils/handleUpdateLocalPlan";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
+import type { CourseType, FacultyType } from "@/types";
 
 import { OfflineAlert } from "./_components/OfflineAlert";
 import { SyncErrorAlert } from "./_components/SyncErrorAlert";
 import { SyncedButton } from "./_components/SyncedButton";
-
-type CourseType = Array<{
-  id: string;
-  name: string;
-  registrationId: string;
-  groups: Array<{
-    id: number;
-    name: string;
-    startTime: string;
-    endTime: string;
-    group: string;
-    lecturer: string;
-    week: "-" | "TN" | "TP";
-    day: Day;
-    type: "C" | "L" | "P" | "S" | "W";
-    url: string;
-    courseId: string;
-    createdAt: string;
-    updatedAt: string;
-  }>;
-}>;
-
-type FacultyType = Array<{ id: string; name: string; departmentId: string }>;
 
 export function CreateNewPlanPage({
   planId,
@@ -69,107 +49,16 @@ export function CreateNewPlanPage({
   const [syncing, setSyncing] = useState(false);
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [bouncingAlert, setBouncingAlert] = useState(false);
+  const [faculty, setFaculty] = useState<string | null>(null);
+
   const firstTime = useRef(true);
-  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
   const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const router = useRouter();
   const plan = usePlan({ planId });
 
-  const bounceAlert = () => {
-    setBouncingAlert(true);
-    setTimeout(() => {
-      setBouncingAlert(false);
-    }, 1000);
-  };
-
-  const handleCreateOnlinePlan = async () => {
-    try {
-      firstTime.current = false;
-      const courses = plan.courses
-        .filter((c) => c.isChecked)
-        .map((c) => ({ id: c.id }));
-      const registrations = plan.registrations.map((r) => ({ id: r.id }));
-      const groups = plan.allGroups
-        .filter((g) => g.isChecked)
-        .map((g) => ({ id: g.groupOnlineId }));
-
-      const res = await createNewPlan({
-        name: plan.name,
-        courses,
-        registrations,
-        groups,
-      });
-
-      plan.setPlan((prev) => ({
-        ...prev,
-        synced: true,
-        updatedAt: new Date(res.schedule.updatedAt),
-        onlineId: res.schedule.id.toString(),
-      }));
-
-      toast.success("Utworzono plan");
-      return true;
-    } catch (err) {
-      if (err instanceof Error && "message" in err) {
-        if (err.message === "Not logged in") {
-          setOfflineAlert(true);
-        } else {
-          toast.error("Nie udało się utworzyć planu w wersji online", {
-            description:
-              "Wystąpił nieoczekiwany błąd. Skontaktuj się z zespołem developerów.",
-            duration: 10000,
-          });
-        }
-      }
-      return false;
-    }
-  };
-
-  const handleSyncPlan = async () => {
-    setSyncing(true);
-    try {
-      const res = await updatePlan({
-        id: Number(plan.onlineId),
-        name: plan.name,
-        courses: plan.courses
-          .filter((c) => c.isChecked)
-          .map((c) => ({ id: c.id })),
-        registrations: plan.registrations.map((r) => ({ id: r.id })),
-        groups: plan.allGroups
-          .filter((g) => g.isChecked)
-          .map((g) => ({ id: g.groupOnlineId })),
-      });
-
-      if (!res.success) {
-        toast.error("Nie udało się zaktualizować planu");
-        return;
-      }
-
-      await refetchOnlinePlan();
-
-      plan.setPlan((prev) => ({
-        ...prev,
-        synced: true,
-        updatedAt: res.schedule.updatedAt
-          ? new Date(res.schedule.updatedAt)
-          : new Date(),
-      }));
-    } catch {
-      toast.error("Nie udało się zaktualizować planu");
-    } finally {
-      setSyncing(false);
-    }
-  };
-
-  useEffect(() => {
-    if (plan.onlineId === null && firstTime.current) {
-      void handleCreateOnlinePlan();
-    }
-  }, [plan]);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const [faculty, setFaculty] = useState<string | null>(null);
+  //- Functions tanstack query -//
   const registrations = useQuery({
     enabled: faculty !== null,
     queryKey: ["registrations", faculty],
@@ -223,80 +112,46 @@ export function CreateNewPlanPage({
     },
   });
 
-  const handleUpdateLocalPlan = async () => {
+  //- Plan state functions -//
+  const createOnlinePlan = async () => {
     firstTime.current = false;
-    if (!onlinePlan) {
-      return false;
-    }
-
-    let updatedRegistrations: typeof plan.registrations = [];
-    let updatedCourses: typeof plan.courses = [];
-
-    for (const registration of onlinePlan.registrations) {
-      try {
-        const courses = await coursesFn.mutateAsync(registration.id);
-        const extendedCourses: ExtendedCourse[] = courses
-          .map((c) => {
-            const groups: ExtendedGroup[] = c.groups.map((g) => ({
-              groupId: g.group + c.id + g.type,
-              groupNumber: g.group.toString(),
-              groupOnlineId: g.id,
-              courseId: c.id,
-              courseName: c.name,
-              isChecked:
-                onlinePlan.courses
-                  .find((oc) => oc.id === c.id)
-                  ?.groups.some((og) => og.id === g.id) ?? false,
-              courseType: g.type,
-              day: g.day,
-              lecturer: g.lecturer,
-              registrationId: c.registrationId,
-              week: g.week.replace("-", "") as "" | "TN" | "TP",
-              endTime: g.endTime.split(":").slice(0, 2).join(":"),
-              startTime: g.startTime.split(":").slice(0, 2).join(":"),
-            }));
-            return {
-              id: c.id,
-              name: c.name,
-              isChecked: onlinePlan.courses.some((oc) => oc.id === c.id),
-              registrationId: c.registrationId,
-              type: c.groups.at(0)?.type ?? ("" as LessonType),
-              groups,
-            };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name));
-
-        // Add unique registrations to the updatedRegistrations array
-        updatedRegistrations = [...updatedRegistrations, registration].filter(
-          (regist, index, array) =>
-            array.findIndex((t) => t.id === regist.id) === index,
-        );
-
-        // Add unique courses to the updatedCourses array
-        updatedCourses = [...updatedCourses, ...extendedCourses].filter(
-          (course, index, array) =>
-            array.findIndex((t) => t.id === course.id) === index,
-        );
-      } catch {
-        toast.error("Nie udało się pobrać kursów");
-      }
-    }
-
-    const updatedData = produce((draft: typeof plan) => {
-      draft.registrations = updatedRegistrations;
-      draft.courses = updatedCourses;
-      draft.synced = true;
-      draft.toCreate = false;
-      draft.updatedAt = new Date(onlinePlan.updatedAt);
-    });
-
-    plan.setPlan({
-      ...plan,
-      ...updatedData,
-    });
-
-    return true;
+    await handleCreateOnlinePlan(plan, setOfflineAlert);
   };
+
+  const syncPlan = async () => {
+    await handleSyncPlan(plan, refetchOnlinePlan, setSyncing);
+  };
+
+  const updateLocalPlan = async () => {
+    firstTime.current = false;
+    await handleUpdateLocalPlan(onlinePlan, plan, coursesFn);
+  };
+
+  //- Basic functions -//
+  const bounceAlert = () => {
+    setBouncingAlert(true);
+    setTimeout(() => {
+      setBouncingAlert(false);
+    }, 1000);
+  };
+
+  const resetInactivityTimer = () => {
+    if (inactivityTimeout.current !== null) {
+      clearTimeout(inactivityTimeout.current);
+    }
+    inactivityTimeout.current = setTimeout(() => {
+      if (!plan.synced && plan.onlineId !== null && !offlineAlert) {
+        void syncPlan();
+      }
+    }, 4000);
+  };
+
+  //- Effects -//
+  useEffect(() => {
+    if (plan.onlineId === null && firstTime.current) {
+      void createOnlinePlan();
+    }
+  }, [plan.onlineId]);
 
   useEffect(() => {
     if (
@@ -305,20 +160,9 @@ export function CreateNewPlanPage({
       plan.toCreate &&
       firstTime.current
     ) {
-      void handleUpdateLocalPlan();
+      void updateLocalPlan();
     }
   }, [plan, onlinePlan]);
-
-  const resetInactivityTimer = () => {
-    if (inactivityTimeout.current !== null) {
-      clearTimeout(inactivityTimeout.current);
-    }
-    inactivityTimeout.current = setTimeout(() => {
-      if (!plan.synced && plan.onlineId !== null && !offlineAlert) {
-        void handleSyncPlan();
-      }
-    }, 4000);
-  };
 
   useEffect(() => {
     resetInactivityTimer();
@@ -343,10 +187,10 @@ export function CreateNewPlanPage({
         {offlineAlert ? <OfflineAlert /> : null}
         <SyncErrorAlert
           downloadChanges={() => {
-            void handleUpdateLocalPlan();
+            void updateLocalPlan();
           }}
           sendChanges={() => {
-            void handleSyncPlan();
+            void syncPlan();
           }}
           planDate={plan.updatedAt}
           onlinePlan={onlinePlan}
@@ -398,7 +242,7 @@ export function CreateNewPlanPage({
               onlineId={plan.onlineId}
               syncing={syncing}
               bounceAlert={bounceAlert}
-              onClick={handleSyncPlan}
+              onClick={syncPlan}
               isOffline={offlineAlert}
               equalsDates={isEqual(
                 plan.updatedAt,
@@ -407,6 +251,10 @@ export function CreateNewPlanPage({
             />
             <PlanDisplayLink id={plan.id} />
           </div>
+
+          <p className="text-xs text-muted-foreground">
+            Ostatnia aktualizacja: {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
+          </p>
         </div>
 
         <div className="w-full">
