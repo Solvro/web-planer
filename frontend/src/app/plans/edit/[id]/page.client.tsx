@@ -140,7 +140,12 @@ export function CreateNewPlanPage({
       clearTimeout(inactivityTimeout.current);
     }
     inactivityTimeout.current = setTimeout(() => {
-      if (!plan.synced && plan.onlineId !== null && !offlineAlert) {
+      if (
+        !plan.synced &&
+        plan.onlineId !== null &&
+        !offlineAlert &&
+        !plan.toCreate
+      ) {
         void syncPlan();
       }
     }, 4000);

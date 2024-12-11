@@ -36,7 +36,6 @@
     "date-fns": "^4.1.0",
     "fetch-cookie": "^3.0.1",
     "framer-motion": "^11.3.28",
-    "immer": "^10.1.1",
     "jotai": "^2.9.3",
     "lru-cache": "^11.0.1",
     "lucide-react": "^0.426.0",

@@ -1,5 +1,4 @@
 import type { UseMutationResult } from "@tanstack/react-query";
-import { produce } from "immer";
 import { toast } from "sonner";
 
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
@@ -69,17 +68,13 @@ export const handleUpdateLocalPlan = async (
     }
   }
 
-  const updatedData = produce((draft: typeof plan) => {
-    draft.registrations = updatedRegistrations;
-    draft.courses = updatedCourses;
-    draft.synced = true;
-    draft.toCreate = false;
-    draft.updatedAt = new Date(onlinePlan.updatedAt);
-  });
-
   plan.setPlan({
     ...plan,
-    ...updatedData,
+    registrations: updatedRegistrations,
+    courses: updatedCourses,
+    synced: true,
+    toCreate: false,
+    updatedAt: new Date(onlinePlan.updatedAt),
   });
 
   return true;
