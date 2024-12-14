@@ -1,14 +1,23 @@
-import { toast } from "sonner";
-
 import { updatePlan } from "@/actions/plans";
 import type { PlanState } from "@/lib/usePlan";
 
-export const syncPlan = async <T>(
-  plan: PlanState,
-  refetchOnlinePlan: () => Promise<T>,
-  setSyncing: (value: boolean) => void,
-): Promise<T | null> => {
-  setSyncing(true);
+type SyncPlanResult =
+  | {
+      status: "ERROR";
+      message: string;
+    }
+  | {
+      status: "SUCCESS";
+      updatedAt: string;
+    };
+
+/**
+ * Updates a plan online in database on user account.
+ * @param plan **plan** object from useAtom()
+ * @returns Objects ```{ status: "ERROR", message: string }``` or ```{ status: "SUCCESS", updatedAt: string }```
+ */
+
+export const syncPlan = async (plan: PlanState): Promise<SyncPlanResult> => {
   try {
     const res = await updatePlan({
       id: Number(plan.onlineId),
@@ -23,24 +32,14 @@ export const syncPlan = async <T>(
     });
 
     if (!res.success) {
-      toast.error("Nie udało się zaktualizować planu");
-      return null;
+      return {
+        status: "ERROR",
+        message: "Nie udało się zaktualizować planu",
+      };
     }
 
-    await refetchOnlinePlan();
-
-    plan.setPlan((prev) => ({
-      ...prev,
-      synced: true,
-      updatedAt: res.schedule.updatedAt
-        ? new Date(res.schedule.updatedAt)
-        : new Date(),
-    }));
-  } catch {
-    toast.error("Nie udało się zaktualizować planu");
-    return null;
-  } finally {
-    setSyncing(false);
+    return { status: "SUCCESS", updatedAt: res.schedule.updatedAt };
+  } catch (err) {
+    return { status: "ERROR", message: "Nie udało się zaktualizować planu" };
   }
-  return null;
 };

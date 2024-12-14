@@ -1,7 +1,25 @@
 import { createNewPlan } from "@/actions/plans";
 import type { PlanState } from "@/lib/usePlan";
 
-export const createOnlinePlan = async (plan: PlanState) => {
+type CreateOnlinePlanResult =
+  | {
+      status: "NOT_LOGGED_IN" | "UNKNOWN";
+      message: string;
+    }
+  | {
+      status: "SUCCESS";
+      updatedAt: Date;
+      onlineId: string;
+    };
+
+/**
+ * Creates a new plan online in database on user account.
+ * @param plan **plan** object from useAtom()
+ * @returns Objects: ```{ status: "NOT_LOGGED_IN" | "UNKNOWN", message: string }``` or ```{ status: "SUCCESS" }```
+ */
+export const createOnlinePlan = async (
+  plan: PlanState,
+): Promise<CreateOnlinePlanResult> => {
   try {
     const courses = plan.courses
       .filter((c) => c.isChecked)
@@ -18,21 +36,18 @@ export const createOnlinePlan = async (plan: PlanState) => {
       groups,
     });
 
-    plan.setPlan((prev) => ({
-      ...prev,
-      synced: true,
+    return {
+      status: "SUCCESS",
       updatedAt: new Date(res.schedule.updatedAt),
       onlineId: res.schedule.id.toString(),
-    }));
-
-    return { success: true };
+    };
   } catch (err) {
     if (err instanceof Error && "message" in err) {
       if (err.message === "Not logged in") {
-        return { error: "NOT_LOGGED_IN", message: err.message };
+        return { status: "NOT_LOGGED_IN", message: err.message };
       }
-      return { error: "UNKNOWN", message: err.message };
+      return { status: "UNKNOWN", message: err.message };
     }
-    return { error: "UNKNOWN", message: "Wystąpił nieoczekiwany błąd" };
+    return { status: "UNKNOWN", message: "Wystąpił nieoczekiwany błąd" };
   }
 };

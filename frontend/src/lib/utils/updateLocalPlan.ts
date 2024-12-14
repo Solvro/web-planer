@@ -1,22 +1,40 @@
 import type { UseMutationResult } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
-import type { PlanState } from "@/lib/usePlan";
 import type { LessonType } from "@/services/usos/types";
 import type { CourseType, PlanResponseType } from "@/types";
 
+import type { Registration } from "../types";
+
+type UpdateLocalPlanResult =
+  | {
+      status: "ERROR";
+      message: string;
+    }
+  | {
+      status: "SUCCESS";
+      updatedRegistrations: Registration[];
+      updatedCourses: ExtendedCourse[];
+      updatedAt: Date;
+    };
+
+/**
+ * Updates local plan with online plan data.
+ * @param onlinePlan Online plan data
+ * @param coursesFn Function to fetch courses
+ * @returns Objects ```{ status: "ERROR", message: string }``` or ```{ status: "SUCCESS", updatedRegistrations: Registration[], updatedCourses: ExtendedCourse[], updatedAt: Date }```
+ */
+
 export const updateLocalPlan = async (
   onlinePlan: PlanResponseType | null | undefined,
-  plan: PlanState,
   coursesFn: UseMutationResult<CourseType, Error, string>,
-): Promise<boolean> => {
+): Promise<UpdateLocalPlanResult> => {
   if (!onlinePlan) {
-    return false;
+    return { status: "ERROR", message: "Nie udało się pobrać planu online" };
   }
 
-  let updatedRegistrations: typeof plan.registrations = [];
-  let updatedCourses: typeof plan.courses = [];
+  let updatedRegistrations: Registration[] = [];
+  let updatedCourses: ExtendedCourse[] = [];
 
   for (const registration of onlinePlan.registrations) {
     try {
@@ -64,18 +82,14 @@ export const updateLocalPlan = async (
           array.findIndex((t) => t.id === course.id) === index,
       );
     } catch {
-      toast.error("Nie udało się pobrać kursów");
+      return { status: "ERROR", message: "Nie udało się pobrać kursów" };
     }
   }
 
-  plan.setPlan({
-    ...plan,
-    registrations: updatedRegistrations,
-    courses: updatedCourses,
-    synced: true,
-    toCreate: false,
+  return {
+    status: "SUCCESS",
+    updatedRegistrations,
+    updatedCourses,
     updatedAt: new Date(onlinePlan.updatedAt),
-  });
-
-  return true;
+  };
 };

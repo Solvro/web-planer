@@ -114,28 +114,66 @@ export function CreateNewPlanPage({
 
   const handleCreateOnlinePlan = async () => {
     firstTime.current = false;
-    const result = await createOnlinePlan(plan);
-    if ("error" in result) {
-      if (result.error === "NOT_LOGGED_IN") {
-        setOfflineAlert(true);
-      } else {
-        toast.error("Nie udało się utworzyć planu w wersji online", {
-          description: result.message,
-          duration: 10000,
-        });
-      }
-    } else if ("success" in result) {
+    const res = await createOnlinePlan(plan);
+
+    if (res.status === "SUCCESS") {
+      const { updatedAt, onlineId } = res;
+      plan.setPlan((prev) => ({
+        ...prev,
+        synced: true,
+        updatedAt: new Date(updatedAt),
+        onlineId: onlineId,
+      }));
+
       toast.success("Utworzono plan");
+    } else if (res.status === "NOT_LOGGED_IN") {
+      setOfflineAlert(true);
+    } else {
+      toast.error("Nie udało się utworzyć planu w wersji online", {
+        description: res.message,
+        duration: 10000,
+      });
     }
   };
 
   const handleSyncPlan = async () => {
-    await syncPlan(plan, refetchOnlinePlan, setSyncing);
+    setSyncing(true);
+    const res = await syncPlan(plan);
+
+    if (res.status === "SUCCESS") {
+      await refetchOnlinePlan();
+
+      plan.setPlan((prev) => ({
+        ...prev,
+        synced: true,
+        updatedAt: res.updatedAt ? new Date(res.updatedAt) : new Date(),
+      }));
+    } else {
+      toast.error(res.message, {
+        duration: 10000,
+      });
+    }
   };
 
   const handleUpdateLocalPlan = async () => {
     firstTime.current = false;
-    await updateLocalPlan(onlinePlan, plan, coursesFn);
+    const res = await updateLocalPlan(onlinePlan, coursesFn);
+
+    if (res.status === "SUCCESS") {
+      const { updatedRegistrations, updatedCourses, updatedAt } = res;
+      plan.setPlan({
+        ...plan,
+        registrations: updatedRegistrations,
+        courses: updatedCourses,
+        synced: true,
+        toCreate: false,
+        updatedAt,
+      });
+    } else {
+      toast.error(res.message, {
+        duration: 10000,
+      });
+    }
   };
 
   const bounceAlert = () => {
