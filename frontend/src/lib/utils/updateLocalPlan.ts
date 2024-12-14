@@ -6,7 +6,7 @@ import type { PlanState } from "@/lib/usePlan";
 import type { LessonType } from "@/services/usos/types";
 import type { CourseType, PlanResponseType } from "@/types";
 
-export const handleUpdateLocalPlan = async (
+export const updateLocalPlan = async (
   onlinePlan: PlanResponseType | null | undefined,
   plan: PlanState,
   coursesFn: UseMutationResult<CourseType, Error, string>,

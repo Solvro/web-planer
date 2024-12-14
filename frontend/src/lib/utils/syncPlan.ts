@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { updatePlan } from "@/actions/plans";
 import type { PlanState } from "@/lib/usePlan";
 
-export const handleSyncPlan = async <T>(
+export const syncPlan = async <T>(
   plan: PlanState,
   refetchOnlinePlan: () => Promise<T>,
   setSyncing: (value: boolean) => void,

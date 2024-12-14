@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { createNewPlan } from "@/actions/plans";
 import type { PlanState } from "@/lib/usePlan";
 
-export const handleCreateOnlinePlan = async (
+export const createOnlinePlan = async (
   plan: PlanState,
   setOfflineAlert: (value: boolean) => void,
 ) => {

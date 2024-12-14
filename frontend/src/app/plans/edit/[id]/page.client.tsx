@@ -29,9 +29,9 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
-import { handleCreateOnlinePlan } from "@/lib/utils/handleCreateOnlinePlan";
-import { handleSyncPlan } from "@/lib/utils/handleSyncPlan";
-import { handleUpdateLocalPlan } from "@/lib/utils/handleUpdateLocalPlan";
+import { createOnlinePlan } from "@/lib/utils/createOnlinePlan";
+import { syncPlan } from "@/lib/utils/syncPlan";
+import { updateLocalPlan } from "@/lib/utils/updateLocalPlan";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
 import type { CourseType, FacultyType } from "@/types";
@@ -59,7 +59,6 @@ export function CreateNewPlanPage({
   const router = useRouter();
   const plan = usePlan({ planId });
 
-  //- Functions tanstack query -//
   const registrations = useQuery({
     enabled: faculty !== null,
     queryKey: ["registrations", faculty],
@@ -113,22 +112,20 @@ export function CreateNewPlanPage({
     },
   });
 
-  //- Plan state functions -//
-  const createOnlinePlan = async () => {
+  const handleCreateOnlinePlan = async () => {
     firstTime.current = false;
-    await handleCreateOnlinePlan(plan, setOfflineAlert);
+    await createOnlinePlan(plan, setOfflineAlert);
   };
 
-  const syncPlan = async () => {
-    await handleSyncPlan(plan, refetchOnlinePlan, setSyncing);
+  const handleSyncPlan = async () => {
+    await syncPlan(plan, refetchOnlinePlan, setSyncing);
   };
 
-  const updateLocalPlan = async () => {
+  const handleUpdateLocalPlan = async () => {
     firstTime.current = false;
-    await handleUpdateLocalPlan(onlinePlan, plan, coursesFn);
+    await updateLocalPlan(onlinePlan, plan, coursesFn);
   };
 
-  //- Basic functions -//
   const bounceAlert = () => {
     setBouncingAlert(true);
     setTimeout(() => {
@@ -147,15 +144,14 @@ export function CreateNewPlanPage({
         !offlineAlert &&
         !plan.toCreate
       ) {
-        void syncPlan();
+        void handleSyncPlan();
       }
     }, 4000);
   };
 
-  //- Effects -//
   useEffect(() => {
     if (plan.onlineId === null && firstTime.current) {
-      void createOnlinePlan();
+      void handleCreateOnlinePlan();
     }
   }, [plan.onlineId]);
 
@@ -166,7 +162,7 @@ export function CreateNewPlanPage({
       plan.toCreate &&
       firstTime.current
     ) {
-      void updateLocalPlan();
+      void handleUpdateLocalPlan();
     }
   }, [plan, onlinePlan]);
 
@@ -195,10 +191,10 @@ export function CreateNewPlanPage({
         {offlineAlert ? <OfflineAlert /> : null}
         <SyncErrorAlert
           downloadChanges={() => {
-            void updateLocalPlan();
+            void handleUpdateLocalPlan();
           }}
           sendChanges={() => {
-            void syncPlan();
+            void handleSyncPlan();
           }}
           planDate={plan.updatedAt}
           onlinePlan={onlinePlan}
@@ -250,7 +246,7 @@ export function CreateNewPlanPage({
               onlineId={plan.onlineId}
               syncing={syncing}
               bounceAlert={bounceAlert}
-              onClick={syncPlan}
+              onClick={handleSyncPlan}
               isOffline={offlineAlert}
               equalsDates={isEqual(
                 plan.updatedAt,
