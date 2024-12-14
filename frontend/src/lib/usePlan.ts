@@ -20,7 +20,7 @@ export interface PlanState {
   setPlan: setPlanType;
 }
 
-export type setPlanType = Dispatch<
+type setPlanType = Dispatch<
   SetStateAction<{
     id: string;
     name: string;
