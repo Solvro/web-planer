@@ -114,7 +114,19 @@ export function CreateNewPlanPage({
 
   const handleCreateOnlinePlan = async () => {
     firstTime.current = false;
-    await createOnlinePlan(plan, setOfflineAlert);
+    const result = await createOnlinePlan(plan);
+    if ("error" in result) {
+      if (result.error === "NOT_LOGGED_IN") {
+        setOfflineAlert(true);
+      } else {
+        toast.error("Nie udało się utworzyć planu w wersji online", {
+          description: result.message,
+          duration: 10000,
+        });
+      }
+    } else if ("success" in result) {
+      toast.success("Utworzono plan");
+    }
   };
 
   const handleSyncPlan = async () => {

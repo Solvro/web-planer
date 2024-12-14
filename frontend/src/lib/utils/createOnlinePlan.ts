@@ -1,12 +1,7 @@
-import { toast } from "sonner";
-
 import { createNewPlan } from "@/actions/plans";
 import type { PlanState } from "@/lib/usePlan";
 
-export const createOnlinePlan = async (
-  plan: PlanState,
-  setOfflineAlert: (value: boolean) => void,
-) => {
+export const createOnlinePlan = async (plan: PlanState) => {
   try {
     const courses = plan.courses
       .filter((c) => c.isChecked)
@@ -30,20 +25,14 @@ export const createOnlinePlan = async (
       onlineId: res.schedule.id.toString(),
     }));
 
-    toast.success("Utworzono plan");
-    return true;
+    return { success: true };
   } catch (err) {
     if (err instanceof Error && "message" in err) {
       if (err.message === "Not logged in") {
-        setOfflineAlert(true);
-      } else {
-        toast.error("Nie udało się utworzyć planu w wersji online", {
-          description:
-            "Wystąpił nieoczekiwany błąd. Skontaktuj się z zespołem developerów.",
-          duration: 10000,
-        });
+        return { error: "NOT_LOGGED_IN", message: err.message };
       }
+      return { error: "UNKNOWN", message: err.message };
     }
-    return false;
+    return { error: "UNKNOWN", message: "Wystąpił nieoczekiwany błąd" };
   }
 };
