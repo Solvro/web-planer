@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { env } from "@/env.mjs";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
 import { createOnlinePlan } from "@/lib/utils/createOnlinePlan";
@@ -49,7 +50,6 @@ export function CreateNewPlanPage({
 }) {
   const [syncing, setSyncing] = useState(false);
   const [offlineAlert, setOfflineAlert] = useState(false);
-  const [bouncingAlert, setBouncingAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
 
   const firstTime = useRef(true);
@@ -64,7 +64,7 @@ export function CreateNewPlanPage({
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
       );
 
       if (!response.ok) {
@@ -101,7 +101,7 @@ export function CreateNewPlanPage({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
       );
 
       if (!response.ok) {
@@ -176,13 +176,6 @@ export function CreateNewPlanPage({
     }
   };
 
-  const bounceAlert = () => {
-    setBouncingAlert(true);
-    setTimeout(() => {
-      setBouncingAlert(false);
-    }, 1000);
-  };
-
   const resetInactivityTimer = () => {
     if (inactivityTimeout.current !== null) {
       clearTimeout(inactivityTimeout.current);
@@ -248,7 +241,6 @@ export function CreateNewPlanPage({
           }}
           planDate={plan.updatedAt}
           onlinePlan={onlinePlan}
-          bounce={bouncingAlert}
         />
 
         <div className="flex flex-col justify-start gap-3 md:w-full">
@@ -292,13 +284,11 @@ export function CreateNewPlanPage({
               </form>
             </div>
             <SyncedButton
-              synced={plan.synced}
-              onlineId={plan.onlineId}
-              syncing={syncing}
-              bounceAlert={bounceAlert}
+              plan={plan}
+              isSyncing={syncing}
               onClick={handleSyncPlan}
               isOffline={offlineAlert}
-              equalsDates={isEqual(
+              isEqualsDates={isEqual(
                 plan.updatedAt,
                 new Date(onlinePlan ? onlinePlan.updatedAt : plan.updatedAt),
               )}

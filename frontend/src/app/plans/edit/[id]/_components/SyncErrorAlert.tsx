@@ -39,13 +39,11 @@ interface PlanResponseType {
 export const SyncErrorAlert = ({
   onlinePlan,
   planDate,
-  bounce = false,
   downloadChanges,
   sendChanges,
 }: {
   onlinePlan: PlanResponseType | null | undefined;
   planDate: Date;
-  bounce?: boolean;
   downloadChanges: () => void;
   sendChanges: () => void;
 }) => {
@@ -74,7 +72,6 @@ export const SyncErrorAlert = ({
     <div
       className={cn(
         "flex w-full flex-col rounded-md bg-primary/10 transition-all",
-        { "animate-fast-bounce": bounce },
       )}
     >
       <div className="flex w-full items-start justify-start p-4 pb-2">

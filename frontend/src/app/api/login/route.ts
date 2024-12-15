@@ -1,7 +1,7 @@
 import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { USOS_APPS_URL } from "@/env.mjs";
+import { env } from "@/env.mjs";
 import { getRequestToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -39,6 +39,6 @@ export async function GET() {
   });
 
   return redirect(
-    `${USOS_APPS_URL}/services/oauth/authorize?oauth_token=${token.token}`,
+    `${env.USOS_APPS_URL}/services/oauth/authorize?oauth_token=${token.token}`,
   );
 }

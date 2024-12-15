@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
+import { env } from "@/env.mjs";
+
 import { CreateNewPlanPage } from "./page.client";
 
 interface PageProps {
@@ -19,7 +21,7 @@ export default async function CreateNewPlan({ params }: PageProps) {
   }
 
   const facultiesRes = (await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/departments`,
+    `${env.NEXT_PUBLIC_API_URL}/departments`,
   ).then((r) => r.json())) as Array<{ id: string; name: string }> | null;
   if (!facultiesRes) {
     return notFound();

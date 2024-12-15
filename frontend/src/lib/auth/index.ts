@@ -24,7 +24,7 @@ export const getAccessToken = async (
 ) => {
   const data = oauth.authorize(
     {
-      url: `https://apps.${env.USOS_BASE_URL}/services/oauth/access_token`,
+      url: `${env.USOS_APPS_URL}/services/oauth/access_token`,
       method: "POST",
       data: { oauth_token, oauth_verifier },
     },
@@ -35,8 +35,8 @@ export const getAccessToken = async (
   );
 
   const response = await fetch(
-    `https://apps.${
-      env.USOS_BASE_URL
+    `${
+      env.USOS_APPS_URL
     }/services/oauth/access_token?${new URLSearchParams(Object.entries(data)).toString()}
 		`,
     {
@@ -62,7 +62,7 @@ const removeMultipleSlashesFromUrl = (url: string) => {
 
 export async function getRequestToken() {
   const data = oauth.authorize({
-    url: `https://apps.${env.USOS_BASE_URL}/services/oauth/request_token`,
+    url: `${env.USOS_APPS_URL}/services/oauth/request_token`,
     method: "POST",
     data: {
       oauth_callback: removeMultipleSlashesFromUrl(
@@ -73,9 +73,7 @@ export async function getRequestToken() {
   });
 
   const response = await fetch(
-    `https://apps.${
-      env.USOS_BASE_URL
-    }/services/oauth/request_token?${new URLSearchParams(
+    `${env.USOS_APPS_URL}/services/oauth/request_token?${new URLSearchParams(
       Object.entries(data),
     ).toString()}`,
     {

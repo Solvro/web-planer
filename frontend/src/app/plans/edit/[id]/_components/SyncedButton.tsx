@@ -8,6 +8,7 @@ import {
   RefreshCwOffIcon,
 } from "lucide-react";
 import React, { useMemo } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,36 +16,33 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { PlanState } from "@/lib/usePlan";
 
 export const SyncedButton = ({
-  synced,
-  onlineId,
-  syncing,
+  plan,
+  isSyncing,
   onClick,
-  bounceAlert,
-  equalsDates,
+  isEqualsDates,
   isOffline,
 }: {
-  synced: boolean;
-  onlineId: string | null;
-  syncing: boolean;
+  plan: PlanState;
+  isSyncing: boolean;
   onClick: () => Promise<void>;
-  bounceAlert: () => void;
-  equalsDates: boolean;
+  isEqualsDates: boolean;
   isOffline: boolean;
 }) => {
   const message = useMemo(() => {
-    if (synced && equalsDates) {
+    if (plan.synced && isEqualsDates) {
       return "Zsynchronizowano";
-    } else if (!(onlineId ?? "")) {
+    } else if (!(plan.onlineId ?? "")) {
       return "Plan dostępny tylko lokalnie";
-    } else if (syncing) {
+    } else if (isSyncing) {
       return "Synchronizowanie...";
-    } else if (!equalsDates) {
+    } else if (!isEqualsDates) {
       return "Twoja wersja różni się od wersji online";
     }
     return "Masz lokalne zmiany";
-  }, [synced, onlineId, syncing, equalsDates]);
+  }, [plan.synced, plan.onlineId, isSyncing, isEqualsDates]);
   return (
     <Tooltip>
       <TooltipTrigger asChild={true}>
@@ -53,8 +51,11 @@ export const SyncedButton = ({
           variant="outline"
           className="min-w-10"
           onClick={() => {
-            if (!equalsDates) {
-              bounceAlert();
+            if (!isEqualsDates) {
+              toast.info(
+                "Wybierz akcję z alertu powyżej, aby zsynchronizować dane tak jak chcesz",
+                { duration: 5000 },
+              );
             } else if (isOffline) {
               return;
             } else {
@@ -62,13 +63,13 @@ export const SyncedButton = ({
             }
           }}
         >
-          {synced && equalsDates ? (
+          {plan.synced && isEqualsDates ? (
             <CloudIcon className="size-4 text-emerald-500" />
-          ) : !(onlineId ?? "") ? (
+          ) : !(plan.onlineId ?? "") ? (
             <AlertTriangleIcon className="size-4 text-rose-500" />
-          ) : syncing ? (
+          ) : isSyncing ? (
             <RefreshCwIcon className="size-4 animate-spin text-primary" />
-          ) : !equalsDates ? (
+          ) : !isEqualsDates ? (
             <GitPullRequestClosed className="size-4 text-primary" />
           ) : (
             <RefreshCwOffIcon className="size-4 text-amber-500" />

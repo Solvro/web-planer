@@ -1,9 +1,9 @@
 import fetch from "node-fetch";
 
-import { USOS_APPS_URL } from "@/env.mjs";
+import { env } from "@/env.mjs";
 import { oauth } from "@/lib/auth";
 
-const baseUrl = `${USOS_APPS_URL}/services`;
+const baseUrl = `${env.USOS_APPS_URL}/services`;
 
 export const createClient = ({
   token,
