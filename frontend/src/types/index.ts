@@ -1,3 +1,7 @@
+import type { Dispatch, SetStateAction } from "react";
+
+import type { ExtendedCourse } from "@/atoms/planFamily";
+import type { Registration } from "@/lib/types";
 import type { Day } from "@/services/usos/types";
 
 export interface CreatePlanResponseType {
@@ -71,3 +75,31 @@ export type FacultyType = Array<{
   name: string;
   departmentId: string;
 }>;
+
+export interface PlanState {
+  id: string;
+  name: string;
+  courses: ExtendedCourse[];
+  registrations: Registration[];
+  allGroups: ExtendedCourse["groups"];
+  onlineId: string | null;
+  synced: boolean;
+  toCreate: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  setPlan: SetPlanType;
+}
+
+type SetPlanType = Dispatch<
+  SetStateAction<{
+    id: string;
+    name: string;
+    courses: ExtendedCourse[];
+    registrations: Registration[];
+    createdAt: Date;
+    updatedAt: Date;
+    onlineId: string | null;
+    toCreate: boolean;
+    synced: boolean;
+  }>
+>;

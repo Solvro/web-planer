@@ -16,7 +16,30 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { PlanState } from "@/lib/usePlan";
+import type { PlanState } from "@/types";
+
+const LOGIC_STATUS_RESULTS = {
+  SYNCHRONIZED: {
+    message: "Zsynchronizowano",
+    icon: <CloudIcon className="size-4 text-emerald-500" />,
+  },
+  LOCAL_ONLY: {
+    message: "Plan dostępny tylko lokalnie",
+    icon: <AlertTriangleIcon className="size-4 text-rose-500" />,
+  },
+  SYNCING: {
+    message: "Synchronizowanie...",
+    icon: <RefreshCwIcon className="size-4 animate-spin text-primary" />,
+  },
+  DIFFERENT_DATES: {
+    message: "Twoja wersja różni się od wersji online",
+    icon: <GitPullRequestClosed className="size-4 text-primary" />,
+  },
+  LOCAL_CHANGES: {
+    message: "Masz lokalne zmiany",
+    icon: <RefreshCwOffIcon className="size-4 text-amber-500" />,
+  },
+};
 
 export const SyncedButton = ({
   plan,
@@ -31,18 +54,22 @@ export const SyncedButton = ({
   isEqualsDates: boolean;
   isOffline: boolean;
 }) => {
-  const message = useMemo(() => {
+  const planStatus = useMemo(() => {
     if (plan.synced && isEqualsDates) {
-      return "Zsynchronizowano";
+      return "SYNCHRONIZED";
     } else if (!(plan.onlineId ?? "")) {
-      return "Plan dostępny tylko lokalnie";
+      return "LOCAL_ONLY";
     } else if (isSyncing) {
-      return "Synchronizowanie...";
+      return "SYNCING";
     } else if (!isEqualsDates) {
-      return "Twoja wersja różni się od wersji online";
+      return "DIFFERENT_DATES";
     }
-    return "Masz lokalne zmiany";
+    return "LOCAL_CHANGES";
   }, [plan.synced, plan.onlineId, isSyncing, isEqualsDates]);
+
+  const message = LOGIC_STATUS_RESULTS[planStatus].message;
+  const icon = LOGIC_STATUS_RESULTS[planStatus].icon;
+
   return (
     <Tooltip>
       <TooltipTrigger asChild={true}>
@@ -63,17 +90,7 @@ export const SyncedButton = ({
             }
           }}
         >
-          {plan.synced && isEqualsDates ? (
-            <CloudIcon className="size-4 text-emerald-500" />
-          ) : !(plan.onlineId ?? "") ? (
-            <AlertTriangleIcon className="size-4 text-rose-500" />
-          ) : isSyncing ? (
-            <RefreshCwIcon className="size-4 animate-spin text-primary" />
-          ) : !isEqualsDates ? (
-            <GitPullRequestClosed className="size-4 text-primary" />
-          ) : (
-            <RefreshCwOffIcon className="size-4 text-amber-500" />
-          )}
+          {icon}
         </Button>
       </TooltipTrigger>
       <TooltipContent>

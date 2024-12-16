@@ -1,5 +1,5 @@
 import { createNewPlan } from "@/actions/plans";
-import type { PlanState } from "@/lib/usePlan";
+import type { PlanState } from "@/types";
 
 type CreateOnlinePlanResult =
   | {

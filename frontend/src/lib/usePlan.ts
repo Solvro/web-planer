@@ -1,38 +1,8 @@
-import type { SetStateAction } from "jotai";
 import { useAtom } from "jotai";
-import type { Dispatch } from "react";
 
 import { type ExtendedCourse, planFamily } from "@/atoms/planFamily";
 
 import type { Registration } from "./types";
-
-export interface PlanState {
-  id: string;
-  name: string;
-  courses: ExtendedCourse[];
-  registrations: Registration[];
-  allGroups: ExtendedCourse["groups"];
-  onlineId: string | null;
-  synced: boolean;
-  toCreate: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  setPlan: setPlanType;
-}
-
-type setPlanType = Dispatch<
-  SetStateAction<{
-    id: string;
-    name: string;
-    courses: ExtendedCourse[];
-    registrations: Registration[];
-    createdAt: Date;
-    updatedAt: Date;
-    onlineId: string | null;
-    toCreate: boolean;
-    synced: boolean;
-  }>
->;
 
 export const usePlan = ({ planId }: { planId: string }) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
