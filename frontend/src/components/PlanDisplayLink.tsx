@@ -1,17 +1,27 @@
 import { FolderSearch } from "lucide-react";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-import { buttonVariants } from "./ui/button";
+import { Button } from "./ui/button";
 
 export function PlanDisplayLink({ id }: { id: string }) {
   return (
-    <Link
-      href={`/plans/preview/${id}`}
-      className={cn(buttonVariants({ size: "icon" }), "font-semibold")}
-    >
-      <FolderSearch className="size-4" />
-    </Link>
+    <Tooltip>
+      <TooltipTrigger asChild={true}>
+        <Button asChild={true} size="icon">
+          <Link href={`/plans/preview/${id}`}>
+            <FolderSearch className="size-4" />
+          </Link>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Podgląd</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

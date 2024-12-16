@@ -3,7 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import type React from "react";
 
-import ClientProviders from "@/components/Providers";
+import { ClientProviders } from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
 import { cn } from "@/lib/utils";

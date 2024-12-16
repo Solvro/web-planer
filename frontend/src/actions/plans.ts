@@ -3,51 +3,11 @@
 import { revalidatePath } from "next/cache";
 
 import { auth, fetchToAdonis } from "@/lib/auth";
-
-interface CreatePlanResponseType {
-  success: boolean;
-  message: string;
-  schedule: {
-    name: string;
-    userId: number;
-    createdAt: string;
-    updatedAt: string;
-    id: number;
-  };
-}
-
-interface PlanResponseType {
-  name: string;
-  userId: number;
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  courses: Array<{
-    id: string;
-    name: string;
-    department: string;
-    lecturer: string;
-    type: string;
-    ects: number;
-    semester: number;
-    groups: Array<{
-      id: number;
-      name: string;
-      day: string;
-      time: string;
-      room: string;
-    }>;
-  }>;
-  registrations: Array<{
-    id: string;
-    name: string;
-  }>;
-}
-
-interface DeletePlanResponseType {
-  success: boolean;
-  message: string;
-}
+import type {
+  CreatePlanResponseType,
+  DeletePlanResponseType,
+  PlanResponseType,
+} from "@/types";
 
 export const createNewPlan = async ({
   name,

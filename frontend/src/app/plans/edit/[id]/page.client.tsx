@@ -1,14 +1,15 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { isEqual } from "date-fns";
+import { format, isEqual } from "date-fns";
+import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { toast } from "sonner";
 
-import { createNewPlan, getPlan, updatePlan } from "@/actions/plans";
+import { getPlan } from "@/actions/plans";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
 import { ClassSchedule } from "@/components/ClassSchedule";
 import { GroupsAccordionItem } from "@/components/GroupsAccordion";
@@ -26,36 +27,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { env } from "@/env.mjs";
 import { usePlan } from "@/lib/usePlan";
 import { registrationReplacer } from "@/lib/utils";
+import { createOnlinePlan } from "@/lib/utils/createOnlinePlan";
+import { syncPlan } from "@/lib/utils/syncPlan";
+import { updateLocalPlan } from "@/lib/utils/updateLocalPlan";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
+import type { CourseType, FacultyType } from "@/types";
 
-import { SyncErrorAlert } from "./SyncErrorAlert";
-import { SyncedButton } from "./SyncedButton";
-
-type CourseType = Array<{
-  id: string;
-  name: string;
-  registrationId: string;
-  groups: Array<{
-    id: number;
-    name: string;
-    startTime: string;
-    endTime: string;
-    group: string;
-    lecturer: string;
-    week: "-" | "TN" | "TP";
-    day: Day;
-    type: "C" | "L" | "P" | "S" | "W";
-    url: string;
-    courseId: string;
-    createdAt: string;
-    updatedAt: string;
-  }>;
-}>;
-
-type FacultyType = Array<{ id: string; name: string; departmentId: string }>;
+import { OfflineAlert } from "./_components/OfflineAlert";
+import { SyncErrorAlert } from "./_components/SyncErrorAlert";
+import { SyncedButton } from "./_components/SyncedButton";
 
 export function CreateNewPlanPage({
   planId,
@@ -65,102 +49,22 @@ export function CreateNewPlanPage({
   faculties: Array<{ name: string; value: string }>;
 }) {
   const [syncing, setSyncing] = useState(false);
-  const [bouncingAlert, setBouncingAlert] = useState(false);
-  const firstTime = useRef(true);
-  const router = useRouter();
-
-  const plan = usePlan({
-    planId,
-  });
-
-  const bounceAlert = () => {
-    setBouncingAlert(true);
-    setTimeout(() => {
-      setBouncingAlert(false);
-    }, 1000);
-  };
-
-  const handleCreateOnlinePlan = async () => {
-    firstTime.current = false;
-    const courses = plan.courses
-      .filter((c) => c.isChecked)
-      .map((c) => ({ id: c.id }));
-    const registrations = plan.registrations.map((r) => ({ id: r.id }));
-    const groups = plan.allGroups
-      .filter((g) => g.isChecked)
-      .map((g) => ({ id: g.groupOnlineId }));
-    try {
-      const res = await createNewPlan({
-        name: plan.name,
-        courses,
-        registrations,
-        groups,
-      });
-      plan.setPlan((prev) => ({
-        ...prev,
-        synced: true,
-        updatedAt: new Date(res.schedule.updatedAt),
-        onlineId: res.schedule.id.toString(),
-      }));
-      toast.success("Utworzono plan");
-      return true;
-    } catch (error) {
-      return toast.error("Nie udało się utworzyć planu w wersji online", {
-        description: "Zaloguj się i spróbuj ponownie",
-        duration: 5000,
-      });
-    }
-  };
-
-  const handleSyncPlan = async () => {
-    setSyncing(true);
-    try {
-      const res = await updatePlan({
-        id: Number(plan.onlineId),
-        name: plan.name,
-        courses: plan.courses
-          .filter((c) => c.isChecked)
-          .map((c) => ({ id: c.id })),
-        registrations: plan.registrations.map((r) => ({ id: r.id })),
-        groups: plan.allGroups
-          .filter((g) => g.isChecked)
-          .map((g) => ({ id: g.groupOnlineId })),
-      });
-      if (!res.success) {
-        return toast.error("Nie udało się zaktualizować planu");
-      }
-      await refetchOnlinePlan();
-      toast.success("Zaktualizowano plan");
-      plan.setPlan((prev) => ({
-        ...prev,
-        synced: true,
-        updatedAt: res.schedule.updatedAt
-          ? new Date(res.schedule.updatedAt)
-          : new Date(),
-      }));
-      return true;
-    } catch (error) {
-      return toast.error("Nie udało się zaktualizować planu");
-    } finally {
-      setSyncing(false);
-    }
-  };
-
-  useEffect(() => {
-    if (plan.onlineId === null && firstTime.current) {
-      void handleCreateOnlinePlan();
-    }
-  }, [plan]);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
+  const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
+
+  const firstTime = useRef(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const router = useRouter();
+  const plan = usePlan({ planId });
+
   const registrations = useQuery({
     enabled: faculty !== null,
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
       );
 
       if (!response.ok) {
@@ -197,7 +101,7 @@ export function CreateNewPlanPage({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
       );
 
       if (!response.ok) {
@@ -208,82 +112,91 @@ export function CreateNewPlanPage({
     },
   });
 
+  const handleCreateOnlinePlan = async () => {
+    firstTime.current = false;
+    const res = await createOnlinePlan(plan);
+
+    if (res.status === "SUCCESS") {
+      const { updatedAt, onlineId } = res;
+      plan.setPlan((prev) => ({
+        ...prev,
+        synced: true,
+        updatedAt: new Date(updatedAt),
+        onlineId: onlineId,
+      }));
+
+      toast.success("Utworzono plan");
+    } else if (res.status === "NOT_LOGGED_IN") {
+      setOfflineAlert(true);
+    } else {
+      toast.error("Nie udało się utworzyć planu w wersji online", {
+        description: res.message,
+        duration: 10000,
+      });
+    }
+  };
+
+  const handleSyncPlan = async () => {
+    setSyncing(true);
+    const res = await syncPlan(plan);
+
+    if (res.status === "SUCCESS") {
+      await refetchOnlinePlan();
+
+      plan.setPlan((prev) => ({
+        ...prev,
+        synced: true,
+        updatedAt: res.updatedAt ? new Date(res.updatedAt) : new Date(),
+      }));
+    } else {
+      toast.error(res.message, {
+        duration: 10000,
+      });
+    }
+  };
+
   const handleUpdateLocalPlan = async () => {
     firstTime.current = false;
+    const res = await updateLocalPlan(onlinePlan, coursesFn);
 
-    if (!onlinePlan) {
-      return false;
+    if (res.status === "SUCCESS") {
+      const { updatedRegistrations, updatedCourses, updatedAt } = res;
+      plan.setPlan({
+        ...plan,
+        registrations: updatedRegistrations,
+        courses: updatedCourses,
+        synced: true,
+        toCreate: false,
+        updatedAt,
+      });
+    } else {
+      toast.error(res.message, {
+        duration: 10000,
+      });
     }
-
-    let updatedRegistrations: typeof plan.registrations = [];
-    let updatedCourses: typeof plan.courses = [];
-
-    for (const registration of onlinePlan.registrations) {
-      try {
-        const courses = await coursesFn.mutateAsync(registration.id);
-        const extendedCourses: ExtendedCourse[] = courses
-          .map((c) => {
-            const groups: ExtendedGroup[] = c.groups.map((g) => ({
-              groupId: g.group + c.id + g.type,
-              groupNumber: g.group.toString(),
-              groupOnlineId: g.id,
-              courseId: c.id,
-              courseName: c.name,
-              isChecked:
-                onlinePlan.courses
-                  .find((oc) => oc.id === c.id)
-                  ?.groups.some((og) => og.id === g.id) ?? false,
-              courseType: g.type,
-              day: g.day,
-              lecturer: g.lecturer,
-              registrationId: c.registrationId,
-              week: g.week.replace("-", "") as "" | "TN" | "TP",
-              endTime: g.endTime.split(":").slice(0, 2).join(":"),
-              startTime: g.startTime.split(":").slice(0, 2).join(":"),
-            }));
-            return {
-              id: c.id,
-              name: c.name,
-              isChecked: onlinePlan.courses.some((oc) => oc.id === c.id),
-              registrationId: c.registrationId,
-              type: c.groups.at(0)?.type ?? ("" as LessonType),
-              groups,
-            };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name));
-
-        // List update logic:
-        // Add unique registrations to the updatedRegistrations array
-        // r - current registration
-        // i - current index
-        // a - array of registrations
-        updatedRegistrations = [...updatedRegistrations, registration].filter(
-          (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
-        );
-
-        // Add unique courses to the updatedCourses array
-        // c - current course
-        // i - current index
-        // a - array of courses
-        updatedCourses = [...updatedCourses, ...extendedCourses].filter(
-          (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
-        );
-      } catch {
-        toast.error("Nie udało się pobrać kursów");
-      }
-    }
-
-    plan.setPlan({
-      ...plan,
-      registrations: updatedRegistrations,
-      courses: updatedCourses,
-      synced: true,
-      toCreate: false,
-      updatedAt: new Date(onlinePlan.updatedAt),
-    });
-
-    return true;
   };
+
+  const resetInactivityTimer = () => {
+    if (inactivityTimeout.current !== null) {
+      clearTimeout(inactivityTimeout.current);
+    }
+    inactivityTimeout.current = setTimeout(() => {
+      if (
+        !plan.synced &&
+        plan.onlineId !== null &&
+        !offlineAlert &&
+        !plan.toCreate
+      ) {
+        void handleSyncPlan();
+      }
+    }, 4000);
+  };
+
+  useEffect(() => {
+    if (plan.onlineId === null && firstTime.current) {
+      void handleCreateOnlinePlan();
+    }
+  }, [plan.onlineId]);
 
   useEffect(() => {
     if (
@@ -296,17 +209,21 @@ export function CreateNewPlanPage({
     }
   }, [plan, onlinePlan]);
 
-  const downloadChanges = () => {
-    void handleUpdateLocalPlan();
-  };
-  const uploadChanges = () => {
-    void handleSyncPlan();
-  };
+  useEffect(() => {
+    resetInactivityTimer();
+    return () => {
+      if (inactivityTimeout.current !== null) {
+        clearTimeout(inactivityTimeout.current);
+      }
+    };
+  }, [plan.name, plan.courses, plan.registrations, plan.allGroups]);
 
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        loading...
+        <Loader2Icon size={64} className="mb-4 animate-spin text-primary" />
+        <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
+        <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
       </div>
     );
   }
@@ -314,12 +231,16 @@ export function CreateNewPlanPage({
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
+        {offlineAlert ? <OfflineAlert /> : null}
         <SyncErrorAlert
-          downloadChanges={downloadChanges}
-          sendChanges={uploadChanges}
+          downloadChanges={() => {
+            void handleUpdateLocalPlan();
+          }}
+          sendChanges={() => {
+            void handleSyncPlan();
+          }}
           planDate={plan.updatedAt}
           onlinePlan={onlinePlan}
-          bounce={bouncingAlert}
         />
 
         <div className="flex flex-col justify-start gap-3 md:w-full">
@@ -363,18 +284,19 @@ export function CreateNewPlanPage({
               </form>
             </div>
             <SyncedButton
-              synced={plan.synced}
-              onlineId={plan.onlineId}
-              syncing={syncing}
-              bounceAlert={bounceAlert}
-              onClick={handleSyncPlan}
-              equalsDates={isEqual(
+              plan={plan}
+              isSyncing={syncing}
+              isEqualsDates={isEqual(
                 plan.updatedAt,
                 new Date(onlinePlan ? onlinePlan.updatedAt : plan.updatedAt),
               )}
             />
             <PlanDisplayLink id={plan.id} />
           </div>
+
+          <p className="text-xs text-muted-foreground">
+            Ostatnia aktualizacja: {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
+          </p>
         </div>
 
         <div className="w-full">
