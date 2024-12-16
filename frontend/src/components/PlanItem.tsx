@@ -108,6 +108,7 @@ export const PlanItem = ({
       id: uuid,
       onlineId,
       name,
+      createdAt: new Date(),
     });
 
     setTimeout(() => {
@@ -139,7 +140,9 @@ export const PlanItem = ({
         </CardTitle>
         <CardDescription>
           {format(
-            onlineOnly ? updatedAt : plan.createdAt,
+            onlineOnly
+              ? updatedAt
+              : ((plan.createdAt as Date | undefined) ?? new Date()),
             "dd.MM.yyyy - HH:mm",
           )}
         </CardDescription>
