@@ -44,15 +44,11 @@ const LOGIC_STATUS_RESULTS = {
 export const SyncedButton = ({
   plan,
   isSyncing,
-  onClick,
   isEqualsDates,
-  isOffline,
 }: {
   plan: PlanState;
   isSyncing: boolean;
-  onClick: () => Promise<void>;
   isEqualsDates: boolean;
-  isOffline: boolean;
 }) => {
   const planStatus = useMemo(() => {
     if (plan.synced && isEqualsDates) {
@@ -83,10 +79,8 @@ export const SyncedButton = ({
                 "Wybierz akcję z alertu powyżej, aby zsynchronizować dane tak jak chcesz",
                 { duration: 5000 },
               );
-            } else if (isOffline) {
-              return;
             } else {
-              void onClick();
+              return;
             }
           }}
         >

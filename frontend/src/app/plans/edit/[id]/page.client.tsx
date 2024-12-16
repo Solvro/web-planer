@@ -286,8 +286,6 @@ export function CreateNewPlanPage({
             <SyncedButton
               plan={plan}
               isSyncing={syncing}
-              onClick={handleSyncPlan}
-              isOffline={offlineAlert}
               isEqualsDates={isEqual(
                 plan.updatedAt,
                 new Date(onlinePlan ? onlinePlan.updatedAt : plan.updatedAt),
