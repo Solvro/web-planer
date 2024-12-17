@@ -48,16 +48,16 @@ export const getAccessToken = async (
   );
   const text = await response.text();
 
-  const params = new URLSearchParams(text);
+  const parameters = new URLSearchParams(text);
 
   return {
-    token: params.get("oauth_token"),
-    secret: params.get("oauth_token_secret"),
+    token: parameters.get("oauth_token"),
+    secret: parameters.get("oauth_token_secret"),
   };
 };
 
 const removeMultipleSlashesFromUrl = (url: string) => {
-  return url.replace(/([^:]\/)\/+/g, "$1");
+  return url.replaceAll(/([^:]\/)\/+/g, "$1");
 };
 
 export async function getRequestToken() {
@@ -83,11 +83,11 @@ export async function getRequestToken() {
       },
     },
   );
-  const params = new URLSearchParams(await response.text());
+  const parameters = new URLSearchParams(await response.text());
 
   return {
-    token: params.get("oauth_token"),
-    secret: params.get("oauth_token_secret"),
+    token: parameters.get("oauth_token"),
+    secret: parameters.get("oauth_token_secret"),
   };
 }
 
@@ -101,7 +101,7 @@ export const auth = async (tokens?: {
     tokens?.secret ?? cookies.get("access_token_secret")?.value;
 
   if (accessToken === "" || accessSecret === "") {
-    if (tokens) {
+    if (tokens !== undefined) {
       return null;
     }
     throw new Error("No access token or access secret");
@@ -133,13 +133,13 @@ export const auth = async (tokens?: {
         name: "access_token_secret",
         path: "/",
       });
-      if (tokens) {
+      if (tokens !== undefined) {
         return null;
       }
       throw new Error(data.error);
     }
     const setCookieHeaders = response.headers.getSetCookie();
-    setCookieHeaders.forEach((cookie) => {
+    for (const cookie of setCookieHeaders) {
       const preparedCookie = cookie.split(";")[0];
       const [name, value] = preparedCookie.split("=");
       cookies.set({
@@ -150,10 +150,10 @@ export const auth = async (tokens?: {
         httpOnly: true,
         secure: true,
       });
-    });
+    }
     return data;
-  } catch (error) {
-    if (tokens) {
+  } catch {
+    if (tokens !== undefined) {
       return null;
     }
     throw new Error("Failed to authenticate");
@@ -173,11 +173,12 @@ export const fetchToAdonis = async <T>({
     const cookies = await cookiesPromise();
     const adonisSession = cookies.get("adonis-session")?.value;
     const token = cookies.get("token")?.value;
+
     const fetchOptions: RequestInit = {
       method,
       headers: {
         "Content-Type": "application/json",
-        Cookie: `adonis-session=${adonisSession}; token=${token}`,
+        Cookie: `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`,
       },
       credentials: "include",
     };
@@ -192,7 +193,7 @@ export const fetchToAdonis = async <T>({
     );
     const data = (await response.json()) as T;
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

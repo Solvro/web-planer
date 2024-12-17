@@ -16,9 +16,9 @@ export const createNewPlan = async ({
   groups,
 }: {
   name: string;
-  courses: Array<{ id: string }>;
-  registrations: Array<{ id: string }>;
-  groups: Array<{ id: number }>;
+  courses: { id: string }[];
+  registrations: { id: string }[];
+  groups: { id: number }[];
 }) => {
   try {
     await auth();
@@ -28,12 +28,12 @@ export const createNewPlan = async ({
       method: "POST",
       body: JSON.stringify({ name, courses, registrations, groups }),
     });
-    if (!data) {
+    if (data === null) {
       throw new Error("Failed to create new plan");
     }
     revalidatePath("/plans");
     return data;
-  } catch (e) {
+  } catch {
     throw new Error("Not logged in");
   }
 };
@@ -47,18 +47,19 @@ export const updatePlan = async ({
 }: {
   id: number;
   name: string;
-  courses: Array<{ id: string }>;
-  registrations: Array<{ id: string }>;
-  groups: Array<{ id: number }>;
+  courses: { id: string }[];
+  registrations: { id: string }[];
+  groups: { id: number }[];
 }) => {
   await auth();
 
   const data = await fetchToAdonis<CreatePlanResponseType>({
-    url: `/user/schedules/${id}`,
+    url: `/user/schedules/${id.toString()}`,
     method: "PATCH",
     body: JSON.stringify({ name, courses, registrations, groups }),
   });
-  if (!data) {
+
+  if (data === null) {
     throw new Error("Failed to update plan");
   }
   return data;
@@ -68,15 +69,15 @@ export const deletePlan = async ({ id }: { id: number }) => {
   try {
     await auth();
     const data = await fetchToAdonis<DeletePlanResponseType>({
-      url: `/user/schedules/${id}`,
+      url: `/user/schedules/${id.toString()}`,
       method: "DELETE",
     });
-    if (!data) {
+    if (data === null) {
       throw new Error("Failed to delete plan");
     }
     revalidatePath("/plans");
     return data;
-  } catch (e) {
+  } catch {
     throw new Error("Not logged in");
   }
 };
@@ -85,14 +86,14 @@ export const getPlan = async ({ id }: { id: number }) => {
   try {
     await auth();
     const data = await fetchToAdonis<PlanResponseType>({
-      url: `/user/schedules/${id}`,
+      url: `/user/schedules/${id.toString()}`,
       method: "GET",
     });
-    if (!data) {
+    if (data === null) {
       return false;
     }
     return data;
-  } catch (e) {
+  } catch {
     return null;
   }
 };

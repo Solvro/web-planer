@@ -2,17 +2,8 @@
   "name": "backend",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "license": "AGPL-3.0-only",
-  "scripts": {
-    "start": "node bin/server.js",
-    "build": "node ace build",
-    "dev": "node ace serve --hmr",
-    "test": "node ace test",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
-  },
+  "type": "module",
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
@@ -31,24 +22,22 @@
     "#tests/*": "./tests/*.js",
     "#config/*": "./config/*.js"
   },
-  "devDependencies": {
-    "@adonisjs/assembler": "^7.8.1",
-    "@adonisjs/eslint-config": "^2.0.0-beta.6",
-    "@adonisjs/prettier-config": "^1.4.0",
-    "@adonisjs/tsconfig": "^1.4.0",
-    "@japa/api-client": "^2.0.3",
-    "@japa/assert": "^3.0.0",
-    "@japa/plugin-adonisjs": "^3.0.1",
-    "@japa/runner": "^3.1.4",
-    "@swc/core": "^1.7.22",
-    "@types/luxon": "^3.4.2",
-    "@types/node": "^22.5.1",
-    "eslint": "^9.9.1",
-    "hot-hook": "^0.2.6",
-    "pino-pretty": "^11.2.2",
-    "prettier": "^3.3.3",
-    "ts-node-maintained": "^10.9.4",
-    "typescript": "~5.5"
+  "scripts": {
+    "build": "node ace build",
+    "dev": "node ace serve --hmr",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings=0",
+    "start": "node bin/server.js",
+    "test": "node ace test",
+    "typecheck": "tsc --noEmit"
+  },
+  "lint-staged": {
+    "*": "prettier -w --ignore-unknown"
+  },
+  "prettier": "@solvro/config/prettier",
+  "resolutions": {
+    "strtok3": "8.0.1"
   },
   "dependencies": {
     "@adonisjs/auth": "^9.2.4",
@@ -67,6 +56,24 @@
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2"
   },
+  "devDependencies": {
+    "@adonisjs/assembler": "^7.8.1",
+    "@adonisjs/tsconfig": "^1.4.0",
+    "@japa/api-client": "^2.0.3",
+    "@japa/assert": "^3.0.0",
+    "@japa/plugin-adonisjs": "^3.0.1",
+    "@japa/runner": "^3.1.4",
+    "@solvro/config": "^1.12.1",
+    "@swc/core": "^1.7.22",
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^22.5.1",
+    "eslint": "^9.17.0",
+    "hot-hook": "^0.2.6",
+    "pino-pretty": "^11.2.2",
+    "prettier": "^3.4.2",
+    "ts-node-maintained": "^10.9.4",
+    "typescript": "~5.5"
+  },
   "hotHook": {
     "boundaries": [
       "./app/controllers/**/*.ts",
@@ -75,9 +82,5 @@
   },
   "overrides": {
     "strtok3": "8.0.1"
-  },
-  "resolutions": {
-    "strtok3": "8.0.1"
-  },
-  "prettier": "@adonisjs/prettier-config"
+  }
 }

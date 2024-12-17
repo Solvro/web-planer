@@ -23,8 +23,8 @@ export function SignOutButton({
     return (
       <Slot
         className="w-full"
-        onClick={(e) => {
-          e.preventDefault();
+        onClick={(event) => {
+          event.preventDefault();
           void signOut();
         }}
       >

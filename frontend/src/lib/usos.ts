@@ -1,7 +1,7 @@
 import { cookies as cookiesPromise } from "next/headers";
 
 import { usosService } from "@/services/usos";
-import { createClient } from "@/services/usos/usosClient";
+import { createClient } from "@/services/usos/usos-client";
 
 export const createUsosService = async () => {
   const cookies = await cookiesPromise();

@@ -1,6 +1,3 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
-/* eslint-disable react/prop-types */
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 

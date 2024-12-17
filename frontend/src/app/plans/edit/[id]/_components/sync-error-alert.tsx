@@ -14,7 +14,7 @@ interface PlanResponseType {
   id: number;
   createdAt: string;
   updatedAt: string;
-  courses: Array<{
+  courses: {
     id: string;
     name: string;
     department: string;
@@ -22,21 +22,21 @@ interface PlanResponseType {
     type: string;
     ects: number;
     semester: number;
-    groups: Array<{
+    groups: {
       id: number;
       name: string;
       day: string;
       time: string;
       room: string;
-    }>;
-  }>;
-  registrations: Array<{
+    }[];
+  }[];
+  registrations: {
     id: string;
     name: string;
-  }>;
+  }[];
 }
 
-export const SyncErrorAlert = ({
+export function SyncErrorAlert({
   onlinePlan,
   planDate,
   downloadChanges,
@@ -46,10 +46,10 @@ export const SyncErrorAlert = ({
   planDate: Date;
   downloadChanges: () => void;
   sendChanges: () => void;
-}) => {
+}) {
   const [loadingSending, setLoadingSending] = useState(false);
   const [loadingDownloading, setLoadingDownloading] = useState(false);
-  if (!onlinePlan) {
+  if (onlinePlan == null) {
     return null;
   }
   if (isEqual(planDate, new Date(onlinePlan.updatedAt))) {
@@ -131,4 +131,4 @@ export const SyncErrorAlert = ({
       </div>
     </div>
   );
-};
+}

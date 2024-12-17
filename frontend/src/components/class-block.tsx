@@ -24,7 +24,7 @@ function calculatePosition(startTime: string, endTime: string) {
   return [startGrid, durationSpan];
 }
 
-export const ClassBlock = ({
+export function ClassBlock({
   startTime,
   endTime,
   groupNumber,
@@ -48,7 +48,7 @@ export const ClassBlock = ({
   isDisabled: boolean;
   isReadonly?: boolean;
   onClick: () => void;
-}) => {
+}) {
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
 
@@ -59,7 +59,7 @@ export const ClassBlock = ({
       onClick={isReadonly ? undefined : onClick}
       style={{
         gridColumnStart: startGrid,
-        gridColumnEnd: `span ${durationSpan}`,
+        gridColumnEnd: `span ${durationSpan.toString()}`,
       }}
       className={cn(
         position,
@@ -81,4 +81,4 @@ export const ClassBlock = ({
       <p className="truncate font-semibold">{lecturer}</p>
     </button>
   );
-};
+}

@@ -1,25 +1,28 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import Course from '#models/group'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { DateTime } from "luxon";
+
+import { BaseModel, column, hasMany } from "@adonisjs/lucid/orm";
+import type { HasMany } from "@adonisjs/lucid/types/relations";
+
+import Course from "#models/group";
+
 export default class Registration extends BaseModel {
   @column({ isPrimary: true })
-  declare id: string
+  declare id: string;
 
   @column()
-  declare name: string
+  declare name: string;
 
   @column()
-  declare departmentId: string
+  declare departmentId: string;
 
   @column()
-  declare round: number
+  declare round: number;
 
   @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  declare createdAt: DateTime;
 
   @hasMany(() => Course)
-  declare courses: HasMany<typeof Course>
+  declare courses: HasMany<typeof Course>;
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  declare updatedAt: DateTime;
 }

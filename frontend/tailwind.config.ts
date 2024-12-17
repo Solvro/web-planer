@@ -1,4 +1,6 @@
+import tailwindScrollbar from "tailwind-scrollbar";
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
 
 const config = {
   darkMode: ["class"],
@@ -183,7 +185,8 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
+  plugins: [tailwindAnimate, tailwindScrollbar],
 } satisfies Config;
 
+// eslint-disable-next-line import/no-default-export
 export default config;

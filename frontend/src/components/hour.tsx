@@ -1,6 +1,6 @@
 import React from "react";
 
-const Hour = ({ hour }: { hour: string }) => {
+function Hour({ hour }: { hour: string }) {
   const [startHour, startMinute] = hour.split(":").map(Number);
 
   const startGrid = startHour * 12 - 7 * 12 - 5 + startMinute / 5;
@@ -16,6 +16,6 @@ const Hour = ({ hour }: { hour: string }) => {
       <span className="bg-white py-0.5">{hour}</span>
     </div>
   );
-};
+}
 
 export { Hour };

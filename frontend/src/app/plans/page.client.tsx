@@ -6,15 +6,15 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
-import { planFamily } from "@/atoms/planFamily";
-import { plansIds } from "@/atoms/plansIds";
-import { PlanItem } from "@/components/PlanItem";
+import { planFamily } from "@/atoms/plan-family";
+import { plansIds } from "@/atoms/plans-ids";
+import { PlanItem } from "@/components/plan-item";
 
 import type { PlanResponseDataType } from "./page";
 
 const plansAtom = atom(
   (get) => get(plansIds).map((id) => get(planFamily(id))),
-  (get, set, values: Array<{ id: string }>) => {
+  (_get, set, values: { id: string }[]) => {
     set(plansIds, values);
   },
 );
@@ -64,6 +64,7 @@ export function PlansPage({
     if (firstTime.current && plansExistingLocallyAndDeletedOnline.length > 0) {
       handleDeleteDeletedPlans();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plansExistingLocallyAndDeletedOnline]);
 
   return (

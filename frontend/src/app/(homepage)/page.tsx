@@ -9,39 +9,41 @@ import { buttonVariants } from "@/components/ui/button";
 import { createUsosService } from "@/lib/usos";
 import { cn } from "@/lib/utils";
 
-const AnimationLogo = () => (
-  <Block
-    whileHover={{
-      rotate: "0.0deg",
-      scale: 1.01,
-    }}
-    className="flex content-center items-center justify-center text-center align-middle md:mt-10"
-  >
-    <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
-      <div className="mb-5 md:mb-0 md:mt-5">
-        <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
-          SOLVRO
-        </p>
-      </div>
+function AnimationLogo() {
+  return (
+    <Block
+      whileHover={{
+        rotate: "0.0deg",
+        scale: 1.01,
+      }}
+      className="flex content-center items-center justify-center text-center align-middle md:mt-10"
+    >
+      <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
+        <div className="mb-5 md:mb-0 md:mt-5">
+          <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            SOLVRO
+          </p>
+        </div>
 
-      <a href="https://solvro.pwr.edu.pl/">
-        <Image
-          src="/assets/logo/logo_solvro_mono.png"
-          alt="Logo Koła Naukowego Solvro w kolorze"
-          width={200}
-          height={200}
-          className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
-        />
-      </a>
+        <a href="https://solvro.pwr.edu.pl/">
+          <Image
+            src="/assets/logo/logo_solvro_mono.png"
+            alt="Logo Koła Naukowego Solvro w kolorze"
+            width={200}
+            height={200}
+            className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
+          />
+        </a>
 
-      <div className="mb:mt-5">
-        <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
-          PLANER
-        </p>
+        <div className="mb:mt-5">
+          <p className="text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            PLANER
+          </p>
+        </div>
       </div>
-    </div>
-  </Block>
-);
+    </Block>
+  );
+}
 
 const JoinUsBlock = async () => {
   try {
@@ -64,7 +66,7 @@ const JoinUsBlock = async () => {
         Twoje plany
       </Link>
     );
-  } catch (e) {
+  } catch {
     return (
       <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
         <Link

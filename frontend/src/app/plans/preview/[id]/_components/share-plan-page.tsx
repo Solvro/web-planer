@@ -3,17 +3,18 @@
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { useMemo } from "react";
 import { LuDownloadCloud } from "react-icons/lu";
 
-import { planFamily } from "@/atoms/planFamily";
-import { plansIds } from "@/atoms/plansIds";
-import { ClassSchedule } from "@/components/ClassSchedule";
+import { planFamily } from "@/atoms/plan-family";
+import { plansIds } from "@/atoms/plans-ids";
+import { ClassSchedule } from "@/components/class-schedule";
 import { Button } from "@/components/ui/button";
-import { usePlan } from "@/lib/usePlan";
+import { usePlan } from "@/lib/use-plan";
 import { Day } from "@/services/usos/types";
 
 export function SharePlanPage({ planId }: { planId: string }) {
-  const uuid = React.useMemo(() => crypto.randomUUID(), []);
+  const uuid = useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const plan = usePlan({ planId });
   const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));

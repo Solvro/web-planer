@@ -133,7 +133,7 @@ export interface UmamiTracker {
      * ```
      */
     // eslint-disable-next-line @typescript-eslint/unified-signatures
-    (eventName: string, obj: EventData): Promise<string>;
+    (eventName: string, object: EventData): Promise<string>;
 
     /**
      * Tracks a page view with custom properties

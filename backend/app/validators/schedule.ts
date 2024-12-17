@@ -1,4 +1,4 @@
-import vine from '@vinejs/vine'
+import vine from "@vinejs/vine";
 
 export const createScheduleValidator = vine.compile(
   vine.object({
@@ -7,25 +7,25 @@ export const createScheduleValidator = vine.compile(
       .array(
         vine.object({
           id: vine.number(),
-        })
+        }),
       )
       .optional(),
     courses: vine
       .array(
         vine.object({
           id: vine.string(),
-        })
+        }),
       )
       .optional(),
     registrations: vine
       .array(
         vine.object({
           id: vine.string(),
-        })
+        }),
       )
       .optional(),
-  })
-)
+  }),
+);
 
 export const updateScheduleValidator = vine.compile(
   vine.object({
@@ -34,23 +34,23 @@ export const updateScheduleValidator = vine.compile(
       .array(
         vine.object({
           id: vine.number(),
-        })
+        }),
       )
       .optional(),
     courses: vine
       .array(
         vine.object({
           id: vine.string(),
-        })
+        }),
       )
       .optional(),
     registrations: vine
       .array(
         vine.object({
           id: vine.string(),
-        })
+        }),
       )
       .optional(),
     updatedAt: vine.string().optional(),
-  })
-)
+  }),
+);

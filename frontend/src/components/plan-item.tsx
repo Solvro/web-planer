@@ -15,7 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import { deletePlan } from "@/actions/plans";
-import { plansIds } from "@/atoms/plansIds";
+import { plansIds } from "@/atoms/plans-ids";
 import {
   Dialog,
   DialogContent,
@@ -32,7 +32,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { usePlan } from "@/lib/usePlan";
+import { usePlan } from "@/lib/use-plan";
 import { pluralize } from "@/lib/utils";
 
 import { Button } from "./ui/button";
@@ -46,7 +46,7 @@ import {
 } from "./ui/card";
 import { StatusIcon } from "./ui/status-icon";
 
-export const PlanItem = ({
+export function PlanItem({
   id,
   name,
   synced,
@@ -64,7 +64,7 @@ export const PlanItem = ({
   groupCount?: number;
   registrationCount?: number;
   updatedAt?: Date;
-}) => {
+}) {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
   const uuidToCopy = React.useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
@@ -132,6 +132,8 @@ export const PlanItem = ({
     .flatMap((c) => c.groups)
     .filter((group) => group.isChecked).length;
 
+  const plansLength = plan.registrations.length;
+
   return (
     <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
       <CardHeader className="space-y-1 p-4">
@@ -149,9 +151,9 @@ export const PlanItem = ({
       </CardHeader>
       <CardContent className="flex-1 p-4 pt-0">
         <p className="text-sm">
-          {registrationCount || plan.registrations.length}{" "}
+          {registrationCount || plansLength}{" "}
           {pluralize(
-            registrationCount || plan.registrations.length,
+            registrationCount || plansLength,
             "kurs",
             "kursy",
             "kursów",
@@ -242,4 +244,4 @@ export const PlanItem = ({
       </Dialog>
     </Card>
   );
-};
+}

@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useMediaQuery } from "@/lib/useMediaQuery";
+import { useMediaQuery } from "@/lib/use-media-query";
 
 import {
   Command,
@@ -46,9 +46,9 @@ export function RegistrationCombobox({
             variant="outline"
             className="w-full justify-start truncate font-normal"
           >
-            {selectedRegistrations
-              ? `${selectedRegistrations.length} wybranych`
-              : "Rejestracja"}
+            {selectedRegistrations === null
+              ? "Rejestracja"
+              : `${selectedRegistrations.length.toString()} wybranych`}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
@@ -72,9 +72,9 @@ export function RegistrationCombobox({
           variant="outline"
           className="w-full justify-start truncate font-normal"
         >
-          {selectedRegistrations
-            ? `${selectedRegistrations.length} wybranych`
-            : "Wybierz rejestracje"}
+          {selectedRegistrations === null
+            ? "Wybierz rejestracje"
+            : `${selectedRegistrations.length.toString()} wybranych`}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -92,13 +92,13 @@ export function RegistrationCombobox({
   );
 }
 
-const RegistrationList = ({
+function RegistrationList({
   allRegistrations,
   setSelectedRegistrationId,
 }: {
   allRegistrations: Option[];
   setSelectedRegistrationId: (id: string) => void;
-}) => {
+}) {
   return (
     <Command>
       <CommandInput placeholder="Wybierz rejestrację..." />
@@ -123,4 +123,4 @@ const RegistrationList = ({
       </CommandList>
     </Command>
   );
-};
+}

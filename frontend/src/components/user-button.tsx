@@ -10,12 +10,12 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { GetProfile } from "@/services/usos/getProfile";
+import type { GetProfile } from "@/services/usos/get-profile";
 
 import { Badge } from "./ui/badge";
 import { SignOutButton } from "./ui/signout-button";
 
-export const UserButton = ({ profile }: { profile: GetProfile }) => {
+export function UserButton({ profile }: { profile: GetProfile }) {
   const [opened, setOpened] = React.useState(false);
 
   return (
@@ -33,7 +33,7 @@ export const UserButton = ({ profile }: { profile: GetProfile }) => {
             <div className="flex w-full items-start gap-3">
               <div className="flex flex-col gap-1">
                 <h1 className="translate-y-0.5 text-lg font-semibold leading-none">
-                  {profile.first_name + " " + profile.last_name}
+                  {`${profile.first_name} ${profile.last_name}`}
                 </h1>
                 <p className="text-xs font-medium leading-none">
                   {profile.student_number}@student.pwr.edu.pl
@@ -63,9 +63,9 @@ export const UserButton = ({ profile }: { profile: GetProfile }) => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+}
 
-const UserAvatar = ({ profile }: { profile: GetProfile }) => {
+function UserAvatar({ profile }: { profile: GetProfile }) {
   return (
     <Avatar>
       <AvatarImage src={profile.photo_urls["50x50"]} />
@@ -74,4 +74,4 @@ const UserAvatar = ({ profile }: { profile: GetProfile }) => {
       </AvatarFallback>
     </Avatar>
   );
-};
+}

@@ -1,4 +1,4 @@
-name: CI Backend
+name: Backend - CI
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
         working-directory: backend
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -29,8 +29,17 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Set up AdonisJS environment
+        run: |
+          cp .env.development .env
+          node ace generate:key
+
       - name: Lint
         run: npm run lint
+        if: always()
+
+      - name: Format
+        run: npm run format:check
         if: always()
 
       - name: Type check
@@ -39,18 +48,4 @@ jobs:
 
       - name: Run Test Build
         run: npm run build
-        env:
-          NODE_ENV: production
-          PORT: 3333
-          HOST: 0.0.0.0
-          LOG_LEVEL: debug
-          APP_KEY: really-hard-secret-key-to-guess
-          SESSION_DRIVER: cookie
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_USER: postgres
-          DB_DATABASE: postgres
-          DB_PASSWORD: postgres
-          USOS_CONSUMER_KEY: test
-          USOS_CONSUMER_SECRET: test
         if: always()
