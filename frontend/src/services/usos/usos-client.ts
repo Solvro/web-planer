@@ -13,7 +13,7 @@ export const createClient = ({
   secret?: string;
 }) => {
   if (typeof token !== "string" || typeof secret !== "string") {
-    throw new Error("No token or secret provided");
+    throw new TypeError("No token or secret provided");
   }
   return {
     async get<R = unknown>(endpoint: string): Promise<R> {

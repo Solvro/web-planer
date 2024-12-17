@@ -1,4 +1,4 @@
-import { type DialogProps } from "@radix-ui/react-dialog";
+import type { DialogProps } from "@radix-ui/react-dialog";
 import { Command as CommandPrimitive } from "cmdk";
 import { Search } from "lucide-react";
 import * as React from "react";
@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => (
   <CommandPrimitive
     ref={ref}
@@ -24,7 +23,7 @@ Command.displayName = CommandPrimitive.displayName;
 
 type CommandDialogProps = DialogProps;
 
-const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+function CommandDialog({ children, ...props }: CommandDialogProps) {
   return (
     <Dialog {...props}>
       <DialogContent className="overflow-hidden p-0 shadow-lg">
@@ -34,12 +33,11 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}
 
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => (
   // eslint-disable-next-line react/no-unknown-property
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
@@ -60,7 +58,6 @@ CommandInput.displayName = CommandPrimitive.Input.displayName;
 const CommandList = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
@@ -87,7 +84,6 @@ CommandEmpty.displayName = CommandPrimitive.Empty.displayName;
 const CommandGroup = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Group>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Group
     ref={ref}
@@ -104,7 +100,6 @@ CommandGroup.displayName = CommandPrimitive.Group.displayName;
 const CommandSeparator = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
@@ -117,7 +112,6 @@ CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
@@ -131,10 +125,10 @@ const CommandItem = React.forwardRef<
 
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
-const CommandShortcut = ({
+function CommandShortcut({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+}: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       className={cn(
@@ -144,7 +138,7 @@ const CommandShortcut = ({
       {...props}
     />
   );
-};
+}
 CommandShortcut.displayName = "CommandShortcut";
 
 export {

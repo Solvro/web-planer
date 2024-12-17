@@ -29,7 +29,7 @@ export const createOnlinePlan = async (
       .filter((g) => g.isChecked)
       .map((g) => ({ id: g.groupOnlineId }));
 
-    const res = await createNewPlan({
+    const response = await createNewPlan({
       name: plan.name,
       courses,
       registrations,
@@ -38,15 +38,15 @@ export const createOnlinePlan = async (
 
     return {
       status: "SUCCESS",
-      updatedAt: new Date(res.schedule.updatedAt),
-      onlineId: res.schedule.id.toString(),
+      updatedAt: new Date(response.schedule.updatedAt),
+      onlineId: response.schedule.id.toString(),
     };
-  } catch (err) {
-    if (err instanceof Error && "message" in err) {
-      if (err.message === "Not logged in") {
-        return { status: "NOT_LOGGED_IN", message: err.message };
+  } catch (error) {
+    if (error instanceof Error && "message" in error) {
+      if (error.message === "Not logged in") {
+        return { status: "NOT_LOGGED_IN", message: error.message };
       }
-      return { status: "UNKNOWN", message: err.message };
+      return { status: "UNKNOWN", message: error.message };
     }
     return { status: "UNKNOWN", message: "Wystąpił nieoczekiwany błąd" };
   }

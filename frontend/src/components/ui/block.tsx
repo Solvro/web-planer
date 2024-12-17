@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import type React from "react";
-import { type ComponentProps } from "react";
+import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
-export const Block = ({
+export function Block({
   className,
   ...rest
-}: ComponentProps<(typeof motion)["div"]> & { className: string }) => {
+}: ComponentProps<(typeof motion)["div"]> & { className: string }) {
   return (
     <motion.div
       variants={{
@@ -34,4 +34,4 @@ export const Block = ({
       {...rest}
     />
   );
-};
+}

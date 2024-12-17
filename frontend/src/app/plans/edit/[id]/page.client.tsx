@@ -10,11 +10,11 @@ import { MdArrowBack } from "react-icons/md";
 import { toast } from "sonner";
 
 import { getPlan } from "@/actions/plans";
-import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
-import { ClassSchedule } from "@/components/ClassSchedule";
-import { GroupsAccordionItem } from "@/components/GroupsAccordion";
-import { PlanDisplayLink } from "@/components/PlanDisplayLink";
-import { RegistrationCombobox } from "@/components/RegistrationCombobox";
+import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
+import { ClassSchedule } from "@/components/class-schedule";
+import { GroupsAccordionItem } from "@/components/groups-accordion";
+import { PlanDisplayLink } from "@/components/plan-display-link";
+import { RegistrationCombobox } from "@/components/registration-combobox";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,25 +28,25 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/env.mjs";
-import { usePlan } from "@/lib/usePlan";
+import { usePlan } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
-import { createOnlinePlan } from "@/lib/utils/createOnlinePlan";
-import { syncPlan } from "@/lib/utils/syncPlan";
-import { updateLocalPlan } from "@/lib/utils/updateLocalPlan";
+import { createOnlinePlan } from "@/lib/utils/create-online-plan";
+import { syncPlan } from "@/lib/utils/sync-plan";
+import { updateLocalPlan } from "@/lib/utils/update-local-plan";
 import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
 import type { CourseType, FacultyType } from "@/types";
 
-import { OfflineAlert } from "./_components/OfflineAlert";
-import { SyncErrorAlert } from "./_components/SyncErrorAlert";
-import { SyncedButton } from "./_components/SyncedButton";
+import { OfflineAlert } from "./_components/offline-alert";
+import { SyncErrorAlert } from "./_components/sync-error-alert";
+import { SyncedButton } from "./_components/synced-button";
 
 export function CreateNewPlanPage({
   planId,
   faculties,
 }: {
   planId: string;
-  faculties: Array<{ name: string; value: string }>;
+  faculties: { name: string; value: string }[];
 }) {
   const [syncing, setSyncing] = useState(false);
   const [offlineAlert, setOfflineAlert] = useState(false);
@@ -64,7 +64,7 @@ export function CreateNewPlanPage({
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty?.toString() ?? ""}/registrations`,
       );
 
       if (!response.ok) {
@@ -83,25 +83,25 @@ export function CreateNewPlanPage({
     enabled: plan.onlineId !== null,
     queryKey: ["onlinePlan", plan.onlineId],
     queryFn: async () => {
-      const res = await getPlan({ id: Number(plan.onlineId) });
+      const response = await getPlan({ id: Number(plan.onlineId) });
       if (
-        res === false ||
-        (res as unknown as { status: number }).status === 404
+        response === false ||
+        (response as unknown as { status: number }).status === 404
       ) {
         plan.remove();
         toast.error("Nie udało się pobrać planu");
         router.push("/plans");
         return null;
       }
-      return res;
+      return response;
     },
   });
 
-  const coursesFn = useMutation({
+  const coursesFunction = useMutation({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty?.toString() ?? ""}/registrations/${encodeURIComponent(registrationId)}/courses`,
       );
 
       if (!response.ok) {
@@ -114,53 +114,55 @@ export function CreateNewPlanPage({
 
   const handleCreateOnlinePlan = async () => {
     firstTime.current = false;
-    const res = await createOnlinePlan(plan);
+    const response = await createOnlinePlan(plan);
 
-    if (res.status === "SUCCESS") {
-      const { updatedAt, onlineId } = res;
-      plan.setPlan((prev) => ({
-        ...prev,
+    if (response.status === "SUCCESS") {
+      const { updatedAt, onlineId } = response;
+      plan.setPlan((previous) => ({
+        ...previous,
         synced: true,
         updatedAt: new Date(updatedAt),
-        onlineId: onlineId,
+        onlineId,
       }));
 
       toast.success("Utworzono plan");
-    } else if (res.status === "NOT_LOGGED_IN") {
+    } else if (response.status === "NOT_LOGGED_IN") {
       setOfflineAlert(true);
     } else {
       toast.error("Nie udało się utworzyć planu w wersji online", {
-        description: res.message,
-        duration: 10000,
+        description: response.message,
+        duration: 10_000,
       });
     }
   };
 
   const handleSyncPlan = async () => {
     setSyncing(true);
-    const res = await syncPlan(plan);
+    const response = await syncPlan(plan);
 
-    if (res.status === "SUCCESS") {
+    if (response.status === "SUCCESS") {
       await refetchOnlinePlan();
 
-      plan.setPlan((prev) => ({
-        ...prev,
+      plan.setPlan((previous) => ({
+        ...previous,
         synced: true,
-        updatedAt: res.updatedAt ? new Date(res.updatedAt) : new Date(),
+        updatedAt: response.updatedAt
+          ? new Date(response.updatedAt)
+          : new Date(),
       }));
     } else {
-      toast.error(res.message, {
-        duration: 10000,
+      toast.error(response.message, {
+        duration: 10_000,
       });
     }
   };
 
   const handleUpdateLocalPlan = async () => {
     firstTime.current = false;
-    const res = await updateLocalPlan(onlinePlan, coursesFn);
+    const response = await updateLocalPlan(onlinePlan, coursesFunction);
 
-    if (res.status === "SUCCESS") {
-      const { updatedRegistrations, updatedCourses, updatedAt } = res;
+    if (response.status === "SUCCESS") {
+      const { updatedRegistrations, updatedCourses, updatedAt } = response;
       plan.setPlan({
         ...plan,
         registrations: updatedRegistrations,
@@ -170,8 +172,8 @@ export function CreateNewPlanPage({
         updatedAt,
       });
     } else {
-      toast.error(res.message, {
-        duration: 10000,
+      toast.error(response.message, {
+        duration: 10_000,
       });
     }
   };
@@ -196,17 +198,19 @@ export function CreateNewPlanPage({
     if (plan.onlineId === null && firstTime.current) {
       void handleCreateOnlinePlan();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan.onlineId]);
 
   useEffect(() => {
     if (
-      onlinePlan &&
+      onlinePlan != null &&
       plan.onlineId !== null &&
       plan.toCreate &&
       firstTime.current
     ) {
       void handleUpdateLocalPlan();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan, onlinePlan]);
 
   useEffect(() => {
@@ -216,6 +220,7 @@ export function CreateNewPlanPage({
         clearTimeout(inactivityTimeout.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan.name, plan.courses, plan.registrations, plan.allGroups]);
 
   if (isLoading) {
@@ -258,9 +263,10 @@ export function CreateNewPlanPage({
               </Button>
               <form
                 className="flex w-full items-center justify-center"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const formData = new FormData(event.currentTarget);
+                  // eslint-disable-next-line @typescript-eslint/no-base-to-string
                   plan.changeName(formData.get("name")?.toString() ?? "");
                   inputRef.current?.blur();
                 }}
@@ -276,8 +282,8 @@ export function CreateNewPlanPage({
                     defaultValue={
                       typeof window === "undefined" ? "" : plan.name
                     }
-                    onChange={(e) => {
-                      plan.changeName(e.currentTarget.value);
+                    onChange={(event) => {
+                      plan.changeName(event.currentTarget.value);
                     }}
                   />
                 </div>
@@ -288,7 +294,9 @@ export function CreateNewPlanPage({
               isSyncing={syncing}
               isEqualsDates={isEqual(
                 plan.updatedAt,
-                new Date(onlinePlan ? onlinePlan.updatedAt : plan.updatedAt),
+                new Date(
+                  onlinePlan == null ? plan.updatedAt : onlinePlan.updatedAt,
+                ),
               )}
             />
             <PlanDisplayLink id={plan.id} />
@@ -325,7 +333,8 @@ export function CreateNewPlanPage({
         </div>
         {registrations.isLoading ? (
           <Skeleton className="h-[40px] w-full rounded-sm" />
-        ) : registrations.data && registrations.data.length > 0 ? (
+        ) : registrations.data !== undefined &&
+          registrations.data.length > 0 ? (
           <div className="w-full">
             <Label htmlFor="registration">Rejestracja</Label>
             <RegistrationCombobox
@@ -350,7 +359,7 @@ export function CreateNewPlanPage({
                 ) {
                   plan.removeRegistration(selectedRegistration.id);
                 } else {
-                  coursesFn.mutate(selectedRegistration.id, {
+                  coursesFunction.mutate(selectedRegistration.id, {
                     onSuccess: (data) => {
                       const extendedCourses: ExtendedCourse[] = data
                         .map((c) => ({
@@ -400,7 +409,8 @@ export function CreateNewPlanPage({
               }}
             />
           </div>
-        ) : registrations.data && registrations.data.length === 0 ? (
+        ) : registrations.data !== undefined &&
+          registrations.data.length === 0 ? (
           <div className="w-full items-center justify-center">
             <p className="text-center">Brak wybranych</p>
           </div>
@@ -443,7 +453,7 @@ export function CreateNewPlanPage({
               day={label}
               selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
               groups={plan.allGroups.filter(
-                (g) => g.day.toLocaleLowerCase() === day,
+                (g) => (g.day.toLocaleLowerCase() as Day) === day,
               )}
               onSelectGroup={(groupdId) => {
                 plan.selectGroup(groupdId);

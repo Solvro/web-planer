@@ -3,22 +3,33 @@
   "version": "1.0.0",
   "private": true,
   "description": "The Solvro Planer project aims to create an intuitive and user-friendly application that helps students plan their academic schedule",
+  "keywords": [],
+  "license": "AGPL-3.0-only",
+  "author": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cd frontend && npm install && cd ../backend && npm install",
     "db": "docker compose up",
-    "prepare": "husky"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "postinstall": "cd frontend && npm install && cd ../backend && npm install",
+    "lint": "eslint . --max-warnings=0",
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "AGPL-3.0-only",
-  "devDependencies": {
-    "husky": "^9.1.5",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.4.1"
+  "lint-staged": {
+    "*.md": "prettier --write"
   },
+  "prettier": "@solvro/config/prettier",
   "dependencies": {
     "@maximemrf/adonisjs-jwt": "^0.2.2",
     "adonis-autoswagger": "^3.64.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@solvro/config": "^1.12.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "prettier": "^3.4.2"
   }
 }

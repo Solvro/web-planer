@@ -1,14 +1,14 @@
 import Link from "next/link";
 import React, { Suspense } from "react";
 
-import { SolvroLogo } from "@/components/SolvroLogo";
+import { SolvroLogo } from "@/components/solvro-logo";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
 import { createUsosService } from "@/lib/usos";
 import { cn } from "@/lib/utils";
 
-export const PlansTopbar = () => {
+export function PlansTopbar() {
   return (
     <div className="flex w-full items-center justify-between bg-mainbutton7 py-4 shadow-sm">
       <div className="container mx-auto flex items-center justify-between">
@@ -45,15 +45,15 @@ export const PlansTopbar = () => {
       </div>
     </div>
   );
-};
+}
 
-const UserProfile = async () => {
+async function UserProfile() {
   try {
     const usos = await createUsosService();
     const profile = await usos.getProfile();
 
     return <UserButton profile={profile} />;
-  } catch (error) {
+  } catch {
     return (
       <Button variant="default" size="sm" asChild={true}>
         <Link href="/api/login" prefetch={false}>
@@ -62,4 +62,4 @@ const UserProfile = async () => {
       </Button>
     );
   }
-};
+}

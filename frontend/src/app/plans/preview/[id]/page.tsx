@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
-import { SharePlanPage } from "./_components/SharePlanPage";
+import { SharePlanPage } from "./_components/share-plan-page";
 
 interface PageProps {
   params: Promise<{ id: string }>;

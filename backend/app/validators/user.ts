@@ -1,9 +1,11 @@
-import vine from '@vinejs/vine'
+import vine from "@vinejs/vine";
 
 export const createUserValidator = vine.compile(
   vine.object({
-    id: vine
-      .string()
-      .unique(async (db, value) => !(await db.from('users').where('id', value).first())),
-  })
-)
+    id: vine.string().unique(
+      async (db, value) =>
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        !(await db.from("users").where("id", value).first()),
+    ),
+  }),
+);

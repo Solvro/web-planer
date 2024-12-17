@@ -1,9 +1,9 @@
 import React from "react";
 
-import type { ExtendedGroup } from "@/atoms/planFamily";
+import type { ExtendedGroup } from "@/atoms/plan-family";
 
-import { ClassBlock } from "./ClassBlock";
-import { Hour } from "./Hour";
+import { ClassBlock } from "./class-block";
+import { Hour } from "./hour";
 
 const upperHours = [
   "7:30",
@@ -42,7 +42,7 @@ const bottomHours = [
   "21:50",
 ] as const;
 
-const ClassSchedule = ({
+function ClassSchedule({
   day,
   groups,
   selectedGroups,
@@ -54,7 +54,7 @@ const ClassSchedule = ({
   selectedGroups: ExtendedGroup[];
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
-}) => {
+}) {
   return (
     <div className="flex min-w-fit flex-col rounded-xl border-2 p-3">
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold">
@@ -62,11 +62,11 @@ const ClassSchedule = ({
       </div>
       <div className="flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]">
         <div className="grid min-w-[1400px] grid-cols-dayPlan px-[10px]">
-          {upperHours.map((hour, index) => (
-            <Hour hour={hour} key={index} />
+          {upperHours.map((hour) => (
+            <Hour hour={hour} key={hour} />
           ))}
-          {bottomHours.map((hour, index) => (
-            <Hour hour={hour} key={index} />
+          {bottomHours.map((hour) => (
+            <Hour hour={hour} key={hour} />
           ))}
         </div>
         <div className="grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5">
@@ -94,6 +94,6 @@ const ClassSchedule = ({
       </div>
     </div>
   );
-};
+}
 
 export { ClassSchedule };

@@ -1,6 +1,3 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
-/* eslint-disable react/prop-types */
 import * as React from "react";
 
 import { cn } from "@/lib/utils";

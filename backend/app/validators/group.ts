@@ -1,6 +1,6 @@
-import vine from '@vinejs/vine'
+import vine from "@vinejs/vine";
 
-const timeFormat = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/
+const timeFormat = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
 
 export const createGroupValidator = vine.compile(
   vine.object({
@@ -10,10 +10,10 @@ export const createGroupValidator = vine.compile(
     endTime: vine.string().regex(timeFormat),
     group: vine.string(),
     lecturer: vine.string(),
-    week: vine.enum(['-', 'TP', 'TN']),
+    week: vine.enum(["-", "TP", "TN"]),
     type: vine.string(),
     day: vine.string(),
     courseId: vine.string(),
     url: vine.string(),
-  })
-)
+  }),
+);

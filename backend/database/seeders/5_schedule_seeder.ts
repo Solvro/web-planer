@@ -1,9 +1,10 @@
-import Schedule from '#models/schedule'
-import { BaseSeeder } from '@adonisjs/lucid/seeders'
+import { BaseSeeder } from "@adonisjs/lucid/seeders";
+
+import Schedule from "#models/schedule";
 
 export default class extends BaseSeeder {
   async run() {
     // Write your database queries inside the run method
-    await Schedule.createMany([{ userId: 1 }, { userId: 1 }])
+    await Schedule.createMany([{ userId: 1 }, { userId: 1 }]);
   }
 }

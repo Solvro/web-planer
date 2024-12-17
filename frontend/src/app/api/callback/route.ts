@@ -1,15 +1,15 @@
 import { revalidatePath } from "next/cache";
 import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
-import { type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { getAccessToken } from "@/lib/auth";
 import { usosService } from "@/services/usos";
-import { createClient } from "@/services/usos/usosClient";
+import { createClient } from "@/services/usos/usos-client";
 
 export const dynamic = "force-dynamic";
 
-const BLACKLIST = ["272695"];
+const BLACKLIST = new Set(["272695"]);
 
 export const GET = async (request: NextRequest) => {
   const url = request.nextUrl;
@@ -61,7 +61,7 @@ export const GET = async (request: NextRequest) => {
 
   const usos = usosService(createClient(tokens));
   const profile = await usos.getProfile();
-  if (BLACKLIST.includes(profile.student_number)) {
+  if (BLACKLIST.has(profile.student_number)) {
     return new Response(
       `Sorry ${profile.first_name}, ale ciebie nie obsługujemy 😘`,
       {

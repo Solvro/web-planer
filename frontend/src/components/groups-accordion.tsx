@@ -1,6 +1,6 @@
 import { XIcon } from "lucide-react";
 
-import type { ExtendedCourse } from "@/atoms/planFamily";
+import type { ExtendedCourse } from "@/atoms/plan-family";
 import {
   AccordionContent,
   AccordionItem,
@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
-import { typeClasses } from "./ClassBlock";
+import { typeClasses } from "./class-block";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
-export const GroupsAccordionItem = ({
+export function GroupsAccordionItem({
   registrationName,
   onCourseCheck,
   onCheckAll,
@@ -24,7 +24,7 @@ export const GroupsAccordionItem = ({
   onCheckAll: (isChecked: boolean) => void;
   onDelete?: () => void;
   courses: ExtendedCourse[];
-}) => {
+}) {
   return (
     <AccordionItem value={registrationName}>
       <div className="flex items-center gap-1">
@@ -85,4 +85,4 @@ export const GroupsAccordionItem = ({
       </AccordionContent>
     </AccordionItem>
   );
-};
+}

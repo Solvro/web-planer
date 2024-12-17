@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 
-import type { ExtendedCourse } from "@/atoms/planFamily";
+import type { ExtendedCourse } from "@/atoms/plan-family";
 import type { Registration } from "@/lib/types";
 import type { Day } from "@/services/usos/types";
 
@@ -22,7 +22,7 @@ export interface PlanResponseType {
   id: number;
   createdAt: string;
   updatedAt: string;
-  courses: Array<{
+  courses: {
     id: string;
     name: string;
     department: string;
@@ -30,18 +30,18 @@ export interface PlanResponseType {
     type: string;
     ects: number;
     semester: number;
-    groups: Array<{
+    groups: {
       id: number;
       name: string;
       day: string;
       time: string;
       room: string;
-    }>;
-  }>;
-  registrations: Array<{
+    }[];
+  }[];
+  registrations: {
     id: string;
     name: string;
-  }>;
+  }[];
 }
 
 export interface DeletePlanResponseType {
@@ -49,11 +49,11 @@ export interface DeletePlanResponseType {
   message: string;
 }
 
-export type CourseType = Array<{
+export type CourseType = {
   id: string;
   name: string;
   registrationId: string;
-  groups: Array<{
+  groups: {
     id: number;
     name: string;
     startTime: string;
@@ -67,14 +67,14 @@ export type CourseType = Array<{
     courseId: string;
     createdAt: string;
     updatedAt: string;
-  }>;
-}>;
+  }[];
+}[];
 
-export type FacultyType = Array<{
+export type FacultyType = {
   id: string;
   name: string;
   departmentId: string;
-}>;
+}[];
 
 export interface PlanState {
   id: string;

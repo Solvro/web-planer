@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 
-import { type ExtendedCourse, planFamily } from "@/atoms/planFamily";
+import { planFamily } from "@/atoms/plan-family";
+import type { ExtendedCourse } from "@/atoms/plan-family";
 
 import type { Registration } from "./types";
 
@@ -49,10 +50,10 @@ export const usePlan = ({ planId }: { planId: string }) => {
       setPlan({
         ...plan,
         registrations: [...plan.registrations, registration].filter(
-          (r, i, a) => a.findIndex((t) => t.id === r.id) === i,
+          (r, index, a) => a.findIndex((t) => t.id === r.id) === index,
         ),
         courses: [...plan.courses, ...courses].filter(
-          (c, i, a) => a.findIndex((t) => t.id === c.id) === i,
+          (c, index, a) => a.findIndex((t) => t.id === c.id) === index,
         ),
 
         synced: firstTime,

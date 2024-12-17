@@ -2,15 +2,15 @@ import * as cheerio from "cheerio";
 import makeFetchCookie from "fetch-cookie";
 import { LRUCache } from "lru-cache";
 
-import type { GetCoursesCart } from "./getCoursesCart";
-import type { GetCoursesEditions } from "./getCoursesEditions";
-import type { GetProfile } from "./getProfile";
-import type { GetRegistrationRoundCourses } from "./getRegistrationRoundCourses";
-import type { GetRegistrations } from "./getRegistrations";
-import { type GetTerms } from "./getTerms";
-import type { GetUserRegistrations } from "./getUserRegistrations";
+import type { GetCoursesCart } from "./get-courses-cart";
+import type { GetCoursesEditions } from "./get-courses-editions";
+import type { GetProfile } from "./get-profile";
+import type { GetRegistrationRoundCourses } from "./get-registration-round-courses";
+import type { GetRegistrations } from "./get-registrations";
+import type { GetTerms } from "./get-terms";
+import type { GetUserRegistrations } from "./get-user-registrations";
 import { Day, Frequency, LessonType } from "./types";
-import type { UsosClient } from "./usosClient";
+import type { UsosClient } from "./usos-client";
 
 const fetchWithCookie = makeFetchCookie(fetch);
 
@@ -140,7 +140,7 @@ export const usosService = (usosClient: UsosClient) => {
       const data = await fetchWithCookie(
         `https://web.usos.pwr.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod=${courseId}`,
         {
-          signal: AbortSignal.timeout(10000),
+          signal: AbortSignal.timeout(10_000),
         },
       );
 
@@ -160,11 +160,11 @@ export const usosService = (usosClient: UsosClient) => {
     },
 
     getGroups: async (courseId: string, term?: string) => {
-      const cacheKey = `groups-${courseId}-${term}`;
+      const cacheKey = `groups-${courseId}-${term?.toString() ?? ""}`;
 
       if (cache.has(cacheKey)) {
         return cache.get(cacheKey) as Promise<
-          Array<{
+          {
             hourStartTime: Time;
             hourEndTime: Time;
             duration: Time;
@@ -178,7 +178,7 @@ export const usosService = (usosClient: UsosClient) => {
             groupNumber: number;
             frequency: Frequency;
             name: string;
-          }>
+          }[]
         >;
       }
 
@@ -192,7 +192,7 @@ export const usosService = (usosClient: UsosClient) => {
               "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
           },
         },
-      ).then((t) => t.text());
+      ).then(async (t) => t.text());
 
       const $ = cheerio.load(data);
 
@@ -208,36 +208,50 @@ export const usosService = (usosClient: UsosClient) => {
           howOften.find((t) => t.includes("co") || t.includes("każd")) ?? "";
 
         const frequency = (() => {
+          // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
           switch (true) {
-            case frequencyText.includes(Frequency.EVERY):
+            case frequencyText.includes(Frequency.EVERY): {
               return Frequency.EVERY;
-            case frequencyText.includes(Frequency.ODD):
+            }
+            case frequencyText.includes(Frequency.ODD): {
               return Frequency.ODD;
-            case frequencyText.includes(Frequency.EVEN):
+            }
+            case frequencyText.includes(Frequency.EVEN): {
               return Frequency.EVEN;
-            default:
+            }
+            default: {
               return Frequency.NEVER;
+            }
           }
         })();
 
         const day = (() => {
+          // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
           switch (true) {
-            case frequencyText.includes(Day.MONDAY):
+            case frequencyText.includes(Day.MONDAY): {
               return Day.MONDAY;
-            case frequencyText.includes(Day.TUESDAY):
+            }
+            case frequencyText.includes(Day.TUESDAY): {
               return Day.TUESDAY;
-            case frequencyText.includes(Day.WEDNESDAY):
+            }
+            case frequencyText.includes(Day.WEDNESDAY): {
               return Day.WEDNESDAY;
-            case frequencyText.includes(Day.THURSDAY):
+            }
+            case frequencyText.includes(Day.THURSDAY): {
               return Day.THURSDAY;
-            case frequencyText.includes(Day.FRIDAY):
+            }
+            case frequencyText.includes(Day.FRIDAY): {
               return Day.FRIDAY;
-            case frequencyText.includes(Day.SATURDAY):
+            }
+            case frequencyText.includes(Day.SATURDAY): {
               return Day.SATURDAY;
-            case frequencyText.includes(Day.SUNDAY):
+            }
+            case frequencyText.includes(Day.SUNDAY): {
               return Day.SUNDAY;
-            default:
+            }
+            default: {
               return Day.NEVER;
+            }
           }
         })();
         const person = $(entry)
@@ -263,19 +277,26 @@ export const usosService = (usosClient: UsosClient) => {
         const hourEndTime = hourToTime(hourEnd);
 
         const type = (() => {
+          // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
           switch (true) {
-            case name.startsWith("C"):
+            case name.startsWith("C"): {
               return LessonType.EXERCISES;
-            case name.startsWith("L"):
+            }
+            case name.startsWith("L"): {
               return LessonType.LABORATORY;
-            case name.startsWith("P"):
+            }
+            case name.startsWith("P"): {
               return LessonType.PROJECT;
-            case name.startsWith("S"):
+            }
+            case name.startsWith("S"): {
               return LessonType.SEMINAR;
-            case name.startsWith("W"):
+            }
+            case name.startsWith("W"): {
               return LessonType.LECTURE;
-            default:
+            }
+            default: {
               return LessonType.LECTURE;
+            }
           }
         })();
         return {

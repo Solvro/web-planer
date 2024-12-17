@@ -2,18 +2,23 @@
   "name": "web-planner",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
     "postbuild": "next-sitemap",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "dev": "next dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "knip": "knip",
+    "lint": "next lint --max-warnings=0",
+    "lint:fix": "next lint --fix",
+    "start": "next start",
     "typecheck": "tsc"
   },
+  "lint-staged": {
+    "*": "prettier -w --ignore-unknown"
+  },
+  "prettier": "@solvro/config/prettier",
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -39,7 +44,7 @@
     "jotai": "^2.9.3",
     "lru-cache": "^11.0.1",
     "lucide-react": "^0.426.0",
-    "next": "^15.0.3",
+    "next": "^15.1.0",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.4.3",
     "node-fetch": "^3.3.2",
@@ -55,24 +60,19 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@alergeek-ventures/eslint-config": "^9.0.17",
-    "@next/eslint-plugin-next": "^14.2.7",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@solvro/config": "^1.12.1",
     "@types/crypto-js": "^4.2.2",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@typescript-eslint/parser": "^8.3.0",
-    "eslint": "^8",
-    "knip": "^5.27.4",
-    "postcss": "^8",
+    "@types/node": "^20.17.10",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "eslint": "^9.17.0",
+    "knip": "^5.41.0",
+    "postcss": "^8.4.49",
     "postcss-load-config": "^6.0.1",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.6",
+    "prettier": "^3.4.2",
     "tailwind-scrollbar": "^3.1.0",
-    "tailwindcss": "^3.4.10",
-    "typescript": "^5",
-    "vitest": "^2.0.5"
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2"
   },
   "volta": {
     "node": "20.16.0"

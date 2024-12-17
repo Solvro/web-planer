@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-const Logo = () => {
+function Logo() {
   return (
     <Link href="https://solvro.pwr.edu.pl/">
       <Image
@@ -16,9 +16,9 @@ const Logo = () => {
       />
     </Link>
   );
-};
+}
 
-export const Navbar = () => {
+export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -108,4 +108,4 @@ export const Navbar = () => {
       </div>
     </div>
   );
-};
+}

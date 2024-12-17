@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { PlansTopbar } from "./_components/PlansTopbar";
+import { PlansTopbar } from "./_components/plans-topbar";
 
 export default function PlansLayout({
   children,

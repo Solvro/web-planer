@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { ExtendedCourse } from "@/atoms/planFamily";
+import type { ExtendedCourse } from "@/atoms/plan-family";
 import { fetchToAdonis } from "@/lib/auth";
 import type { Registration } from "@/lib/types";
 

@@ -1,2 +1,3 @@
-import { configApp } from '@adonisjs/eslint-config'
-export default configApp()
+import { solvro } from "@solvro/config/eslint";
+
+export default solvro();

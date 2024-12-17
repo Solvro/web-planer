@@ -19,7 +19,7 @@ type SyncPlanResult =
 
 export const syncPlan = async (plan: PlanState): Promise<SyncPlanResult> => {
   try {
-    const res = await updatePlan({
+    const response = await updatePlan({
       id: Number(plan.onlineId),
       name: plan.name,
       courses: plan.courses
@@ -31,15 +31,15 @@ export const syncPlan = async (plan: PlanState): Promise<SyncPlanResult> => {
         .map((g) => ({ id: g.groupOnlineId })),
     });
 
-    if (!res.success) {
+    if (!response.success) {
       return {
         status: "ERROR",
         message: "Nie udało się zaktualizować planu",
       };
     }
 
-    return { status: "SUCCESS", updatedAt: res.schedule.updatedAt };
-  } catch (err) {
+    return { status: "SUCCESS", updatedAt: response.schedule.updatedAt };
+  } catch {
     return { status: "ERROR", message: "Nie udało się zaktualizować planu" };
   }
 };

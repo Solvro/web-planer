@@ -6,10 +6,6 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-
-/* eslint-disable react/prop-types */
-
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -172,17 +168,17 @@ const DropdownMenuSeparator = React.forwardRef<
 ));
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
-const DropdownMenuShortcut = ({
+function DropdownMenuShortcut({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
+}: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
       {...props}
     />
   );
-};
+}
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
 export {

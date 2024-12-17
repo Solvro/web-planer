@@ -41,7 +41,7 @@ const LOGIC_STATUS_RESULTS = {
   },
 };
 
-export const SyncedButton = ({
+export function SyncedButton({
   plan,
   isSyncing,
   isEqualsDates,
@@ -49,7 +49,7 @@ export const SyncedButton = ({
   plan: PlanState;
   isSyncing: boolean;
   isEqualsDates: boolean;
-}) => {
+}) {
   const planStatus = useMemo(() => {
     if (plan.synced && isEqualsDates) {
       return "SYNCHRONIZED";
@@ -79,8 +79,6 @@ export const SyncedButton = ({
                 "Wybierz akcję z alertu powyżej, aby zsynchronizować dane tak jak chcesz",
                 { duration: 5000 },
               );
-            } else {
-              return;
             }
           }}
         >
@@ -92,4 +90,4 @@ export const SyncedButton = ({
       </TooltipContent>
     </Tooltip>
   );
-};
+}

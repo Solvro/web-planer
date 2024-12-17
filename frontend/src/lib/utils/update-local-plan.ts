@@ -1,6 +1,6 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 
-import type { ExtendedCourse, ExtendedGroup } from "@/atoms/planFamily";
+import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import type { LessonType } from "@/services/usos/types";
 import type { CourseType, PlanResponseType } from "@/types";
 
@@ -27,9 +27,9 @@ type UpdateLocalPlanResult =
 
 export const updateLocalPlan = async (
   onlinePlan: PlanResponseType | null | undefined,
-  coursesFn: UseMutationResult<CourseType, Error, string>,
+  coursesFunction: UseMutationResult<CourseType, Error, string>,
 ): Promise<UpdateLocalPlanResult> => {
-  if (!onlinePlan) {
+  if (onlinePlan == null) {
     return { status: "ERROR", message: "Nie udało się pobrać planu online" };
   }
 
@@ -38,7 +38,7 @@ export const updateLocalPlan = async (
 
   for (const registration of onlinePlan.registrations) {
     try {
-      const courses = await coursesFn.mutateAsync(registration.id);
+      const courses = await coursesFunction.mutateAsync(registration.id);
       const extendedCourses: ExtendedCourse[] = courses
         .map((c) => {
           const groups: ExtendedGroup[] = c.groups.map((g) => ({
