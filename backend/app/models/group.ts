@@ -36,6 +36,12 @@ export default class Group extends BaseModel {
   @column()
   declare url: string;
 
+  @column()
+  declare spotsOccupied: number;
+
+  @column()
+  declare spotsTotal: number;
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;
 

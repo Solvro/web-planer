@@ -256,6 +256,31 @@ const scrapGroupDetails = async (groupUrl: string) => {
     .eq(1)
     .text()
     .trim();
+  const spotsOccupied = mainContent
+    .find("table")
+    .find("tbody")
+    .children()
+    .filter(function () {
+      return $(this).text().includes("Liczba osób w grupie:");
+    })
+    .find("td")
+    .eq(1)
+    .text()
+    .trim();
+  const spotsTotal = mainContent
+    .find("table")
+    .find("tbody")
+    .children()
+    .filter(function () {
+      return $(this).text().includes("Limit miejsc:");
+    })
+    .find("td")
+    .eq(1)
+    .text()
+    .trim();
+  const spotsOccupiedNumber = Number.parseInt(spotsOccupied, 10);
+  const spotsTotalNumber = Number.parseInt(spotsTotal, 10);
+
   return {
     name,
     type,
@@ -265,6 +290,8 @@ const scrapGroupDetails = async (groupUrl: string) => {
     startTime,
     endTime,
     lecturer,
+    spotsOccupied: Number.isNaN(spotsOccupiedNumber) ? 0 : spotsOccupiedNumber,
+    spotsTotal: Number.isNaN(spotsTotalNumber) ? 0 : spotsTotalNumber,
   };
 };
 
@@ -292,12 +319,12 @@ const giveGroupType = (groupType: string) => {
     return "C";
   } else if (groupType.includes("Zajęcia")) {
     return "L";
+  } else if (groupType.includes("Wykład")) {
+    return "W";
   } else if (groupType.includes("Projekt")) {
     return "P";
   } else if (groupType.includes("Seminarium")) {
     return "S";
-  } else if (groupType.includes("Wykład")) {
-    return "W";
   }
   return "Unknown";
 };
