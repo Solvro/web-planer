@@ -33,16 +33,16 @@ export default class Scraper extends BaseCommand {
   };
 
   async run() {
-    const DepartmentModule = await import('#models/department')
-    const Department = DepartmentModule.default
-    const RegistrationModule = await import('#models/registration')
-    const Registration = RegistrationModule.default
-    const CourseModule = await import('#models/course')
-    const Course = CourseModule.default
-    const GroupModule = await import('#models/group')
-    const Group = GroupModule.default
-    const GroupArchiveModule = await import('#models/group_archive')
-    const GroupArchive = GroupArchiveModule.default
+    const DepartmentModule = await import("#models/department");
+    const Department = DepartmentModule.default;
+    const RegistrationModule = await import("#models/registration");
+    const Registration = RegistrationModule.default;
+    const CourseModule = await import("#models/course");
+    const Course = CourseModule.default;
+    const GroupModule = await import("#models/group");
+    const Group = GroupModule.default;
+    const GroupArchiveModule = await import("#models/group_archive");
+    const GroupArchive = GroupArchiveModule.default;
 
     this.logger.log("Scraping departments");
     const departments = await scrapDepartments();
@@ -133,20 +133,20 @@ export default class Scraper extends BaseCommand {
         }),
       );
     }
-    console.log('Courses details scraped')
-    console.log('Synchronizing group_archive with current groups')
-    const currentGroups = await Group.all()
+    this.logger.log("Courses details scraped");
+    this.logger.log("Synchronizing group_archive with current groups");
+    const currentGroups = await Group.all();
     await Promise.all(
       currentGroups.map(async (group) => {
         await GroupArchive.updateOrCreate(
           { id: group.id },
           {
             ...group.$attributes,
-          }
-        )
-      })
-    )
-    console.log('Scraping groups details')
+          },
+        );
+      }),
+    );
+    this.logger.log("Scraping groups details");
     for (const registration of registrations) {
       for (const course of registration.courses) {
         const detailsUrls = (await Promise.all(
