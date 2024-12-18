@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Schedule from '#models/schedule'
 import { createScheduleValidator, updateScheduleValidator } from '#validators/schedule'
 import { DateTime } from 'luxon'
+import mail from '@adonisjs/mail/services/main'
 
 export default class SchedulesController {
   /**
