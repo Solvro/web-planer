@@ -147,21 +147,39 @@ export default class Scraper extends BaseCommand {
             if (details === undefined) {
               return;
             }
-            await Group.create({
-              name: details.name.slice(0, 255),
-              startTime: details.startTime.slice(0, 255),
-              endTime: details.endTime.slice(0, 255),
-              group: details.group.slice(0, 255),
-              lecturer: details.lecturer
-                .trim()
-                .replace(/\s+/g, " ")
-                .slice(0, 255),
-              week: details.week,
-              day: details.day.slice(0, 255),
-              type: details.type.slice(0, 255),
-              courseId: course.courseCode.slice(0, 255),
-              url: url.slice(0, 255),
-            });
+            await Group.updateOrCreate(
+              {
+                name: details.name.slice(0, 255),
+                startTime: details.startTime.slice(0, 255),
+                endTime: details.endTime.slice(0, 255),
+                group: details.group.slice(0, 255),
+                lecturer: details.lecturer
+                  .trim()
+                  .replace(/\s+/g, " ")
+                  .slice(0, 255),
+                week: details.week,
+                day: details.day.slice(0, 255),
+                type: details.type.slice(0, 255),
+                courseId: course.courseCode.slice(0, 255),
+              },
+              {
+                name: details.name.slice(0, 255),
+                startTime: details.startTime.slice(0, 255),
+                endTime: details.endTime.slice(0, 255),
+                group: details.group.slice(0, 255),
+                lecturer: details.lecturer
+                  .trim()
+                  .replace(/\s+/g, " ")
+                  .slice(0, 255),
+                week: details.week,
+                day: details.day.slice(0, 255),
+                type: details.type.slice(0, 255),
+                courseId: course.courseCode.slice(0, 255),
+                spotsOccupied: details.spotsOccupied,
+                spotsTotal: details.spotsTotal,
+                url: url.slice(0, 255),
+              },
+            );
           }),
         );
       }
