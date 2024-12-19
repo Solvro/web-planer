@@ -2,17 +2,35 @@ import { BaseCommand } from "@adonisjs/core/ace";
 import type { CommandOptions } from "@adonisjs/core/types/ace";
 import mail from "@adonisjs/mail/services/main";
 
-interface ChangedGroup {
-  groupId: number;
-  reason: string;
-}
-async function sendEmail(email: string) {
-  void mail.send((message) => {
-    message
-      .to(email)
-      .subject("Zmiana w Twoim planie")
-      .text("Nastąpiły zmiany w jednym z Twoich planów");
-  });
+async function sendEmail(userNotifications: Map<string, string[]>) {
+  for (const studentNumber of userNotifications.keys()) {
+    const notificationsList = userNotifications.get(studentNumber);
+    if (notificationsList !== undefined) {
+      const htmlContent = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+      <h2 style="color: #0056b3;">Nastąpiły zmiany w blokach zajęciowych</h2>
+      ${notificationsList.map((notification) => `<p style="color: #333; margin: 10px 0;">${notification}</p>`).join("")}
+      <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
+      <div style="text-align: left;">
+      <a href="https://planer.solvro.pl" style=color: #0056b3; font-weight: bold;">
+        Dokonaj zmian w swoim kreatorze!
+      </a>
+      <br>
+      <img src="https://planer.solvro.pl/og_image.png" 
+           alt="Logo Planer" style="margin-top: 10px; width: 350px; height: auto;">
+      <br>
+      <p style="color: #333; font-weight: bold;">Zespół Planera</p>
+      </div>
+    </div>
+    `;
+      await mail.send((message) => {
+        message
+          .to(`${studentNumber}@student.pwr.edu.pl`)
+          .subject("Planer - nastąpiły zmiany w twoich planach")
+          .html(htmlContent);
+      });
+    }
+  }
 }
 
 export default class Notifications extends BaseCommand {
@@ -47,7 +65,7 @@ export default class Notifications extends BaseCommand {
       archivedGroups.map((group) => [group.id, group]),
     );
 
-    const changes: ChangedGroup[] = [];
+    const userNotifications = new Map<string, string[]>();
 
     for (const schedule of schedules) {
       for (const group of schedule.groups) {
@@ -56,24 +74,40 @@ export default class Notifications extends BaseCommand {
 
         try {
           const user = await User.findOrFail(schedule.userId);
+          if (!user.allowNotifications) {
+            break;
+          }
 
           if (archivedGroup !== undefined) {
-            if (
-              currentGroup?.startTime !== archivedGroup.startTime ||
-              currentGroup.lecturer !== archivedGroup.lecturer
-            ) {
-              await sendEmail(`${user.studentNumber}@student.pwr.edu.pl`);
+            const notifications =
+              userNotifications.get(user.studentNumber) ?? [];
+
+            if (currentGroup?.startTime !== archivedGroup.startTime) {
+              notifications.push(
+                `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana godzin zajęć z ${archivedGroup.startTime.slice(0, -3)}-${archivedGroup.endTime.slice(0, -3)} na ${currentGroup?.startTime.slice(0, -3)}-${currentGroup?.endTime.slice(0, -3)}.`,
+              );
+            }
+
+            if (currentGroup?.lecturer !== archivedGroup.lecturer) {
+              notifications.push(
+                `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana prowadzącego z ${archivedGroup.lecturer} na ${currentGroup?.lecturer}.`,
+              );
+            }
+
+            if (notifications.length > 0) {
+              userNotifications.set(user.studentNumber, notifications);
             }
           }
         } catch (error) {
           this.logger.error(
-            `Błąd podczas wyszukiwania użytkownika ${schedule.userId}: ${error}`,
+            `Error while searching for a user ${schedule.userId}: ${error}`,
           );
         }
       }
     }
 
-    this.logger.log("Detected changes:");
-    this.logger.log(JSON.stringify(changes));
+    if (userNotifications.size > 0) {
+      await sendEmail(userNotifications);
+    }
   }
 }

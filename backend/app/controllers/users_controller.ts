@@ -4,39 +4,20 @@ import User from "#models/user";
 
 export default class UsersController {
   /**
-   * Display a list of all users
+   * Toggle notifications for user. POST req without body.
    */
-  async index(_ctx: HttpContext) {
-    return User.query();
-  }
-
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {
-    const payload = request.only(["id"]);
-    const user = await User.create(payload);
-    return { message: "User created.", user };
-  }
-
-  /**
-   * Show individual user
-   */
-  async show({ params }: HttpContext) {
-    return await User.findOrFail(params.id);
-  }
-
-  /**
-   * Handle form submission for the edit action
-   */
-  // async update({ params, request }: HttpContext) {}
-
-  /**
-   * Delete record
-   */
-  async destroy(ctx: HttpContext) {
-    const user = await this.show(ctx);
-    await user.delete();
-    return { message: "Member successfully deleted." };
+  async toggleNotifications({ auth }: HttpContext) {
+    const userId = auth.user?.id;
+    if (userId === undefined) {
+      return { message: "User not authenticated." };
+    }
+    const user = await User.findOrFail(userId);
+    user.allowNotifications = !user.allowNotifications;
+    await user.save();
+    return {
+      message: "User notifications updated successfully",
+      user: userId,
+      success: true,
+    };
   }
 }

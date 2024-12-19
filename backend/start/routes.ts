@@ -22,6 +22,7 @@ const RegistrationsController = () =>
   import("#controllers/registrations_controller");
 const CoursesController = () => import("#controllers/courses_controller");
 const GroupsController = () => import("#controllers/groups_controller");
+const UsersController = () => import("#controllers/users_controller");
 
 router.get("/swagger", async () => {
   return AutoSwagger.default.docs(router.toJSON(), swagger);
@@ -83,4 +84,8 @@ router
 router.post("user/login", [AuthController, "store"]).use(middleware.guest());
 router
   .delete("user/logout", [AuthController, "destroy"])
+  .use(middleware.usosAuth());
+
+router
+  .post("/user/toggleNotifications", [UsersController, "toggleNotifications"])
   .use(middleware.usosAuth());
