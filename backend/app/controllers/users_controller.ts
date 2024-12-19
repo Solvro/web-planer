@@ -1,21 +1,20 @@
 import type { HttpContext } from "@adonisjs/core/http";
 
 import User from "#models/user";
+import { createUserValidator } from "#validators/user";
 
 export default class UsersController {
   /**
-   * Toggle notifications for user. POST req without body.
+   * Update user data
    */
-  async toggleNotifications({ auth }: HttpContext) {
+  async update({ request, auth }: HttpContext) {
+    const payload = await request.validateUsing(createUserValidator);
     const userId = auth.user?.id;
-    if (userId === undefined) {
-      return { message: "User not authenticated." };
-    }
-    const user = await User.findOrFail(userId);
-    user.allowNotifications = !user.allowNotifications;
-    await user.save();
+    const currUser = await User.findOrFail(userId);
+    currUser.merge(payload);
+    await currUser.save();
     return {
-      message: "User notifications updated successfully",
+      message: "User updated successfully",
       user: userId,
       success: true,
     };

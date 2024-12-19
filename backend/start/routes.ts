@@ -86,6 +86,4 @@ router
   .delete("user/logout", [AuthController, "destroy"])
   .use(middleware.usosAuth());
 
-router
-  .patch("/user", [UsersController, "toggleNotifications"])
-  .use(middleware.usosAuth());
+router.patch("/user", [UsersController, "update"]).use(middleware.usosAuth());
