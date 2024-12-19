@@ -11,10 +11,10 @@ export default defineConfig({
   |
   */
   commands: [
-    () => import('@adonisjs/core/commands'),
-    () => import('@adonisjs/lucid/commands'),
-    () => import('adonisjs-scheduler/commands'),
-    () => import('@adonisjs/mail/commands')
+    () => import("@adonisjs/core/commands"),
+    () => import("@adonisjs/lucid/commands"),
+    () => import("adonisjs-scheduler/commands"),
+    () => import("@adonisjs/mail/commands"),
   ],
 
   /*
@@ -42,7 +42,7 @@ export default defineConfig({
       file: () => import("adonisjs-scheduler/scheduler_provider"),
       environment: ["console"],
     },
-    () => import('@adonisjs/mail/mail_provider')
+    () => import("@adonisjs/mail/mail_provider"),
   ],
 
   /*

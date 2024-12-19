@@ -1,46 +1,48 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { DateTime } from "luxon";
+
+import { BaseModel, column } from "@adonisjs/lucid/orm";
+
 export default class GroupArchive extends BaseModel {
-  static table = 'groups_archive'
+  static table = "groups_archive";
   @column({ isPrimary: true })
-  declare id: number
+  declare id: number;
 
   @column()
-  declare name: string
+  declare name: string;
 
   @column()
-  declare startTime: string
+  declare startTime: string;
 
   @column()
-  declare endTime: string
+  declare endTime: string;
 
   @column()
-  declare group: string
+  declare group: string;
 
   @column()
-  declare lecturer: string
+  declare lecturer: string;
 
   @column()
-  declare week: '-' | 'TP' | 'TN'
+  declare week: "-" | "TP" | "TN";
 
   @column()
-  declare day: string
+  declare day: string;
 
   @column()
-  declare type: string
+  declare type: string;
 
   @column()
-  declare courseId: string
+  declare courseId: string;
 
   @column()
-  declare url: string
+  declare url: string;
 
   @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  declare createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  declare updatedAt: DateTime;
 
   @column.dateTime()
-  declare scrapedAt: DateTime
+  declare scrapedAt: DateTime;
 }
