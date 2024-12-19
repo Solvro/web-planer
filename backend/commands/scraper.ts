@@ -41,6 +41,8 @@ export default class Scraper extends BaseCommand {
     const Course = CourseModule.default;
     const GroupModule = await import("#models/group");
     const Group = GroupModule.default;
+    const GroupArchiveModule = await import("#models/group_archive");
+    const GroupArchive = GroupArchiveModule.default;
 
     this.logger.log("Scraping departments");
     const departments = await scrapDepartments();
@@ -132,6 +134,18 @@ export default class Scraper extends BaseCommand {
       );
     }
     this.logger.log("Courses details scraped");
+    this.logger.log("Synchronizing group_archive with current groups");
+    const currentGroups = await Group.all();
+    await Promise.all(
+      currentGroups.map(async (group) => {
+        await GroupArchive.updateOrCreate(
+          { id: group.id },
+          {
+            ...group.$attributes,
+          },
+        );
+      }),
+    );
     this.logger.log("Scraping groups details");
     for (const registration of registrations) {
       for (const course of registration.courses) {
