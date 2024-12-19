@@ -87,5 +87,5 @@ router
   .use(middleware.usosAuth());
 
 router
-  .post("/user/toggleNotifications", [UsersController, "toggleNotifications"])
+  .patch("/user", [UsersController, "toggleNotifications"])
   .use(middleware.usosAuth());
