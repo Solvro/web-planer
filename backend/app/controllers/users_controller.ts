@@ -1,42 +1,31 @@
 import type { HttpContext } from "@adonisjs/core/http";
 
 import User from "#models/user";
+import { createUserValidator } from "#validators/user";
 
 export default class UsersController {
   /**
-   * Display a list of all users
+   * Update user data
    */
-  async index(_ctx: HttpContext) {
-    return User.query();
+  async update({ request, auth }: HttpContext) {
+    const payload = await request.validateUsing(createUserValidator);
+    const userId = auth.user?.id;
+    const currUser = await User.findOrFail(userId);
+    currUser.merge(payload);
+    await currUser.save();
+    return {
+      message: "User updated successfully",
+      user: userId,
+      success: true,
+    };
   }
 
   /**
-   * Handle form submission for the create action
+   * Display user data
    */
-  async store({ request }: HttpContext) {
-    const payload = request.only(["id"]);
-    const user = await User.create(payload);
-    return { message: "User created.", user };
-  }
 
-  /**
-   * Show individual user
-   */
-  async show({ params }: HttpContext) {
-    return await User.findOrFail(params.id);
-  }
-
-  /**
-   * Handle form submission for the edit action
-   */
-  // async update({ params, request }: HttpContext) {}
-
-  /**
-   * Delete record
-   */
-  async destroy(ctx: HttpContext) {
-    const user = await this.show(ctx);
-    await user.delete();
-    return { message: "Member successfully deleted." };
+  async show({ auth }: HttpContext) {
+    const userId = auth.user?.id;
+    return await User.findOrFail(userId);
   }
 }
