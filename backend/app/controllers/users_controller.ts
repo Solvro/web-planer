@@ -19,4 +19,13 @@ export default class UsersController {
       success: true,
     };
   }
+
+  /**
+   * Display user data
+   */
+
+  async show({ auth }: HttpContext) {
+    const userId = auth.user?.id;
+    return await User.findOrFail(userId);
+  }
 }
