@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/env.mjs";
+import { useSession } from "@/hooks/use-session";
 import { usePlan } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
 import { createOnlinePlan } from "@/lib/utils/create-online-plan";
@@ -51,6 +52,7 @@ export function CreateNewPlanPage({
   const [syncing, setSyncing] = useState(false);
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
+  const { user } = useSession();
 
   const firstTime = useRef(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -64,7 +66,7 @@ export function CreateNewPlanPage({
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty?.toString() ?? ""}/registrations`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty ?? ""}/registrations`,
       );
 
       if (!response.ok) {
@@ -179,6 +181,9 @@ export function CreateNewPlanPage({
   };
 
   const resetInactivityTimer = () => {
+    if (user == null) {
+      return;
+    }
     if (inactivityTimeout.current !== null) {
       clearTimeout(inactivityTimeout.current);
     }
@@ -221,7 +226,7 @@ export function CreateNewPlanPage({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan.name, plan.courses, plan.registrations, plan.allGroups]);
+  }, [plan.name, plan.courses, plan.registrations, plan.allGroups, user]);
 
   if (isLoading) {
     return (

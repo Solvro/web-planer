@@ -4,6 +4,13 @@ import type { ExtendedCourse } from "@/atoms/plan-family";
 import type { Registration } from "@/lib/types";
 import type { Day } from "@/services/usos/types";
 
+export interface User {
+  firstName: string;
+  lastName: string;
+  studentNumber: number;
+  usosId: string;
+}
+
 export interface CreatePlanResponseType {
   success: boolean;
   message: string;

@@ -6,6 +6,8 @@ import type React from "react";
 import { ClientProviders } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
+import { SessionProvider } from "@/hooks/use-session";
+import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
 
@@ -89,26 +91,30 @@ declare global {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await auth({ disableThrow: true });
+
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
-      <ClientProviders>
-        <body className={cn(inter.className, "min-h-screen")}>
-          {children}
-          <Script
-            async={true}
-            defer={true}
-            src="https://analytics.solvro.pl/script.js"
-            data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
-            data-domains="planer.solvro.pl"
-          />
-          <Toaster richColors={true} />
-        </body>
-      </ClientProviders>
+      <SessionProvider user={user}>
+        <ClientProviders>
+          <body className={cn(inter.className, "min-h-screen")}>
+            {children}
+            <Script
+              async={true}
+              defer={true}
+              src="https://analytics.solvro.pl/script.js"
+              data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
+              data-domains="planer.solvro.pl"
+            />
+            <Toaster richColors={true} />
+          </body>
+        </ClientProviders>
+      </SessionProvider>
     </html>
   );
 }
