@@ -253,9 +253,9 @@ export function CreateNewPlanPage({
           onlinePlan={onlinePlan}
         />
 
-        <div className="flex flex-col justify-start gap-3 md:w-full">
+        <div className="flex w-full flex-col justify-start gap-3">
           <div className="flex w-full items-end gap-1">
-            <div className="flex items-end gap-1">
+            <div className="flex w-full items-end gap-1">
               <Button
                 variant="outline"
                 className="aspect-square"
@@ -308,7 +308,8 @@ export function CreateNewPlanPage({
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Ostatnia aktualizacja: {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
+            Ostatnia aktualizacja online:{" "}
+            {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
           </p>
         </div>
 
@@ -444,7 +445,7 @@ export function CreateNewPlanPage({
           </Accordion>
         </div>
       </div>
-      <div className="ml-2 flex grow items-start overflow-x-scroll md:ml-0">
+      <div className="ml-2 flex w-full grow items-start overflow-x-scroll md:ml-0 md:w-auto">
         <div className="flex flex-col gap-3">
           {[
             { day: Day.MONDAY, label: "Poniedziałek" },

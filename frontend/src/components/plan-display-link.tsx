@@ -13,7 +13,7 @@ export function PlanDisplayLink({ id }: { id: string }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild={true}>
-        <Button asChild={true} size="icon">
+        <Button asChild={true} size="icon" className="min-w-10">
           <Link href={`/plans/preview/${id}`}>
             <FolderSearch className="size-4" />
           </Link>

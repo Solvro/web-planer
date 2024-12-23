@@ -133,19 +133,23 @@ export const auth = async (tokens?: {
       }
       throw new Error(data.error);
     }
-    const setCookieHeaders = response.headers.getSetCookie();
-    for (const cookie of setCookieHeaders) {
-      const preparedCookie = cookie.split(";")[0];
-      const [name, value] = preparedCookie.split("=");
-      cookies.set({
-        name,
-        value,
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-        httpOnly: true,
-        secure: true,
-      });
-    }
+
+    try {
+      const setCookieHeaders = response.headers.getSetCookie();
+      for (const cookie of setCookieHeaders) {
+        const preparedCookie = cookie.split(";")[0];
+        const [name, value] = preparedCookie.split("=");
+        cookies.set({
+          name,
+          value,
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true,
+          secure: true,
+        });
+      }
+    } catch {}
+
     return data;
   } catch {
     if (tokens !== undefined) {
