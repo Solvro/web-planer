@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { useAtom } from "jotai";
 import {
   CopyIcon,
+  Download,
   EllipsisVerticalIcon,
   Loader2Icon,
   Pencil,
@@ -34,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { usePlan } from "@/lib/use-plan";
 import { pluralize } from "@/lib/utils";
+import { generateICSFile } from "@/lib/utils/generate-ics-file";
 
 import { Button } from "./ui/button";
 import {
@@ -176,12 +178,20 @@ export function PlanItem({
               <EllipsisVerticalIcon className="size-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" side="top" className="w-44">
+          <DropdownMenuContent align="start" side="top" className="w-50">
             <DropdownMenuLabel>Wybierz akcję</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={copyPlan}>
               <CopyIcon />
               <span>Kopiuj</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                generateICSFile(plan.allGroups);
+              }}
+            >
+              <Download />
+              <span>Eksportuj do pliku .ics</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
