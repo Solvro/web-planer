@@ -1,10 +1,22 @@
+import { notFound } from "next/navigation";
 import React from "react";
 
 import { Separator } from "@/components/ui/separator";
+import { auth } from "@/lib/auth";
 
 import { NotificationsForm } from "../../_components/notifications-form";
 
-export default function NotificationsPage() {
+export default async function NotificationsPage() {
+  let user;
+  try {
+    user = await auth();
+    if (user == null) {
+      throw new Error("Not logged in");
+    }
+  } catch {
+    return notFound();
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -14,7 +26,7 @@ export default function NotificationsPage() {
         </p>
       </div>
       <Separator />
-      <NotificationsForm />
+      <NotificationsForm defaultUser={user} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { BellRingIcon, UserIcon } from "lucide-react";
+import { BellRingIcon, CalendarPlusIcon, UserIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -24,6 +24,11 @@ const sidebarNavItems = [
     href: "/plans/account/notifications",
     icon: <BellRingIcon className="size-4" />,
   },
+  {
+    title: "Dodawanie do kalendarza",
+    href: "/plans/account/calendar",
+    icon: <CalendarPlusIcon className="size-4" />,
+  },
 ];
 
 export default async function SettingsLayout({
@@ -37,8 +42,8 @@ export default async function SettingsLayout({
   }
 
   return (
-    <div className="h-screen w-full">
-      <div className="container mx-auto hidden space-y-6 p-10 pb-16 md:block">
+    <div className="w-full pb-10">
+      <div className="container mx-auto flex flex-col space-y-6 p-10 pb-0">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Ustawienia</h2>
           <p className="text-muted-foreground">
@@ -50,7 +55,7 @@ export default async function SettingsLayout({
           <aside className="-mx-4 lg:w-1/5">
             <SidebarSettings items={sidebarNavItems} />
           </aside>
-          <div className="flex-1 lg:max-w-2xl">{children}</div>
+          <div className="flex-1 lg:max-w-3xl">{children}</div>
         </div>
       </div>
     </div>

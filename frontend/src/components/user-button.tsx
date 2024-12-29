@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Settings2Icon } from "lucide-react";
+import { CircleHelpIcon, LogOut, Settings2Icon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -54,6 +54,19 @@ export function UserButton({ profile }: { profile: GetProfile }) {
                 <Settings2Icon className="h-4 w-4" />
               </div>
               <h2 className="text-sm font-medium">Ustawienia</h2>
+            </button>
+          </Link>
+          <Link href="/plans/account/calendar" className="w-full">
+            <button
+              className="flex w-full items-center gap-3 border-t bg-background p-4 py-4 transition-all hover:bg-muted/50"
+              onClick={() => {
+                setOpened(false);
+              }}
+            >
+              <div className="mr-1 flex w-[40px] items-center justify-center">
+                <CircleHelpIcon className="h-4 w-4" />
+              </div>
+              <h2 className="text-sm font-medium">Jak dodać do kalendarza?</h2>
             </button>
           </Link>
           <SignOutButton asChild={true}>

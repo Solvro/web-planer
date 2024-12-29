@@ -5,10 +5,18 @@ import type { Registration } from "@/lib/types";
 import type { Day } from "@/services/usos/types";
 
 export interface User {
+  id: number;
   firstName: string;
   lastName: string;
   studentNumber: number;
   usosId: string;
+  createdAt: string;
+  updatedAt: string;
+  allowNotifications: boolean;
+}
+
+export interface UserSettingsPayload {
+  allowNotifications: boolean;
 }
 
 export interface CreatePlanResponseType {

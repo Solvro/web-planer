@@ -11,6 +11,11 @@ const USER_STATUSES = {
   2: "Aktywny Student",
 };
 
+const USER_SEX = {
+  M: "Mężczyzna",
+  K: "Kobieta",
+};
+
 export default async function ProfilePage() {
   let profile;
 
@@ -20,6 +25,8 @@ export default async function ProfilePage() {
   } catch {
     return notFound();
   }
+
+  const sex = USER_SEX[profile.sex as keyof typeof USER_SEX] || "Nieznana";
 
   return (
     <div className="space-y-6">
@@ -54,7 +61,7 @@ export default async function ProfilePage() {
             </div>
             <div className="flex w-full items-center justify-between">
               <p>Płeć:</p>
-              <h3 className="font-medium">{profile.sex.toUpperCase()}</h3>
+              <h3 className="font-medium">{sex}</h3>
             </div>
             <div className="flex w-full items-center justify-between">
               <p>Numer indeksu:</p>
