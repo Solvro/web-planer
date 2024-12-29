@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { createUsosService } from "@/lib/usos";
 
 const USER_STATUSES = {
-  0: "Niegdy nie byłeś studentem",
+  0: "Nigdy nie byłeś studentem",
   1: "Były Student",
   2: "Aktywny Student",
 };
