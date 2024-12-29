@@ -91,7 +91,7 @@ export function NotificationsForm({ defaultUser }: { defaultUser: User }) {
                       Zmiany w Twoim planie
                     </FormLabel>
                     <FormDescription>
-                      Receive emails for friend requests, follows, and more.
+                      Otrzymuj maile o zmianach w Twoim planie.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -113,7 +113,7 @@ export function NotificationsForm({ defaultUser }: { defaultUser: User }) {
                       Powiadomienia o bezpieczeństwie
                     </FormLabel>
                     <FormDescription>
-                      Receive emails about your account activity and security.
+                      Otrzymuj maile na temat bezpieczeństwa Twojego konta.
                     </FormDescription>
                   </div>
                   <FormControl>

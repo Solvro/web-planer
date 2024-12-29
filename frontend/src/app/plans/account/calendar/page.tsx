@@ -26,7 +26,7 @@ export default function FAQCalendarPage() {
         </p>
         <Image
           src={TutorialImage1}
-          alt="Tutorial 1"
+          alt="Strona z planami, przycisk dodaj do kalendarza"
           unoptimized
           className="w-full"
         />
@@ -42,13 +42,13 @@ export default function FAQCalendarPage() {
         </p>
         <Image
           src={TutorialImage2}
-          alt="Tutorial 1"
+          alt="Strona główna kalendarza google z zaznaczonym na czerwono przyciskiem dodaj"
           unoptimized
           className="w-full"
         />
         <Image
           src={TutorialImage3}
-          alt="Tutorial 1"
+          alt="Strona kalendarza google z zaznaczonym na czerwono przyciskiem importuj"
           unoptimized
           className="w-full"
         />
@@ -61,7 +61,7 @@ export default function FAQCalendarPage() {
         </p>
         <Image
           src={TutorialImage4}
-          alt="Tutorial 1"
+          alt="Strona importu pliku do kalendarza google"
           unoptimized
           className="w-full"
         />
