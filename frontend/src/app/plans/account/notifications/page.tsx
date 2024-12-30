@@ -7,13 +7,8 @@ import { auth } from "@/lib/auth";
 import { NotificationsForm } from "../../_components/notifications-form";
 
 export default async function NotificationsPage() {
-  let user;
-  try {
-    user = await auth();
-    if (user == null) {
-      throw new Error("Not logged in");
-    }
-  } catch {
+  const user = await auth({ disableThrow: true });
+  if (user == null) {
     return notFound();
   }
 
