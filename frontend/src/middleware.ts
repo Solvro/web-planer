@@ -9,7 +9,8 @@ export async function middleware(request: NextRequest) {
     secret: request.cookies.get("access_token_secret")?.value,
   };
 
-  const isProtectedRoute = request.nextUrl.pathname.startsWith("/account");
+  const isProtectedRoute =
+    request.nextUrl.pathname.startsWith("/plans/account");
   const user = await auth(tokens);
 
   if (!isProtectedRoute) {

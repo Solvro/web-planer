@@ -191,7 +191,7 @@ export function PlanItem({
               }}
             >
               <Download />
-              <span>Eksportuj do pliku .ics</span>
+              <span>Dodaj do kalendarza (.ics)</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {

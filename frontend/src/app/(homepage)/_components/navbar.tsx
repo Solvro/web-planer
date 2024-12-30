@@ -26,7 +26,7 @@ export function Navbar() {
   };
   return (
     <div className="relative z-50 h-20 border-b border-white/10 backdrop-blur-[12px]">
-      <div className="container mx-auto flex items-center justify-between px-20">
+      <div className="container mx-auto flex items-center justify-between px-6 md:px-20">
         <Logo />
 
         <nav className="hidden h-20 items-center text-white md:flex">

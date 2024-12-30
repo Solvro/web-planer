@@ -3,6 +3,7 @@ import { cookies as cookiesPromise } from "next/headers";
 import OAuth from "oauth-1.0a";
 
 import { env } from "@/env.mjs";
+import type { User } from "@/types";
 
 function createHmacSha1Base64(base_string: string, key: string) {
   const hmac: CryptoJS.lib.WordArray = HmacSHA1(base_string, key);
@@ -92,8 +93,9 @@ export async function getRequestToken() {
 }
 
 export const auth = async (tokens?: {
-  token: string | undefined;
-  secret: string | undefined;
+  token?: string | undefined;
+  secret?: string | undefined;
+  disableThrow?: boolean;
 }) => {
   const cookies = await cookiesPromise();
   const accessToken = tokens?.token ?? cookies.get("access_token")?.value;
@@ -116,14 +118,7 @@ export const auth = async (tokens?: {
       body: JSON.stringify({ accessToken, accessSecret }),
       credentials: "include",
     });
-    const data = (await response.json()) as
-      | {
-          firstName: string;
-          lastName: string;
-          studentNumber: number;
-          usosId: string;
-        }
-      | { error: string };
+    const data = (await response.json()) as User | { error: string };
     if ("error" in data) {
       cookies.delete({
         name: "access_token",
@@ -138,19 +133,23 @@ export const auth = async (tokens?: {
       }
       throw new Error(data.error);
     }
-    const setCookieHeaders = response.headers.getSetCookie();
-    for (const cookie of setCookieHeaders) {
-      const preparedCookie = cookie.split(";")[0];
-      const [name, value] = preparedCookie.split("=");
-      cookies.set({
-        name,
-        value,
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-        httpOnly: true,
-        secure: true,
-      });
-    }
+
+    try {
+      const setCookieHeaders = response.headers.getSetCookie();
+      for (const cookie of setCookieHeaders) {
+        const preparedCookie = cookie.split(";")[0];
+        const [name, value] = preparedCookie.split("=");
+        cookies.set({
+          name,
+          value,
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true,
+          secure: true,
+        });
+      }
+    } catch {}
+
     return data;
   } catch {
     if (tokens !== undefined) {
