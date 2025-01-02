@@ -237,7 +237,6 @@ export function CreateNewPlanPage({
       </div>
     );
   }
-
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-5 py-3 md:flex-row md:items-start">
       <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
@@ -399,6 +398,8 @@ export function CreateNewPlanPage({
                                   .split(":")
                                   .slice(0, 2)
                                   .join(":"),
+                                spotsOccupied: g.spotsOccupied,
+                                spotsTotal: g.spotsTotal,
                               }) satisfies ExtendedGroup,
                           ),
                         }))

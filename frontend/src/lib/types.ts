@@ -13,6 +13,8 @@ export interface ClassBlockProps {
   week: "" | "TN" | "TP";
   courseType: "C" | "L" | "P" | "S" | "W";
   registrationId: string;
+  spotsOccupied: number;
+  spotsTotal: number;
 }
 
 export interface Registration {
