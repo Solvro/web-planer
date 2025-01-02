@@ -80,6 +80,8 @@ export type CourseType = {
     type: "C" | "L" | "P" | "S" | "W";
     url: string;
     courseId: string;
+    spotsOccupied: number;
+    spotsTotal: number;
     createdAt: string;
     updatedAt: string;
   }[];

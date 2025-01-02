@@ -1,5 +1,6 @@
 import React from "react";
 
+import { StarsRating } from "@/components/class-block-stars";
 import { cn } from "@/lib/utils";
 
 export const typeClasses = {
@@ -34,6 +35,8 @@ export function ClassBlock({
   courseType,
   isChecked,
   isDisabled,
+  spotsOccupied,
+  spotsTotal,
   onClick,
   isReadonly = false,
 }: {
@@ -47,11 +50,13 @@ export function ClassBlock({
   isChecked: boolean;
   isDisabled: boolean;
   isReadonly?: boolean;
+  spotsOccupied: number;
+  spotsTotal: number;
   onClick: () => void;
 }) {
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
-
+  const randomRating = Math.random() * 5;
   return (
     <button
       suppressHydrationWarning={true}
@@ -74,11 +79,26 @@ export function ClassBlock({
       )}
     >
       <div className="flex w-full justify-between">
-        <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
+        <div className="flex gap-1">
+          <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
+          <StarsRating rating={randomRating} />
+        </div>
         <p>{`Grupa ${groupNumber}`}</p>
       </div>
       <p className="truncate font-bold">{courseName}</p>
       <p className="truncate font-semibold">{lecturer}</p>
+      <p className="mt-2 flex w-full justify-between truncate">
+        Miejsca:
+        <span className="font-bold">
+          {spotsOccupied}/{spotsTotal}
+        </span>
+      </p>
+      <p className="flex w-full justify-between truncate">
+        Średnia ocena:
+        <span className="font-bold">
+          {randomRating.toFixed(1)} (1200 opinii)
+        </span>
+      </p>
     </button>
   );
 }

@@ -58,6 +58,8 @@ export const updateLocalPlan = async (
             week: g.week.replace("-", "") as "" | "TN" | "TP",
             endTime: g.endTime.split(":").slice(0, 2).join(":"),
             startTime: g.startTime.split(":").slice(0, 2).join(":"),
+            spotsOccupied: g.spotsOccupied,
+            spotsTotal: g.spotsTotal,
           }));
           return {
             id: c.id,
