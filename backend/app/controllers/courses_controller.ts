@@ -13,12 +13,42 @@ export default class CoursesController {
     assert(typeof params.registration_id === "string");
 
     const registrationId = decodeURIComponent(params.registration_id);
-    if (registrationId) {
-      return await Course.query()
-        .where("registrationId", registrationId)
-        .preload("groups");
+    if (!registrationId) {
+      return [];
     }
-    return [];
+
+    const courses = await Course.query()
+      .where("registrationId", registrationId)
+      .preload("groups", (groupQuery) => groupQuery.preload("lecturers"));
+
+    const transformedCourses = courses.map((course) => ({
+      id: course.id,
+      name: course.name,
+      registrationId: course.registrationId,
+      createdAt: course.createdAt,
+      updatedAt: course.updatedAt,
+      groups: course.groups.map((group) => ({
+        id: group.id,
+        name: group.name,
+        lecturer: Array.isArray(group.lecturers)
+          ? group.lecturers
+              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+              .join(", ")
+          : "Brak prowadzącego",
+        averageRating: Array.isArray(group.lecturers)
+          ? (
+              group.lecturers.reduce(
+                (total, lecturer) =>
+                  total + (Number.parseFloat(lecturer.averageRating) || 0),
+                0,
+              ) / group.lecturers.length
+            ).toFixed(2)
+          : 0,
+        ...group.serialize(),
+      })),
+    }));
+
+    return transformedCourses;
   }
 
   /**
@@ -38,17 +68,48 @@ export default class CoursesController {
    */
   async show({ params }: HttpContext) {
     assert(typeof params.registration_id === "string");
+    assert(typeof params.id === "string");
     const registrationId = decodeURIComponent(params.registration_id);
-    if (registrationId) {
-      assert(typeof params.id === "string");
 
-      return await Course.query()
-        .where("registrationId", registrationId)
-        .andWhere("id", params.id)
-        .preload("groups")
-        .firstOrFail();
+    if (!registrationId) {
+      return [];
     }
-    return {};
+
+    const course = await Course.query()
+      .where("registrationId", registrationId)
+      .andWhere("id", params.id)
+      .preload("groups", (groupQuery) => groupQuery.preload("lecturers"))
+      .firstOrFail();
+
+    const transformedCourse = {
+      id: course.id,
+      name: course.name,
+      registrationId: course.registrationId,
+      createdAt: course.createdAt,
+      updatedAt: course.updatedAt,
+      groups: course.groups.map((group) => ({
+        id: group.id,
+        name: group.name,
+        lecturer: Array.isArray(group.lecturers)
+          ? group.lecturers
+              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+              .join(", ")
+          : "Brak prowadzącego",
+        averageRating: Array.isArray(group.lecturers)
+          ? (
+              group.lecturers.reduce(
+                (total, lecturer) =>
+                  total + (Number.parseFloat(lecturer.averageRating) || 0),
+                0,
+              ) / group.lecturers.length
+            ).toFixed(2)
+          : 0,
+
+        ...group.serialize(),
+      })),
+    };
+
+    return transformedCourse;
   }
 
   /**
