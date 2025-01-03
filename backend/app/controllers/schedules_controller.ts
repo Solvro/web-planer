@@ -19,27 +19,26 @@ export default class SchedulesController {
       return { message: "User not authenticated." };
     }
 
-    // Pobierz wszystkie harmonogramy użytkownika
     const schedules = await Schedule.query()
       .where("userId", userId)
-      .preload("registrations") // Preload registrations dla każdego harmonogramu
-      .preload("courses"); // Preload courses dla każdego harmonogramu
+      .preload("registrations")
+      .preload("courses");
 
-    // Przetwórz każdy harmonogram, aby uzyskać pożądaną strukturę
     const transformedSchedules = await Promise.all(
       schedules.map(async (schedule) => {
-        // Pobierz grupy powiązane z kursami w harmonogramie
         const courseGroups = await schedule
           .related("courses")
           .query()
-          .preload("groups", (groupQuery) =>
-            groupQuery.whereExists((subQuery) =>
-              subQuery
-                .from("schedule_groups")
-                .whereRaw("schedule_groups.group_id = groups.id")
-                .andWhere("schedule_groups.schedule_id", schedule.id),
-            ),
-          );
+          .preload("groups", (groupQuery) => {
+            void groupQuery
+              .preload("lecturers")
+              .whereExists((subQuery) =>
+                subQuery
+                  .from("schedule_groups")
+                  .whereRaw("schedule_groups.group_id = groups.id")
+                  .andWhere("schedule_groups.schedule_id", schedule.id),
+              );
+          });
 
         return {
           id: schedule.id,
@@ -57,6 +56,21 @@ export default class SchedulesController {
             groups: course.groups.map((group) => ({
               id: group.id,
               name: group.name,
+              lecturer: Array.isArray(group.lecturers)
+                ? group.lecturers
+                    .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+                    .join(", ")
+                : "Brak prowadzącego",
+              averageRating: Array.isArray(group.lecturers)
+                ? (
+                    group.lecturers.reduce(
+                      (total, lecturer) =>
+                        total +
+                        (Number.parseFloat(lecturer.averageRating) || 0),
+                      0,
+                    ) / group.lecturers.length
+                  ).toFixed(2)
+                : 0,
               ...group.serialize(),
             })),
           })),
@@ -121,24 +135,24 @@ export default class SchedulesController {
     const schedule = await Schedule.query()
       .where("id", scheduleId)
       .andWhere("userId", userId)
-      .preload("registrations") // Preload registrations
-      .preload("courses") // Preload courses (grupy powiązane z kursami zostaną załadowane osobno)
+      .preload("registrations")
+      .preload("courses")
       .firstOrFail();
 
-    // Pobranie grup powiązanych z kursami z uwzględnieniem schedule_id
     const courseGroups = await schedule
       .related("courses")
       .query()
-      .preload("groups", (groupQuery) =>
-        groupQuery.whereExists((subQuery) =>
-          subQuery
-            .from("schedule_groups")
-            .whereRaw("schedule_groups.group_id = groups.id")
-            .andWhere("schedule_groups.schedule_id", scheduleId),
-        ),
-      );
+      .preload("groups", (groupQuery) => {
+        void groupQuery
+          .preload("lecturers")
+          .whereExists((subQuery) =>
+            subQuery
+              .from("schedule_groups")
+              .whereRaw("schedule_groups.group_id = groups.id")
+              .andWhere("schedule_groups.schedule_id", scheduleId),
+          );
+      });
 
-    // Transformacja danych do żądanej struktury
     const transformedSchedule = {
       id: schedule.id,
       userId: schedule.userId,
@@ -155,7 +169,40 @@ export default class SchedulesController {
         groups: course.groups.map((group) => ({
           id: group.id,
           name: group.name,
+          lecturer: Array.isArray(group.lecturers)
+            ? group.lecturers
+                .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+                .join(", ")
+            : "Brak prowadzącego",
+          averageRating: Array.isArray(group.lecturers)
+            ? (
+                group.lecturers.reduce(
+                  (total, lecturer) =>
+                    total + (Number.parseFloat(lecturer.averageRating) || 0),
+                  0,
+                ) / group.lecturers.length
+              ).toFixed(2)
+            : 0,
           ...group.serialize(),
+          // id: group.id,
+          // name: group.name,
+          // startTime: group.startTime,
+          // endTime: group.endTime,
+          // group: group.group,
+          // lecturer: Array.isArray(group.lecturers)
+          //   ? group.lecturers
+          //       .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+          //       .join(", ")
+          //   : "Brak prowadzącego",
+          // week: group.week,
+          // day: group.day,
+          // type: group.type,
+          // url: group.url,
+          // courseId: group.courseId,
+          // spotsOccupied: group.spotsOccupied,
+          // spotsTotal: group.spotsTotal,
+          // createdAt: group.createdAt,
+          // updatedAt: group.updatedAt,
         })),
       })),
     };

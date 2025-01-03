@@ -1,6 +1,9 @@
 import { DateTime } from "luxon";
 
-import { BaseModel, column } from "@adonisjs/lucid/orm";
+import { BaseModel, column, manyToMany } from "@adonisjs/lucid/orm";
+import type { ManyToMany } from "@adonisjs/lucid/types/relations";
+
+import Lecturer from "./lecturer.js";
 
 export default class Group extends BaseModel {
   @column({ isPrimary: true })
@@ -18,8 +21,15 @@ export default class Group extends BaseModel {
   @column()
   declare group: string;
 
-  @column()
-  declare lecturer: string;
+  @manyToMany(() => Lecturer, {
+    localKey: "id",
+    pivotForeignKey: "group_id",
+    relatedKey: "id",
+    pivotRelatedForeignKey: "lecturer_id",
+    pivotTable: "group_lecturers",
+    pivotTimestamps: true,
+  })
+  declare lecturers: ManyToMany<typeof Lecturer>;
 
   @column()
   declare week: "-" | "TP" | "TN";

@@ -1,6 +1,8 @@
 import { BaseCommand } from "@adonisjs/core/ace";
 import type { CommandOptions } from "@adonisjs/core/types/ace";
 
+import Lecturer from "#models/lecturer";
+
 import {
   scrapCourseNameGroupsUrls,
   scrapCourses,
@@ -136,14 +138,21 @@ export default class Scraper extends BaseCommand {
     this.logger.log("Courses details scraped");
     this.logger.log("Synchronizing group_archive with current groups");
     const currentGroups = await Group.all();
+
     await Promise.all(
       currentGroups.map(async (group) => {
-        await GroupArchive.updateOrCreate(
+        const groupArchive = await GroupArchive.updateOrCreate(
           { id: group.id },
           {
             ...group.$attributes,
           },
         );
+
+        const lecturers = await group.related("lecturers").query();
+
+        await groupArchive
+          .related("lecturers")
+          .sync(lecturers.map((lecturer) => lecturer.id));
       }),
     );
     this.logger.log("Scraping groups details");
@@ -161,16 +170,38 @@ export default class Scraper extends BaseCommand {
             if (details === undefined) {
               return;
             }
-            await Group.updateOrCreate(
+
+            const lecturers = details.lecturer
+              .trim()
+              .replace(/\s+/g, " ")
+              .slice(0, 255)
+              .split(", ");
+
+            const lecturerIds = await Promise.all(
+              lecturers.map(async (lecturer) => {
+                const [name, ...surnameParts] = lecturer.split(" ");
+                const surname = surnameParts.join(" ");
+
+                const existingLecturer = await Lecturer.query()
+                  .where("name", name)
+                  .andWhere("surname", surname)
+                  .first();
+
+                if (existingLecturer !== null) {
+                  return existingLecturer.id;
+                } else {
+                  const dbLecturer = await Lecturer.create({ name, surname });
+                  return dbLecturer.id;
+                }
+              }),
+            );
+
+            const group = await Group.updateOrCreate(
               {
                 name: details.name.slice(0, 255),
                 startTime: details.startTime.slice(0, 255),
                 endTime: details.endTime.slice(0, 255),
                 group: details.group.slice(0, 255),
-                lecturer: details.lecturer
-                  .trim()
-                  .replace(/\s+/g, " ")
-                  .slice(0, 255),
                 week: details.week,
                 day: details.day.slice(0, 255),
                 type: details.type.slice(0, 255),
@@ -181,10 +212,6 @@ export default class Scraper extends BaseCommand {
                 startTime: details.startTime.slice(0, 255),
                 endTime: details.endTime.slice(0, 255),
                 group: details.group.slice(0, 255),
-                lecturer: details.lecturer
-                  .trim()
-                  .replace(/\s+/g, " ")
-                  .slice(0, 255),
                 week: details.week,
                 day: details.day.slice(0, 255),
                 type: details.type.slice(0, 255),
@@ -194,6 +221,8 @@ export default class Scraper extends BaseCommand {
                 url: url.slice(0, 255),
               },
             );
+
+            await group.related("lecturers").sync(lecturerIds);
           }),
         );
       }
