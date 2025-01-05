@@ -184,25 +184,6 @@ export default class SchedulesController {
               ).toFixed(2)
             : 0,
           ...group.serialize(),
-          // id: group.id,
-          // name: group.name,
-          // startTime: group.startTime,
-          // endTime: group.endTime,
-          // group: group.group,
-          // lecturer: Array.isArray(group.lecturers)
-          //   ? group.lecturers
-          //       .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
-          //       .join(", ")
-          //   : "Brak prowadzącego",
-          // week: group.week,
-          // day: group.day,
-          // type: group.type,
-          // url: group.url,
-          // courseId: group.courseId,
-          // spotsOccupied: group.spotsOccupied,
-          // spotsTotal: group.spotsTotal,
-          // createdAt: group.createdAt,
-          // updatedAt: group.updatedAt,
         })),
       })),
     };
