@@ -1,5 +1,3 @@
-import assert from "node:assert";
-
 import type { HttpContext } from "@adonisjs/core/http";
 
 import Group from "#models/group";
@@ -10,10 +8,36 @@ export default class GroupsController {
    * Display a list of all groups in matching course
    */
   async index({ params }: HttpContext) {
-    const courseId = params.course_id as unknown;
-    if (typeof courseId === "string") {
-      return Group.query().where("courseId", courseId);
+    const courseId = params.course_id as string;
+
+    if (courseId) {
+      const groups = await Group.query()
+        .where("courseId", courseId)
+        .preload("lecturers");
+
+      const transformedGroups = groups.map((group) => ({
+        id: group.id,
+        name: group.name,
+        lecturer: Array.isArray(group.lecturers)
+          ? group.lecturers
+              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+              .join(", ")
+          : "Brak prowadzącego",
+        averageRating: Array.isArray(group.lecturers)
+          ? (
+              group.lecturers.reduce(
+                (total, lecturer) =>
+                  total + (Number.parseFloat(lecturer.averageRating) || 0),
+                0,
+              ) / group.lecturers.length
+            ).toFixed(2)
+          : 0,
+        ...group.serialize(),
+      }));
+
+      return transformedGroups;
     }
+
     return {};
   }
 
@@ -30,14 +54,38 @@ export default class GroupsController {
    * Show individual group in matching group
    */
   async show({ params }: HttpContext) {
-    const courseId = params.course_id as unknown;
-    if (typeof courseId === "string") {
-      assert(typeof params.id === "string");
+    const courseId = params.course_id as string;
 
-      return await Group.query()
+    if (courseId && typeof params.id === "string") {
+      const group = await Group.query()
         .where("courseId", courseId)
-        .andWhere("id", params.id);
+        .andWhere("id", params.id)
+        .preload("lecturers")
+        .firstOrFail();
+
+      const transformedGroup = {
+        id: group.id,
+        name: group.name,
+        lecturer: Array.isArray(group.lecturers)
+          ? group.lecturers
+              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+              .join(", ")
+          : "Brak prowadzącego",
+        averageRating: Array.isArray(group.lecturers)
+          ? (
+              group.lecturers.reduce(
+                (total, lecturer) =>
+                  total + (Number.parseFloat(lecturer.averageRating) || 0),
+                0,
+              ) / group.lecturers.length
+            ).toFixed(2)
+          : 0,
+        ...group.serialize(),
+      };
+
+      return transformedGroup;
     }
+
     return {};
   }
 

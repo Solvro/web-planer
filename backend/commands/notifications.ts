@@ -55,8 +55,8 @@ export default class Notifications extends BaseCommand {
 
     const schedules = await Schedule.query().preload("groups");
 
-    const currentGroups = await Group.all();
-    const archivedGroups = await GroupArchive.all();
+    const currentGroups = await Group.query().preload("lecturers");
+    const archivedGroups = await GroupArchive.query().preload("lecturers");
 
     const currentGroupsMap = new Map(
       currentGroups.map((group) => [group.id, group]),
@@ -87,10 +87,17 @@ export default class Notifications extends BaseCommand {
                 `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana godzin zajęć z ${archivedGroup.startTime.slice(0, -3)}-${archivedGroup.endTime.slice(0, -3)} na ${currentGroup?.startTime.slice(0, -3)}-${currentGroup?.endTime.slice(0, -3)}.`,
               );
             }
+            const currentLecturers = currentGroup?.lecturers
+              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+              .join(", ");
 
-            if (currentGroup?.lecturer !== archivedGroup.lecturer) {
+            const archivedLecturers = archivedGroup.lecturers
+              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+              .join(", ");
+
+            if (currentLecturers !== archivedLecturers) {
               notifications.push(
-                `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana prowadzącego z ${archivedGroup.lecturer} na ${currentGroup?.lecturer}.`,
+                `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana prowadzących z ${archivedLecturers} na ${currentLecturers}.`,
               );
             }
 
@@ -105,7 +112,6 @@ export default class Notifications extends BaseCommand {
         }
       }
     }
-
     if (userNotifications.size > 0) {
       await sendEmail(userNotifications);
     }
