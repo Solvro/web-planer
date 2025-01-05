@@ -400,6 +400,7 @@ export function CreateNewPlanPage({
                                   .join(":"),
                                 spotsOccupied: g.spotsOccupied,
                                 spotsTotal: g.spotsTotal,
+                                averageRating: g.averageRating,
                               }) satisfies ExtendedGroup,
                           ),
                         }))

@@ -77,7 +77,6 @@ function ClassSchedule({
                 g.courseId === block.courseId &&
                 g.courseType === block.courseType,
             );
-
             return (
               <ClassBlock
                 isReadonly={isReadonly}

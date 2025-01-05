@@ -15,6 +15,7 @@ export interface ClassBlockProps {
   registrationId: string;
   spotsOccupied: number;
   spotsTotal: number;
+  averageRating: number;
 }
 
 export interface Registration {

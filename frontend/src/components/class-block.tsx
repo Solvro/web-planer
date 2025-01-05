@@ -37,6 +37,7 @@ export function ClassBlock({
   isDisabled,
   spotsOccupied,
   spotsTotal,
+  averageRating,
   onClick,
   isReadonly = false,
 }: {
@@ -49,14 +50,14 @@ export function ClassBlock({
   courseType: "C" | "L" | "P" | "S" | "W";
   isChecked: boolean;
   isDisabled: boolean;
-  isReadonly?: boolean;
   spotsOccupied: number;
   spotsTotal: number;
+  averageRating: number;
   onClick: () => void;
+  isReadonly?: boolean;
 }) {
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
-  const randomRating = Math.random() * 5;
   return (
     <button
       suppressHydrationWarning={true}
@@ -81,23 +82,26 @@ export function ClassBlock({
       <div className="flex w-full justify-between">
         <div className="flex gap-1">
           <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
-          <StarsRating rating={randomRating} />
+          <StarsRating rating={averageRating} />
         </div>
         <p>{`Grupa ${groupNumber}`}</p>
       </div>
       <p className="truncate font-bold">{courseName}</p>
       <p className="truncate font-semibold">{lecturer}</p>
       <p className="mt-2 flex w-full justify-between truncate">
-        Miejsca:
-        <span className="font-bold">
+        Dostępne miejsca:
+        <span
+          className={cn(
+            "font-bold",
+            spotsOccupied >= spotsTotal ? "text-red-500" : null,
+          )}
+        >
           {spotsOccupied}/{spotsTotal}
         </span>
       </p>
       <p className="flex w-full justify-between truncate">
         Średnia ocena:
-        <span className="font-bold">
-          {randomRating.toFixed(1)} (1200 opinii)
-        </span>
+        <span className="font-bold">{averageRating}</span>
       </p>
     </button>
   );

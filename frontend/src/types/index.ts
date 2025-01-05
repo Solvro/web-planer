@@ -82,6 +82,7 @@ export type CourseType = {
     courseId: string;
     spotsOccupied: number;
     spotsTotal: number;
+    averageRating: number;
     createdAt: string;
     updatedAt: string;
   }[];
