@@ -1,9 +1,8 @@
-import { revalidatePath } from "next/cache";
 import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 
-import { getAccessToken } from "@/lib/auth";
+import { auth, getAccessToken } from "@/lib/auth";
 import { usosService } from "@/services/usos";
 import { createClient } from "@/services/usos/usos-client";
 
@@ -83,6 +82,6 @@ export const GET = async (request: NextRequest) => {
     secure: true,
   });
 
-  revalidatePath("/plans");
+  await auth(tokens);
   return redirect("/plans");
 };

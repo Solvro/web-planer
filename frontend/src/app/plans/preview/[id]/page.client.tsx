@@ -42,7 +42,7 @@ export function SharePlanPage({ planId }: { planId: string }) {
     }, 200);
   };
   return (
-    <>
+    <div className="flex grow flex-col">
       <div className="flex items-center justify-center gap-4 p-2">
         <Button
           onClick={copyPlan}
@@ -89,6 +89,6 @@ export function SharePlanPage({ planId }: { planId: string }) {
             ),
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -187,7 +187,7 @@ export function PlanItem({
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                generateICSFile(plan.allGroups);
+                generateICSFile(plan.allGroups, plan.name);
               }}
             >
               <Download />
