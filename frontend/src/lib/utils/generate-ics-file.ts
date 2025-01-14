@@ -142,6 +142,7 @@ const extractStartTimeUTCEndTimeUTC = (
 
 export const generateICSFile = (
   groups: ExtendedGroup[],
+  name: string,
   startDate = new Date("2024-10-01"),
   endDate = new Date("2025-02-05"),
 ) => {
@@ -212,6 +213,6 @@ export const generateICSFile = (
   const blob = new Blob([icsContent], { type: "text/calendar" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "events.ics";
+  link.download = `${name}.ics`;
   link.click();
 };
