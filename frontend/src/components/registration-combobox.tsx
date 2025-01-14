@@ -105,20 +105,22 @@ function RegistrationList({
       <CommandList>
         <CommandEmpty>Brak wyników</CommandEmpty>
         <CommandGroup>
-          {allRegistrations.map((option) => (
-            <CommandItem
-              key={option.value}
-              value={option.label}
-              onSelect={(value) => {
-                const id = allRegistrations.find(
-                  (r) => r.label === value,
-                )?.value;
-                setSelectedRegistrationId(id ?? "");
-              }}
-            >
-              {option.label}
-            </CommandItem>
-          ))}
+          {allRegistrations
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .map((option) => (
+              <CommandItem
+                key={option.value}
+                value={option.label}
+                onSelect={(value) => {
+                  const id = allRegistrations.find(
+                    (r) => r.label === value,
+                  )?.value;
+                  setSelectedRegistrationId(id ?? "");
+                }}
+              >
+                {option.label}
+              </CommandItem>
+            ))}
         </CommandGroup>
       </CommandList>
     </Command>

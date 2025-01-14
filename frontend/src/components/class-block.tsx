@@ -1,3 +1,4 @@
+import { UsersRoundIcon } from "lucide-react";
 import React from "react";
 
 import { StarsRating } from "@/components/class-block-stars";
@@ -82,14 +83,13 @@ export function ClassBlock({
       <div className="flex w-full justify-between">
         <div className="flex gap-1">
           <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
-          <StarsRating rating={averageRating} />
         </div>
         <p>{`Grupa ${groupNumber}`}</p>
       </div>
       <p className="truncate font-bold">{courseName}</p>
       <p className="truncate font-semibold">{lecturer}</p>
       <p className="mt-2 flex w-full justify-between truncate">
-        Dostępne miejsca:
+        <UsersRoundIcon className="size-3" />
         <span
           className={cn(
             "font-bold",
@@ -100,7 +100,7 @@ export function ClassBlock({
         </span>
       </p>
       <p className="flex w-full justify-between truncate">
-        Średnia ocena:
+        <StarsRating rating={averageRating > 0 ? averageRating : 1} />
         <span className="font-bold">{averageRating}</span>
       </p>
     </button>
