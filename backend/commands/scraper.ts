@@ -156,6 +156,7 @@ export default class Scraper extends BaseCommand {
       }),
     );
     this.logger.log("Scraping groups details");
+    const processedGroupIds: number[] = [];
     for (const registration of registrations) {
       for (const course of registration.courses) {
         const detailsUrls = (await Promise.all(
@@ -222,11 +223,14 @@ export default class Scraper extends BaseCommand {
               },
             );
 
+            processedGroupIds.push(group.id);
+
             await group.related("lecturers").sync(lecturerIds);
           }),
         );
       }
     }
+    await Group.query().whereNotIn("id", processedGroupIds).delete();
     this.logger.log("Groups details scraped");
   }
 }
