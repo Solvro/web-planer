@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type React from "react";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { FeedbackProvider } from "@/hooks/use-feedback";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +17,11 @@ const queryClient = new QueryClient({
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <TooltipProvider delayDuration={0}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <FeedbackProvider>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </FeedbackProvider>
     </TooltipProvider>
   );
 }

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { useFeedback } from "@/hooks/use-feedback";
+
 function Logo() {
   return (
     <Link href="https://solvro.pwr.edu.pl/">
@@ -11,8 +13,9 @@ function Logo() {
         src="/assets/logo/solvro_white.png"
         alt="Logo Koła Naukowego Solvro"
         width={150}
-        height={150}
+        height={30}
         className="mx-auto cursor-pointer"
+        unoptimized
       />
     </Link>
   );
@@ -20,6 +23,7 @@ function Logo() {
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { openDialog } = useFeedback();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -47,7 +51,7 @@ export function Navbar() {
               <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
             </li>
             <li>
-              <Link href="https://forms.gle/4tBCPkLMFKptB1iZ7">Zgłoś błąd</Link>
+              <button onClick={openDialog}>Zgłoś błąd</button>
             </li>
           </ul>
         </nav>
@@ -98,9 +102,7 @@ export function Navbar() {
                 <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
               </li>
               <li className="p-2">
-                <Link href="https://forms.gle/4tBCPkLMFKptB1iZ7">
-                  Zgłoś błąd
-                </Link>
+                <button onClick={openDialog}>Zgłoś błąd</button>
               </li>
             </ul>
           </div>

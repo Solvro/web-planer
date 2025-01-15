@@ -8,6 +8,10 @@ export const env = createEnv({
     USOS_APPS_URL: z.string().url().default("https://apps.usos.pwr.edu.pl"),
     SITE_URL: z.string().url().default("http://localhost:3000"),
     NEXT_PUBLIC_API_URL: z.string().url().default("http://localhost:3000/api"),
+    FORMS_LINK: z.string().url(),
+    FORMS_FIELD_EMAIL: z.string(),
+    FORMS_FIELD_TITLE: z.string(),
+    FORMS_FIELD_DESCRIPTION: z.string(),
   },
   client: {
     NEXT_PUBLIC_API_URL: z.string().url(),
@@ -18,6 +22,10 @@ export const env = createEnv({
     USOS_APPS_URL: process.env.USOS_APPS_URL,
     USOS_CONSUMER_KEY: process.env.USOS_CONSUMER_KEY,
     USOS_CONSUMER_SECRET: process.env.USOS_CONSUMER_SECRET,
+    FORMS_LINK: process.env.FORMS_LINK,
+    FORMS_FIELD_EMAIL: process.env.FORMS_FIELD_EMAIL,
+    FORMS_FIELD_TITLE: process.env.FORMS_FIELD_TITLE,
+    FORMS_FIELD_DESCRIPTION: process.env.FORMS_FIELD_DESCRIPTION,
   },
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });
