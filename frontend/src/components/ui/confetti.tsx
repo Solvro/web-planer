@@ -5,7 +5,7 @@ import type {
   CreateTypes as ConfettiInstance,
   Options as ConfettiOptions,
 } from "canvas-confetti";
-import confetti from "canvas-confetti";
+import confetti, { create } from "canvas-confetti";
 import type { ReactNode } from "react";
 import React, {
   createContext,
@@ -51,7 +51,7 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
       if (instanceRef.current !== null) {
         return;
       }
-      instanceRef.current = confetti.create(node, {
+      instanceRef.current = create(node, {
         ...globalOptions,
         resize: true,
       });
