@@ -18,6 +18,9 @@ export default class Lecturer extends BaseModel {
   @column()
   declare averageRating: string;
 
+  @column()
+  declare opinionsCount: string;
+
   @hasMany(() => Rating)
   declare ratings: HasMany<typeof Rating>;
 

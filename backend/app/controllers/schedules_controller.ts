@@ -21,8 +21,12 @@ export default class SchedulesController {
 
     const schedules = await Schedule.query()
       .where("userId", userId)
-      .preload("registrations")
-      .preload("courses");
+      .preload("registrations", (registrationQuery) => {
+        void registrationQuery.where("isActive", true).orWhereNull("isActive");
+      })
+      .preload("courses", (courseQuery) => {
+        void courseQuery.where("isActive", true).orWhereNull("isActive");
+      });
 
     const transformedSchedules = await Promise.all(
       schedules.map(async (schedule) => {
@@ -32,6 +36,8 @@ export default class SchedulesController {
           .preload("groups", (groupQuery) => {
             void groupQuery
               .preload("lecturers")
+              .where("isActive", true)
+              .orWhereNull("isActive")
               .whereExists((subQuery) =>
                 subQuery
                   .from("schedule_groups")
@@ -135,8 +141,12 @@ export default class SchedulesController {
     const schedule = await Schedule.query()
       .where("id", scheduleId)
       .andWhere("userId", userId)
-      .preload("registrations")
-      .preload("courses")
+      .preload("registrations", (registrationQuery) => {
+        void registrationQuery.where("isActive", true).orWhereNull("isActive");
+      })
+      .preload("courses", (courseQuery) => {
+        void courseQuery.where("isActive", true).orWhereNull("isActive");
+      })
       .firstOrFail();
 
     const courseGroups = await schedule
@@ -145,6 +155,8 @@ export default class SchedulesController {
       .preload("groups", (groupQuery) => {
         void groupQuery
           .preload("lecturers")
+          .where("isActive", true)
+          .orWhereNull("isActive")
           .whereExists((subQuery) =>
             subQuery
               .from("schedule_groups")
@@ -174,15 +186,27 @@ export default class SchedulesController {
                 .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
                 .join(", ")
             : "Brak prowadzącego",
-          averageRating: Array.isArray(group.lecturers)
-            ? (
-                group.lecturers.reduce(
-                  (total, lecturer) =>
-                    total + (Number.parseFloat(lecturer.averageRating) || 0),
-                  0,
-                ) / group.lecturers.length
-              ).toFixed(2)
-            : 0,
+          averageRating:
+            Array.isArray(group.lecturers) && group.lecturers.length > 0
+              ? (
+                  group.lecturers
+                    .map((lecturer) =>
+                      Number.parseFloat(lecturer.averageRating),
+                    )
+                    .filter((rating) => !Number.isNaN(rating))
+                    .reduce((total, rating) => total + rating, 0) /
+                  group.lecturers.length
+                ).toFixed(2)
+              : "0.00",
+          opinionsCount:
+            Array.isArray(group.lecturers) && group.lecturers.length > 0
+              ? group.lecturers
+                  .map((lecturer) =>
+                    Number.parseInt(lecturer.opinionsCount, 10),
+                  )
+                  .filter((count) => !Number.isNaN(count))
+                  .reduce((total, count) => total + count, 0)
+              : 0,
           ...group.serialize(),
         })),
       })),
