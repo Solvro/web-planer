@@ -75,10 +75,9 @@ function removeTitles(data: string[]): string[] {
 }
 
 const scrapLecturersPage = async (url: string) => {
-  const lecturers: Lecturer[] = [];
   const response = await fetchLecturers(url);
   if (!response.ok) {
-    logger.info("Something went wrong in fetching lecturers");
+    logger.error("Something went wrong in fetching lecturers");
     return;
   }
 
@@ -87,41 +86,53 @@ const scrapLecturersPage = async (url: string) => {
 
   const body = iconv.decode(buffer, "ISO-8859-2");
 
+  if (body.includes("Zapomniałem hasła")) {
+    logger.error("You need to login to polwro.com. Wrong cookies my friends");
+    // TODO: set this in env
+    await delay(1000);
+    return;
+  }
+
   const $ = cheerio.load(body);
-  const block = $("tbody")
+  logger.info("Planer to bambiki");
+  const lecturers = $("tbody")
     .find("td")
     .children("div.hrw")
-    .children("div.img.folder, div.img.folder_hot, div.img.folder_locked");
-  block.each((_, element) => {
-    const smallBlock = $(element);
-    const text = smallBlock.text().trim().replace(/\s+/g, " ");
-    const splitedData = removeTitles(text.split(" "));
-    const rating = splitedData[0].replace(",", ".");
-    const name = splitedData[2].replace(",", "");
-    const lastName = splitedData[1].replace(",", "");
-    const opinionsMatch = /Opinii: (\d+)/.exec(text);
-    const visitsMatch = /Odwiedzin: (\d+)/.exec(text);
+    .children("div.img.folder, div.img.folder_hot, div.img.folder_locked")
+    .map((_, element) => {
+      logger.info("Planer to bambiki 1");
+      const smallBlock = $(element);
+      const text = smallBlock.text().trim().replace(/\s+/g, " ");
+      const splitedData = removeTitles(text.split(" "));
+      const rating = splitedData[0].replace(",", ".");
+      const name = splitedData[2].replace(",", "");
+      const lastName = splitedData[1].replace(",", "");
+      const opinionsMatch = /Opinii: (\d+)/.exec(text);
+      const visitsMatch = /Odwiedzin: (\d+)/.exec(text);
 
-    const opinions = opinionsMatch !== null ? opinionsMatch[1] : "0";
-    const visits = visitsMatch !== null ? visitsMatch[1] : "0";
+      const opinions = opinionsMatch !== null ? opinionsMatch[1] : "0";
+      const visits = visitsMatch !== null ? visitsMatch[1] : "0";
 
-    lecturers.push({ rating, name, lastName, opinions, visits });
-  });
-  const nextPageDiv = $("tbody")
+      return { rating, name, lastName, opinions, visits };
+    })
+    .get();
+
+  // TODO: refactor this to not use let
+  let nextPageUrl = "";
+  $("tbody")
     .find("ul.vfigntop")
     .find("li.rr")
     .find("div")
-    .children("a");
+    .children("a")
+    .each((_, element) => {
+      if ($(element).text().includes("następna")) {
+        nextPageUrl = `https://polwro.com/${$(element).attr("href")}`;
+      }
+    });
 
-  let nextPageUrl = "";
-  nextPageDiv.each((_, element) => {
-    if ($(element).text().includes("następna")) {
-      nextPageUrl = `https://polwro.com/${$(element).attr("href")}`;
-    }
-  });
-
+  // TODO: set this in env
   await delay(1000);
-  return { lecturers, nextPage: nextPageUrl };
+  return { lecturers, nextPageUrl };
 };
 
 const scrapLecturersForCategory = async (url: string) => {
@@ -132,19 +143,21 @@ const scrapLecturersForCategory = async (url: string) => {
     if (result === undefined) {
       return lecturers;
     }
-
+    // TODO: instead of pushing this to array, either save it to db or yield it
     lecturers.push(...result.lecturers);
-    nextPage = result.nextPage;
+    nextPage = result.nextPageUrl;
   }
   return lecturers;
 };
 
 export const scrapLecturers = async () => {
+  // TODO: do not save all shit to RAM, pls
   const lecturers: Lecturer[] = [];
   for (const url of CATEGORIES_STARTS_URLS) {
-    logger.info("scraping category", url);
+    logger.info(`scraping category ${url}`);
     const lecturersFromCategory = await scrapLecturersForCategory(url);
     lecturers.push(...lecturersFromCategory);
   }
   return lecturers;
 };
+// elo żelo
