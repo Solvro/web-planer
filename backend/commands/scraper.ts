@@ -63,32 +63,45 @@ export default class Scraper extends BaseCommand {
       ),
     );
     this.logger.log("Scraping registrations");
+    const processedRegistrationIds: string[] = [];
     const registrations = await Promise.all(
       departments.map(async (department) => {
         const regs = await scrapRegistrations(department.url);
         if (regs === undefined) {
-          return [];
+          return []; // Jeśli brak wyników, zwróć pustą tablicę
         }
         department.registrations = regs;
-        department.registrations.forEach(async (registration) => {
-          await Registration.updateOrCreate(
-            {
-              id:
-                extractLastStringInBrackets(registration.name) ??
-                registration.name,
-            },
-            {
-              name: registration.name,
-              departmentId:
-                extractLastStringInBrackets(department.name) ?? department.name,
-            },
-          );
-        });
+
+        await Promise.all(
+          department.registrations.map(async (registration) => {
+            const updatedRegistration = await Registration.updateOrCreate(
+              {
+                id:
+                  extractLastStringInBrackets(registration.name) ??
+                  registration.name,
+              },
+              {
+                name: registration.name,
+                departmentId:
+                  extractLastStringInBrackets(department.name) ??
+                  department.name,
+                isActive: true, // Oznaczamy przetworzoną rejestrację jako aktywną
+              },
+            );
+            processedRegistrationIds.push(updatedRegistration.id); // Dodanie ID do listy przetworzonych
+          }),
+        );
+
         return regs;
       }),
     ).then((results) => results.flat());
+
+    await Registration.query()
+      .whereNotIn("id", processedRegistrationIds)
+      .update({ isActive: false });
     this.logger.log("Registrations scraped");
     this.logger.log("Scraping courses urls");
+    const processedCourseIds: string[] = [];
     await Promise.all(
       registrations.map(async (registration) => {
         let urls;
@@ -123,18 +136,23 @@ export default class Scraper extends BaseCommand {
           course.groups = urls.map((url) => {
             return { url, groups: [] };
           });
-          await Course.updateOrCreate(
+          const updatedCourse = await Course.updateOrCreate(
             { id: courseCodeNameGroupsUrls.courseCode },
             {
               name: course.name,
               registrationId:
                 extractLastStringInBrackets(registration.name) ??
                 registration.name,
+              isActive: true,
             },
           );
+          processedCourseIds.push(updatedCourse.id);
         }),
       );
     }
+    await Course.query()
+      .whereNotIn("id", processedCourseIds)
+      .update({ isActive: false });
     this.logger.log("Courses details scraped");
     this.logger.log("Synchronizing group_archive with current groups");
     const currentGroups = await Group.all();
@@ -220,6 +238,7 @@ export default class Scraper extends BaseCommand {
                 spotsOccupied: details.spotsOccupied,
                 spotsTotal: details.spotsTotal,
                 url: url.slice(0, 255),
+                isActive: true,
               },
             );
 
@@ -230,7 +249,9 @@ export default class Scraper extends BaseCommand {
         );
       }
     }
-    await Group.query().whereNotIn("id", processedGroupIds).delete();
+    await Group.query()
+      .whereNotIn("id", processedGroupIds)
+      .update({ isActive: false });
     this.logger.log("Groups details scraped");
   }
 }

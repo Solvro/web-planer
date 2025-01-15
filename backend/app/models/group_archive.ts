@@ -53,6 +53,9 @@ export default class GroupArchive extends BaseModel {
   @column()
   declare spotsTotal: number;
 
+  @column()
+  declare isActive: boolean;
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;
 

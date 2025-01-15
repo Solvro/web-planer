@@ -21,6 +21,9 @@ export default class Registration extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;
 
+  @column()
+  declare isActive: boolean;
+
   @hasMany(() => Course)
   declare courses: HasMany<typeof Course>;
   @column.dateTime({ autoCreate: true, autoUpdate: true })
