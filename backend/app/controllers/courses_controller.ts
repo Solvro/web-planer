@@ -35,15 +35,23 @@ export default class CoursesController {
               .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
               .join(", ")
           : "Brak prowadzącego",
-        averageRating: Array.isArray(group.lecturers)
-          ? (
-              group.lecturers.reduce(
-                (total, lecturer) =>
-                  total + (Number.parseFloat(lecturer.averageRating) || 0),
-                0,
-              ) / group.lecturers.length
-            ).toFixed(2)
-          : 0,
+        averageRating:
+          Array.isArray(group.lecturers) && group.lecturers.length > 0
+            ? (
+                group.lecturers
+                  .map((lecturer) => Number.parseFloat(lecturer.averageRating))
+                  .filter((rating) => !Number.isNaN(rating))
+                  .reduce((total, rating) => total + rating, 0) /
+                group.lecturers.length
+              ).toFixed(2)
+            : "0.00",
+        opinionsCount:
+          Array.isArray(group.lecturers) && group.lecturers.length > 0
+            ? group.lecturers
+                .map((lecturer) => Number.parseInt(lecturer.opinionsCount, 10))
+                .filter((count) => !Number.isNaN(count))
+                .reduce((total, count) => total + count, 0)
+            : 0,
         ...group.serialize(),
       })),
     }));
