@@ -15,6 +15,9 @@ export default class Course extends BaseModel {
   @column()
   declare registrationId: string;
 
+  @column()
+  declare isActive: boolean;
+
   @hasMany(() => Group)
   declare groups: HasMany<typeof Group>;
 
