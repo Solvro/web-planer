@@ -68,7 +68,7 @@ export default class Scraper extends BaseCommand {
       departments.map(async (department) => {
         const regs = await scrapRegistrations(department.url);
         if (regs === undefined) {
-          return []; // Jeśli brak wyników, zwróć pustą tablicę
+          return [];
         }
         department.registrations = regs;
 
@@ -85,10 +85,10 @@ export default class Scraper extends BaseCommand {
                 departmentId:
                   extractLastStringInBrackets(department.name) ??
                   department.name,
-                isActive: true, // Oznaczamy przetworzoną rejestrację jako aktywną
+                isActive: true,
               },
             );
-            processedRegistrationIds.push(updatedRegistration.id); // Dodanie ID do listy przetworzonych
+            processedRegistrationIds.push(updatedRegistration.id);
           }),
         );
 
