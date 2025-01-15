@@ -120,7 +120,7 @@ const scrapLecturersPage = async (url: string) => {
     }
   });
 
-  await delay(500);
+  await delay(1000);
   return { lecturers, nextPage: nextPageUrl };
 };
 
