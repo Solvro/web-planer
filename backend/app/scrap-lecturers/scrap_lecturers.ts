@@ -3,6 +3,8 @@ import iconv from "iconv-lite";
 
 import logger from "@adonisjs/core/services/logger";
 
+import env from "#start/env";
+
 interface Lecturer {
   rating: string;
   name: string;
@@ -37,8 +39,7 @@ async function fetchLecturers(url: string, timeout = 100000) {
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "Accept-Encoding": "gzip, deflate, br, zstd",
         "Accept-Language": "en-US,en;q=0.9,pl-PL;q=0.8,pl;q=0.7",
-        Cookie:
-          "pmlist=; bb038dfef1_counter=1; bb038dfef1_sid=8b9aebe43f5c5b6263b21c3772b87244; bb038dfef1_data=a%3A2%3A%7Bs%3A11%3A%22autologinid%22%3Bs%3A0%3A%22%22%3Bs%3A6%3A%22userid%22%3Bs%3A6%3A%22144199%22%3B%7D",
+        Cookie: env.get("POLWRO_COOKIES") ?? "",
       },
 
       signal: controller.signal,
