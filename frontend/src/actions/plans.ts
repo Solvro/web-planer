@@ -29,12 +29,12 @@ export const createNewPlan = async ({
       body: JSON.stringify({ name, courses, registrations, groups }),
     });
     if (data === null) {
-      throw new Error("Failed to create new plan");
+      return null;
     }
     revalidatePath("/plans");
     return data;
   } catch {
-    throw new Error("Not logged in");
+    return null;
   }
 };
 

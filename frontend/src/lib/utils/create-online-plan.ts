@@ -20,34 +20,28 @@ type CreateOnlinePlanResult =
 export const createOnlinePlan = async (
   plan: PlanState,
 ): Promise<CreateOnlinePlanResult> => {
-  try {
-    const courses = plan.courses
-      .filter((c) => c.isChecked)
-      .map((c) => ({ id: c.id }));
-    const registrations = plan.registrations.map((r) => ({ id: r.id }));
-    const groups = plan.allGroups
-      .filter((g) => g.isChecked)
-      .map((g) => ({ id: g.groupOnlineId }));
+  const courses = plan.courses
+    .filter((c) => c.isChecked)
+    .map((c) => ({ id: c.id }));
+  const registrations = plan.registrations.map((r) => ({ id: r.id }));
+  const groups = plan.allGroups
+    .filter((g) => g.isChecked)
+    .map((g) => ({ id: g.groupOnlineId }));
 
-    const response = await createNewPlan({
-      name: plan.name,
-      courses,
-      registrations,
-      groups,
-    });
+  const response = await createNewPlan({
+    name: plan.name,
+    courses,
+    registrations,
+    groups,
+  });
 
-    return {
-      status: "SUCCESS",
-      updatedAt: new Date(response.schedule.updatedAt),
-      onlineId: response.schedule.id.toString(),
-    };
-  } catch (error) {
-    if (error instanceof Error && "message" in error) {
-      if (error.message === "Not logged in") {
-        return { status: "NOT_LOGGED_IN", message: error.message };
-      }
-      return { status: "UNKNOWN", message: error.message };
-    }
-    return { status: "UNKNOWN", message: "Wystąpił nieoczekiwany błąd" };
+  if (response === null) {
+    return { status: "NOT_LOGGED_IN", message: "Musisz się zalogować." };
   }
+
+  return {
+    status: "SUCCESS",
+    updatedAt: new Date(response.schedule.updatedAt),
+    onlineId: response.schedule.id.toString(),
+  };
 };

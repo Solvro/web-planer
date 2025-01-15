@@ -32,6 +32,7 @@ function AnimationLogo() {
             width={200}
             height={200}
             className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
+            unoptimized
           />
         </a>
 
