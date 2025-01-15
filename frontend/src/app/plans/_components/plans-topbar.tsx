@@ -8,6 +8,8 @@ import { UserButton } from "@/components/user-button";
 import { createUsosService } from "@/lib/usos";
 import { cn } from "@/lib/utils";
 
+import { FeedbackButton } from "./feedback-button";
+
 export function PlansTopbar() {
   return (
     <div className="flex w-full items-center justify-between bg-mainbutton7 py-4 shadow-sm">
@@ -35,7 +37,7 @@ export function PlansTopbar() {
           >
             <span className="text-nowrap">Terminarz USOS</span>
           </Link>
-
+          <FeedbackButton />
           <Suspense
             fallback={<Skeleton className="size-[40px] rounded-full" />}
           >
