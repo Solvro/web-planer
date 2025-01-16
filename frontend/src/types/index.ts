@@ -85,6 +85,7 @@ export type CourseType = {
     averageRating: number;
     createdAt: string;
     updatedAt: string;
+    opinionsCount: number;
   }[];
 }[];
 

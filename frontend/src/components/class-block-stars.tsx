@@ -1,5 +1,7 @@
 import { StarHalfIcon, StarIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 function customRound(rating: number): number {
   const integerPart = Math.floor(rating);
   const decimalPart = rating - integerPart;
@@ -13,17 +15,23 @@ function customRound(rating: number): number {
   }
 }
 
-export function StarsRating({ rating }: { rating: number }) {
+export function StarsRating({
+  rating,
+  hideStars = false,
+}: {
+  rating: number;
+  hideStars?: boolean;
+}) {
   const roundedRating = customRound(rating);
   const fullPoints = Math.floor(roundedRating);
   const isHalfPoint = roundedRating % 1 === 0.5;
   return (
-    <div className="flex gap-1">
+    <div className={cn("flex gap-1", { hidden: hideStars })}>
       {Array.from({ length: fullPoints }).map((_, index) => {
         return (
           <StarIcon
-            fill="#9e881c"
-            color="#9e881c"
+            fill="#ffe605"
+            color="#cf9013"
             // eslint-disable-next-line react/no-array-index-key
             key={index}
             width={10}
@@ -32,7 +40,7 @@ export function StarsRating({ rating }: { rating: number }) {
         );
       })}
       {isHalfPoint ? (
-        <StarHalfIcon fill="#9e881c" color="#9e881c" width={10} height={10} />
+        <StarHalfIcon fill="#ffe605" color="#cf9013" width={10} height={10} />
       ) : null}
     </div>
   );
