@@ -15,6 +15,7 @@
     "postinstall": "cd frontend && npm install && cd ../backend && npm install",
     "lint": "eslint . --max-warnings=0",
     "prepare": "husky",
+    "test": "jest",
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
