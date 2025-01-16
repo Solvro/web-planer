@@ -4,13 +4,21 @@ import React from "react";
 import { StarsRating } from "@/components/class-block-stars";
 import { cn } from "@/lib/utils";
 
-export const typeClasses = {
-  W: "bg-red-300",
-  L: "bg-blue-300",
-  C: "bg-green-300",
-  S: "bg-orange-300",
-  P: "bg-fuchsia-200",
+const typeBgColors = {
+  W: "bg-red-100",
+  L: "bg-blue-100",
+  C: "bg-green-100",
+  S: "bg-orange-100",
+  P: "bg-fuchsia-100",
 } as const;
+
+const typeBarColors = {
+  W: "bg-red-500",
+  L: "bg-blue-500",
+  C: "bg-green-500",
+  S: "bg-orange-500",
+  P: "bg-fuchsia-500",
+};
 
 function calculatePosition(startTime: string, endTime: string) {
   const [startHour, startMinute] = startTime.split(":").map(Number);
@@ -39,6 +47,7 @@ export function ClassBlock({
   spotsOccupied,
   spotsTotal,
   averageRating,
+  opinionsCount,
   onClick,
   isReadonly = false,
 }: {
@@ -54,6 +63,7 @@ export function ClassBlock({
   spotsOccupied: number;
   spotsTotal: number;
   averageRating: number;
+  opinionsCount: number;
   onClick: () => void;
   isReadonly?: boolean;
 }) {
@@ -70,8 +80,8 @@ export function ClassBlock({
       }}
       className={cn(
         position,
-        typeClasses[courseType],
-        `relative flex flex-col truncate rounded-md p-2 shadow-md`,
+        typeBgColors[courseType],
+        `border-l-3 relative flex flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
         isChecked
           ? "cursor-pointer"
           : isDisabled
@@ -80,6 +90,12 @@ export function ClassBlock({
         isReadonly ? "cursor-default" : null,
       )}
     >
+      <div
+        className={cn(
+          "absolute inset-y-0 left-0 top-0 w-[4px]",
+          typeBarColors[courseType],
+        )}
+      ></div>
       <div className="flex w-full justify-between">
         <div className="flex gap-1">
           <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
@@ -99,10 +115,15 @@ export function ClassBlock({
           {spotsOccupied}/{spotsTotal}
         </span>
       </p>
-      <p className="flex w-full justify-between truncate">
-        <StarsRating rating={averageRating > 0 ? averageRating : 1} />
-        <span className="font-bold">{averageRating}</span>
-      </p>
+      <div className={"flex w-full justify-between truncate"}>
+        <StarsRating
+          rating={averageRating > 0 ? averageRating : 1}
+          hideStars={durationSpan < 10}
+        />
+        <p className="font-bold">
+          {averageRating} ({opinionsCount})
+        </p>
+      </div>
     </button>
   );
 }
