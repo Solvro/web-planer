@@ -4,11 +4,13 @@ on:
   push:
     branches: ["main"]
     paths:
+      - ".github/workflows/frontend_ci.yaml"
       - "*"
       - "frontend/**"
   pull_request:
     branches: ["main"]
     paths:
+      - ".github/workflows/frontend_ci.yaml"
       - "*"
       - "frontend/**"
 
