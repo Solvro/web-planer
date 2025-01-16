@@ -401,6 +401,7 @@ export function CreateNewPlanPage({
                                 spotsOccupied: g.spotsOccupied,
                                 spotsTotal: g.spotsTotal,
                                 averageRating: g.averageRating,
+                                opinionsCount: g.opinionsCount,
                               }) satisfies ExtendedGroup,
                           ),
                         }))
