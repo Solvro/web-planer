@@ -8,9 +8,16 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
-import { typeClasses } from "./class-block";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+
+const typeClasses = {
+  W: "bg-red-300",
+  L: "bg-blue-300",
+  C: "bg-green-300",
+  S: "bg-orange-300",
+  P: "bg-fuchsia-200",
+} as const;
 
 export function GroupsAccordionItem({
   registrationName,

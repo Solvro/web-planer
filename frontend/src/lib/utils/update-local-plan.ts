@@ -60,6 +60,7 @@ export const updateLocalPlan = async (
             startTime: g.startTime.split(":").slice(0, 2).join(":"),
             spotsOccupied: g.spotsOccupied,
             spotsTotal: g.spotsTotal,
+            opinionsCount: g.opinionsCount,
             averageRating: g.averageRating,
           }));
           return {
