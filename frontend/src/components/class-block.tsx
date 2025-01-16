@@ -4,6 +4,8 @@ import React from "react";
 import { StarsRating } from "@/components/class-block-stars";
 import { cn } from "@/lib/utils";
 
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+
 const typeBgColors = {
   W: "bg-red-100",
   L: "bg-blue-100",
@@ -70,60 +72,69 @@ export function ClassBlock({
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
   return (
-    <button
-      suppressHydrationWarning={true}
-      disabled={isDisabled}
-      onClick={isReadonly ? undefined : onClick}
-      style={{
-        gridColumnStart: startGrid,
-        gridColumnEnd: `span ${durationSpan.toString()}`,
-      }}
-      className={cn(
-        position,
-        typeBgColors[courseType],
-        `border-l-3 relative flex flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
-        isChecked
-          ? "cursor-pointer"
-          : isDisabled
-            ? "opacity-20"
-            : "cursor-pointer opacity-60",
-        isReadonly ? "cursor-default" : null,
-      )}
-    >
-      <div
-        className={cn(
-          "absolute inset-y-0 left-0 top-0 w-[4px]",
-          typeBarColors[courseType],
-        )}
-      ></div>
-      <div className="flex w-full justify-between">
-        <div className="flex gap-1">
-          <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
-        </div>
-        <p>{`Grupa ${groupNumber}`}</p>
-      </div>
-      <p className="truncate font-bold">{courseName}</p>
-      <p className="truncate font-semibold">{lecturer}</p>
-      <p className="mt-2 flex w-full justify-between truncate">
-        <UsersRoundIcon className="size-3" />
-        <span
+    <Tooltip delayDuration={500}>
+      <TooltipTrigger asChild={true}>
+        <button
+          suppressHydrationWarning={true}
+          disabled={isDisabled}
+          onClick={isReadonly ? undefined : onClick}
+          style={{
+            gridColumnStart: startGrid,
+            gridColumnEnd: `span ${durationSpan.toString()}`,
+          }}
           className={cn(
-            "font-bold",
-            spotsOccupied >= spotsTotal ? "text-red-500" : null,
+            position,
+            typeBgColors[courseType],
+            `border-l-3 relative flex flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
+            isChecked
+              ? "cursor-pointer"
+              : isDisabled
+                ? "opacity-20"
+                : "cursor-pointer opacity-60",
+            isReadonly ? "cursor-default" : null,
           )}
         >
-          {spotsOccupied}/{spotsTotal}
-        </span>
-      </p>
-      <div className={"flex w-full justify-between truncate"}>
-        <StarsRating
-          rating={averageRating > 0 ? averageRating : 1}
-          hideStars={durationSpan < 10}
-        />
-        <p className="font-bold">
-          {averageRating} ({opinionsCount})
+          <div
+            className={cn(
+              "absolute inset-y-0 left-0 top-0 w-[4px]",
+              typeBarColors[courseType],
+            )}
+          ></div>
+          <div className="flex w-full justify-between">
+            <div className="flex gap-1">
+              <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
+            </div>
+            <p>{`Grupa ${groupNumber}`}</p>
+          </div>
+          <p className="truncate font-bold">{courseName}</p>
+          <p className="truncate font-semibold">{lecturer}</p>
+          <p className="mt-2 flex w-full justify-between truncate">
+            <UsersRoundIcon className="size-3" />
+            <span
+              className={cn(
+                "font-bold",
+                spotsOccupied >= spotsTotal ? "text-red-500" : null,
+              )}
+            >
+              {spotsOccupied}/{spotsTotal}
+            </span>
+          </p>
+          <div className={"flex w-full justify-between truncate"}>
+            <StarsRating
+              rating={averageRating > 0 ? averageRating : 1}
+              hideStars={durationSpan < 10}
+            />
+            <p className="font-bold">
+              {averageRating} ({opinionsCount})
+            </p>
+          </div>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>
+          {courseName} - {lecturer}
         </p>
-      </div>
-    </button>
+      </TooltipContent>
+    </Tooltip>
   );
 }
