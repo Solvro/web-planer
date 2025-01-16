@@ -5,6 +5,8 @@ import logger from "@adonisjs/core/services/logger";
 
 import env from "#start/env";
 
+import { loginToPolwro } from "./polwro_login.js";
+
 interface Lecturer {
   rating: string;
   name: string;
@@ -27,10 +29,13 @@ const CATEGORIES_STARTS_URLS = [
   "https://polwro.com/viewforum.php?f=42&topicdays=0&start=0",
 ];
 
-async function fetchLecturers(url: string, timeout = 100000) {
+async function fetchLecturers(
+  url: string,
+  authCookie: string,
+  timeout = 100000,
+) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -39,9 +44,8 @@ async function fetchLecturers(url: string, timeout = 100000) {
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "Accept-Encoding": "gzip, deflate, br, zstd",
         "Accept-Language": "en-US,en;q=0.9,pl-PL;q=0.8,pl;q=0.7",
-        Cookie: env.get("POLWRO_COOKIES") ?? "",
+        Cookie: authCookie,
       },
-
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
@@ -74,8 +78,8 @@ function removeTitles(data: string[]): string[] {
   return data.filter((word) => !titlesToRemove.includes(word.toLowerCase()));
 }
 
-const scrapLecturersPage = async (url: string) => {
-  const response = await fetchLecturers(url);
+const scrapLecturersPage = async (url: string, authCookie: string) => {
+  const response = await fetchLecturers(url, authCookie);
   if (!response.ok) {
     logger.error("Something went wrong in fetching lecturers");
     return;
@@ -135,11 +139,11 @@ const scrapLecturersPage = async (url: string) => {
   return { lecturers, nextPageUrl };
 };
 
-const scrapLecturersForCategory = async (url: string) => {
+const scrapLecturersForCategory = async (url: string, authCookie: string) => {
   const lecturers: Lecturer[] = [];
   let nextPage = url;
   while (nextPage !== "") {
-    const result = await scrapLecturersPage(nextPage);
+    const result = await scrapLecturersPage(nextPage, authCookie);
     if (result === undefined) {
       return lecturers;
     }
@@ -151,11 +155,18 @@ const scrapLecturersForCategory = async (url: string) => {
 };
 
 export const scrapLecturers = async () => {
+  const authCookie = await loginToPolwro(
+    env.get("POLWRO_USERNAME") ?? "",
+    env.get("POLWRO_PASSWORD") ?? "",
+  );
   // TODO: do not save all shit to RAM, pls
   const lecturers: Lecturer[] = [];
   for (const url of CATEGORIES_STARTS_URLS) {
     logger.info(`scraping category ${url}`);
-    const lecturersFromCategory = await scrapLecturersForCategory(url);
+    const lecturersFromCategory = await scrapLecturersForCategory(
+      url,
+      authCookie,
+    );
     lecturers.push(...lecturersFromCategory);
   }
   return lecturers;
