@@ -14,21 +14,6 @@ export default class Lecturers extends BaseCommand {
   };
 
   async run() {
-    const LecturerModule = await import("#models/lecturer");
-    const Lecturer = LecturerModule.default;
-    const lecturers = await scrapLecturers();
-    // TODO: this can be a bulk operator
-    for (const lecturer of lecturers) {
-      await Lecturer.updateOrCreate(
-        {
-          name: lecturer.name,
-          surname: lecturer.lastName,
-        },
-        {
-          averageRating: lecturer.rating,
-          opinionsCount: lecturer.opinions,
-        },
-      );
-    }
+    await scrapLecturers();
   }
 }

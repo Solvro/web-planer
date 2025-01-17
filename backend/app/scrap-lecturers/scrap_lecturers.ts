@@ -3,19 +3,10 @@ import iconv from "iconv-lite";
 
 import logger from "@adonisjs/core/services/logger";
 
+import Lecturer from "#models/lecturer";
 import env from "#start/env";
 
 import { loginToPolwro } from "./polwro_login.js";
-
-interface Lecturer {
-  rating: string;
-  name: string;
-  lastName: string;
-  opinions: string;
-  visits: string;
-}
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const CATEGORIES_STARTS_URLS = [
   "https://polwro.com/viewforum.php?f=6&topicdays=0&start=0",
@@ -28,6 +19,8 @@ const CATEGORIES_STARTS_URLS = [
   "https://polwro.com/viewforum.php?f=12&topicdays=0&start=0",
   "https://polwro.com/viewforum.php?f=42&topicdays=0&start=0",
 ];
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function fetchLecturers(
   url: string,
@@ -105,49 +98,53 @@ const scrapLecturersPage = async (url: string, authCookie: string) => {
       const smallBlock = $(element);
       const text = smallBlock.text().trim().replace(/\s+/g, " ");
       const splitedData = removeTitles(text.split(" "));
-      const rating = splitedData[0].replace(",", ".");
+      const averageRating = splitedData[0].replace(",", ".");
       const name = splitedData[2].replace(",", "");
-      const lastName = splitedData[1].replace(",", "");
+      const surname = splitedData[1].replace(",", "");
       const opinionsMatch = /Opinii: (\d+)/.exec(text);
       const visitsMatch = /Odwiedzin: (\d+)/.exec(text);
 
-      const opinions = opinionsMatch !== null ? opinionsMatch[1] : "0";
+      const opinionsCount = opinionsMatch !== null ? opinionsMatch[1] : "0";
       const visits = visitsMatch !== null ? visitsMatch[1] : "0";
 
-      return { rating, name, lastName, opinions, visits };
+      return { averageRating, name, surname, opinionsCount, visits };
     })
     .get();
 
-  // TODO: refactor this to not use let
-  let nextPageUrl = "";
-  $("tbody")
+  const nextPageUrlElement = $("tbody")
     .find("ul.vfigntop")
     .find("li.rr")
     .find("div")
     .children("a")
-    .each((_, element) => {
-      if ($(element).text().includes("następna")) {
-        nextPageUrl = `https://polwro.com/${$(element).attr("href")}`;
-      }
+    .filter(function () {
+      return $(this).text().includes("następna");
     });
-
+  const nextPageUrl =
+    nextPageUrlElement.length > 0
+      ? `https://polwro.com/${nextPageUrlElement.attr("href")}`
+      : "";
   await delay(Number(env.get("POLWRO_DELAY")));
   return { lecturers, nextPageUrl };
 };
 
 const scrapLecturersForCategory = async (url: string, authCookie: string) => {
-  const lecturers: Lecturer[] = [];
   let nextPage = url;
   while (nextPage !== "") {
     const result = await scrapLecturersPage(nextPage, authCookie);
     if (result === undefined) {
-      return lecturers;
+      break;
     }
-    // TODO: instead of pushing this to array, either save it to db or yield it
-    lecturers.push(...result.lecturers);
     nextPage = result.nextPageUrl;
+    for (const lecturer of result.lecturers) {
+      await Lecturer.updateOrCreate(
+        { name: lecturer.name, surname: lecturer.surname },
+        {
+          averageRating: lecturer.averageRating,
+          opinionsCount: lecturer.opinionsCount,
+        },
+      );
+    }
   }
-  return lecturers;
 };
 
 export const scrapLecturers = async () => {
@@ -155,15 +152,9 @@ export const scrapLecturers = async () => {
     env.get("POLWRO_USERNAME") ?? "",
     env.get("POLWRO_PASSWORD") ?? "",
   );
-  // TODO: do not save all shit to RAM, pls
-  const lecturers: Lecturer[] = [];
+
   for (const url of CATEGORIES_STARTS_URLS) {
     logger.info(`scraping category ${url}`);
-    const lecturersFromCategory = await scrapLecturersForCategory(
-      url,
-      authCookie,
-    );
-    lecturers.push(...lecturersFromCategory);
+    await scrapLecturersForCategory(url, authCookie);
   }
-  return lecturers;
 };
