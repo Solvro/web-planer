@@ -37,7 +37,7 @@ export default async function ProfilePage() {
         </p>
       </div>
       <Separator />
-      <div className="flex items-start gap-4 rounded-md border p-5">
+      <div className="flex flex-col items-start gap-4 rounded-md border p-5 md:flex-row">
         <div className="size-[51px] min-w-[51px] rounded-full border">
           <Image
             src={profile.photo_urls["50x50"]}
