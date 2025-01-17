@@ -92,19 +92,16 @@ const scrapLecturersPage = async (url: string, authCookie: string) => {
 
   if (body.includes("Zapomniałem hasła")) {
     logger.error("You need to login to polwro.com. Wrong cookies my friends");
-    // TODO: set this in env
-    await delay(1000);
+    await delay(Number(env.get("POLWRO_DELAY")));
     return;
   }
 
   const $ = cheerio.load(body);
-  logger.info("Planer to bambiki");
   const lecturers = $("tbody")
     .find("td")
     .children("div.hrw")
     .children("div.img.folder, div.img.folder_hot, div.img.folder_locked")
     .map((_, element) => {
-      logger.info("Planer to bambiki 1");
       const smallBlock = $(element);
       const text = smallBlock.text().trim().replace(/\s+/g, " ");
       const splitedData = removeTitles(text.split(" "));
@@ -134,8 +131,7 @@ const scrapLecturersPage = async (url: string, authCookie: string) => {
       }
     });
 
-  // TODO: set this in env
-  await delay(1000);
+  await delay(Number(env.get("POLWRO_DELAY")));
   return { lecturers, nextPageUrl };
 };
 
@@ -171,4 +167,3 @@ export const scrapLecturers = async () => {
   }
   return lecturers;
 };
-// elo żelo
