@@ -42,8 +42,8 @@ export default async function SettingsLayout({
   }
 
   return (
-    <div className="min-h-screen w-full pb-10">
-      <div className="container mx-auto flex flex-col space-y-6 p-10 pb-0">
+    <div className="w-full pb-10">
+      <div className="container mx-auto flex h-full min-h-screen flex-col space-y-6 p-10 pb-0">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Ustawienia</h2>
           <p className="text-muted-foreground">
