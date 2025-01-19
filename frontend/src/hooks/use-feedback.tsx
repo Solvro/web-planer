@@ -136,7 +136,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
                       <FormLabel>Adres email</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="np. 123456@student.pwr.edu.pl"
+                          placeholder="123456@student.pwr.edu.pl"
                           {...field}
                         />
                       </FormControl>
@@ -157,7 +157,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
                       <FormLabel>Tytuł zgłoszenia</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="np. Błąd związany z formularzem"
+                          placeholder="Błąd związany z formularzem"
                           {...field}
                         />
                       </FormControl>
@@ -174,7 +174,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
                       <FormLabel>Opis zgłoszenia</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="np. Zauważyłem, że formularz podczas..."
+                          placeholder="Zauważyłem, że formularz podczas..."
                           {...field}
                         />
                       </FormControl>
