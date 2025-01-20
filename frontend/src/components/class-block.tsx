@@ -1,7 +1,6 @@
 import { UsersRoundIcon } from "lucide-react";
 import React from "react";
 
-import { StarsRating } from "@/components/class-block-stars";
 import { cn } from "@/lib/utils";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -48,8 +47,6 @@ export function ClassBlock({
   isDisabled,
   spotsOccupied,
   spotsTotal,
-  averageRating,
-  opinionsCount,
   onClick,
   isReadonly = false,
 }: {
@@ -119,15 +116,6 @@ export function ClassBlock({
               {spotsOccupied}/{spotsTotal}
             </span>
           </p>
-          <div className={"flex w-full justify-between truncate"}>
-            <StarsRating
-              rating={averageRating > 0 ? averageRating : 1}
-              hideStars={durationSpan < 10}
-            />
-            <p className="font-bold">
-              {averageRating} ({opinionsCount})
-            </p>
-          </div>
         </button>
       </TooltipTrigger>
       <TooltipContent>
