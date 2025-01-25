@@ -142,6 +142,48 @@ export default function HomePage() {
           </div>
         </Block>
       </section>
+
+      <section className="mt-20 flex items-center justify-center">
+        <div className="w-full max-w-lg rounded-md border-2 border-[#F67548] bg-gradient-to-r from-[#f6764868] via-[#EB614368] to-[#DB2B1068] p-5">
+          <div className="flex items-start gap-1 text-2xl font-bold text-white">
+            <h1 className="inline">Słyszałeś już o </h1>
+            <Image
+              src={"/assets/logo/topwr_logo.svg"}
+              alt={"ToPWR Logo"}
+              className="inline"
+              width={100}
+              height={20}
+            />
+            <h1 className="inline">?</h1>
+          </div>
+
+          <p className="mt-2 text-white/90">
+            Jeśli nie, to koniecznie pobierz apkę na swój telefon już teraz, aby
+            być na bieżąco ze studenckim życiem Politechniki Wrocławskiej!
+          </p>
+
+          <div className="mt-4 flex items-center gap-2">
+            <Link href="https://play.google.com/store/apps/details?id=com.solvro.topwr">
+              <Image
+                src={"/assets/google_play.png"}
+                alt={"Download on google play"}
+                width={300}
+                height={50}
+                className="w-[160px]"
+              />
+            </Link>
+            <Link href="https://apps.apple.com/us/app/topwr/id1644647395">
+              <Image
+                src={"/assets/apple_store.png"}
+                alt={"Download on google play"}
+                width={300}
+                height={50}
+                className="w-[144px]"
+              />
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
