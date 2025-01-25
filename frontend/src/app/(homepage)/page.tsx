@@ -169,7 +169,7 @@ export default function HomePage() {
                 alt={"Download on google play"}
                 width={300}
                 height={50}
-                className="w-[200px]"
+                className="w-[160px]"
               />
             </Link>
             <Link href="https://apps.apple.com/us/app/topwr/id1644647395">
@@ -178,7 +178,7 @@ export default function HomePage() {
                 alt={"Download on google play"}
                 width={300}
                 height={50}
-                className="w-[180px]"
+                className="w-[144px]"
               />
             </Link>
           </div>
