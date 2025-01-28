@@ -8,7 +8,7 @@ import { createClient } from "@/services/usos/usos-client";
 
 export const dynamic = "force-dynamic";
 
-const BLACKLIST = new Set(["272695"]);
+const BLACKLIST = new Set();
 
 export const GET = async (request: NextRequest) => {
   const url = request.nextUrl;
