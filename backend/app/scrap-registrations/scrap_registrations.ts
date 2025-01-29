@@ -336,9 +336,9 @@ const getGroupNumber = (groupInfo: string) => {
 };
 
 const checkWeek = (week: string): "TN" | "TP" | "-" => {
-  if (week.includes("(nieparzyste)")) {
+  if (week.includes("(nieparzyste),")) {
     return "TN";
-  } else if (week.includes("(parzyste)")) {
+  } else if (week.includes("(parzyste),")) {
     return "TP";
   }
   return "-";
