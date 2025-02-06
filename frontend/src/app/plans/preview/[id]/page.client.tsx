@@ -1,10 +1,10 @@
 "use client";
 
+import { toPng } from "html-to-image";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useMemo } from "react";
-import { LuDownloadCloud } from "react-icons/lu";
+import { useCallback, useMemo, useRef } from "react";
 
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
@@ -20,7 +20,9 @@ export function SharePlanPage({ planId }: { planId: string }) {
   const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
 
   const router = useRouter();
+  const captureRef = useRef<HTMLDivElement>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const copyPlan = () => {
     const newPlan = {
       id: uuid,
@@ -41,18 +43,38 @@ export function SharePlanPage({ planId }: { planId: string }) {
       router.push(`/plans/edit/${newPlan.id}`);
     }, 200);
   };
+
+  const downloadPlan = useCallback(() => {
+    if (captureRef.current === null) {
+      return;
+    }
+
+    toPng(captureRef.current, { cacheBust: true })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = `${plan.name}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+      });
+  }, [captureRef, plan.name]);
   return (
     <div className="flex grow flex-col">
       <div className="flex items-center justify-center gap-4 p-2">
         <Button
-          onClick={copyPlan}
+          onClick={downloadPlan}
           className="flex items-center justify-center gap-4 text-nowrap rounded-md text-lg"
         >
-          Skopiuj
-          <LuDownloadCloud />
+          Pobierz .jpg
         </Button>
       </div>
-      <div className="flex flex-col gap-2 overflow-auto p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900">
+
+      <div
+        ref={captureRef}
+        className="flex flex-col gap-2 overflow-auto bg-white p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900"
+      >
         {[
           { day: Day.MONDAY, label: "Poniedziałek" },
           { day: Day.TUESDAY, label: "Wtorek" },
