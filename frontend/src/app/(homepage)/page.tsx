@@ -84,7 +84,7 @@ function AnimationLogo() {
         rotate: "0.0deg",
         scale: 1.01,
       }}
-      className="animate-fade-in-2 flex content-center items-center justify-center text-center align-middle opacity-0 [--animation-delay:200ms] md:mt-10"
+      className="flex animate-fade-in-2 content-center items-center justify-center text-center align-middle opacity-0 [--animation-delay:200ms] md:mt-10"
     >
       <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
         <div className="mb-5 md:mb-0 md:mt-5">
@@ -191,11 +191,11 @@ export default function Home() {
           </AnimatedGradientText>
         </div>
         <AnimationLogo />
-        <p className="animate-fade-in-2 mb-2 translate-y-[-1rem] text-balance text-lg tracking-tight text-muted-foreground opacity-0 [--animation-delay:400ms] md:text-xl">
+        <p className="mb-2 translate-y-[-1rem] animate-fade-in-2 text-balance text-lg tracking-tight text-muted-foreground opacity-0 [--animation-delay:400ms] md:text-xl">
           Stwórz swój plan używając{" "}
           <span className="font-bold uppercase">darmowego</span> planera!
         </p>
-        <div className="animate-fade-in-2 mx-auto mb-12 flex w-max items-center gap-3 rounded-md border-2 border-amber-400 bg-amber-100 p-2 opacity-0 [--animation-delay:400ms] dark:bg-amber-500/40">
+        <div className="mx-auto mb-12 flex w-max animate-fade-in-2 items-center gap-3 rounded-md border-2 border-amber-400 bg-amber-100 p-2 opacity-0 [--animation-delay:400ms] dark:bg-amber-500/40">
           <div className="flex size-6 items-center justify-center rounded-sm bg-amber-500">
             <Icons.Alert className="size-3 text-white" />
           </div>
@@ -214,8 +214,8 @@ export default function Home() {
           <JoinUsBlock />
         </Suspense>
 
-        <div className="animate-fade-up relative mt-[8rem] opacity-0 [--animation-delay:400ms] [perspective:2000px] after:absolute after:inset-0 after:z-20 after:[background:linear-gradient(to_top,hsl(var(--background))_30%,transparent)]">
-          <div className="before:animate-image-glow rounded-xl border border-white/10 bg-white bg-opacity-[0.01] before:absolute before:bottom-1/2 before:left-0 before:top-0 before:h-full before:w-full before:opacity-0 before:[background-image:linear-gradient(to_bottom,hsl(var(--primary)),hsl(var(--primary)),transparent_40%)] before:[filter:blur(180px)]">
+        <div className="relative mt-[8rem] animate-fade-up opacity-0 [--animation-delay:400ms] [perspective:2000px] after:absolute after:inset-0 after:z-20 after:[background:linear-gradient(to_top,hsl(var(--background))_30%,transparent)]">
+          <div className="rounded-xl border border-white/10 bg-white bg-opacity-[0.01] before:absolute before:bottom-1/2 before:left-0 before:top-0 before:h-full before:w-full before:animate-image-glow before:opacity-0 before:[background-image:linear-gradient(to_bottom,hsl(var(--primary)),hsl(var(--primary)),transparent_40%)] before:[filter:blur(180px)]">
             <BorderBeam colorFrom="hsl(var(--primary))" />
             <Image
               src={HeroImageDark}
@@ -366,7 +366,7 @@ export default function Home() {
       </section>
 
       <Particles
-        className="animate-fade-up absolute inset-0 -z-10 opacity-0 [--animation-delay:400ms]"
+        className="absolute inset-0 -z-10 animate-fade-up opacity-0 [--animation-delay:400ms]"
         quantity={80}
         ease={40}
         color={"#2f81f5"}

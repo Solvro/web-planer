@@ -13,6 +13,10 @@ import { Button } from "@/components/ui/button";
 import { usePlan } from "@/lib/use-plan";
 import { Day } from "@/services/usos/types";
 
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 export function SharePlanPage({ planId }: { planId: string }) {
   const uuid = useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
@@ -44,21 +48,21 @@ export function SharePlanPage({ planId }: { planId: string }) {
     }, 200);
   };
 
-  const downloadPlan = useCallback(() => {
+  const downloadPlan = useCallback(async () => {
     if (captureRef.current === null) {
       return;
     }
 
-    toPng(captureRef.current, { cacheBust: true })
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = `${plan.name}.png`;
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-      });
+    const element = captureRef.current;
+    try {
+      const dataUrl = await toPng(element, { cacheBust: true });
+      const link = document.createElement("a");
+      link.download = `${plan.name}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error: unknown) {
+      console.error(error);
+    }
   }, [captureRef, plan.name]);
   return (
     <div className="flex grow flex-col">
