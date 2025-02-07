@@ -13,10 +13,6 @@ import { Button } from "@/components/ui/button";
 import { usePlan } from "@/lib/use-plan";
 import { Day } from "@/services/usos/types";
 
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 export function SharePlanPage({ planId }: { planId: string }) {
   const uuid = useMemo(() => crypto.randomUUID(), []);
   const [plans, setPlans] = useAtom(plansIds);
