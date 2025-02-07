@@ -72,9 +72,9 @@ export function PlansPage({
       <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
         <button
           onClick={addNewPlan}
-          className="group flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:border-primary hover:bg-primary/5 hover:shadow-xl"
+          className="group flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:border-primary hover:bg-primary/5 hover:shadow-xl dark:border-gray-800"
         >
-          <PlusIcon className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary" />
+          <PlusIcon className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
         </button>
         {plans.map((plan) => (
           <PlanItem

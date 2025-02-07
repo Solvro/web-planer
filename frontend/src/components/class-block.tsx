@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const typeBgColors = {
-  W: "bg-red-100",
-  L: "bg-blue-100",
-  C: "bg-green-100",
-  S: "bg-orange-100",
-  P: "bg-fuchsia-100",
+  W: "bg-red-100 dark:bg-red-900",
+  L: "bg-blue-100 dark:bg-blue-900",
+  C: "bg-green-100 dark:bg-green-900",
+  S: "bg-orange-100 dark:bg-orange-900",
+  P: "bg-fuchsia-100 dark:bg-fuchsia-900",
 } as const;
 
 const typeBarColors = {
@@ -86,8 +86,8 @@ export function ClassBlock({
             isChecked
               ? "cursor-pointer"
               : isDisabled
-                ? "opacity-20"
-                : "cursor-pointer opacity-60",
+                ? "opacity-20 dark:opacity-10"
+                : "cursor-pointer opacity-60 dark:opacity-40",
             isReadonly ? "cursor-default" : null,
           )}
         >

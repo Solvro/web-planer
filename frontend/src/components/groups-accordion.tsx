@@ -12,11 +12,11 @@ import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
 const typeClasses = {
-  W: "bg-red-300",
-  L: "bg-blue-300",
-  C: "bg-green-300",
-  S: "bg-orange-300",
-  P: "bg-fuchsia-200",
+  W: "bg-red-300 dark:bg-red-600",
+  L: "bg-blue-300 dark:bg-blue-600",
+  C: "bg-green-300 dark:bg-green-600",
+  S: "bg-orange-300 dark:bg-orange-600",
+  P: "bg-fuchsia-200 dark:bg-fuchsia-500",
 } as const;
 
 export function GroupsAccordionItem({
@@ -66,7 +66,7 @@ export function GroupsAccordionItem({
         </div>
         {courses.map((course) => (
           <div key={course.id}>
-            <div className="grid grid-cols-[1fr_5fr] items-center justify-between p-4 py-2 text-base transition-colors hover:cursor-pointer hover:bg-blue-100">
+            <div className="grid grid-cols-[1fr_5fr] items-center justify-between rounded-md p-4 py-2 text-base transition-colors hover:cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-100/20">
               <div
                 className={cn(
                   "flex size-[45px] items-center justify-center rounded-full bg-secondary",

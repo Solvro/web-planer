@@ -1,11 +1,11 @@
 export function Footer() {
   return (
-    <footer className="sm:mt-12">
-      <p className="p-4 text-center text-white">
+    <footer className="mt-12 md:mt-0">
+      <p className="p-4 text-center font-medium text-black dark:text-white">
         Made with ❤️ by{" "}
         <a
           href="https://solvro.pwr.edu.pl/"
-          className="font-bold text-mainbutton hover:underline"
+          className="font-bold text-blue-700 hover:underline"
         >
           SOLVRO
         </a>

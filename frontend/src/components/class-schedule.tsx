@@ -57,7 +57,7 @@ function ClassSchedule({
 }) {
   return (
     <div className="flex min-w-fit flex-col rounded-xl border-2 p-3">
-      <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold">
+      <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
       </div>
       <div className="flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]">
