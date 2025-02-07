@@ -4,6 +4,7 @@ import Script from "next/script";
 import type React from "react";
 
 import { ClientProviders } from "@/components/providers";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
 import { SessionProvider } from "@/hooks/use-session";
@@ -103,7 +104,14 @@ export default async function RootLayout({
       <SessionProvider user={user}>
         <ClientProviders>
           <body className={cn(inter.className, "min-h-screen")}>
-            {children}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
             <Script
               async={true}
               defer={true}

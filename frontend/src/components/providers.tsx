@@ -6,8 +6,6 @@ import type React from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { FeedbackProvider } from "@/hooks/use-feedback";
 
-import { ThemeProvider } from "./theme-provider";
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -21,14 +19,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
     <TooltipProvider delayDuration={0}>
       <FeedbackProvider>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          {children}
         </QueryClientProvider>
       </FeedbackProvider>
     </TooltipProvider>
