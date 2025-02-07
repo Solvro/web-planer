@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -274,7 +276,7 @@ export const Particles: React.FC<ParticlesProps> = ({
     return () => {
       window.removeEventListener("resize", initCanvas);
     };
-  }, [color]);
+  }, [animate, color]);
 
   useEffect(() => {
     onMouseMove();
