@@ -17,6 +17,13 @@ import { PlanDisplayLink } from "@/components/plan-display-link";
 import { RegistrationCombobox } from "@/components/registration-combobox";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -29,6 +36,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/env.mjs";
 import { useSession } from "@/hooks/use-session";
+import { useShare } from "@/hooks/use-share";
 import { usePlan } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
 import { createOnlinePlan } from "@/lib/utils/create-online-plan";
@@ -53,6 +61,7 @@ export function CreateNewPlanPage({
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
   const { user } = useSession();
+  const { isDialogOpen, setIsDialogOpen } = useShare();
 
   const firstTime = useRef(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -303,7 +312,7 @@ export function CreateNewPlanPage({
                 ),
               )}
             />
-            <PlanDisplayLink id={plan.id} />
+            <PlanDisplayLink />
           </div>
 
           <p className="text-xs text-muted-foreground">
@@ -313,7 +322,9 @@ export function CreateNewPlanPage({
         </div>
 
         <div className="w-full">
-          <Label htmlFor="faculty">Wydział</Label>
+          <Label htmlFor="faculty" className="mb-1">
+            Wydział
+          </Label>
           <Select
             name="faculty"
             onValueChange={(v) => {
@@ -321,7 +332,7 @@ export function CreateNewPlanPage({
             }}
           >
             <SelectTrigger className="pl-2" disabled={registrations.isLoading}>
-              <SelectValue placeholder="Wydział" />
+              <SelectValue placeholder="Wybierz swój wydział" />
             </SelectTrigger>
             <SelectContent className="max-w-full">
               {faculties.map((f) => (
@@ -488,6 +499,19 @@ export function CreateNewPlanPage({
           )}
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Udostępnij swój plan</DialogTitle>
+            <DialogDescription className="text-balance">
+              Możesz udostępnij link do swojego planu, aby inni mogli go
+              zobaczyć lub pobrać w formacie .png
+            </DialogDescription>
+          </DialogHeader>
+          <div>sss</div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

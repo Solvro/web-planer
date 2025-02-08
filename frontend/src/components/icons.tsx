@@ -8,6 +8,7 @@ import {
   Loader2Icon,
   Lock,
   Palette,
+  Share,
   Timer,
   TriangleAlert,
   UserIcon,
@@ -26,4 +27,5 @@ export const Icons = {
   User: UserIcon,
   Bell: BellRingIcon,
   AddCalendar: CalendarPlusIcon,
+  Share,
 };
