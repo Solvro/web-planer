@@ -1,12 +1,16 @@
 import {
+  BellRingIcon,
   Biohazard,
+  CalendarPlusIcon,
   CalendarRangeIcon,
   Download,
   Fingerprint,
   Loader2Icon,
   Lock,
+  Palette,
   Timer,
   TriangleAlert,
+  UserIcon,
 } from "lucide-react";
 
 export const Icons = {
@@ -18,4 +22,8 @@ export const Icons = {
   Timer,
   Biohazard,
   Download,
+  Palette,
+  User: UserIcon,
+  Bell: BellRingIcon,
+  AddCalendar: CalendarPlusIcon,
 };

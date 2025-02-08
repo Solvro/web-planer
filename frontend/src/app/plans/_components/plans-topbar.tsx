@@ -2,7 +2,6 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 
 import { SolvroLogo } from "@/components/solvro-logo";
-import { ModeToggle } from "@/components/theme-switch";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
@@ -22,14 +21,14 @@ export function PlansTopbar() {
           <Button
             asChild={true}
             variant={"ghost"}
-            className="hover:bg-blue-200/40 dark:hover:bg-white/5"
+            className="text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5"
           >
             <Link href="/plans">Moje plany</Link>
           </Button>
           <Button
             asChild={true}
             variant={"ghost"}
-            className="hover:bg-blue-200/40 dark:hover:bg-white/5"
+            className="text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5"
           >
             <Link
               href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
@@ -38,8 +37,11 @@ export function PlansTopbar() {
               Terminarz USOS
             </Link>
           </Button>
-          <FeedbackButton ghost={true} />
-          <ModeToggle className="ml-1 mr-2 min-w-10" />
+          <FeedbackButton
+            ghost={true}
+            className="mr-2 text-white hover:text-white"
+          />
+          {/* <ModeToggle className="ml-1 mr-2 min-w-10" /> */}
           <Suspense
             fallback={<Skeleton className="size-[40px] rounded-full" />}
           >

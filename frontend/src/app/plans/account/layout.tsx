@@ -1,8 +1,8 @@
-import { BellRingIcon, CalendarPlusIcon, UserIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
+import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 
@@ -17,17 +17,22 @@ const sidebarNavItems = [
   {
     title: "Profil",
     href: "/plans/account",
-    icon: <UserIcon className="size-4" />,
+    icon: <Icons.User className="size-4" />,
+  },
+  {
+    title: "Motyw strony",
+    href: "/plans/account/appearance",
+    icon: <Icons.Palette className="size-4" />,
   },
   {
     title: "Powiadomienia",
     href: "/plans/account/notifications",
-    icon: <BellRingIcon className="size-4" />,
+    icon: <Icons.Bell className="size-4" />,
   },
   {
     title: "Dodawanie do kalendarza",
     href: "/plans/account/calendar",
-    icon: <CalendarPlusIcon className="size-4" />,
+    icon: <Icons.AddCalendar className="size-4" />,
   },
 ];
 

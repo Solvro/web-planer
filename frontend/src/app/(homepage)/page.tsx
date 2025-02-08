@@ -181,7 +181,7 @@ export default function Home() {
             <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
             <span
               className={cn(
-                `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
+                `inline animate-gradient bg-gradient-to-r from-[#ffd5a2] via-[#cea1ff] to-[#ffd5a2] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent dark:from-[#ffaa40] dark:via-[#9c40ff] dark:to-[#ffaa40]`,
               )}
             >
               Obowiązkowa apka dla każdego studenta!
