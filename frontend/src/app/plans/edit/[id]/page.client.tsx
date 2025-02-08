@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, isEqual } from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -556,11 +557,18 @@ export function CreateNewPlanPage({
               )}
             </div>
           </div>
-          <div className="absolute bottom-6 right-8 z-20 flex items-center gap-2 rounded-full border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px]">
-            <DownloadPlanButton plan={plan} captureRef={captureRef} />
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 100, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              className="absolute bottom-6 right-8 z-20 flex items-center gap-2 rounded-full border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px]"
+            >
+              <DownloadPlanButton plan={plan} captureRef={captureRef} />
 
-            <SharePlanButton plan={plan} />
-          </div>
+              <SharePlanButton plan={plan} />
+            </motion.div>
+          </AnimatePresence>
         </DialogContent>
       </Dialog>
     </div>
