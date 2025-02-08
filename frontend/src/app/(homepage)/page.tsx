@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { InputIcon } from "@radix-ui/react-icons";
-import { BellIcon, CalendarIcon, FileTextIcon, GlobeIcon } from "lucide-react";
+import { CalendarIcon, FileTextIcon, GlobeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -21,59 +21,47 @@ import HeroImageLight from "../../../public/assets/planer-light.png";
 const features = [
   {
     Icon: FileTextIcon,
-    name: "Save your files",
-    description: "We automatically save your files as you type.",
+    name: "Advanced AI Algorithms",
+    description: "Our platform utilizes cutting-edge AI algorithms...",
+    className: "lg:col-span-1 lg:row-span-1",
     href: "/",
     cta: "Learn more",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
-    className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
   },
   {
     Icon: InputIcon,
-    name: "Full text search",
-    description: "Search through all your files in one place.",
+    name: "Secure Data Handling",
+    description: "We prioritize your data security...",
+    className: "lg:col-span-1 lg:row-span-1",
     href: "/",
     cta: "Learn more",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
-    className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-3",
   },
   {
     Icon: GlobeIcon,
-    name: "Multilingual",
-    description: "Supports 100+ languages and counting.",
+    name: "Seamless Integration",
+    description: "Easily integrate our AI solutions...",
+    className: "lg:col-span-1 lg:row-span-2",
     href: "/",
     cta: "Learn more",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
-    className: "lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-4",
   },
   {
     Icon: CalendarIcon,
-    name: "Calendar",
-    description: "Use the calendar to filter your files by date.",
+    name: "Customizable Solutions",
+    description: "Tailor our AI services to your specific needs...",
+    className: "lg:col-span-2 lg:row-span-1",
     href: "/",
     cta: "Learn more",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
-    className: "lg:col-start-3 lg:col-end-3 lg:row-start-1 lg:row-end-2",
-  },
-  {
-    Icon: BellIcon,
-    name: "Notifications",
-    description:
-      "Get notified when someone shares a file or mentions you in a comment.",
-    href: "/",
-    cta: "Learn more",
-    background: (
-      <img className="absolute -right-20 -top-20 opacity-60" alt="" />
-    ),
-    className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
   },
 ];
 
@@ -299,9 +287,9 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold">Ogólny bałagan</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Veritatis, rem quibusdam dolores neque voluptatem ut illo
-                  dolorum quae aliquid vitae.
+                  USOS to nie jest najlepsze narzędzie do układania planów.
+                  Możesz się tam zapisać, czysto teoretycznie można też ułożyć
+                  plan ale jest to droga przez mękę.
                 </p>
               </div>
             </div>
@@ -314,9 +302,9 @@ export default function Home() {
                   Nakładające się zajęcia
                 </h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Veritatis, rem quibusdam dolores neque voluptatem ut illo
-                  dolorum quae aliquid vitae.
+                  Bardzo dużo zajęć nakłada się na siebie. Przez to bardzo łatwo
+                  się pomylić i zapisać na jakieś zajęca jednocześnie. Wtedy
+                  trzeba być miłym dla Pań z dziekanatu.
                 </p>
               </div>
             </div>
@@ -327,9 +315,9 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold">Zapisy na sekundy</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Veritatis, rem quibusdam dolores neque voluptatem ut illo
-                  dolorum quae aliquid vitae.
+                  Jeśli wcześniej nie przygotujesz sobie swojego wymarzonego
+                  planu, podczas zapisów nie będzie na to czasu. Najbardziej
+                  atrakcyjne zajęcia znikają w mgnieniu oka.
                 </p>
               </div>
             </div>
@@ -347,14 +335,13 @@ export default function Home() {
               <h3 className="mx-auto mt-4 max-w-xs text-3xl font-semibold sm:max-w-none sm:text-4xl md:text-5xl">
                 Ułóż swój wymażony plan z planerem!
               </h3>
-              <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veritatis, rem quibusdam dolores neque voluptatem ut illo
-                dolorum quae aliquid vitae.
+              <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600">
+                Wybierz swój wydział, kierunek i już. Możesz ułożyć swój plan
+                widząc swoje wszystkie zajęcia na jednej stronie.
               </p>
             </div>
 
-            <BentoGrid className="lg:grid-rows-3">
+            <BentoGrid className="min-h-[750px] lg:grid-cols-3 lg:grid-rows-2">
               {features.map((feature) => (
                 <BentoCard key={feature.name} {...feature} />
               ))}
