@@ -1,8 +1,8 @@
-import { UsersRoundIcon } from "lucide-react";
 import React from "react";
 
 import { cn } from "@/lib/utils";
 
+import { Icons } from "./icons";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const typeBgColors = {
@@ -106,7 +106,7 @@ export function ClassBlock({
           <p className="truncate font-bold">{courseName}</p>
           <p className="truncate font-semibold">{lecturer}</p>
           <p className="mt-2 flex w-full justify-between truncate">
-            <UsersRoundIcon className="size-3" />
+            <Icons.UsersRound className="size-3" />
             <span
               className={cn(
                 "font-bold",

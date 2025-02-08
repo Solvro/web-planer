@@ -21,14 +21,14 @@ export function PlansTopbar() {
           <Button
             asChild={true}
             variant={"ghost"}
-            className="text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5"
+            className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
           >
             <Link href="/plans">Moje plany</Link>
           </Button>
           <Button
             asChild={true}
             variant={"ghost"}
-            className="text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5"
+            className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
           >
             <Link
               href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
@@ -39,7 +39,7 @@ export function PlansTopbar() {
           </Button>
           <FeedbackButton
             ghost={true}
-            className="mr-2 text-white hover:text-white"
+            className="mr-2 hidden text-white hover:text-white md:flex"
           />
           {/* <ModeToggle className="ml-1 mr-2 min-w-10" /> */}
           <Suspense

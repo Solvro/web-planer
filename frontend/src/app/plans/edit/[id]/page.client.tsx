@@ -3,7 +3,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, isEqual } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
-import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +13,7 @@ import { getPlan } from "@/actions/plans";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import { ClassSchedule } from "@/components/class-schedule";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
+import { Icons } from "@/components/icons";
 import { PlanDisplayLink } from "@/components/plan-display-link";
 import { RegistrationCombobox } from "@/components/registration-combobox";
 import { Accordion } from "@/components/ui/accordion";
@@ -244,7 +244,7 @@ export function CreateNewPlanPage({
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <Loader2Icon size={64} className="mb-4 animate-spin text-primary" />
+        <Icons.Loader size={64} className="mb-4 animate-spin text-primary" />
         <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
         <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
       </div>

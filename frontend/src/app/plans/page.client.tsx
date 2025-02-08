@@ -1,13 +1,13 @@
 "use client";
 
 import { atom, useAtom } from "jotai";
-import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
+import { Icons } from "@/components/icons";
 import { PlanItem } from "@/components/plan-item";
 
 import type { PlanResponseDataType } from "./page";
@@ -74,7 +74,7 @@ export function PlansPage({
           onClick={addNewPlan}
           className="group flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:border-primary hover:bg-primary/5 hover:shadow-xl dark:border-gray-800"
         >
-          <PlusIcon className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
+          <Icons.Plus className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
         </button>
         {plans.map((plan) => (
           <PlanItem

@@ -2,9 +2,9 @@
 
 import { formatDistance, isAfter, isEqual } from "date-fns";
 import { pl } from "date-fns/locale";
-import { DownloadCloudIcon, Loader2Icon, UploadCloudIcon } from "lucide-react";
 import React, { useState } from "react";
 
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -104,9 +104,9 @@ export function SyncErrorAlert({
           }}
         >
           {loadingDownloading ? (
-            <Loader2Icon className="size-4 animate-spin" />
+            <Icons.Loader className="size-4 animate-spin" />
           ) : (
-            <DownloadCloudIcon className="size-4" />
+            <Icons.DownloadCloud className="size-4" />
           )}
           Pobierz zmiany
         </Button>
@@ -122,9 +122,9 @@ export function SyncErrorAlert({
           }}
         >
           {loadingSending ? (
-            <Loader2Icon className="size-4 animate-spin" />
+            <Icons.Loader className="size-4 animate-spin" />
           ) : (
-            <UploadCloudIcon className="size-4" />
+            <Icons.UploadCloud className="size-4" />
           )}
           Zapisz w chmurze
         </Button>

@@ -1,10 +1,12 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 import { FeedbackButton } from "@/app/plans/_components/feedback-button";
+import { Icons } from "@/components/icons";
 import { ModeToggle } from "@/components/theme-switch";
 import { Button } from "@/components/ui/button";
 import { useFeedback } from "@/hooks/use-feedback";
@@ -84,55 +86,50 @@ export function Navbar() {
 
         {/* Mobile Menu Icon */}
         <div className="flex h-20 items-center md:hidden">
-          <button
-            onClick={toggleMenu}
-            className="text-white focus:outline-none"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+          <Button onClick={toggleMenu} size={"icon"} variant={"outline"}>
+            {isMenuOpen ? (
+              <Icons.X className="!size-6" />
+            ) : (
+              <Icons.Menu className="!size-6" />
+            )}
+          </Button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen ? (
-          <div className="absolute left-0 top-full w-full animate-fade-in bg-mainbutton6 shadow-lg md:hidden">
-            <ul className="flex flex-col gap-4 p-4 text-center uppercase text-white">
-              <li className="p-2">
-                <Link href="https://www.facebook.com/knsolvro">
-                  Aktualności
-                </Link>
-              </li>
-              <li className="p-2">
-                <Link href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
-                  Instrukcje
-                </Link>
-              </li>
-              <li className="p-2">
-                <Link href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
-                  Terminarz
-                </Link>
-              </li>
-              <li className="p-2">
-                <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
-              </li>
-              <li className="p-2">
-                <button onClick={openDialog}>Zgłoś błąd</button>
-              </li>
-            </ul>
-          </div>
-        ) : null}
+        <AnimatePresence>
+          {isMenuOpen ? (
+            <motion.div
+              initial={{ opacity: 0, y: -400 }}
+              animate={{ opacity: 100, y: 0 }}
+              exit={{ opacity: 0, y: -400 }}
+              className="absolute left-0 top-full w-full bg-background shadow-lg md:hidden"
+            >
+              <ul className="flex flex-col gap-4 p-4 text-center uppercase text-white">
+                <li className="p-2">
+                  <Link href="https://www.facebook.com/knsolvro">
+                    Aktualności
+                  </Link>
+                </li>
+                <li className="p-2">
+                  <Link href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=instrukcjePL.html">
+                    Instrukcje
+                  </Link>
+                </li>
+                <li className="p-2">
+                  <Link href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html">
+                    Terminarz
+                  </Link>
+                </li>
+                <li className="p-2">
+                  <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
+                </li>
+                <li className="p-2">
+                  <button onClick={openDialog}>Zgłoś błąd</button>
+                </li>
+              </ul>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     </div>
   );

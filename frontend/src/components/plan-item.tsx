@@ -2,14 +2,6 @@
 
 import { format } from "date-fns";
 import { useAtom } from "jotai";
-import {
-  CopyIcon,
-  Download,
-  EllipsisVerticalIcon,
-  Loader2Icon,
-  Pencil,
-  TrashIcon,
-} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -37,6 +29,7 @@ import { usePlan } from "@/lib/use-plan";
 import { pluralize } from "@/lib/utils";
 import { generateICSFile } from "@/lib/utils/generate-ics-file";
 
+import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -175,14 +168,14 @@ export function PlanItem({
         <DropdownMenu open={dropdownOpened} onOpenChange={setDropdownOpened}>
           <DropdownMenuTrigger asChild={true}>
             <Button variant="secondary" size="iconSm">
-              <EllipsisVerticalIcon className="size-4" />
+              <Icons.EllipsisVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="top" className="w-50">
             <DropdownMenuLabel>Wybierz akcję</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={copyPlan}>
-              <CopyIcon />
+              <Icons.Copy />
               <span>Kopiuj</span>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -190,7 +183,7 @@ export function PlanItem({
                 generateICSFile(plan.allGroups, plan.name);
               }}
             >
-              <Download />
+              <Icons.Download />
               <span>Dodaj do kalendarza (.ics)</span>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -199,20 +192,20 @@ export function PlanItem({
                 setDialogOpened(true);
               }}
             >
-              <TrashIcon />
+              <Icons.Trash />
               <span>Usuń</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         {onlineOnly ? (
           <Button size="sm" onClick={createFromOnlinePlan}>
-            <Pencil className="h-4 w-4" />
+            <Icons.Pencil className="h-4 w-4" />
             Edytuj
           </Button>
         ) : (
           <Button size="sm" asChild={true}>
             <Link href={`/plans/edit/${id}`}>
-              <Pencil className="h-4 w-4" />
+              <Icons.Pencil className="h-4 w-4" />
               Edytuj
             </Link>
           </Button>
@@ -246,7 +239,9 @@ export function PlanItem({
               }}
               variant="destructive"
             >
-              {loading ? <Loader2Icon className="size-4 animate-spin" /> : null}
+              {loading ? (
+                <Icons.Loader className="size-4 animate-spin" />
+              ) : null}
               Usuń
             </Button>
           </DialogFooter>

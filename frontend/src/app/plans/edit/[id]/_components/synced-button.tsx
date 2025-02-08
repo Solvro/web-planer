@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  AlertTriangleIcon,
-  CloudIcon,
-  GitPullRequestClosed,
-  RefreshCwIcon,
-  RefreshCwOffIcon,
-} from "lucide-react";
 import React, { useMemo } from "react";
 import { toast } from "sonner";
 
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -21,23 +15,23 @@ import type { PlanState } from "@/types";
 const LOGIC_STATUS_RESULTS = {
   SYNCHRONIZED: {
     message: "Zsynchronizowano",
-    icon: <CloudIcon className="size-4 text-emerald-500" />,
+    icon: <Icons.Cloud className="size-4 text-emerald-500" />,
   },
   LOCAL_ONLY: {
     message: "Plan dostępny tylko lokalnie",
-    icon: <AlertTriangleIcon className="size-4 text-rose-500" />,
+    icon: <Icons.AlertTriangle className="size-4 text-rose-500" />,
   },
   SYNCING: {
     message: "Synchronizowanie...",
-    icon: <RefreshCwIcon className="size-4 animate-spin text-primary" />,
+    icon: <Icons.RefreshCw className="size-4 animate-spin text-primary" />,
   },
   DIFFERENT_DATES: {
     message: "Twoja wersja różni się od wersji online",
-    icon: <GitPullRequestClosed className="size-4 text-primary" />,
+    icon: <Icons.GitPullRequestClosed className="size-4 text-primary" />,
   },
   LOCAL_CHANGES: {
     message: "Masz lokalne zmiany",
-    icon: <RefreshCwOffIcon className="size-4 text-amber-500" />,
+    icon: <Icons.RefreshCwOff className="size-4 text-amber-500" />,
   },
 };
 

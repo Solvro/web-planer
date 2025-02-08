@@ -1,5 +1,3 @@
-import { XIcon } from "lucide-react";
-
 import type { ExtendedCourse } from "@/atoms/plan-family";
 import {
   AccordionContent,
@@ -8,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
+import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
@@ -43,7 +42,7 @@ export function GroupsAccordionItem({
           variant="outline"
           className="min-w-10"
         >
-          <XIcon className="size-4" />
+          <Icons.X className="size-4" />
         </Button>
         <AccordionTrigger className="px-4 hover:no-underline">
           <span className="text-balance text-left text-sm">

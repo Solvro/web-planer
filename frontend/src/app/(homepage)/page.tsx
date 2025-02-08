@@ -156,7 +156,7 @@ export default function Home() {
             <ModeToggle /> */}
       <section
         id="hero"
-        className="relative mx-auto mt-56 max-w-[80rem] px-6 text-center md:px-8"
+        className="relative mx-auto mt-56 max-w-[80rem] px-2 text-center md:px-6 md:px-8"
       >
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
           <AnimatedGradientText>
@@ -170,7 +170,7 @@ export default function Home() {
             <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
             <span
               className={cn(
-                `inline animate-gradient bg-gradient-to-r from-[#ffd5a2] via-[#cea1ff] to-[#ffd5a2] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent dark:from-[#ffaa40] dark:via-[#9c40ff] dark:to-[#ffaa40]`,
+                `inline animate-gradient text-balance bg-gradient-to-r from-[#ffd5a2] via-[#cea1ff] to-[#ffd5a2] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent dark:from-[#ffaa40] dark:via-[#9c40ff] dark:to-[#ffaa40]`,
               )}
             >
               Obowiązkowa apka dla każdego studenta!
@@ -183,12 +183,13 @@ export default function Home() {
           <span className="font-bold uppercase">darmowego</span> planera!
         </p>
         <div className="mx-auto mb-12 flex w-max animate-fade-in-2 items-center gap-3 rounded-md border-2 border-amber-400 bg-amber-100 p-2 opacity-0 [--animation-delay:400ms] dark:bg-amber-500/40">
-          <div className="flex size-6 items-center justify-center rounded-sm bg-amber-500">
+          <div className="hidden size-6 items-center justify-center rounded-sm bg-amber-500 md:flex">
             <Icons.Alert className="size-3 text-white" />
           </div>
           <h3 className="text-center text-sm font-medium text-amber-950 dark:text-white">
-            Planer jest narzędziem tylko układającym plany, zapisy należy
-            wykonać własnoręcznie w USOS
+            Planer jest narzędziem tylko układającym plany,
+            <br className="block md:hidden" />
+            zapisy należy wykonać własnoręcznie w USOS
           </h3>
         </div>
         <Suspense

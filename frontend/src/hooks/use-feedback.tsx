@@ -2,12 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import confetti from "canvas-confetti";
-import { BugIcon, Check, Loader2 } from "lucide-react";
 import { createContext, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 import { sendFeedbackForm } from "@/actions/feedback";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -113,7 +113,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
           </DialogHeader>
           {sended ? (
             <div className="flex h-56 w-full flex-col items-center justify-center">
-              <Check className="size-56 text-green-500" />
+              <Icons.Check className="size-56 text-green-500" />
               <h1 className="mt-5 text-center text-lg font-semibold">
                 Przyjęliśmy Twoje zgłoszenie
               </h1>
@@ -184,9 +184,9 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
                 />
                 <Button type="submit" disabled={sending}>
                   {sending ? (
-                    <Loader2 className="size-4 animate-spin" />
+                    <Icons.Loader className="size-4 animate-spin" />
                   ) : (
-                    <BugIcon className="size-4" />
+                    <Icons.Bug className="size-4" />
                   )}{" "}
                   Prześlij zgłoszenie
                 </Button>
