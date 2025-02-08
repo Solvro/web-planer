@@ -30,6 +30,7 @@ export const createScheduleValidator = vine.compile(
 export const updateScheduleValidator = vine.compile(
   vine.object({
     name: vine.string().optional(),
+    sharedId: vine.string().optional(),
     groups: vine
       .array(
         vine.object({

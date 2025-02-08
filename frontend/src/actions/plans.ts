@@ -41,12 +41,14 @@ export const createNewPlan = async ({
 export const updatePlan = async ({
   id,
   name,
+  sharedId,
   courses,
   registrations,
   groups,
 }: {
   id: number;
   name: string;
+  sharedId: string | null;
   courses: { id: string }[];
   registrations: { id: string }[];
   groups: { id: number }[];
@@ -56,7 +58,7 @@ export const updatePlan = async ({
   const data = await fetchToAdonis<CreatePlanResponseType>({
     url: `/user/schedules/${id.toString()}`,
     method: "PATCH",
-    body: JSON.stringify({ name, courses, registrations, groups }),
+    body: JSON.stringify({ name, sharedId, courses, registrations, groups }),
   });
 
   if (data === null) {

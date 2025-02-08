@@ -1,28 +1,27 @@
 "use client";
 
-import { toPng } from "html-to-image";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useCallback, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
 import { ClassSchedule } from "@/components/class-schedule";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { usePlan } from "@/lib/use-plan";
+import type { SharedPlan } from "@/lib/types";
 import { Day } from "@/services/usos/types";
 
-export function SharePlanPage({ planId }: { planId: string }) {
-  const uuid = useMemo(() => crypto.randomUUID(), []);
+export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
+  const uuid = useMemo(() => uuidv4(), []);
   const [plans, setPlans] = useAtom(plansIds);
-  const plan = usePlan({ planId });
   const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
 
   const router = useRouter();
   const captureRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const copyPlan = () => {
     const newPlan = {
       id: uuid,
@@ -44,36 +43,26 @@ export function SharePlanPage({ planId }: { planId: string }) {
     }, 200);
   };
 
-  const downloadPlan = useCallback(async () => {
-    if (captureRef.current === null) {
-      return;
-    }
-
-    const element = captureRef.current;
-    try {
-      const dataUrl = await toPng(element, { cacheBust: true });
-      const link = document.createElement("a");
-      link.download = `${plan.name}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error: unknown) {
-      console.error(error);
-    }
-  }, [captureRef, plan.name]);
   return (
     <div className="flex grow flex-col">
-      <div className="flex items-center justify-center gap-4 p-2">
-        <Button
-          onClick={downloadPlan}
-          className="flex items-center justify-center gap-4 text-nowrap rounded-md text-lg"
-        >
-          Pobierz .jpg
-        </Button>
+      <div className="container mx-auto flex items-center justify-between gap-4 px-14 py-4">
+        <h1 className="text-xl font-semibold">{plan.name}</h1>
+
+        <div className="flex items-center gap-1">
+          <Button
+            size={"sm"}
+            className="bg-white text-black"
+            onClick={copyPlan}
+          >
+            <Icons.Copy className="size-4" />
+            Skopiuj do siebie
+          </Button>
+        </div>
       </div>
 
       <div
         ref={captureRef}
-        className="flex flex-col gap-2 overflow-auto bg-white p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900"
+        className="flex flex-col gap-2 overflow-auto bg-background p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900"
       >
         {[
           { day: Day.MONDAY, label: "Poniedziałek" },
@@ -88,8 +77,8 @@ export function SharePlanPage({ planId }: { planId: string }) {
             isReadonly={true}
             selectedGroups={[]}
             groups={plan.allGroups.filter((g) => g.day === day && g.isChecked)}
-            onSelectGroup={(groupdId) => {
-              plan.selectGroup(groupdId);
+            onSelectGroup={() => {
+              return null;
             }}
           />
         ))}

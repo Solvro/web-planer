@@ -46,6 +46,8 @@ import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
 import type { CourseType, FacultyType } from "@/types";
 
+import { DownloadPlanButton } from "../../_components/download-button";
+import { SharePlanButton } from "../../_components/share-plan-button";
 import { OfflineAlert } from "./_components/offline-alert";
 import { SyncErrorAlert } from "./_components/sync-error-alert";
 import { SyncedButton } from "./_components/synced-button";
@@ -64,6 +66,7 @@ export function CreateNewPlanPage({
   const { isDialogOpen, setIsDialogOpen } = useShare();
 
   const firstTime = useRef(true);
+  const captureRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -501,7 +504,7 @@ export function CreateNewPlanPage({
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-full md:max-w-[1620px]">
           <DialogHeader>
             <DialogTitle>Udostępnij swój plan</DialogTitle>
             <DialogDescription className="text-balance">
@@ -509,7 +512,55 @@ export function CreateNewPlanPage({
               zobaczyć lub pobrać w formacie .png
             </DialogDescription>
           </DialogHeader>
-          <div>sss</div>
+          <div className="relative max-h-[700px] overflow-y-auto">
+            <div
+              ref={captureRef}
+              className="flex flex-col gap-2 bg-background p-1"
+            >
+              {[
+                { day: Day.MONDAY, label: "Poniedziałek" },
+                { day: Day.TUESDAY, label: "Wtorek" },
+                { day: Day.WEDNESDAY, label: "Środa" },
+                { day: Day.THURSDAY, label: "Czwartek" },
+                { day: Day.FRIDAY, label: "Piątek" },
+              ].map(({ day, label }) => (
+                <ClassSchedule
+                  key={day}
+                  day={label}
+                  isReadonly={true}
+                  selectedGroups={[]}
+                  groups={plan.allGroups.filter(
+                    (g) => g.day === day && g.isChecked,
+                  )}
+                  onSelectGroup={(groupdId) => {
+                    plan.selectGroup(groupdId);
+                  }}
+                />
+              ))}
+              {[
+                { day: Day.SATURDAY, label: "Sobota" },
+                { day: Day.SUNDAY, label: "Niedziela" },
+              ].map(
+                ({ day, label }) =>
+                  plan.allGroups.some((g) => g.day === day) && (
+                    <ClassSchedule
+                      key={day}
+                      day={label}
+                      isReadonly={true}
+                      selectedGroups={[]}
+                      groups={plan.allGroups.filter(
+                        (g) => g.day === day && g.isChecked,
+                      )}
+                    />
+                  ),
+              )}
+            </div>
+          </div>
+          <div className="absolute bottom-6 right-8 z-20 flex items-center gap-2 rounded-full border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px]">
+            <DownloadPlanButton plan={plan} captureRef={captureRef} />
+
+            <SharePlanButton plan={plan} />
+          </div>
         </DialogContent>
       </Dialog>
     </div>

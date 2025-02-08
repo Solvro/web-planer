@@ -22,6 +22,7 @@ export const syncPlan = async (plan: PlanState): Promise<SyncPlanResult> => {
     const response = await updatePlan({
       id: Number(plan.onlineId),
       name: plan.name,
+      sharedId: plan.sharedId,
       courses: plan.courses
         .filter((c) => c.isChecked)
         .map((c) => ({ id: c.id })),

@@ -3,8 +3,10 @@ import {
   Biohazard,
   CalendarPlusIcon,
   CalendarRangeIcon,
+  Copy,
   Download,
   Fingerprint,
+  Link,
   Loader2Icon,
   Lock,
   Palette,
@@ -28,4 +30,6 @@ export const Icons = {
   Bell: BellRingIcon,
   AddCalendar: CalendarPlusIcon,
   Share,
+  Link,
+  Copy,
 };

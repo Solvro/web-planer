@@ -33,6 +33,7 @@ export interface CreatePlanResponseType {
 
 export interface PlanResponseType {
   name: string;
+  sharedId: string | null;
   userId: number;
   id: number;
   createdAt: string;
@@ -98,6 +99,7 @@ export type FacultyType = {
 export interface PlanState {
   id: string;
   name: string;
+  sharedId: string | null;
   courses: ExtendedCourse[];
   registrations: Registration[];
   allGroups: ExtendedCourse["groups"];
@@ -113,6 +115,7 @@ type SetPlanType = Dispatch<
   SetStateAction<{
     id: string;
     name: string;
+    sharedId: string | null;
     courses: ExtendedCourse[];
     registrations: Registration[];
     createdAt: Date;

@@ -18,6 +18,7 @@ export const planFamily = atomFamily(
       {
         id,
         name: `Nowy plan`,
+        sharedId: null as string | null,
         courses: [] as ExtendedCourse[],
         registrations: [] as Registration[],
         createdAt: new Date(),

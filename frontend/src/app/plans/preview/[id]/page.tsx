@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
+import { fetchToAdonis } from "@/lib/auth";
+import type { SharedPlan } from "@/lib/types";
+
 import { SharePlanPage } from "./page.client";
 
 interface PageProps {
@@ -18,5 +21,18 @@ export default async function SharePlan({ params }: PageProps) {
     return notFound();
   }
 
-  return <SharePlanPage planId={id} />;
+  const result = await fetchToAdonis<{ success: boolean; plan: SharedPlan }>({
+    url: `/shared/${id}`,
+    method: "GET",
+  });
+
+  if (result?.success === false || result === null) {
+    return notFound();
+  }
+
+  const plan = JSON.parse(
+    result.plan.plan as unknown as string,
+  ) as SharedPlan["plan"];
+
+  return <SharePlanPage plan={plan} />;
 }

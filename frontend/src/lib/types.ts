@@ -1,3 +1,4 @@
+import type { ExtendedCourse } from "@/atoms/plan-family";
 import type { Day } from "@/services/usos/types";
 
 export interface ClassBlockProps {
@@ -29,4 +30,14 @@ export interface Course {
   id: string;
   type: string;
   registrationId: string;
+}
+
+export interface SharedPlan {
+  id: string;
+  plan: {
+    name: string;
+    courses: ExtendedCourse[];
+    registrations: Registration[];
+    allGroups: ExtendedCourse["groups"];
+  };
 }

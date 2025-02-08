@@ -79,7 +79,7 @@ export function SyncErrorAlert({
           <h1 className="text-lg font-bold text-primary">
             Wystąpił konflikt w chmurze!
           </h1>
-          <p className="text-xs font-medium text-black/90">
+          <p className="text-xs font-medium text-black/90 dark:text-white">
             Posiadasz{" "}
             <strong>
               {isAfter(planDate, onlinePlan.updatedAt)
