@@ -1,9 +1,24 @@
+"use client";
+
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-interface AnimatedGradientTextProps extends ComponentPropsWithoutRef<"div"> {
+interface AnimatedGradientTextProps extends ComponentPropsWithoutRef<"button"> {
   children: ReactNode;
+}
+
+function downloadApp() {
+  const userAgent = navigator.userAgent;
+
+  if (/android|Windows/i.test(userAgent)) {
+    window.open(
+      "https://play.google.com/store/apps/details?id=com.solvro.topwr",
+      "_blank",
+    );
+  } else if (/iPad|iPhone|iPod|Macintosh/i.test(userAgent)) {
+    window.open("https://apps.apple.com/us/app/topwr/id1644647395", "_blank");
+  }
 }
 
 export function AnimatedGradientText({
@@ -12,7 +27,8 @@ export function AnimatedGradientText({
   ...props
 }: AnimatedGradientTextProps) {
   return (
-    <div
+    <button
+      onClick={downloadApp}
       className={cn(
         "group relative mx-auto flex max-w-fit flex-row items-center justify-center rounded-2xl bg-orange-950/90 px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#8fdfff1f] backdrop-blur-sm transition-shadow duration-500 ease-out [--bg-size:300%] hover:shadow-[inset_0_-5px_10px_#8fdfff3f] dark:bg-black/40",
         className,
@@ -24,6 +40,6 @@ export function AnimatedGradientText({
       />
 
       {children}
-    </div>
+    </button>
   );
 }
