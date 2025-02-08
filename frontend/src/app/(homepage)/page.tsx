@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { InputIcon } from "@radix-ui/react-icons";
-import { CalendarIcon, FileTextIcon, GlobeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -20,45 +18,48 @@ import HeroImageLight from "../../../public/assets/planer-light.png";
 
 const features = [
   {
-    Icon: FileTextIcon,
-    name: "Advanced AI Algorithms",
-    description: "Our platform utilizes cutting-edge AI algorithms...",
+    Icon: Icons.Workflow,
+    name: "Automatyczne pobieranie zajęć",
+    description:
+      "Dzięki planerowi masz gwarancję aktualnych danych o zapisach.",
     className: "lg:col-span-1 lg:row-span-1",
-    href: "/",
-    cta: "Learn more",
+    href: "/plans",
+    cta: "Przejdź do planowania",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
   },
   {
-    Icon: InputIcon,
-    name: "Secure Data Handling",
-    description: "We prioritize your data security...",
+    Icon: Icons.Share,
+    name: "Udostępnij znajomym",
+    description:
+      "Po stworzeniu swojego arcydzieła, możesz je udostępnić znajomym.",
     className: "lg:col-span-1 lg:row-span-1",
-    href: "/",
-    cta: "Learn more",
+    href: "/plans",
+    cta: "Przejdź do planowania",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
   },
   {
-    Icon: GlobeIcon,
-    name: "Seamless Integration",
-    description: "Easily integrate our AI solutions...",
+    Icon: Icons.Bell,
+    name: "Powiadomienia o zmianach",
+    description: "Coś się zmieniło w planie? Dowiesz się o tym jako pierwszy.",
     className: "lg:col-span-1 lg:row-span-2",
-    href: "/",
-    cta: "Learn more",
+    href: "/plans/account/notifications",
+    cta: "Sprawdź ustawienia",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),
   },
   {
-    Icon: CalendarIcon,
-    name: "Customizable Solutions",
-    description: "Tailor our AI services to your specific needs...",
+    Icon: Icons.Logo,
+    name: "Od studentów dla studentów",
+    description:
+      "Razem z grupą znajomych KN Solvro stworzyliśmy planer dla Ciebie.",
     className: "lg:col-span-2 lg:row-span-1",
-    href: "/",
-    cta: "Learn more",
+    href: "/plans",
+    cta: "Przejdź do planowania",
     background: (
       <img className="absolute -right-20 -top-20 opacity-60" alt="" />
     ),

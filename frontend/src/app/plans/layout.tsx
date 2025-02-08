@@ -13,7 +13,7 @@ export default function PlansLayout({
 
       {children}
 
-      <div className="flex w-full items-center justify-center bg-mainbutton7 p-2 py-6 dark:bg-white/5">
+      <div className="flex w-full flex-col items-center justify-center bg-mainbutton7 p-2 py-6 dark:bg-white/5">
         <p className="text-center text-white">
           Made with ❤️ by{" "}
           <a
@@ -22,6 +22,10 @@ export default function PlansLayout({
           >
             SOLVRO
           </a>
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Źródłem danych o zajęciach jest USOS i ich prawnym właścicielem jest
+          Politechnika Wrocławska
         </p>
       </div>
     </div>
