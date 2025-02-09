@@ -18,6 +18,7 @@ const DepartmentsController = () =>
   import("#controllers/departments_controller");
 const AuthController = () => import("#controllers/auth_controller");
 const SchedulesController = () => import("#controllers/schedules_controller");
+const SharedController = () => import("#controllers/shared_controller");
 const RegistrationsController = () =>
   import("#controllers/registrations_controller");
 const CoursesController = () => import("#controllers/courses_controller");
@@ -34,6 +35,9 @@ router.get("/docs", async () => {
   // return AutoSwagger.default.scalar("/swagger"); to use Scalar instead
   // return AutoSwagger.default.rapidoc("/swagger", "view"); to use RapiDoc instead (pass "view" default, or "read" to change the render-style)
 });
+
+router.get("/shared/:id", [SharedController, "show"]);
+router.post("/shared", [SharedController, "store"]);
 
 router.get("/departments", [DepartmentsController, "index"]);
 router.get("/departments/:id", [DepartmentsController, "show"]);

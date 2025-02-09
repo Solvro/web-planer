@@ -2,12 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { getCurrentUser, updateUser } from "@/actions/user";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -131,7 +131,7 @@ export function NotificationsForm({ defaultUser }: { defaultUser: User }) {
         </div>
 
         <Button type="submit" disabled={isUpdating}>
-          {isUpdating ? <Loader2Icon className="size-4 animate-spin" /> : null}
+          {isUpdating ? <Icons.Loader className="size-4 animate-spin" /> : null}
           Zaktualizuj dane
         </Button>
       </form>

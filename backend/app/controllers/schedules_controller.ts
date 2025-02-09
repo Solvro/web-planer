@@ -52,6 +52,7 @@ export default class SchedulesController {
           createdAt: schedule.createdAt,
           updatedAt: schedule.updatedAt,
           name: schedule.name,
+          sharedId: schedule.sharedId,
           registrations: schedule.registrations.map((reg) => ({
             id: reg.id,
             ...reg.serialize(),
@@ -171,6 +172,7 @@ export default class SchedulesController {
       createdAt: schedule.createdAt,
       updatedAt: schedule.updatedAt,
       name: schedule.name,
+      sharedId: schedule.sharedId,
       registrations: schedule.registrations.map((reg) => ({
         id: reg.id,
         ...reg.serialize(),
@@ -235,6 +237,10 @@ export default class SchedulesController {
 
       if (payload.name !== undefined) {
         currSchedule.name = payload.name;
+      }
+
+      if (payload.sharedId !== undefined) {
+        currSchedule.sharedId = payload.sharedId;
       }
 
       if (payload.groups !== undefined) {

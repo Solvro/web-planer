@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, isEqual } from "date-fns";
-import { Loader2Icon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -13,10 +13,18 @@ import { getPlan } from "@/actions/plans";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import { ClassSchedule } from "@/components/class-schedule";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
+import { Icons } from "@/components/icons";
 import { PlanDisplayLink } from "@/components/plan-display-link";
 import { RegistrationCombobox } from "@/components/registration-combobox";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -29,6 +37,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/env.mjs";
 import { useSession } from "@/hooks/use-session";
+import { useShare } from "@/hooks/use-share";
 import { usePlan } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
 import { createOnlinePlan } from "@/lib/utils/create-online-plan";
@@ -38,6 +47,8 @@ import type { LessonType } from "@/services/usos/types";
 import { Day } from "@/services/usos/types";
 import type { CourseType, FacultyType } from "@/types";
 
+import { DownloadPlanButton } from "../../_components/download-button";
+import { SharePlanButton } from "../../_components/share-plan-button";
 import { OfflineAlert } from "./_components/offline-alert";
 import { SyncErrorAlert } from "./_components/sync-error-alert";
 import { SyncedButton } from "./_components/synced-button";
@@ -53,8 +64,10 @@ export function CreateNewPlanPage({
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
   const { user } = useSession();
+  const { isDialogOpen, setIsDialogOpen } = useShare();
 
   const firstTime = useRef(true);
+  const captureRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -231,7 +244,7 @@ export function CreateNewPlanPage({
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <Loader2Icon size={64} className="mb-4 animate-spin text-primary" />
+        <Icons.Loader size={64} className="mb-4 animate-spin text-primary" />
         <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
         <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
       </div>
@@ -303,7 +316,7 @@ export function CreateNewPlanPage({
                 ),
               )}
             />
-            <PlanDisplayLink id={plan.id} />
+            <PlanDisplayLink />
           </div>
 
           <p className="text-xs text-muted-foreground">
@@ -313,7 +326,9 @@ export function CreateNewPlanPage({
         </div>
 
         <div className="w-full">
-          <Label htmlFor="faculty">Wydział</Label>
+          <Label htmlFor="faculty" className="mb-1">
+            Wydział
+          </Label>
           <Select
             name="faculty"
             onValueChange={(v) => {
@@ -321,7 +336,7 @@ export function CreateNewPlanPage({
             }}
           >
             <SelectTrigger className="pl-2" disabled={registrations.isLoading}>
-              <SelectValue placeholder="Wydział" />
+              <SelectValue placeholder="Wybierz swój wydział" />
             </SelectTrigger>
             <SelectContent className="max-w-full">
               {faculties.map((f) => (
@@ -488,6 +503,74 @@ export function CreateNewPlanPage({
           )}
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="w-full md:max-w-[1620px]">
+          <DialogHeader>
+            <DialogTitle>Udostępnij swój plan</DialogTitle>
+            <DialogDescription className="text-balance">
+              Możesz udostępnij link do swojego planu, aby inni mogli go
+              zobaczyć lub pobrać w formacie .png
+            </DialogDescription>
+          </DialogHeader>
+          <div className="relative max-h-[700px] overflow-y-auto">
+            <div
+              ref={captureRef}
+              className="flex flex-col gap-2 bg-background p-1"
+            >
+              {[
+                { day: Day.MONDAY, label: "Poniedziałek" },
+                { day: Day.TUESDAY, label: "Wtorek" },
+                { day: Day.WEDNESDAY, label: "Środa" },
+                { day: Day.THURSDAY, label: "Czwartek" },
+                { day: Day.FRIDAY, label: "Piątek" },
+              ].map(({ day, label }) => (
+                <ClassSchedule
+                  key={day}
+                  day={label}
+                  isReadonly={true}
+                  selectedGroups={[]}
+                  groups={plan.allGroups.filter(
+                    (g) => g.day === day && g.isChecked,
+                  )}
+                  onSelectGroup={(groupdId) => {
+                    plan.selectGroup(groupdId);
+                  }}
+                />
+              ))}
+              {[
+                { day: Day.SATURDAY, label: "Sobota" },
+                { day: Day.SUNDAY, label: "Niedziela" },
+              ].map(
+                ({ day, label }) =>
+                  plan.allGroups.some((g) => g.day === day) && (
+                    <ClassSchedule
+                      key={day}
+                      day={label}
+                      isReadonly={true}
+                      selectedGroups={[]}
+                      groups={plan.allGroups.filter(
+                        (g) => g.day === day && g.isChecked,
+                      )}
+                    />
+                  ),
+              )}
+            </div>
+          </div>
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 100, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              className="absolute bottom-6 right-8 z-20 flex items-center gap-2 rounded-full border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px]"
+            >
+              <DownloadPlanButton plan={plan} captureRef={captureRef} />
+
+              <SharePlanButton plan={plan} />
+            </motion.div>
+          </AnimatePresence>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

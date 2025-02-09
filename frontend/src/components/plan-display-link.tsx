@@ -1,26 +1,25 @@
-import { FolderSearch } from "lucide-react";
-import Link from "next/link";
-
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useShare } from "@/hooks/use-share";
 
+import { Icons } from "./icons";
 import { Button } from "./ui/button";
 
-export function PlanDisplayLink({ id }: { id: string }) {
+export function PlanDisplayLink() {
+  const { openDialog } = useShare();
+
   return (
     <Tooltip>
       <TooltipTrigger asChild={true}>
-        <Button asChild={true} size="icon" className="min-w-10">
-          <Link href={`/plans/preview/${id}`}>
-            <FolderSearch className="size-4" />
-          </Link>
+        <Button size="icon" className="min-w-10" onClick={openDialog}>
+          <Icons.Share className="size-4" />
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Podgląd</p>
+        <p>Udostępnij</p>
       </TooltipContent>
     </Tooltip>
   );

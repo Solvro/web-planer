@@ -2,22 +2,28 @@
 
 import React from "react";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useFeedback } from "@/hooks/use-feedback";
 import { cn } from "@/lib/utils";
 
-export function FeedbackButton() {
+export function FeedbackButton({
+  ghost = false,
+  className,
+}: {
+  ghost?: boolean;
+  className?: string;
+}) {
   const { openDialog } = useFeedback();
 
   return (
-    <button
-      className={cn(
-        buttonVariants({ variant: "link" }),
-        "mr-2 hidden text-white md:flex",
-      )}
+    <Button
+      variant={ghost ? "ghost" : "outline"}
+      className={cn(className, {
+        "hover:bg-blue-200/40 dark:hover:bg-white/5": ghost,
+      })}
       onClick={openDialog}
     >
-      <span className="text-nowrap">Zgłoś błąd</span>
-    </button>
+      Zgłoś błąd
+    </Button>
   );
 }

@@ -18,6 +18,9 @@ export default class Schedule extends BaseModel {
   @column()
   declare userId: number;
 
+  @column()
+  declare sharedId: string | null;
+
   @manyToMany(() => Group, {
     localKey: "id",
     pivotForeignKey: "schedule_id",

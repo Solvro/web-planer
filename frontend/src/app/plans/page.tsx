@@ -10,6 +10,7 @@ export interface PlanResponseDataType {
   id: number;
   userId: number;
   name: string;
+  sharedId: string | null;
   createdAt: string;
   updatedAt: string;
   courses: ExtendedCourse[];

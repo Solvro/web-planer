@@ -5,6 +5,7 @@ import type React from "react";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { FeedbackProvider } from "@/hooks/use-feedback";
+import { ShareProvider } from "@/hooks/use-share";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,9 +19,11 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <TooltipProvider delayDuration={0}>
       <FeedbackProvider>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <ShareProvider>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </ShareProvider>
       </FeedbackProvider>
     </TooltipProvider>
   );
