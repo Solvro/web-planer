@@ -37,7 +37,6 @@ export default class SchedulesController {
             void groupQuery
               .preload("lecturers")
               .where("isActive", true)
-              .orWhereNull("isActive")
               .whereExists((subQuery) =>
                 subQuery
                   .from("schedule_groups")
@@ -157,7 +156,6 @@ export default class SchedulesController {
         void groupQuery
           .preload("lecturers")
           .where("isActive", true)
-          .orWhereNull("isActive")
           .whereExists((subQuery) =>
             subQuery
               .from("schedule_groups")

@@ -170,6 +170,7 @@ export function CreateNewPlanPage({
         duration: 10_000,
       });
     }
+    setSyncing(false);
   };
 
   const handleUpdateLocalPlan = async () => {

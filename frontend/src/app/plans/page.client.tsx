@@ -89,6 +89,7 @@ export function PlansPage({
           if (plans.some((p) => p.onlineId === plan.id.toString())) {
             return null;
           }
+          console.log("online plan", plan);
           return (
             <PlanItem
               key={plan.id}

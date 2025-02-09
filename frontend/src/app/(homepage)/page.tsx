@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { createUsosService } from "@/lib/usos";
 import { cn } from "@/lib/utils";
 
+import PWrLogoColor from "../../../public/assets/logo/pwr_color.png";
+import PWrLogoMono from "../../../public/assets/logo/pwr_mono.png";
 import HeroImageDark from "../../../public/assets/planer-dark.png";
 import HeroImageLight from "../../../public/assets/planer-light.png";
 
@@ -77,12 +79,15 @@ function AnimationLogo() {
     >
       <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
         <div className="mb-5 md:mb-0 md:mt-5">
-          <p className="text-4xl font-bold text-blue-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <p className="text-6xl font-bold text-blue-900 dark:text-white sm:text-5xl lg:text-7xl">
             SOLVRO
           </p>
         </div>
 
-        <a href="https://solvro.pwr.edu.pl/">
+        <a
+          href="https://solvro.pwr.edu.pl/"
+          className="flex items-center justify-center"
+        >
           <Image
             src="/assets/logo/logo_solvro_color.png"
             alt="Logo Koła Naukowego Solvro w kolorze"
@@ -94,7 +99,7 @@ function AnimationLogo() {
         </a>
 
         <div className="mb:mt-5">
-          <p className="text-4xl font-bold text-blue-900 dark:text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <p className="text-6xl font-bold text-blue-900 dark:text-white sm:text-5xl lg:text-7xl">
             PLANER
           </p>
         </div>
@@ -156,7 +161,7 @@ export default function Home() {
             <ModeToggle /> */}
       <section
         id="hero"
-        className="relative mx-auto mt-56 max-w-[80rem] px-2 text-center md:px-6 md:px-8"
+        className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-56 md:px-8"
       >
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
           <AnimatedGradientText>
@@ -232,8 +237,13 @@ export default function Home() {
                 <li>
                   <img
                     alt="PWr"
-                    src="https://makroklaster.pl/wp-content/uploads/2022/04/logo-pwr.png"
-                    className="w-34 h-8 px-2 dark:brightness-100 dark:invert"
+                    src={PWrLogoMono.src}
+                    className="hidden h-8 w-40 px-2 dark:block dark:brightness-0 dark:invert"
+                  />
+                  <img
+                    alt="PWr"
+                    src={PWrLogoColor.src}
+                    className="block h-8 w-40 px-2 dark:hidden"
                   />
                 </li>
                 <li>
