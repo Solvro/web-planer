@@ -85,7 +85,8 @@ export function Navbar() {
         </nav>
 
         {/* Mobile Menu Icon */}
-        <div className="flex h-20 items-center md:hidden">
+        <div className="flex h-20 items-center gap-1 md:hidden">
+          <ModeToggle />
           <Button onClick={toggleMenu} size={"icon"} variant={"outline"}>
             {isMenuOpen ? (
               <Icons.X className="!size-6" />
