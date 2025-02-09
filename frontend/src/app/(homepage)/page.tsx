@@ -188,8 +188,8 @@ export default function Home() {
           </div>
           <h3 className="text-center text-sm font-medium text-amber-950 dark:text-white">
             Planer jest narzędziem tylko układającym plany,
-            <br className="block md:hidden" />
-            zapisy należy wykonać własnoręcznie w USOS
+            <br className="block md:hidden" /> zapisy należy wykonać
+            własnoręcznie w USOS
           </h3>
         </div>
         <Suspense

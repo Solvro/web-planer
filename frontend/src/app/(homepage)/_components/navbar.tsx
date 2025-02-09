@@ -104,7 +104,7 @@ export function Navbar() {
               exit={{ opacity: 0, y: -400 }}
               className="absolute left-0 top-full w-full bg-background shadow-lg md:hidden"
             >
-              <ul className="flex flex-col gap-4 p-4 text-center uppercase text-white">
+              <ul className="flex flex-col gap-4 p-4 text-center uppercase text-black dark:text-white">
                 <li className="p-2">
                   <Link href="https://www.facebook.com/knsolvro">
                     Aktualności

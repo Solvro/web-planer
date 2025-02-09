@@ -106,7 +106,7 @@ export default async function RootLayout({
           <body className={cn(inter.className, "min-h-screen")}>
             <ThemeProvider
               attribute="class"
-              defaultTheme="light"
+              defaultTheme="system"
               enableSystem
               disableTransitionOnChange
             >
