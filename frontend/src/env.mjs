@@ -12,6 +12,7 @@ export const env = createEnv({
     FORMS_FIELD_EMAIL: z.string().default("entry.1234567890"),
     FORMS_FIELD_TITLE: z.string().default("entry.1234567890"),
     FORMS_FIELD_DESCRIPTION: z.string().default("entry.1234567890"),
+    GITHUB_TOKEN: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_API_URL: z.string().url(),
@@ -26,6 +27,7 @@ export const env = createEnv({
     FORMS_FIELD_EMAIL: process.env.FORMS_FIELD_EMAIL,
     FORMS_FIELD_TITLE: process.env.FORMS_FIELD_TITLE,
     FORMS_FIELD_DESCRIPTION: process.env.FORMS_FIELD_DESCRIPTION,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
   },
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });

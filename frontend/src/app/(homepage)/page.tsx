@@ -17,6 +17,7 @@ import PWrLogoColor from "../../../public/assets/logo/pwr_color.png";
 import PWrLogoMono from "../../../public/assets/logo/pwr_mono.png";
 import HeroImageDark from "../../../public/assets/planer-dark.png";
 import HeroImageLight from "../../../public/assets/planer-light.png";
+import { GithubRepo } from "./_components/github-repo";
 
 const features = [
   {
@@ -113,6 +114,8 @@ const JoinUsBlock = async () => {
     const usos = await createUsosService();
     await usos.getProfile();
 
+    throw new Error("User is logged in");
+
     return (
       <div className="flex items-center justify-center gap-3">
         <Button
@@ -128,7 +131,7 @@ const JoinUsBlock = async () => {
     );
   } catch {
     return (
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
         <Button
           className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
           asChild={true}
@@ -222,6 +225,13 @@ export default function Home() {
             />
           </div>
         </div>
+        <Particles
+          className="absolute inset-0 -z-10 animate-fade-up opacity-0 [--animation-delay:400ms]"
+          quantity={80}
+          ease={40}
+          color={"#2f81f5"}
+          refresh
+        />
       </section>
       <section
         id="clients"
@@ -362,13 +372,13 @@ export default function Home() {
         </div>
       </section>
 
-      <Particles
-        className="absolute inset-0 -z-10 animate-fade-up opacity-0 [--animation-delay:400ms]"
-        quantity={80}
-        ease={40}
-        color={"#2f81f5"}
-        refresh
-      />
+      <section>
+        <div className="container relative mx-auto max-w-7xl px-4 py-16">
+          <Suspense>
+            <GithubRepo />
+          </Suspense>
+        </div>
+      </section>
     </main>
   );
 }
