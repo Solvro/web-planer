@@ -3,6 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format, isEqual } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -517,7 +518,7 @@ export function CreateNewPlanPage({
           <div className="relative max-h-[700px] overflow-y-auto">
             <div
               ref={captureRef}
-              className="flex flex-col gap-2 bg-background p-1"
+              className="relative flex flex-col gap-2 bg-background p-1"
             >
               {[
                 { day: Day.MONDAY, label: "Poniedziałek" },
@@ -556,6 +557,20 @@ export function CreateNewPlanPage({
                     />
                   ),
               )}
+
+              <div className="absolute bottom-4 right-0 z-20 opacity-10">
+                <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-white md:w-1/4">
+                  <Image
+                    src={"/assets/logo/logo_solvro_mono.png"}
+                    alt="Solvro logo"
+                    width={70}
+                    height={70}
+                  />
+                  <h1 className="hidden text-3xl font-semibold md:block">
+                    Planer
+                  </h1>
+                </div>
+              </div>
             </div>
           </div>
           <AnimatePresence>
