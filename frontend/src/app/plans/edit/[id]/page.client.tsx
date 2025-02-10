@@ -559,10 +559,18 @@ export function CreateNewPlanPage({
               )}
 
               <div className="absolute bottom-4 right-0 z-20 opacity-10">
-                <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-white md:w-1/4">
+                <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-black dark:text-white md:w-1/4">
                   <Image
                     src={"/assets/logo/logo_solvro_mono.png"}
                     alt="Solvro logo"
+                    className="hidden dark:block"
+                    width={70}
+                    height={70}
+                  />
+                  <Image
+                    src={"/assets/logo/logo_solvro_color.png"}
+                    alt="Solvro logo"
+                    className="block dark:hidden"
                     width={70}
                     height={70}
                   />
