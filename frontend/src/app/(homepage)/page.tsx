@@ -391,8 +391,8 @@ export default function Home() {
                   src={"/assets/logo/topwr_logo.svg"}
                   alt={"ToPWR Logo"}
                   className="inline brightness-0 dark:invert"
-                  width={150}
-                  height={10}
+                  width={140}
+                  height={50}
                 />
               </h3>
               <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600 dark:text-slate-300">
