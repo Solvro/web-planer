@@ -114,8 +114,6 @@ const JoinUsBlock = async () => {
     const usos = await createUsosService();
     await usos.getProfile();
 
-    throw new Error("User is logged in");
-
     return (
       <div className="flex items-center justify-center gap-3">
         <Button
@@ -160,30 +158,30 @@ const JoinUsBlock = async () => {
 export default function Home() {
   return (
     <main className="mx-auto flex-1 overflow-hidden">
-      {/* <Button>Click me</Button>
-            <ModeToggle /> */}
       <section
         id="hero"
         className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-56 md:px-8"
       >
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
-          <AnimatedGradientText>
-            <Image
-              src={"/assets/logo/topwr_logo.svg"}
-              alt={"ToPWR Logo"}
-              className="inline"
-              width={60}
-              height={10}
-            />{" "}
-            <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
-            <span
-              className={cn(
-                `inline animate-gradient text-balance bg-gradient-to-r from-[#ffd5a2] via-[#cea1ff] to-[#ffd5a2] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent dark:from-[#ffaa40] dark:via-[#9c40ff] dark:to-[#ffaa40]`,
-              )}
-            >
-              Obowiązkowa apka dla każdego studenta!
-            </span>
-          </AnimatedGradientText>
+          <Link href="#topwr">
+            <AnimatedGradientText>
+              <Image
+                src={"/assets/logo/topwr_logo.svg"}
+                alt={"ToPWR Logo"}
+                className="inline"
+                width={60}
+                height={10}
+              />{" "}
+              <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
+              <span
+                className={cn(
+                  `inline animate-gradient text-balance bg-gradient-to-r from-[#ffd5a2] via-[#cea1ff] to-[#ffd5a2] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent dark:from-[#ffaa40] dark:via-[#9c40ff] dark:to-[#ffaa40]`,
+                )}
+              >
+                Obowiązkowa apka dla każdego studenta!
+              </span>
+            </AnimatedGradientText>
+          </Link>
         </div>
         <AnimationLogo />
         <p className="mb-2 translate-y-[-1rem] animate-fade-in-2 text-balance text-lg tracking-tight text-muted-foreground opacity-0 [--animation-delay:400ms] md:text-xl">
@@ -377,6 +375,55 @@ export default function Home() {
           <Suspense>
             <GithubRepo />
           </Suspense>
+        </div>
+      </section>
+
+      <section className="bg-background" id="topwr">
+        <div className="rounded-xl bg-orange-500/20 py-16 dark:bg-orange-500/10">
+          <div className="container relative mx-auto max-w-7xl px-4 py-16">
+            <div className="mx-auto space-y-4 pb-6 text-center">
+              <h2 className="font-mono text-sm font-medium uppercase tracking-wider text-orange-600">
+                jesteś studentem politechniki wrocławskiej?
+              </h2>
+              <h3 className="mx-auto mt-4 max-w-xs text-3xl font-bold sm:max-w-none sm:text-4xl md:text-5xl">
+                Koniecznie zainstaluj aplikację{" "}
+                <Image
+                  src={"/assets/logo/topwr_logo.svg"}
+                  alt={"ToPWR Logo"}
+                  className="inline brightness-0 dark:invert"
+                  width={140}
+                  height={50}
+                />
+              </h3>
+              <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600 dark:text-slate-300">
+                Znajdziesz w niej wszystkie potrzebne informacje o parkingach,
+                menu w SKS, mapie kampusu i wiele więcej.
+              </p>
+            </div>
+
+            <div className="flex w-full flex-col items-center justify-center space-y-4 pt-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+              <div className="mt-4 flex items-center gap-2">
+                <Link href="https://play.google.com/store/apps/details?id=com.solvro.topwr">
+                  <Image
+                    src={"/assets/google_play.png"}
+                    alt={"Download on google play"}
+                    width={300}
+                    height={50}
+                    className="w-[160px]"
+                  />
+                </Link>
+                <Link href="https://apps.apple.com/us/app/topwr/id1644647395">
+                  <Image
+                    src={"/assets/apple_store.png"}
+                    alt={"Download on google play"}
+                    width={300}
+                    height={50}
+                    className="w-[144px]"
+                  />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>

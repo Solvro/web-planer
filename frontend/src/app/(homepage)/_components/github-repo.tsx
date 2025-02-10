@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Icons } from "@/components/icons";
 import { AvatarCircles } from "@/components/magicui/avatars";
 import { Button } from "@/components/ui/button";
@@ -89,11 +91,14 @@ export async function GithubRepo() {
         <Button
           className="group mt-4 bg-primary text-white ring-amber-500 ring-offset-2 transition-all hover:bg-blue-600 hover:ring-2 dark:bg-white dark:text-black dark:hover:bg-slate-200"
           size={"lg"}
+          asChild
         >
-          <Icons.Github className="size-4" />
-          Walnij nam gwiazdkę
-          <Icons.StarFilledIcon className="text-slate-300 transition-all group-hover:text-amber-500 dark:text-slate-600" />
-          {stars}
+          <Link href="https://github.com/Solvro/web-planer" target="_blank">
+            <Icons.Github className="size-4" />
+            Walnij nam gwiazdkę
+            <Icons.StarFilledIcon className="text-slate-300 transition-all group-hover:text-amber-500 dark:text-slate-600" />
+            {stars}
+          </Link>
         </Button>
       </div>
     </>
