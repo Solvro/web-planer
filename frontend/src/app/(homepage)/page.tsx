@@ -160,7 +160,7 @@ export default function Home() {
     <main className="mx-auto flex-1 overflow-hidden">
       <section
         id="hero"
-        className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-56 md:px-8"
+        className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-40 md:px-8 lg:mt-56"
       >
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
           <Link href="#topwr">
