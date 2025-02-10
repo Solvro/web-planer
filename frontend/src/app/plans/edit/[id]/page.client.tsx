@@ -507,7 +507,7 @@ export function CreateNewPlanPage({
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-full md:max-w-[1620px]">
+        <DialogContent className="h-full max-h-[90%] w-full md:max-w-[1620px]">
           <DialogHeader>
             <DialogTitle>Udostępnij swój plan</DialogTitle>
             <DialogDescription className="text-balance">
@@ -515,7 +515,7 @@ export function CreateNewPlanPage({
               zobaczyć lub pobrać w formacie .png
             </DialogDescription>
           </DialogHeader>
-          <div className="relative max-h-[700px] overflow-y-auto">
+          <div className="relative h-full max-h-[700px] overflow-y-auto">
             <div
               ref={captureRef}
               className="relative flex flex-col gap-2 bg-background p-1"
@@ -586,7 +586,7 @@ export function CreateNewPlanPage({
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 100, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
-              className="absolute bottom-6 right-8 z-20 flex items-center gap-2 rounded-full border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px]"
+              className="absolute bottom-6 right-8 z-20 flex flex-col items-center gap-2 rounded-xl border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px] md:flex-row md:rounded-full"
             >
               <DownloadPlanButton plan={plan} captureRef={captureRef} />
 
