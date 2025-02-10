@@ -1,6 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -34,16 +39,41 @@ function Logo() {
   );
 }
 
+const parentVariants = {
+  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: "-4rem" },
+};
+
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openDialog } = useFeedback();
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+  const [previousScroll, setPreviousScroll] = useState(0);
+
+  function update(latest: number, previous: number): void {
+    if (latest < previous) {
+      setHidden(false);
+    } else if (latest > 100 && latest > previous) {
+      setHidden(true);
+    }
+  }
+
+  useMotionValueEvent(scrollY, "change", (latest: number) => {
+    update(latest, previousScroll);
+    setPreviousScroll(latest);
+  });
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50 h-20 border-b border-blue-900/20 bg-blue-100/50 backdrop-blur-[12px] dark:bg-blue-100/5">
+    <motion.div
+      animate={hidden ? "hidden" : "visible"}
+      variants={parentVariants}
+      className="fixed inset-x-0 top-0 z-50 h-20 border-b border-blue-900/20 bg-blue-100/50 backdrop-blur-[12px] dark:bg-blue-100/5"
+    >
       <div className="container mx-auto flex items-center justify-between px-6 md:px-20">
         <Logo />
 
@@ -132,6 +162,6 @@ export function Navbar() {
           ) : null}
         </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 }
