@@ -137,7 +137,12 @@ export default class Scraper extends BaseCommand {
             return { url, groups: [] };
           });
           const updatedCourse = await Course.updateOrCreate(
-            { id: courseCodeNameGroupsUrls.courseCode },
+            {
+              id:
+                courseCodeNameGroupsUrls.courseCode +
+                (extractLastStringInBrackets(registration.name) ??
+                  registration.name),
+            },
             {
               name: course.name,
               registrationId:
@@ -224,7 +229,10 @@ export default class Scraper extends BaseCommand {
                 week: details.week,
                 day: details.day.slice(0, 255),
                 type: details.type.slice(0, 255),
-                courseId: course.courseCode.slice(0, 255),
+                courseId:
+                  course.courseCode.slice(0, 255) +
+                  (extractLastStringInBrackets(registration.name) ??
+                    registration.name),
               },
               {
                 name: details.name.slice(0, 255),
@@ -234,7 +242,10 @@ export default class Scraper extends BaseCommand {
                 week: details.week,
                 day: details.day.slice(0, 255),
                 type: details.type.slice(0, 255),
-                courseId: course.courseCode.slice(0, 255),
+                courseId:
+                  course.courseCode.slice(0, 255) +
+                  (extractLastStringInBrackets(registration.name) ??
+                    registration.name),
                 spotsOccupied: details.spotsOccupied,
                 spotsTotal: details.spotsTotal,
                 url: url.slice(0, 255),
