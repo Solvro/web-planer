@@ -3,9 +3,15 @@
 import { cookies as cookiesPromise } from "next/headers";
 
 import { env } from "@/env.mjs";
+import { fetchToAdonis } from "@/lib/auth";
 
 export const signOutFunction = async () => {
   const cookies = await cookiesPromise();
+  await fetchToAdonis({
+    url: `${env.NEXT_PUBLIC_API_URL}/user/logout`,
+    method: "DELETE",
+  });
+
   cookies.delete({
     name: "access_token",
     path: "/",
@@ -22,8 +28,10 @@ export const signOutFunction = async () => {
     name: "token",
     path: "/",
   });
-
-  await fetch(`${env.NEXT_PUBLIC_API_URL}/user/logout`, { method: "DELETE" });
+  cookies.delete({
+    name: "XSRF-TOKEN",
+    path: "/",
+  });
 
   return true;
 };

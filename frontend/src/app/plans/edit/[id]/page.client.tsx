@@ -36,9 +36,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { env } from "@/env.mjs";
 import { useSession } from "@/hooks/use-session";
 import { useShare } from "@/hooks/use-share";
+import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
 import { createOnlinePlan } from "@/lib/utils/create-online-plan";
@@ -79,9 +79,10 @@ export function CreateNewPlanPage({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
     queryFn: async () => {
-      const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${encodeURIComponent(faculty ?? "")}/registrations`,
-      );
+      const response = await fetchClient({
+        url: `/departments/${encodeURIComponent(faculty ?? "")}/registrations`,
+        method: "GET",
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -116,9 +117,10 @@ export function CreateNewPlanPage({
   const coursesFunction = useMutation({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
-      const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${encodeURIComponent(faculty ?? "")}/registrations/${encodeURIComponent(registrationId)}/courses`,
-      );
+      const response = await fetchClient({
+        url: `/departments/${encodeURIComponent(faculty ?? "")}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        method: "GET",
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

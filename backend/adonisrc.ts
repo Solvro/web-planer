@@ -43,6 +43,7 @@ export default defineConfig({
       environment: ["console"],
     },
     () => import("@adonisjs/mail/mail_provider"),
+    () => import("@adonisjs/shield/shield_provider"),
   ],
 
   /*
