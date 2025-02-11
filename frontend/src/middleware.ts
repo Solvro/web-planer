@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     default-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com https://fonts.gstatic.com ${process.env.NODE_ENV === "development" ? "'unsafe-eval'" : ""};
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${process.env.NODE_ENV === "development" ? "'unsafe-eval'" : ""} https://analytics.solvro.pl;
     style-src 'self' 'nonce-${nonce}';
-    img-src 'self' blob: data: https://avatars.githubusercontent.com https://wit.pwr.edu.pl https://cms.solvro.pl;
+    img-src 'self' blob: data: https://avatars.githubusercontent.com https://wit.pwr.edu.pl https://cms.solvro.pl https://apps.usos.pwr.edu.pl;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
