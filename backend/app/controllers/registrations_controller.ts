@@ -13,8 +13,9 @@ export default class RegistrationsController {
     const departmentId = params.department_id as unknown;
 
     if (typeof departmentId === "string") {
+      const tmpDepId = decodeURIComponent(departmentId);
       return Registration.query()
-        .where("departmentId", departmentId)
+        .where("departmentId", tmpDepId)
         .andWhere("isActive", true)
         .orWhereNull("isActive");
     }

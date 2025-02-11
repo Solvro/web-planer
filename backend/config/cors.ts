@@ -10,7 +10,7 @@ import env from "#start/env";
  */
 const corsConfig = defineConfig({
   enabled: true,
-  origin: env.get("CORS_ORIGIN", "planer.solvro.pl").split(","), // ["http://localhost:3000", "http://localhost:8080"]
+  origin: true,
   methods: ["GET", "HEAD", "POST", "PUT", "DELETE"],
   headers: true,
   exposeHeaders: [],
