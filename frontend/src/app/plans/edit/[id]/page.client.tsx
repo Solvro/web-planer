@@ -76,11 +76,11 @@ export function CreateNewPlanPage({
   const plan = usePlan({ planId });
 
   const registrations = useQuery({
-    enabled: faculty !== null,
+    enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty ?? ""}/registrations`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${encodeURIComponent(faculty ?? "")}/registrations`,
       );
 
       if (!response.ok) {
@@ -117,7 +117,7 @@ export function CreateNewPlanPage({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/departments/${faculty?.toString() ?? ""}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        `${env.NEXT_PUBLIC_API_URL}/departments/${encodeURIComponent(faculty ?? "")}/registrations/${encodeURIComponent(registrationId)}/courses`,
       );
 
       if (!response.ok) {
