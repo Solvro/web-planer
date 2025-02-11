@@ -29,6 +29,7 @@ export async function GET() {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
+    sameSite: "strict",
   });
 
   cookies.set("oauth_token_secret", token.secret, {
@@ -36,6 +37,7 @@ export async function GET() {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
+    sameSite: "strict",
   });
 
   return redirect(

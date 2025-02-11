@@ -79,8 +79,17 @@ export function CreateNewPlanPage({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
     queryFn: async () => {
+      const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1];
       const response = await fetch(
         `${env.NEXT_PUBLIC_API_URL}/departments/${encodeURIComponent(faculty ?? "")}/registrations`,
+        {
+          headers: {
+            "X-XSRF-TOKEN": csrfToken ?? "",
+          },
+        },
       );
 
       if (!response.ok) {
@@ -116,8 +125,17 @@ export function CreateNewPlanPage({
   const coursesFunction = useMutation({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
+      const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1];
       const response = await fetch(
         `${env.NEXT_PUBLIC_API_URL}/departments/${encodeURIComponent(faculty ?? "")}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        {
+          headers: {
+            "X-XSRF-TOKEN": csrfToken ?? "",
+          },
+        },
       );
 
       if (!response.ok) {

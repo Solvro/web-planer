@@ -92,6 +92,8 @@ export async function getRequestToken() {
   };
 }
 
+const ADONIS_COOKIES = new Set(["token", "adonis-session"]);
+
 export const auth = async (tokens?: {
   token?: string | undefined;
   secret?: string | undefined;
@@ -139,14 +141,27 @@ export const auth = async (tokens?: {
       for (const cookie of setCookieHeaders) {
         const preparedCookie = cookie.split(";")[0];
         const [name, value] = preparedCookie.split("=");
-        cookies.set({
-          name,
-          value,
-          path: "/",
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true,
-          secure: true,
-        });
+        if (name === "XSRF-TOKEN") {
+          cookies.set({
+            name,
+            value,
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: false,
+            secure: true,
+            sameSite: "strict",
+          });
+        } else if (ADONIS_COOKIES.has(name)) {
+          cookies.set({
+            name,
+            value,
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+          });
+        }
       }
     } catch {}
 
@@ -178,6 +193,7 @@ export const fetchToAdonis = async <T>({
       headers: {
         "Content-Type": "application/json",
         Cookie: `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`,
+        "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
       },
       credentials: "include",
     };

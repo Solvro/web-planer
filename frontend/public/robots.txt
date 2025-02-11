@@ -2,6 +2,11 @@
 User-agent: *
 Allow: /
 
+# *
+User-agent: *
+Disallow: /plans
+Disallow: /api
+
 # Host
 Host: https://planer.solvro.pl
 

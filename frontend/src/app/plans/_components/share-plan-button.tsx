@@ -34,10 +34,15 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
     const randomUUID = uuidv4();
 
     try {
+      const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1];
       const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/shared`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-XSRF-TOKEN": csrfToken ?? "",
         },
         body: JSON.stringify({
           plan: JSON.stringify(preparedData),

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies as cookiesPromise } from "next/headers";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -24,9 +25,18 @@ export default async function CreateNewPlan({ params }: PageProps) {
   if (typeof id !== "string" || id.length === 0) {
     return notFound();
   }
+  const cookies = await cookiesPromise();
 
+  const csrfToken = cookies.get("XSRF-TOKEN")?.value;
   const facultiesResponse = await fetch(
     `${env.NEXT_PUBLIC_API_URL}/departments`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": csrfToken ?? "",
+      },
+    },
   ).then(
     async (r) => r.json() as Promise<{ id: string; name: string }[] | null>,
   );
