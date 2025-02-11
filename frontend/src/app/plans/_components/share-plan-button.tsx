@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
+import { fetchClient } from "@/lib/fetch";
 import type { PlanState } from "@/types";
 
 export function SharePlanButton({ plan }: { plan: PlanState }) {
@@ -34,16 +35,9 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
     const randomUUID = uuidv4();
 
     try {
-      const csrfToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("XSRF-TOKEN="))
-        ?.split("=")[1];
-      const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/shared`, {
+      const response = await fetchClient({
+        url: "/shared",
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-XSRF-TOKEN": csrfToken ?? "",
-        },
         body: JSON.stringify({
           plan: JSON.stringify(preparedData),
           id: randomUUID,
