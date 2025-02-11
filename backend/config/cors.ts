@@ -1,7 +1,5 @@
 import { defineConfig } from "@adonisjs/cors";
 
-import env from "#start/env";
-
 /**
  * Configuration options to tweak the CORS policy. The following
  * options are documented on the official documentation website.
