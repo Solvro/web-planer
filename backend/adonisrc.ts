@@ -1,4 +1,4 @@
-import { defineConfig } from "@adonisjs/core/app"
+import { defineConfig } from "@adonisjs/core/app";
 
 export default defineConfig({
   /*
@@ -43,7 +43,7 @@ export default defineConfig({
       environment: ["console"],
     },
     () => import("@adonisjs/mail/mail_provider"),
-    () => import('@adonisjs/shield/shield_provider')
+    () => import("@adonisjs/shield/shield_provider"),
   ],
 
   /*
@@ -80,4 +80,4 @@ export default defineConfig({
     ],
     forceExit: false,
   },
-})
+});
