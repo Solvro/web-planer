@@ -349,7 +349,7 @@ export default function Home() {
                 rozwiązanie
               </h2>
               <h3 className="mx-auto mt-4 max-w-xs text-3xl font-semibold sm:max-w-none sm:text-4xl md:text-5xl">
-                Ułóż swój wymażony plan z planerem!
+                Ułóż swój wymarzony plan z planerem!
               </h3>
               <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600">
                 Wybierz swój wydział, kierunek i już. Możesz ułożyć swój plan
