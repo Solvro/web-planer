@@ -220,42 +220,51 @@ export default class Scraper extends BaseCommand {
               }),
             );
 
-            const group = await Group.updateOrCreate(
-              {
-                name: details.name.slice(0, 255),
-                startTime: details.startTime.slice(0, 255),
-                endTime: details.endTime.slice(0, 255),
-                group: details.group.slice(0, 255),
-                week: details.week,
-                day: details.day.slice(0, 255),
-                type: details.type.slice(0, 255),
-                courseId:
-                  course.courseCode.slice(0, 255) +
-                  (extractLastStringInBrackets(registration.name) ??
-                    registration.name),
-              },
-              {
-                name: details.name.slice(0, 255),
-                startTime: details.startTime.slice(0, 255),
-                endTime: details.endTime.slice(0, 255),
-                group: details.group.slice(0, 255),
-                week: details.week,
-                day: details.day.slice(0, 255),
-                type: details.type.slice(0, 255),
-                courseId:
-                  course.courseCode.slice(0, 255) +
-                  (extractLastStringInBrackets(registration.name) ??
-                    registration.name),
-                spotsOccupied: details.spotsOccupied,
-                spotsTotal: details.spotsTotal,
-                url: url.slice(0, 255),
-                isActive: true,
-              },
-            );
+            for (const day of details.days) {
+              const group = await Group.updateOrCreate(
+                {
+                  name: details.name.slice(0, 255),
+                  startTime: details.startTimeEndTimes[
+                    details.days.indexOf(day)
+                  ].startTime.slice(0, 255),
+                  endTime: details.startTimeEndTimes[
+                    details.days.indexOf(day)
+                  ].endTime.slice(0, 255),
+                  group: details.group.slice(0, 255),
+                  week: details.week,
+                  day: day.slice(0, 255),
+                  type: details.type.slice(0, 255),
+                  courseId:
+                    course.courseCode.slice(0, 255) +
+                    (extractLastStringInBrackets(registration.name) ??
+                      registration.name),
+                },
+                {
+                  name: details.name.slice(0, 255),
+                  startTime: details.startTimeEndTimes[
+                    details.days.indexOf(day)
+                  ].startTime.slice(0, 255),
+                  endTime: details.startTimeEndTimes[
+                    details.days.indexOf(day)
+                  ].endTime.slice(0, 255),
+                  group: details.group.slice(0, 255),
+                  week: details.week,
+                  day: day.slice(0, 255),
+                  type: details.type.slice(0, 255),
+                  courseId:
+                    course.courseCode.slice(0, 255) +
+                    (extractLastStringInBrackets(registration.name) ??
+                      registration.name),
+                  spotsOccupied: details.spotsOccupied,
+                  spotsTotal: details.spotsTotal,
+                  url: url.slice(0, 255),
+                  isActive: true,
+                },
+              );
+              processedGroupIds.push(group.id);
 
-            processedGroupIds.push(group.id);
-
-            await group.related("lecturers").sync(lecturerIds);
+              await group.related("lecturers").sync(lecturerIds);
+            }
           }),
         );
       }
