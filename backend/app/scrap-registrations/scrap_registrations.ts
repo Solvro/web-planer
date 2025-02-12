@@ -225,6 +225,9 @@ const scrapGroupDetails = async (groupUrl: string) => {
   const type = giveGroupType(mainContent.find("h1").text().trim());
   const group = getGroupNumber(mainContent.find("h1").text());
 
+  const days = [] as string[];
+  const startTimeEndTimes = [] as { startTime: string; endTime: string }[];
+
   const dayWeek = mainContent
     .find("table")
     .find("tbody")
@@ -232,19 +235,21 @@ const scrapGroupDetails = async (groupUrl: string) => {
     .eq(2)
     .find("td")
     .eq(1);
+  dayWeek.children("div").each((_, element) => {
+    const day = checkDay($(element).text().trim());
+    const { startTime, endTime } = getStartEndTime($(element).text().trim());
+    if (
+      day !== "unknown" &&
+      startTime !== "error" &&
+      endTime !== "error" &&
+      startTime !== "00:00" &&
+      endTime !== "00:00"
+    ) {
+      days.push(day);
+      startTimeEndTimes.push({ startTime, endTime });
+    }
+  });
   const week = checkWeek(dayWeek.text());
-  const day = checkDay(dayWeek.text());
-  const { startTime, endTime } = getStartEndTime(
-    mainContent
-      .find("table")
-      .find("tbody")
-      .find("tr")
-      .eq(2)
-      .find("td")
-      .eq(1)
-      .text()
-      .trim(),
-  );
   const lecturer = mainContent
     .find("table")
     .find("tbody")
@@ -280,15 +285,13 @@ const scrapGroupDetails = async (groupUrl: string) => {
     .trim();
   const spotsOccupiedNumber = Number.parseInt(spotsOccupied, 10);
   const spotsTotalNumber = Number.parseInt(spotsTotal, 10);
-
   return {
     name,
     type,
     group,
     week,
-    day,
-    startTime,
-    endTime,
+    days,
+    startTimeEndTimes,
     lecturer,
     spotsOccupied: Number.isNaN(spotsOccupiedNumber) ? 0 : spotsOccupiedNumber,
     spotsTotal: Number.isNaN(spotsTotalNumber) ? 0 : spotsTotalNumber,
