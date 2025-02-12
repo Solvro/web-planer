@@ -79,13 +79,11 @@ function AnimationLogo() {
       className="flex animate-fade-in-2 content-center items-center justify-center text-center align-middle opacity-0 [--animation-delay:200ms] md:mt-10"
     >
       <div className="items-center justify-center gap-4 sm:gap-6 md:flex">
-        <div className="mb-5 md:mb-0 md:mt-5">
-          <p className="text-6xl font-bold text-blue-900 dark:text-white sm:text-5xl lg:text-7xl">
-            SOLVRO
-          </p>
-        </div>
+        <h1 className="mb-5 text-6xl font-bold text-blue-900 dark:text-white sm:text-5xl lg:text-7xl">
+          SOLVRO
+        </h1>
 
-        <a
+        <Link
           href="https://solvro.pwr.edu.pl/"
           className="flex items-center justify-center"
         >
@@ -97,13 +95,11 @@ function AnimationLogo() {
             className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
             unoptimized
           />
-        </a>
+        </Link>
 
-        <div className="mb:mt-5">
-          <p className="text-6xl font-bold text-blue-900 dark:text-white sm:text-5xl lg:text-7xl">
-            PLANER
-          </p>
-        </div>
+        <h1 className="mb-5 text-6xl font-bold text-blue-900 dark:text-white sm:text-5xl lg:text-7xl">
+          PLANER
+        </h1>
       </div>
     </Block>
   );
@@ -353,7 +349,7 @@ export default function Home() {
                 rozwiązanie
               </h2>
               <h3 className="mx-auto mt-4 max-w-xs text-3xl font-semibold sm:max-w-none sm:text-4xl md:text-5xl">
-                Ułóż swój wymażony plan z planerem!
+                Ułóż swój wymarzony plan z planerem!
               </h3>
               <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600">
                 Wybierz swój wydział, kierunek i już. Możesz ułożyć swój plan
