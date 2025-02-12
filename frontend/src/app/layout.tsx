@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
-import { headers } from "next/headers";
 import Script from "next/script";
 import type React from "react";
 
@@ -99,8 +98,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await auth({ disableThrow: true });
-  const headersList = await headers();
-  const nonce = headersList.get("x-nonce");
 
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
@@ -121,7 +118,6 @@ export default async function RootLayout({
               src="https://analytics.solvro.pl/script.js"
               data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
               data-domains="planer.solvro.pl"
-              nonce={nonce ?? undefined}
             />
             <Toaster richColors={true} />
           </body>
