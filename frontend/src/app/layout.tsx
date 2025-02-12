@@ -62,9 +62,9 @@ export const metadata: Metadata = {
     url: `https://planer.solvro.pl/`,
     images: [
       {
-        url: "/og-image.png",
-        width: 2360,
-        height: 1337,
+        url: "/og_image.png",
+        width: 2170,
+        height: 1064,
         alt: "Planer - utwórz swój plan zajęć na PWR!",
       },
     ],
