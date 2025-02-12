@@ -149,7 +149,7 @@ export const auth = async (tokens?: {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: false,
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
           });
         } else if (ADONIS_COOKIES.has(name)) {
           cookies.set({
@@ -159,7 +159,7 @@ export const auth = async (tokens?: {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
           });
         }
       }

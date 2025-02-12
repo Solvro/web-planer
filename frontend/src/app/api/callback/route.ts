@@ -74,14 +74,14 @@ export const GET = async (request: NextRequest) => {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "lax",
   });
   cookies.set("access_token_secret", access_token.secret, {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "lax",
   });
 
   await auth(tokens);
