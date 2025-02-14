@@ -50,6 +50,7 @@ import type { CourseType, FacultyType } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
+import { HideDaysSettings } from "./_components/hide-days-settings";
 import { OfflineAlert } from "./_components/offline-alert";
 import { SyncErrorAlert } from "./_components/sync-error-alert";
 import { SyncedButton } from "./_components/synced-button";
@@ -66,6 +67,7 @@ export function CreateNewPlanPage({
   const [faculty, setFaculty] = useState<string | null>(null);
   const { user } = useSession();
   const { isDialogOpen, setIsDialogOpen } = useShare();
+  const [hideDays, setHideDays] = useState(false);
 
   const firstTime = useRef(true);
   const captureRef = useRef<HTMLDivElement>(null);
@@ -219,6 +221,11 @@ export function CreateNewPlanPage({
   useEffect(() => {
     if (plan.onlineId === null && firstTime.current) {
       void handleCreateOnlinePlan();
+
+      const hideDaysSettings = localStorage.getItem("hideDays");
+      if (hideDaysSettings === "true") {
+        setHideDays(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan.onlineId]);
@@ -517,7 +524,8 @@ export function CreateNewPlanPage({
               zobaczyć lub pobrać w formacie .png
             </DialogDescription>
           </DialogHeader>
-          <div className="relative h-full max-h-[700px] overflow-y-auto">
+          <div className="relative h-full max-h-[800px] overflow-y-auto">
+            <HideDaysSettings hideDays={hideDays} setHideDays={setHideDays} />
             <div
               ref={captureRef}
               className="relative flex flex-col gap-2 bg-background p-1"
@@ -528,20 +536,23 @@ export function CreateNewPlanPage({
                 { day: Day.WEDNESDAY, label: "Środa" },
                 { day: Day.THURSDAY, label: "Czwartek" },
                 { day: Day.FRIDAY, label: "Piątek" },
-              ].map(({ day, label }) => (
-                <ClassSchedule
-                  key={day}
-                  day={label}
-                  isReadonly={true}
-                  selectedGroups={[]}
-                  groups={plan.allGroups.filter(
-                    (g) => g.day === day && g.isChecked,
-                  )}
-                  onSelectGroup={(groupdId) => {
-                    plan.selectGroup(groupdId);
-                  }}
-                />
-              ))}
+              ].map(
+                ({ day, label }) =>
+                  (!hideDays || plan.allGroups.some((g) => g.day === day)) && (
+                    <ClassSchedule
+                      key={day}
+                      day={label}
+                      isReadonly={true}
+                      selectedGroups={[]}
+                      groups={plan.allGroups.filter(
+                        (g) => g.day === day && g.isChecked,
+                      )}
+                      onSelectGroup={(groupdId) => {
+                        plan.selectGroup(groupdId);
+                      }}
+                    />
+                  ),
+              )}
               {[
                 { day: Day.SATURDAY, label: "Sobota" },
                 { day: Day.SUNDAY, label: "Niedziela" },
@@ -590,7 +601,11 @@ export function CreateNewPlanPage({
               exit={{ opacity: 0, y: -30 }}
               className="absolute bottom-6 right-8 z-20 flex flex-col items-center gap-2 rounded-xl border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px] md:flex-row md:rounded-full"
             >
-              <DownloadPlanButton plan={plan} captureRef={captureRef} />
+              <DownloadPlanButton
+                plan={plan}
+                captureRef={captureRef}
+                hideDays={hideDays}
+              />
 
               <SharePlanButton plan={plan} />
             </motion.div>
