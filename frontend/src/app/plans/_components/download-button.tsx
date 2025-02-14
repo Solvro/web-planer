@@ -10,9 +10,11 @@ import type { PlanState } from "@/types";
 export function DownloadPlanButton({
   captureRef,
   plan,
+  hideDays,
 }: {
   captureRef: React.RefObject<HTMLDivElement>;
   plan: PlanState;
+  hideDays: boolean;
 }) {
   const [loading, setLoading] = React.useState(false);
 
@@ -28,6 +30,10 @@ export function DownloadPlanButton({
       link.download = `${plan.name}.png`;
       link.href = dataUrl;
       link.click();
+
+      void window.umami?.track("Download plan", {
+        withHiddenDays: hideDays.toString(),
+      });
     } catch (error: unknown) {
       console.error(error);
     } finally {

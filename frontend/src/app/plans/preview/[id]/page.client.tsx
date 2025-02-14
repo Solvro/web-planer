@@ -25,7 +25,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const copyPlan = () => {
     const newPlan = {
       id: uuid,
-      courses: plan.courses,
+      ...plan,
     };
 
     void window.umami?.track("Create plan", {
@@ -35,7 +35,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
     setPlans([...plans, newPlan]);
     setPlanToCopy({
       ...planToCopy,
-      courses: plan.courses,
+      ...plan,
     });
 
     setTimeout(() => {
@@ -44,8 +44,8 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   };
 
   return (
-    <div className="flex grow flex-col">
-      <div className="container mx-auto flex items-center justify-between gap-4 px-14 py-4">
+    <div className="flex w-full grow flex-col overflow-x-auto">
+      <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4 md:px-14">
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 
         <div className="flex items-center gap-1">
@@ -62,7 +62,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
 
       <div
         ref={captureRef}
-        className="flex flex-col gap-2 overflow-auto bg-background p-1 scrollbar-thin scrollbar-track-sky-300 scrollbar-thumb-sky-900"
+        className="flex flex-col gap-2 overflow-auto bg-background p-1 scrollbar-thin"
       >
         {[
           { day: Day.MONDAY, label: "Poniedziałek" },
