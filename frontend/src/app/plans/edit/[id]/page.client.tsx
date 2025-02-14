@@ -221,11 +221,6 @@ export function CreateNewPlanPage({
   useEffect(() => {
     if (plan.onlineId === null && firstTime.current) {
       void handleCreateOnlinePlan();
-
-      const hideDaysSettings = localStorage.getItem("hideDays");
-      if (hideDaysSettings === "true") {
-        setHideDays(true);
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan.onlineId]);
@@ -396,7 +391,7 @@ export function CreateNewPlanPage({
                         .map((c) => ({
                           id: c.id,
                           name: c.name,
-                          isChecked: false,
+                          isChecked: true,
                           registrationId: c.registrationId,
                           type: c.groups.at(0)?.type ?? ("" as LessonType),
                           groups: c.groups.map(
@@ -538,7 +533,10 @@ export function CreateNewPlanPage({
                 { day: Day.FRIDAY, label: "Piątek" },
               ].map(
                 ({ day, label }) =>
-                  (!hideDays || plan.allGroups.some((g) => g.day === day)) && (
+                  (!hideDays ||
+                    plan.allGroups
+                      .filter((g) => g.isChecked)
+                      .some((g) => g.day === day)) && (
                     <ClassSchedule
                       key={day}
                       day={label}
