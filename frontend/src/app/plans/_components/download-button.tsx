@@ -39,7 +39,7 @@ export function DownloadPlanButton({
     } finally {
       setLoading(false);
     }
-  }, [captureRef, plan.name]);
+  }, [captureRef, hideDays, plan.name]);
 
   return (
     <Button
