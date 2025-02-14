@@ -28,6 +28,7 @@ export function HideDaysSettings({
         setHideDays(JSON.parse(hideDaysSett) as boolean);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="flex items-center justify-between gap-4 p-4">
