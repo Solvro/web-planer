@@ -317,32 +317,6 @@ export default class Scraper extends BaseCommand {
       WHERE "group_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_archive_lecturers" WHERE "group_archive_lecturers"."group_id" = "group_lecturers"."group_id");
       COMMIT;
     `);
-    //
-    //const currentGroups = await Group.all();
-    //
-    //const archivedGroups = await Promise.all(
-    //  chunkArray(currentGroups, QUERY_CHUNK_SIZE).map((chunk) =>
-    //    this.dbSemaphore.runTask(() =>
-    //      GroupArchive.updateOrCreateMany(
-    //        "id",
-    //        chunk.map((g) => g.$attributes),
-    //      ),
-    //    ),
-    //  ),
-    //).then((a) => a.flat());
-    //
-    //task.update("Synchronizing archived group lecturers");
-    //await Promise.all(
-    //  zip(currentGroups, archivedGroups).map(([group, groupArchive]) =>
-    //    this.dbSemaphore.runTask(async () => {
-    //      const lecturers = await group.related("lecturers").query();
-    //
-    //      await groupArchive
-    //        .related("lecturers")
-    //        .sync(lecturers.map((lecturer) => lecturer.id));
-    //    }),
-    //  ),
-    //);
   }
 
   async scrapeGroupsTask(task: TaskHandle) {
@@ -404,21 +378,26 @@ export default class Scraper extends BaseCommand {
     );
 
     // Then fetch/create their IDs from the DB
-    const lecturersToInsert = lecturerSet.map((lecturer) => {
-      const [name, ...surnameParts] = lecturer.split(" ");
-      const surname = surnameParts.join(" ");
-      return { name, surname };
-    });
-    const lecturersIds = await Promise.all(
-      chunkArray(lecturersToInsert, QUERY_CHUNK_SIZE).map((chunk) =>
-        this.dbSemaphore.runTask(() =>
-          Lecturer.fetchOrCreateMany(["name", "surname"], chunk),
+    // and collect it into a map
+    const lecturerMap = new Map<string, number>(
+      await Promise.all(
+        chunkArray(lecturerSet, QUERY_CHUNK_SIZE).map((chunk) =>
+          this.dbSemaphore.runTask(async () => {
+            return zip(
+              chunk,
+              await Lecturer.fetchOrCreateMany(
+                ["name", "surname"],
+                chunk.map((lecturer) => {
+                  const [name, ...surnameParts] = lecturer.split(" ");
+                  const surname = surnameParts.join(" ");
+                  return { name, surname };
+                }),
+              ).then((r) => r.map((l) => l.id)),
+            );
+          }),
         ),
-      ),
-    ).then((a) => a.flat().map((l) => l.id));
-
-    // Finally, create a map of lecturer name to ID
-    const lecturerMap = new Map(zip(lecturerSet, lecturersIds));
+      ).then((r) => r.flat(1)),
+    );
 
     task.update("Updating groups");
     const currentDate = DateTime.now();
@@ -500,14 +479,20 @@ export default class Scraper extends BaseCommand {
             )
             .merge(mergedProps)
             .returning("id")) as { id: number }[];
-          const updatedGroups = await Group.findMany(ids.map((i) => i.id));
-          return zip(updatedGroups, chunk).map(([group, { lecturers }]) => {
+          // thanks adonis for returning objects in an arbitrary order
+          const updatedGroups = new Map(
+            await Group.findMany(ids.map((i) => i.id)).then((l) =>
+              l.map((group) => [group.id, group]),
+            ),
+          );
+          const reorderedGroups = ids.map(({ id }) => {
+            const group = updatedGroups.get(id);
+            assert(group !== undefined);
+            return group;
+          });
+          return zip(reorderedGroups, chunk).map(([group, { lecturers }]) => {
             return { group, lecturers };
           });
-          //Group.updateOrCreateMany(
-          //  ["url", "startTime", "day", "week", "courseId"],
-          //  chunk,
-          //),
         }),
       ),
     ).then((a) => a.flat());
