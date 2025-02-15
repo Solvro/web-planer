@@ -9,7 +9,6 @@ import db from "@adonisjs/lucid/services/db";
 import Course from "#models/course";
 import Department from "#models/department";
 import Group from "#models/group";
-import GroupArchive from "#models/group_archive";
 import Lecturer from "#models/lecturer";
 import Registration from "#models/registration";
 
@@ -285,33 +284,65 @@ export default class Scraper extends BaseCommand {
     );
   }
 
-  async synchronizeArchivesTask(task: TaskHandle) {
-    task.update("Synchronizing archived groups");
-    const currentGroups = await Group.all();
-
-    const archivedGroups = await Promise.all(
-      chunkArray(currentGroups, QUERY_CHUNK_SIZE).map((chunk) =>
-        this.dbSemaphore.runTask(() =>
-          GroupArchive.updateOrCreateMany(
-            "id",
-            chunk.map((g) => g.$attributes),
-          ),
-        ),
-      ),
-    ).then((a) => a.flat());
-
-    task.update("Synchronizing archived group lecturers");
-    await Promise.all(
-      zip(currentGroups, archivedGroups).map(([group, groupArchive]) =>
-        this.dbSemaphore.runTask(async () => {
-          const lecturers = await group.related("lecturers").query();
-
-          await groupArchive
-            .related("lecturers")
-            .sync(lecturers.map((lecturer) => lecturer.id));
-        }),
-      ),
-    );
+  async synchronizeArchivesTask(_task: TaskHandle) {
+    //task.update("Synchronizing archived groups");
+    await db.rawQuery(`
+      BEGIN;
+      -- Update the groups table
+      INSERT INTO "groups_archive" ("id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active")
+      SELECT "id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active" FROM "groups"
+      ON CONFLICT ("id") DO UPDATE SET
+      "name" = EXCLUDED."name",
+      "start_time" = EXCLUDED."start_time",
+      "end_time" = EXCLUDED."end_time",
+      "group" = EXCLUDED."group",
+      "week" = EXCLUDED."week",
+      "day" = EXCLUDED."day",
+      "type" = EXCLUDED."type",
+      "url" = EXCLUDED."url",
+      "course_id" = EXCLUDED."course_id",
+      "updated_at" = EXCLUDED."updated_at",
+      "spots_occupied" = EXCLUDED."spots_occupied",
+      "spots_total" = EXCLUDED."spots_total",
+      "is_active" = EXCLUDED."is_active";
+      -- Delete unlinked lecturers
+      DELETE FROM "group_archive_lecturers"
+      USING "group_lecturers", "groups"
+      WHERE "group_archive_lecturers"."group_id" IN (SELECT "id" FROM "groups")
+      AND "group_archive_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_lecturers" WHERE "group_lecturers"."group_id" = "group_archive_lecturers"."group_id");
+      -- Insert new lecturers
+      INSERT INTO "group_archive_lecturers" ("group_id", "lecturer_id", "created_at", "updated_at")
+      SELECT "group_id", "lecturer_id", "created_at", "updated_at"
+      FROM "group_lecturers"
+      WHERE "group_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_archive_lecturers" WHERE "group_archive_lecturers"."group_id" = "group_lecturers"."group_id");
+      COMMIT;
+    `);
+    //
+    //const currentGroups = await Group.all();
+    //
+    //const archivedGroups = await Promise.all(
+    //  chunkArray(currentGroups, QUERY_CHUNK_SIZE).map((chunk) =>
+    //    this.dbSemaphore.runTask(() =>
+    //      GroupArchive.updateOrCreateMany(
+    //        "id",
+    //        chunk.map((g) => g.$attributes),
+    //      ),
+    //    ),
+    //  ),
+    //).then((a) => a.flat());
+    //
+    //task.update("Synchronizing archived group lecturers");
+    //await Promise.all(
+    //  zip(currentGroups, archivedGroups).map(([group, groupArchive]) =>
+    //    this.dbSemaphore.runTask(async () => {
+    //      const lecturers = await group.related("lecturers").query();
+    //
+    //      await groupArchive
+    //        .related("lecturers")
+    //        .sync(lecturers.map((lecturer) => lecturer.id));
+    //    }),
+    //  ),
+    //);
   }
 
   async scrapeGroupsTask(task: TaskHandle) {
