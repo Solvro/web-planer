@@ -3,23 +3,23 @@ import React, { Suspense } from "react";
 
 import { SolvroLogo } from "@/components/solvro-logo";
 import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
 import { createUsosService } from "@/lib/usos";
 
 import { FeedbackButton } from "./feedback-button";
+import { SidebarTriggerButton } from "./sidebar-trigger-button";
 
 export function PlansTopbar() {
   return (
-    <div className="fixed inset-x-0 left-0 top-0 z-30 flex w-full items-center justify-between bg-mainbutton7/80 py-4 shadow-sm backdrop-blur-[12px] dark:border-b dark:bg-white/5">
+    <div className="fixed inset-x-0 left-0 top-0 z-30 flex w-full items-center justify-between bg-mainbutton7 py-4 shadow-sm backdrop-blur-[12px] dark:border-b dark:bg-white/5">
       <div className="flex w-full items-center justify-between md:container md:mx-auto">
         <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-white md:w-1/4">
           <SolvroLogo />
           <h1 className="hidden text-2xl font-semibold md:block">Planer</h1>
         </div>
         <div className="mr-4 flex w-1/4 items-center justify-end">
-          <SidebarTrigger className="mr-2 min-w-7 md:mr-0" />
+          <SidebarTriggerButton />
           <Button
             asChild={true}
             variant={"ghost"}

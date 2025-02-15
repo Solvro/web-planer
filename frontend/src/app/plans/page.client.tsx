@@ -68,7 +68,7 @@ export function PlansPage({
   }, [plansExistingLocallyAndDeletedOnline]);
 
   return (
-    <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4">
+    <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4 pt-24">
       <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
         <button
           onClick={addNewPlan}
