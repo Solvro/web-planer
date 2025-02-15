@@ -13,6 +13,7 @@
     "lint": "next lint --max-warnings=0",
     "lint:fix": "next lint --fix",
     "start": "next start",
+    "test": "next lint --max-warnings=0 && tsc --noEmit && prettier --check .",
     "typecheck": "tsc"
   },
   "lint-staged": {
