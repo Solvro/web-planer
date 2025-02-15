@@ -67,6 +67,16 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
@@ -94,58 +104,128 @@ const config = {
           },
         },
         wave: {
-          "0%": { transform: "rotate(0.0deg)" },
-          "10%": { transform: "rotate(14deg)" },
-          "20%": { transform: "rotate(-8deg)" },
-          "30%": { transform: "rotate(14deg)" },
-          "40%": { transform: "rotate(-4deg)" },
-          "50%": { transform: "rotate(10.0deg)" },
-          "60%": { transform: "rotate(0.0deg)" },
-          "100%": { transform: "rotate(0.0deg)" },
+          "0%": {
+            transform: "rotate(0.0deg)",
+          },
+          "10%": {
+            transform: "rotate(14deg)",
+          },
+          "20%": {
+            transform: "rotate(-8deg)",
+          },
+          "30%": {
+            transform: "rotate(14deg)",
+          },
+          "40%": {
+            transform: "rotate(-4deg)",
+          },
+          "50%": {
+            transform: "rotate(10.0deg)",
+          },
+          "60%": {
+            transform: "rotate(0.0deg)",
+          },
+          "100%": {
+            transform: "rotate(0.0deg)",
+          },
         },
         flip: {
-          "0%": { transform: "rotateY(0deg)" },
-          "10%": { transform: "rotateY(15deg)" },
-          "25%": { transform: "rotateY(30deg)" },
-          "50%": { transform: "rotateY(0deg)" },
-          "60%": { transform: "rotateY(-15deg)" },
-          "75%": { transform: "rotateY(-30deg)" },
-          "100%": { transform: "rotateY(360deg)" },
+          "0%": {
+            transform: "rotateY(0deg)",
+          },
+          "10%": {
+            transform: "rotateY(15deg)",
+          },
+          "25%": {
+            transform: "rotateY(30deg)",
+          },
+          "50%": {
+            transform: "rotateY(0deg)",
+          },
+          "60%": {
+            transform: "rotateY(-15deg)",
+          },
+          "75%": {
+            transform: "rotateY(-30deg)",
+          },
+          "100%": {
+            transform: "rotateY(360deg)",
+          },
         },
         "move-top": {
-          "0%": { top: "-10%" },
-          "100%": { top: "28%" },
+          "0%": {
+            top: "-10%",
+          },
+          "100%": {
+            top: "28%",
+          },
         },
         "move-bottom": {
-          "0%": { bottom: "-10%" },
-          "100%": { bottom: "28%" },
+          "0%": {
+            bottom: "-10%",
+          },
+          "100%": {
+            bottom: "28%",
+          },
         },
         open: {
-          "0%": { transform: "scaleY(0)", opacity: "0" },
-          "100%": { transform: "scaleY(1)", opacity: "1" },
+          "0%": {
+            transform: "scaleY(0)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "scaleY(1)",
+            opacity: "1",
+          },
         },
         close: {
-          "0%": { transform: "scaleY(1)", opacity: "1" },
-          "100%": { transform: "scaleY(0)", opacity: "0" },
+          "0%": {
+            transform: "scaleY(1)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scaleY(0)",
+            opacity: "0",
+          },
         },
         "slide-down": {
-          "0%": { transform: "translateY(-20px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
+          "0%": {
+            transform: "translateY(-20px)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0)",
+            opacity: "1",
+          },
         },
         "fade-in": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
         },
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         gradient: {
-          to: { "background-position": "-200% center" },
+          to: {
+            "background-position": "-200% center",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
         },
         "fast-bounce": {
           "0%, 100%": {
@@ -169,8 +249,12 @@ const config = {
           },
         },
         "fade-in-2": {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
         },
         "border-beam": {
           "100%": {
@@ -178,8 +262,14 @@ const config = {
           },
         },
         "fade-up": {
-          from: { opacity: "0", transform: "translateY(20px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+          from: {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
         },
         "image-glow": {
           "0%": {
@@ -199,12 +289,10 @@ const config = {
             transform: "scale(0.8)",
             boxShadow: "0 0 0 0 rgba(16, 185, 129, 1)",
           },
-
           "70%": {
             transform: "scale(1)",
             boxShadow: "0 0 0 10px rgba(16, 185, 129, 0)",
           },
-
           "100%": {
             transform: "scale(0.8)",
           },

@@ -1,5 +1,7 @@
 import type React from "react";
 
+import { SidebarProvider } from "@/components/ui/sidebar";
+
 import { PlansTopbar } from "./_components/plans-topbar";
 
 export default function PlansLayout({
@@ -9,9 +11,11 @@ export default function PlansLayout({
 }) {
   return (
     <div className="flex h-screen min-h-screen flex-col items-center overflow-x-hidden">
-      <PlansTopbar />
+      <SidebarProvider>
+        <PlansTopbar />
 
-      {children}
+        {children}
+      </SidebarProvider>
 
       <div className="flex w-full flex-col items-center justify-center bg-mainbutton7 p-2 py-6 dark:bg-white/5">
         <p className="text-center text-white">
