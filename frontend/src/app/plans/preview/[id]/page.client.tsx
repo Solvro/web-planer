@@ -44,7 +44,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   };
 
   return (
-    <div className="flex w-full grow flex-col overflow-x-auto">
+    <div className="flex w-full grow flex-col overflow-x-auto pt-24">
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4 md:px-14">
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 
