@@ -3,5 +3,8 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./build"
+  },
+  "paths": {
+    "#utils": ["./app/utils/*.js"]
   }
 }
