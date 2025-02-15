@@ -1,8 +1,10 @@
 import { TaskCallback } from "@poppinss/cliui/types";
+import { DateTime } from "luxon";
 import assert from "node:assert";
 
 import { BaseCommand, flags } from "@adonisjs/core/ace";
 import type { CommandOptions } from "@adonisjs/core/types/ace";
+import db from "@adonisjs/lucid/services/db";
 
 import Course from "#models/course";
 import Department from "#models/department";
@@ -388,72 +390,108 @@ export default class Scraper extends BaseCommand {
     const lecturerMap = new Map(zip(lecturerSet, lecturersIds));
 
     task.update("Updating groups");
+    const currentDate = DateTime.now();
     // set all groups to inactive, query below will activate scraped ones
     await Group.query().update({ isActive: false });
-    const groupQueue = fetchedDetails.flatMap(
-      ({ url, registration, course, details }) =>
+    const preparedGroups = fetchedDetails.flatMap(
+      ({ url, registration, course, details, lecturers }) =>
         details.days.map((day) => {
           return {
-            name: details.name.slice(0, 255),
-            startTime: details.startTimeEndTimes[
-              details.days.indexOf(day)
-            ].startTime.slice(0, 255),
-            endTime: details.startTimeEndTimes[
-              details.days.indexOf(day)
-            ].endTime.slice(0, 255),
-            group: details.group.slice(0, 255),
-            week: details.week as "-" | "TP" | "TN",
-            day: day.slice(0, 255),
-            type: details.type.slice(0, 255),
-            courseId:
-              course.courseCode.slice(0, 255) +
-              (extractLastStringInBrackets(registration.name) ??
-                registration.name),
-            spotsOccupied: details.spotsOccupied,
-            spotsTotal: details.spotsTotal,
-            url: url.slice(0, 255),
-            isActive: true,
+            row: {
+              name: details.name.slice(0, 255),
+              start_time: details.startTimeEndTimes[
+                details.days.indexOf(day)
+              ].startTime.slice(0, 255),
+              end_time: details.startTimeEndTimes[
+                details.days.indexOf(day)
+              ].endTime.slice(0, 255),
+              group: details.group.slice(0, 255),
+              week: details.week as "-" | "TP" | "TN",
+              day: day.slice(0, 255),
+              type: details.type.slice(0, 255),
+              course_id:
+                course.courseCode.slice(0, 255) +
+                (extractLastStringInBrackets(registration.name) ??
+                  registration.name),
+              spots_occupied: details.spotsOccupied,
+              spots_total: details.spotsTotal,
+              url: url.slice(0, 255),
+              is_active: true,
+              created_at: currentDate,
+              updated_at: currentDate,
+            },
+            lecturers,
           };
         }),
     );
+
+    const uniqueRows = Array.from(
+      new Map(
+        preparedGroups.map(({ row, lecturers }) => [
+          JSON.stringify([
+            row.name,
+            row.start_time,
+            row.end_time,
+            row.group,
+            row.week,
+            row.day,
+            row.type,
+            row.course_id,
+          ]),
+          { row, lecturers },
+        ]),
+      ).values(),
+    );
+    const mergedProps = Array.from(
+      new Set(Object.keys(uniqueRows[0].row)).difference(
+        new Set([
+          "created_at",
+          "name",
+          "start_time",
+          "end_time",
+          "group",
+          "week",
+          "day",
+          "type",
+          "course_id",
+        ]),
+      ),
+    );
     const groups = await Promise.all(
-      chunkArray(groupQueue, QUERY_CHUNK_SIZE).map((chunk) =>
-        this.dbSemaphore.runTask(() =>
-          Group.updateOrCreateMany(
-            [
-              "name",
-              "startTime",
-              "endTime",
-              "group",
-              "week",
-              "day",
-              "type",
-              "courseId",
-            ],
-            chunk,
-          ),
-        ),
+      chunkArray(uniqueRows, QUERY_CHUNK_SIZE).map((chunk) =>
+        this.dbSemaphore.runTask(async () => {
+          const ids = (await db
+            .knexQuery()
+            .insert(chunk.map((el) => el.row))
+            .into("groups")
+            .onConflict(
+              db.knexRawQuery('ON CONSTRAINT "groups_scraper_uindex"'),
+            )
+            .merge(mergedProps)
+            .returning("id")) as { id: number }[];
+          const updatedGroups = await Group.findMany(ids.map((i) => i.id));
+          return zip(updatedGroups, chunk).map(([group, { lecturers }]) => {
+            return { group, lecturers };
+          });
+          //Group.updateOrCreateMany(
+          //  ["url", "startTime", "day", "week", "courseId"],
+          //  chunk,
+          //),
+        }),
       ),
     ).then((a) => a.flat());
 
     task.update("Updating group lecturers");
-    const groupLecturers = zip(
-      fetchedDetails.flatMap(({ lecturers, details }) => {
-        const ids = lecturers.map((lecturer) => {
-          const id = lecturerMap.get(lecturer);
-          assert(id !== undefined);
-          return id;
-        });
-        return details.days.map(() => ids);
-      }),
-      groups,
-    );
-
     await Promise.all(
-      groupLecturers.map(([lecturers, group]) =>
-        this.dbSemaphore.runTask(() =>
-          group.related("lecturers").sync(lecturers),
-        ),
+      groups.map(({ group, lecturers }) =>
+        this.dbSemaphore.runTask(async () => {
+          const ids = lecturers.map((lecturer) => {
+            const id = lecturerMap.get(lecturer);
+            assert(id !== undefined);
+            return id;
+          });
+          await group.related("lecturers").sync(ids);
+        }),
       ),
     );
   }
