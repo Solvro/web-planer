@@ -6,7 +6,7 @@ import { auth } from "./lib/auth";
 export async function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const cspHeader = `
-    default-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com https://fonts.gstatic.com https://analytics.solvro.pl;
+    default-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com https://fonts.gstatic.com https://analytics.solvro.pl ${process.env.NODE_ENV === "development" ? "http://localhost:3333" : ""};
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${process.env.NODE_ENV === "development" ? "'unsafe-eval'" : ""} https://analytics.solvro.pl;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://avatars.githubusercontent.com https://wit.pwr.edu.pl https://cms.solvro.pl https://apps.usos.pwr.edu.pl;
