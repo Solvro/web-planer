@@ -1,6 +1,8 @@
 import React from "react";
 
 import type { ExtendedGroup } from "@/atoms/plan-family";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 import { ClassBlock } from "./class-block";
 import { Hour } from "./hour";
@@ -55,8 +57,14 @@ function ClassSchedule({
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
 }) {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="flex min-w-fit flex-col rounded-xl border-2 p-3">
+    <div
+      className={cn("flex min-w-fit flex-col border-y p-3", {
+        "rounded-lg border-x": isReadonly || isMobile,
+      })}
+    >
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
       </div>

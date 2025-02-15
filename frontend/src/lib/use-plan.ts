@@ -5,6 +5,8 @@ import type { ExtendedCourse } from "@/atoms/plan-family";
 
 import type { Registration } from "./types";
 
+export type usePlanType = ReturnType<typeof usePlan>;
+
 export const usePlan = ({ planId }: { planId: string }) => {
   const [plan, setPlan] = useAtom(planFamily({ id: planId }));
 

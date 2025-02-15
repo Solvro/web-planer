@@ -43,6 +43,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import { MdArrowBack } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
 
@@ -107,6 +108,7 @@ export const Icons = {
   Check,
   Bug,
   Menu,
+  ArrowBack: MdArrowBack,
   Github,
   FlexyArrow: ({ className }: { className?: string }) => (
     <svg
