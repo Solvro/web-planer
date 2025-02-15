@@ -512,6 +512,24 @@ export default class Scraper extends BaseCommand {
     );
   }
 
+  async vacuumTablesTask(task: TaskHandle) {
+    const tables = [
+      "departments",
+      "registrations",
+      "courses",
+      "groups_archive",
+      "group_archive_lecturers",
+      "lecturers",
+      "groups",
+      "group_lecturers",
+    ];
+
+    for (const table of tables) {
+      task.update(`Vacuuming '${table}'`);
+      await db.rawQuery("VACUUM ANALYZE ??", [table]);
+    }
+  }
+
   async run() {
     this.scrapingSemaphore = new Semaphore(this.maxUsosRequests);
     this.dbSemaphore = new Semaphore(this.maxDbRequests);
@@ -540,6 +558,10 @@ export default class Scraper extends BaseCommand {
       })
       .add("Scrape groups", async (task) => {
         await this.scrapeGroupsTask(task);
+        return "Done";
+      })
+      .add("Vacuum & analyze tables", async (task) => {
+        await this.vacuumTablesTask(task);
         return "Done";
       })
       .run();
