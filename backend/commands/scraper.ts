@@ -1,9 +1,21 @@
-import { BaseCommand } from "@adonisjs/core/ace";
-import type { CommandOptions } from "@adonisjs/core/types/ace";
+import { TaskCallback } from "@poppinss/cliui/types";
+import { DateTime } from "luxon";
+import assert from "node:assert";
 
+import { BaseCommand, flags } from "@adonisjs/core/ace";
+import type { CommandOptions } from "@adonisjs/core/types/ace";
+import db from "@adonisjs/lucid/services/db";
+
+import Course from "#models/course";
+import Department from "#models/department";
+import Group from "#models/group";
 import Lecturer from "#models/lecturer";
+import Registration from "#models/registration";
+import { chunkArray, zip } from "#utils/arrays";
+import { Semaphore } from "#utils/semaphore";
 
 import {
+  ScrapedDepartment,
   scrapCourseNameGroupsUrls,
   scrapCourses,
   scrapDepartments,
@@ -24,9 +36,16 @@ function extractLastStringInBrackets(input: string): string | null {
   return lastMatch;
 }
 
+const QUERY_CHUNK_SIZE = 4096;
+type TaskHandle = Parameters<TaskCallback>[0];
+
 export default class Scraper extends BaseCommand {
   static commandName = "scraper";
-  static description = "Scrap data from usos pages and insert it to database";
+  static description = "Scrape data from usos pages and insert it to database";
+
+  declare scrapingSemaphore: Semaphore;
+  declare dbSemaphore: Semaphore;
+  declare departments: ScrapedDepartment[];
 
   static options: CommandOptions = {
     startApp: true,
@@ -34,244 +53,438 @@ export default class Scraper extends BaseCommand {
     staysAlive: false,
   };
 
-  async run() {
-    const DepartmentModule = await import("#models/department");
-    const Department = DepartmentModule.default;
-    const RegistrationModule = await import("#models/registration");
-    const Registration = RegistrationModule.default;
-    const CourseModule = await import("#models/course");
-    const Course = CourseModule.default;
-    const GroupModule = await import("#models/group");
-    const Group = GroupModule.default;
-    const GroupArchiveModule = await import("#models/group_archive");
-    const GroupArchive = GroupArchiveModule.default;
+  @flags.number({
+    alias: ["max-usos"],
+    default: 32,
+  })
+  declare maxUsosRequests: number;
 
-    this.logger.log("Scraping departments");
-    const departments = await scrapDepartments();
-    if (departments === undefined) {
-      return;
-    }
+  @flags.number({
+    alias: ["max-db"],
+    default: 64,
+  })
+  declare maxDbRequests: number;
 
+  async departmentScrapeTask(task: TaskHandle) {
+    task.update("Fetching");
+    this.departments = await scrapDepartments();
+
+    task.update("Updating");
     await Promise.all(
-      departments.map((department) =>
-        Department.updateOrCreate(
-          {
-            id: extractLastStringInBrackets(department.name) ?? department.name,
-          },
-          { name: department.name, url: department.url },
+      chunkArray(this.departments, QUERY_CHUNK_SIZE).map((chunk) =>
+        this.dbSemaphore.runTask(() =>
+          Department.updateOrCreateMany(
+            "id",
+            chunk.map((department) => ({
+              id:
+                extractLastStringInBrackets(department.name) ?? department.name,
+              name: department.name,
+              url: department.url,
+            })),
+          ),
         ),
       ),
     );
-    this.logger.log("Scraping registrations");
-    const processedRegistrationIds: string[] = [];
-    const registrations = await Promise.all(
-      departments.map(async (department) => {
-        const regs = await scrapRegistrations(department.url);
-        if (regs === undefined) {
-          return [];
-        }
-        department.registrations = regs;
+  }
 
-        await Promise.all(
-          department.registrations.map(async (registration) => {
-            const updatedRegistration = await Registration.updateOrCreate(
-              {
-                id:
-                  extractLastStringInBrackets(registration.name) ??
-                  registration.name,
-              },
-              {
-                name: registration.name,
-                departmentId:
-                  extractLastStringInBrackets(department.name) ??
-                  department.name,
-                isActive: true,
-              },
-            );
-            processedRegistrationIds.push(updatedRegistration.id);
-          }),
-        );
-
-        return regs;
-      }),
-    ).then((results) => results.flat());
-
-    await Registration.query()
-      .whereNotIn("id", processedRegistrationIds)
-      .update({ isActive: false });
-    this.logger.log("Registrations scraped");
-    this.logger.log("Scraping courses urls");
-    const processedCourseIds: string[] = [];
+  async registrationScrapeTask(task: TaskHandle) {
+    task.update("Fetching");
     await Promise.all(
-      registrations.map(async (registration) => {
-        let urls;
+      this.departments.map(async (department) => {
         try {
-          urls = await scrapCourses(registration.url);
-        } catch (e: unknown) {
-          // @ts-expect-error i dont caRe
-          this.logger.logError(e);
+          department.registrations = await this.scrapingSemaphore.runTask(() =>
+            scrapRegistrations(department.url),
+          );
+        } catch (e) {
+          assert(e instanceof Error);
+          this.logger.warning(
+            `Failed to scrape registrations for '${department.name}': ${e.message}\n${e.stack}`,
+          );
         }
-        if (urls === undefined) {
-          return [];
-        }
-        registration.courses = urls.map((courseUrl) => {
-          return { url: courseUrl, courseCode: "", groups: [], name: "" };
-        });
       }),
     );
-    this.logger.log("Courses urls scraped");
-    this.logger.log("Scraping courses details");
-    for (const registration of registrations) {
-      await Promise.all(
-        registration.courses.map(async (course) => {
-          const courseCodeNameGroupsUrls = await scrapCourseNameGroupsUrls(
-            course.url,
-          );
-          if (courseCodeNameGroupsUrls === undefined) {
+
+    task.update("Updating");
+    // set all registrations to inactive
+    await Registration.query().update({ isActive: false });
+
+    // then insert just-scraped ones and set those to active
+    const toInsert = this.departments.flatMap((department) =>
+      department.registrations.map((registration) => ({
+        id: extractLastStringInBrackets(registration.name) ?? registration.name,
+        name: registration.name,
+        departmentId:
+          extractLastStringInBrackets(department.name) ?? department.name,
+        isActive: true,
+      })),
+    );
+    await Promise.all(
+      chunkArray(toInsert, QUERY_CHUNK_SIZE).map((chunk) =>
+        this.dbSemaphore.runTask(() =>
+          Registration.updateOrCreateMany("id", chunk),
+        ),
+      ),
+    );
+  }
+
+  async courseUrlScrapeTask() {
+    await Promise.all(
+      this.departments.flatMap((department) =>
+        department.registrations.map(async (registration) => {
+          let urls;
+          try {
+            urls = await this.scrapingSemaphore.runTask(() =>
+              scrapCourses(registration.url),
+            );
+          } catch (e: unknown) {
+            assert(e instanceof Error);
+            this.logger.warning(
+              `Failed to scrape course URLs for '${registration.name}': ${e.message}\n${e.stack}`,
+            );
             return;
           }
-          const urls = courseCodeNameGroupsUrls.urls;
-          course.courseCode = courseCodeNameGroupsUrls.courseCode;
-          course.name = courseCodeNameGroupsUrls.courseName;
-          course.groups = urls.map((url) => {
-            return { url, groups: [] };
-          });
-          const updatedCourse = await Course.updateOrCreate(
-            {
-              id:
-                courseCodeNameGroupsUrls.courseCode +
-                (extractLastStringInBrackets(registration.name) ??
-                  registration.name),
-            },
-            {
-              name: course.name,
-              registrationId:
-                extractLastStringInBrackets(registration.name) ??
-                registration.name,
-              isActive: true,
-            },
-          );
-          processedCourseIds.push(updatedCourse.id);
+          registration.courses = urls.map((courseUrl) => ({
+            url: courseUrl,
+            courseCode: "",
+            groups: [],
+            name: "",
+          }));
         }),
-      );
-    }
-    await Course.query()
-      .whereNotIn("id", processedCourseIds)
-      .update({ isActive: false });
-    this.logger.log("Courses details scraped");
-    this.logger.log("Synchronizing group_archive with current groups");
-    const currentGroups = await Group.all();
-
-    await Promise.all(
-      currentGroups.map(async (group) => {
-        const groupArchive = await GroupArchive.updateOrCreate(
-          { id: group.id },
-          {
-            ...group.$attributes,
-          },
-        );
-
-        const lecturers = await group.related("lecturers").query();
-
-        await groupArchive
-          .related("lecturers")
-          .sync(lecturers.map((lecturer) => lecturer.id));
-      }),
+      ),
     );
-    this.logger.log("Scraping groups details");
-    const processedGroupIds: number[] = [];
-    for (const registration of registrations) {
-      for (const course of registration.courses) {
-        const detailsUrls = (await Promise.all(
-          course.groups.map(async (group) => {
-            return await scrapGroupsUrls(group.url);
-          }),
-        ).then((results) => results.flat())) as string[];
+  }
 
-        await Promise.all(
-          detailsUrls.map(async (url) => {
-            const details = await scrapGroupDetails(url);
-            if (details === undefined) {
+  async courseDetailScrapeTask(task: TaskHandle) {
+    task.update("Fetching");
+    await Promise.all(
+      this.departments.flatMap((department) =>
+        department.registrations.flatMap((registration) =>
+          registration.courses.map(async (course) => {
+            let courseDetails;
+            try {
+              courseDetails = await this.scrapingSemaphore.runTask(() =>
+                scrapCourseNameGroupsUrls(course.url),
+              );
+            } catch (e) {
+              assert(e instanceof Error);
+              this.logger.warning(
+                `Failed to scrape course details from '${course.url}': ${e.message}\n${e.stack}`,
+              );
               return;
             }
-
-            const lecturers = details.lecturer
-              .trim()
-              .replace(/\s+/g, " ")
-              .slice(0, 255)
-              .split(", ");
-
-            const lecturerIds = await Promise.all(
-              lecturers.map(async (lecturer) => {
-                const [name, ...surnameParts] = lecturer.split(" ");
-                const surname = surnameParts.join(" ");
-
-                const existingLecturer = await Lecturer.query()
-                  .where("name", name)
-                  .andWhere("surname", surname)
-                  .first();
-
-                if (existingLecturer !== null) {
-                  return existingLecturer.id;
-                } else {
-                  const dbLecturer = await Lecturer.create({ name, surname });
-                  return dbLecturer.id;
-                }
-              }),
-            );
-
-            for (const day of details.days) {
-              const group = await Group.updateOrCreate(
-                {
-                  name: details.name.slice(0, 255),
-                  startTime: details.startTimeEndTimes[
-                    details.days.indexOf(day)
-                  ].startTime.slice(0, 255),
-                  endTime: details.startTimeEndTimes[
-                    details.days.indexOf(day)
-                  ].endTime.slice(0, 255),
-                  group: details.group.slice(0, 255),
-                  week: details.week,
-                  day: day.slice(0, 255),
-                  type: details.type.slice(0, 255),
-                  courseId:
-                    course.courseCode.slice(0, 255) +
-                    (extractLastStringInBrackets(registration.name) ??
-                      registration.name),
-                },
-                {
-                  name: details.name.slice(0, 255),
-                  startTime: details.startTimeEndTimes[
-                    details.days.indexOf(day)
-                  ].startTime.slice(0, 255),
-                  endTime: details.startTimeEndTimes[
-                    details.days.indexOf(day)
-                  ].endTime.slice(0, 255),
-                  group: details.group.slice(0, 255),
-                  week: details.week,
-                  day: day.slice(0, 255),
-                  type: details.type.slice(0, 255),
-                  courseId:
-                    course.courseCode.slice(0, 255) +
-                    (extractLastStringInBrackets(registration.name) ??
-                      registration.name),
-                  spotsOccupied: details.spotsOccupied,
-                  spotsTotal: details.spotsTotal,
-                  url: url.slice(0, 255),
-                  isActive: true,
-                },
-              );
-              processedGroupIds.push(group.id);
-
-              await group.related("lecturers").sync(lecturerIds);
-            }
+            const urls = courseDetails.urls;
+            course.courseCode = courseDetails.courseCode;
+            course.name = courseDetails.courseName;
+            course.groups = urls.map((url) => ({ url, groups: [] }));
           }),
-        );
-      }
+        ),
+      ),
+    );
+
+    task.update("Updating");
+    // set all courses to inactive
+    await Course.query().update({ isActive: false });
+
+    // then push new active courses
+    const toInsert = this.departments.flatMap((department) =>
+      department.registrations.flatMap((registration) =>
+        registration.courses.map((course) => ({
+          id:
+            course.courseCode +
+            (extractLastStringInBrackets(registration.name) ??
+              registration.name),
+          name: course.name,
+          registrationId:
+            extractLastStringInBrackets(registration.name) ?? registration.name,
+          isActive: true,
+        })),
+      ),
+    );
+    await Promise.all(
+      chunkArray(toInsert, QUERY_CHUNK_SIZE).map((chunk) =>
+        this.dbSemaphore.runTask(() => Course.updateOrCreateMany("id", chunk)),
+      ),
+    );
+  }
+
+  async synchronizeArchivesTask() {
+    await db.rawQuery(`
+      BEGIN;
+      -- Update the groups table
+      INSERT INTO "groups_archive" ("id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active")
+      SELECT "id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active" FROM "groups"
+      ON CONFLICT ("id") DO UPDATE SET
+      "name" = EXCLUDED."name",
+      "start_time" = EXCLUDED."start_time",
+      "end_time" = EXCLUDED."end_time",
+      "group" = EXCLUDED."group",
+      "week" = EXCLUDED."week",
+      "day" = EXCLUDED."day",
+      "type" = EXCLUDED."type",
+      "url" = EXCLUDED."url",
+      "course_id" = EXCLUDED."course_id",
+      "updated_at" = EXCLUDED."updated_at",
+      "spots_occupied" = EXCLUDED."spots_occupied",
+      "spots_total" = EXCLUDED."spots_total",
+      "is_active" = EXCLUDED."is_active";
+      -- Delete unlinked lecturers
+      DELETE FROM "group_archive_lecturers"
+      USING "group_lecturers", "groups"
+      WHERE "group_archive_lecturers"."group_id" IN (SELECT "id" FROM "groups")
+      AND "group_archive_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_lecturers" WHERE "group_lecturers"."group_id" = "group_archive_lecturers"."group_id");
+      -- Insert new lecturers
+      INSERT INTO "group_archive_lecturers" ("group_id", "lecturer_id", "created_at", "updated_at")
+      SELECT "group_id", "lecturer_id", "created_at", "updated_at"
+      FROM "group_lecturers"
+      WHERE "group_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_archive_lecturers" WHERE "group_archive_lecturers"."group_id" = "group_lecturers"."group_id");
+      COMMIT;
+    `);
+  }
+
+  async scrapeGroupsTask(task: TaskHandle) {
+    task.update("Fetching");
+
+    const fetchedDetails = await Promise.all(
+      this.departments.flatMap((department) =>
+        department.registrations.flatMap((registration) =>
+          registration.courses.flatMap((course) =>
+            course.groups.map(async (group) => {
+              let urls;
+              try {
+                urls = await this.scrapingSemaphore.runTask(() =>
+                  scrapGroupsUrls(group.url),
+                );
+              } catch (e) {
+                assert(e instanceof Error);
+                this.logger.warning(
+                  `Failed to fetch group detail URLs from '${group.url}': ${e.message}\n${e.stack}`,
+                );
+                return;
+              }
+
+              return await Promise.all(
+                urls.map(async (url) => {
+                  let details;
+                  try {
+                    details = await this.scrapingSemaphore.runTask(() =>
+                      scrapGroupDetails(url),
+                    );
+                  } catch (e) {
+                    assert(e instanceof Error);
+                    this.logger.warning(
+                      `Failed to fetch group details from '${url}': ${e.message}\n${e.stack}`,
+                    );
+                    return;
+                  }
+
+                  const lecturers = details.lecturer
+                    .trim()
+                    .replace(/\s+/g, " ")
+                    .slice(0, 255)
+                    .split(", ");
+
+                  return { url, registration, course, details, lecturers };
+                }),
+              );
+            }),
+          ),
+        ),
+      ),
+    ).then((r) => r.flat().filter((e) => e !== undefined));
+
+    task.update("Updating lecturers");
+
+    // Create a deduplicated list of extracted lecturers
+    const lecturerSet = Array.from(
+      new Set(fetchedDetails.flatMap(({ lecturers }) => lecturers)),
+    );
+
+    // Then fetch/create their IDs from the DB
+    // and collect it into a map
+    const lecturerMap = new Map<string, number>(
+      await Promise.all(
+        chunkArray(lecturerSet, QUERY_CHUNK_SIZE).map((chunk) =>
+          this.dbSemaphore.runTask(async () =>
+            zip(
+              chunk,
+              await Lecturer.fetchOrCreateMany(
+                ["name", "surname"],
+                chunk.map((lecturer) => {
+                  const [name, ...surnameParts] = lecturer.split(" ");
+                  const surname = surnameParts.join(" ");
+                  return { name, surname };
+                }),
+              ).then((r) => r.map((l) => l.id)),
+            ),
+          ),
+        ),
+      ).then((r) => r.flat(1)),
+    );
+
+    task.update("Updating groups");
+    const currentDate = DateTime.now();
+    // set all groups to inactive, query below will activate scraped ones
+    await Group.query().update({ isActive: false });
+    const preparedGroups = fetchedDetails.flatMap(
+      ({ url, registration, course, details, lecturers }) =>
+        details.days.map((day) => ({
+          row: {
+            name: details.name.slice(0, 255),
+            start_time: details.startTimeEndTimes[
+              details.days.indexOf(day)
+            ].startTime.slice(0, 255),
+            end_time: details.startTimeEndTimes[
+              details.days.indexOf(day)
+            ].endTime.slice(0, 255),
+            group: details.group.slice(0, 255),
+            week: details.week as "-" | "TP" | "TN",
+            day: day.slice(0, 255),
+            type: details.type.slice(0, 255),
+            course_id:
+              course.courseCode.slice(0, 255) +
+              (extractLastStringInBrackets(registration.name) ??
+                registration.name),
+            spots_occupied: details.spotsOccupied,
+            spots_total: details.spotsTotal,
+            url: url.slice(0, 255),
+            is_active: true,
+            created_at: currentDate,
+            updated_at: currentDate,
+          },
+          lecturers,
+        })),
+    );
+
+    const uniqueRows = Array.from(
+      new Map(
+        preparedGroups.map(({ row, lecturers }) => [
+          JSON.stringify([
+            row.name,
+            row.start_time,
+            row.end_time,
+            row.group,
+            row.week,
+            row.day,
+            row.type,
+            row.course_id,
+          ]),
+          { row, lecturers },
+        ]),
+      ).values(),
+    );
+    const mergedProps = Array.from(
+      new Set(Object.keys(uniqueRows[0].row)).difference(
+        new Set([
+          "created_at",
+          "name",
+          "start_time",
+          "end_time",
+          "group",
+          "week",
+          "day",
+          "type",
+          "course_id",
+        ]),
+      ),
+    );
+    const groups = await Promise.all(
+      chunkArray(uniqueRows, QUERY_CHUNK_SIZE).map((chunk) =>
+        this.dbSemaphore.runTask(async () => {
+          const ids = (await db
+            .knexQuery()
+            .insert(chunk.map((el) => el.row))
+            .into("groups")
+            .onConflict(
+              db.knexRawQuery('ON CONSTRAINT "groups_scraper_uindex"'),
+            )
+            .merge(mergedProps)
+            .returning("id")) as { id: number }[];
+          // thanks adonis for returning objects in an arbitrary order
+          const updatedGroups = new Map(
+            await Group.findMany(ids.map((i) => i.id)).then((l) =>
+              l.map((group) => [group.id, group]),
+            ),
+          );
+          const reorderedGroups = ids.map(({ id }) => {
+            const group = updatedGroups.get(id);
+            assert(group !== undefined);
+            return group;
+          });
+          return zip(reorderedGroups, chunk).map(([group, { lecturers }]) => ({
+            group,
+            lecturers,
+          }));
+        }),
+      ),
+    ).then((a) => a.flat());
+
+    task.update("Updating group lecturers");
+    await Promise.all(
+      groups.map(({ group, lecturers }) =>
+        this.dbSemaphore.runTask(async () => {
+          const ids = lecturers.map((lecturer) => {
+            const id = lecturerMap.get(lecturer);
+            assert(id !== undefined);
+            return id;
+          });
+          await group.related("lecturers").sync(ids);
+        }),
+      ),
+    );
+  }
+
+  async vacuumTablesTask(task: TaskHandle) {
+    const tables = [
+      "departments",
+      "registrations",
+      "courses",
+      "groups_archive",
+      "group_archive_lecturers",
+      "lecturers",
+      "groups",
+      "group_lecturers",
+    ];
+
+    for (const table of tables) {
+      task.update(`Vacuuming '${table}'`);
+      await db.rawQuery("VACUUM ANALYZE ??", [table]);
     }
-    await Group.query()
-      .whereNotIn("id", processedGroupIds)
-      .update({ isActive: false });
-    this.logger.log("Groups details scraped");
+  }
+
+  async run() {
+    this.scrapingSemaphore = new Semaphore(this.maxUsosRequests);
+    this.dbSemaphore = new Semaphore(this.maxDbRequests);
+
+    await this.ui
+      .tasks({ verbose: true })
+      .add("Scrape departments", async (task) => {
+        await this.departmentScrapeTask(task);
+        return "Done";
+      })
+      .add("Scrape registrations", async (task) => {
+        await this.registrationScrapeTask(task);
+        return "Done";
+      })
+      .add("Scrape course URLs", async () => {
+        await this.courseUrlScrapeTask();
+        return "Done";
+      })
+      .add("Scrape course details", async (task) => {
+        await this.courseDetailScrapeTask(task);
+        return "Done";
+      })
+      .add("Archive current groups", async () => {
+        await this.synchronizeArchivesTask();
+        return "Done";
+      })
+      .add("Scrape groups", async (task) => {
+        await this.scrapeGroupsTask(task);
+        return "Done";
+      })
+      .add("Vacuum & analyze tables", async (task) => {
+        await this.vacuumTablesTask(task);
+        return "Done";
+      })
+      .run();
   }
 }
