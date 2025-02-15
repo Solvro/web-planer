@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     await this.db.rawQuery(`
       BEGIN;
       WITH "duplicates" AS (
-        SELECT MAX("id") AS "id", "name", "start_time", "end_time", "group", "week", "day", "type", "course_id"
+        SELECT MIN("id") AS "id", "name", "start_time", "end_time", "group", "week", "day", "type", "course_id"
         FROM "groups"
         GROUP BY "name", "start_time", "end_time", "group", "week", "day", "type", "course_id"
         HAVING COUNT(*) > 1
