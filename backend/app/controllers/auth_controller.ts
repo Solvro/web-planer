@@ -84,14 +84,14 @@ export default class AuthController {
       await user.save();
 
       //send email
-      // await mail.send((message) => {
-      //   message
-      //     .from("Solvro Planer <planer@solvro.pl>")
-      //     .to(email)
-      //     .subject("Zweryfikuj adres email")
-      //     .text(`Twój kod weryfikacyjny to: ${otp}`)
-      //     .html(`<h1>Twój kod weryfikacyjny to: ${otp}</h1>`);
-      // });
+      await mail.send((message) => {
+        message
+          .from("Solvro Planer <planer@solvro.pl>")
+          .to(email)
+          .subject("Zweryfikuj adres email")
+          .text(`Twój kod weryfikacyjny to: ${otp}`)
+          .html(`<h1>Twój kod weryfikacyjny to: ${otp}</h1>`);
+      });
 
       return response.ok({
         success: true,
