@@ -87,6 +87,10 @@ router
 
 router.post("user/login", [AuthController, "store"]).use(middleware.guest());
 router
+  .post("user/login_otp", [AuthController, "update"])
+  .use(middleware.guest());
+router.post("user/get_otp", [AuthController, "show"]).use(middleware.guest());
+router
   .delete("user/logout", [AuthController, "destroy"])
   .use(middleware.usosAuth());
 
