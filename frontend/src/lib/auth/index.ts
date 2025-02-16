@@ -2,6 +2,7 @@ import CryptoJS, { HmacSHA1 } from "crypto-js";
 import { cookies as cookiesPromise } from "next/headers";
 import OAuth from "oauth-1.0a";
 
+import { ADONIS_COOKIES } from "@/constants";
 import { env } from "@/env.mjs";
 import type { User } from "@/types";
 
@@ -92,9 +93,7 @@ export async function getRequestToken() {
   };
 }
 
-const ADONIS_COOKIES = new Set(["token", "adonis-session"]);
-
-export const auth = async (tokens?: {
+export const authUSOS = async (tokens?: {
   token?: string | undefined;
   secret?: string | undefined;
   disableThrow?: boolean;
@@ -118,6 +117,87 @@ export const auth = async (tokens?: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ accessToken, accessSecret }),
+      credentials: "include",
+    });
+    const data = (await response.json()) as User | { error: string };
+    if ("error" in data) {
+      cookies.delete({
+        name: "access_token",
+        path: "/",
+      });
+      cookies.delete({
+        name: "access_token_secret",
+        path: "/",
+      });
+      if (tokens !== undefined) {
+        return null;
+      }
+      throw new Error(data.error);
+    }
+
+    try {
+      const setCookieHeaders = response.headers.getSetCookie();
+      for (const cookie of setCookieHeaders) {
+        const preparedCookie = cookie.split(";")[0];
+        const [name, value] = preparedCookie.split("=");
+        if (name === "XSRF-TOKEN") {
+          cookies.set({
+            name,
+            value,
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: false,
+            secure: true,
+            sameSite: "lax",
+          });
+        } else if (ADONIS_COOKIES.has(name)) {
+          cookies.set({
+            name,
+            value,
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax",
+          });
+        }
+      }
+    } catch {}
+
+    return data;
+  } catch {
+    if (tokens !== undefined) {
+      return null;
+    }
+    throw new Error("Failed to authenticate");
+  }
+};
+
+export const auth = async (tokens?: {
+  adonisSession?: string | undefined;
+  token?: string | undefined;
+  disableThrow?: boolean;
+}) => {
+  const cookies = await cookiesPromise();
+  const adonisSession =
+    tokens?.adonisSession ?? cookies.get("adonis-session")?.value;
+  const token = tokens?.token ?? cookies.get("token")?.value;
+
+  if (adonisSession === "" || token === "") {
+    if (tokens !== undefined) {
+      return null;
+    }
+    throw new Error("No access token or access secret");
+  }
+
+  try {
+    const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`,
+        "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
+      },
       credentials: "include",
     });
     const data = (await response.json()) as User | { error: string };

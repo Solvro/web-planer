@@ -2,7 +2,7 @@ import { cookies as cookiesPromise } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 
-import { auth, getAccessToken } from "@/lib/auth";
+import { authUSOS, getAccessToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +69,6 @@ export const GET = async (request: NextRequest) => {
     sameSite: "lax",
   });
 
-  await auth(tokens);
+  await authUSOS(tokens);
   return redirect("/plans");
 };

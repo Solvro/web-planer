@@ -41,8 +41,8 @@ export async function middleware(request: NextRequest) {
   );
 
   const tokens = {
-    token: request.cookies.get("access_token")?.value,
-    secret: request.cookies.get("access_token_secret")?.value,
+    adonisSession: request.cookies.get("adonis-session")?.value,
+    token: request.cookies.get("token")?.value,
   };
 
   const isProtectedRoute =

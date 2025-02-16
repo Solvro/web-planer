@@ -17,7 +17,7 @@ export const loginOtpEmailSchema = z.object({
 });
 
 export const otpPinSchema = z.object({
-  pin: z.string().min(6, {
+  otp: z.string().min(6, {
     message: "Kod musi mieć 6 znaków",
   }),
 });

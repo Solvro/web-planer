@@ -11,7 +11,7 @@ import type { z } from "zod";
 import SolvroLogoColor from "@/../public/assets/logo/logo_solvro_color.png";
 import SolvroLogoMono from "@/../public/assets/logo/logo_solvro_mono.png";
 import BgImage from "@/../public/assets/planer-bg.png";
-import { sendOtpToEmail } from "@/actions/login";
+import { sendOtpToEmail, verifyOtp } from "@/actions/login";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,13 +27,13 @@ import { Input } from "@/components/ui/input";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { loginOtpEmailSchema, otpPinSchema } from "@/types/schemas";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [email, setEmail] = React.useState("");
   const [step, setStep] = React.useState<"email" | "otp">("email");
 
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
@@ -49,6 +49,7 @@ export default function LoginPage() {
     try {
       const result = await sendOtpToEmail(values);
       console.log(result);
+      setEmail(values.email);
       setStep("otp");
     } catch (error) {
       console.error(error);
@@ -60,18 +61,25 @@ export default function LoginPage() {
   const formOtp = useForm<z.infer<typeof otpPinSchema>>({
     resolver: zodResolver(otpPinSchema),
     defaultValues: {
-      pin: "",
+      otp: "",
     },
   });
 
-  function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  async function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
+    setIsLoading(true);
+    try {
+      const res = await verifyOtp(email, data);
+      console.log(res);
+      if (res.success) {
+        toast.success("Zalogowano pomyślnie");
+      } else {
+        toast.error("Nieprawidłowy kod");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -142,7 +150,7 @@ export default function LoginPage() {
                   {isLoading ? (
                     <Icons.Loader className="size-4 animate-spin" />
                   ) : null}
-                  Zaloguj się do planera
+                  Wyślij kod
                 </Button>
               </form>
             </Form>
@@ -152,13 +160,14 @@ export default function LoginPage() {
               <Form {...formOtp}>
                 <form
                   onSubmit={formOtp.handleSubmit(onSubmitOtp)}
-                  className="mt-5 w-2/3 space-y-6"
+                  className="mt-5 max-w-xs space-y-6"
                 >
                   <FormField
                     control={formOtp.control}
-                    name="pin"
+                    name="otp"
+                    disabled={isLoading}
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="w-full">
                         <FormLabel>One-Time Password</FormLabel>
                         <FormControl>
                           <InputOTP maxLength={6} {...field}>
@@ -173,14 +182,23 @@ export default function LoginPage() {
                           </InputOTP>
                         </FormControl>
                         <FormDescription>
-                          Please enter the one-time password sent to your phone.
+                          Wpisz kod, który wylądował właśnie na Twoim adresie
+                          email
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  <Button type="submit" size={"sm"} className="float-right">
+                  <Button
+                    type="submit"
+                    size={"sm"}
+                    className="float-right"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <Icons.Loader className="size-4 animate-spin" />
+                    ) : null}
                     Zaloguj się
                   </Button>
                 </form>

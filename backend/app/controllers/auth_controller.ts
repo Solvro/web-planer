@@ -84,14 +84,14 @@ export default class AuthController {
       await user.save();
 
       //send email
-      await mail.send((message) => {
-        message
-          .from("Solvro Planer <planer@solvro.pl>")
-          .to(email)
-          .subject("Zweryfikuj adres email")
-          .text(`Twój kod weryfikacyjny to: ${otp}`)
-          .html(`<h1>Twój kod weryfikacyjny to: ${otp}</h1>`);
-      });
+      // await mail.send((message) => {
+      //   message
+      //     .from("Solvro Planer <planer@solvro.pl>")
+      //     .to(email)
+      //     .subject("Zweryfikuj adres email")
+      //     .text(`Twój kod weryfikacyjny to: ${otp}`)
+      //     .html(`<h1>Twój kod weryfikacyjny to: ${otp}</h1>`);
+      // });
 
       return response.ok({
         success: true,
@@ -119,7 +119,7 @@ export default class AuthController {
     };
     try {
       const user = await User.query()
-        .where("email", email)
+        .where("studentNumber", email.split("@")[0])
         .where("otp_code", otp)
         .where("otp_expire", ">", new Date())
         .first();
@@ -132,8 +132,14 @@ export default class AuthController {
 
       await auth.use("jwt").generate(user);
 
+      user.verified = true;
+      user.otpCode = null;
+      user.otpExpire = null;
+      await user.save();
+
       return response.ok({
-        ...user.serialize(),
+        success: true,
+        user: user.serialize(),
       });
     } catch (error) {
       assert(error instanceof Error);
