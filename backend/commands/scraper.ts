@@ -210,6 +210,7 @@ export default class Scraper extends BaseCommand {
   async synchronizeArchivesTask() {
     await db.rawQuery(`
       BEGIN;
+
       -- Update the groups table
       INSERT INTO "groups_archive" ("id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active")
       SELECT "id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active" FROM "groups"
@@ -227,16 +228,22 @@ export default class Scraper extends BaseCommand {
       "spots_occupied" = EXCLUDED."spots_occupied",
       "spots_total" = EXCLUDED."spots_total",
       "is_active" = EXCLUDED."is_active";
-      -- Delete unlinked lecturers
-      DELETE FROM "group_archive_lecturers"
-      USING "group_lecturers", "groups"
-      WHERE "group_archive_lecturers"."group_id" IN (SELECT "id" FROM "groups")
-      AND "group_archive_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_lecturers" WHERE "group_lecturers"."group_id" = "group_archive_lecturers"."group_id");
-      -- Insert new lecturers
-      INSERT INTO "group_archive_lecturers" ("group_id", "lecturer_id", "created_at", "updated_at")
-      SELECT "group_id", "lecturer_id", "created_at", "updated_at"
-      FROM "group_lecturers"
-      WHERE "group_lecturers"."lecturer_id" NOT IN (SELECT DISTINCT "lecturer_id" FROM "group_archive_lecturers" WHERE "group_archive_lecturers"."group_id" = "group_lecturers"."group_id");
+
+      -- Update the pivot table
+      MERGE INTO "group_archive_lecturers" AS "archive"
+      USING "group_lecturers" AS "current"
+      ON "archive"."group_id" = "current"."group_id" AND "archive"."lecturer_id" = "current"."lecturer_id"
+      -- when the row exists in both tables
+      WHEN MATCHED THEN DO NOTHING
+      -- when the row doesnt exist in the current table
+      WHEN NOT MATCHED BY SOURCE
+      AND EXISTS (SELECT 1 FROM "groups" WHERE "id" = "archive"."group_id")
+      THEN DELETE
+      -- when the row doesnt exist in the archive table
+      WHEN NOT MATCHED BY TARGET
+      THEN INSERT ("group_id", "lecturer_id", "updated_at", "created_at")
+      VALUES ("current"."group_id", "current"."lecturer_id", "current"."updated_at", "current"."created_at");
+
       COMMIT;
     `);
   }
