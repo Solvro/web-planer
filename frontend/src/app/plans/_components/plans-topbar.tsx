@@ -67,7 +67,7 @@ async function UserProfile() {
   } catch {
     return (
       <Button variant="default" size="sm" asChild={true}>
-        <Link href="/api/login" prefetch={false}>
+        <Link href="/login" prefetch={false}>
           Zaloguj się
         </Link>
       </Button>

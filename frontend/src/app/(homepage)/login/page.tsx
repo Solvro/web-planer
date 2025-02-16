@@ -12,6 +12,7 @@ import SolvroLogoColor from "@/../public/assets/logo/logo_solvro_color.png";
 import SolvroLogoMono from "@/../public/assets/logo/logo_solvro_mono.png";
 import BgImage from "@/../public/assets/planer-bg.png";
 import { sendOtpToEmail, verifyOtp } from "@/actions/login";
+import { handleTriggerConfetti } from "@/components/confetti";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import type { VerifyOtpReponseType } from "@/types";
 import { loginOtpEmailSchema, otpPinSchema } from "@/types/schemas";
 
 export default function LoginPage() {
@@ -48,7 +50,10 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const result = await sendOtpToEmail(values);
-      console.log(result);
+      if (!result.success) {
+        toast.error("Wystąpił błąd podczas wysyłania kodu");
+        return;
+      }
       setEmail(values.email);
       setStep("otp");
     } catch (error) {
@@ -68,10 +73,15 @@ export default function LoginPage() {
   async function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
     setIsLoading(true);
     try {
-      const res = await verifyOtp(email, data);
-      console.log(res);
-      if (res.success) {
-        toast.success("Zalogowano pomyślnie");
+      const response = (await verifyOtp(email, data)) as VerifyOtpReponseType;
+      if (response.success) {
+        if (response.user.firstName === "") {
+          // new account = trigger onboard
+          handleTriggerConfetti();
+        } else {
+          toast.success("Zalogowano pomyślnie");
+          window.location.href = "/plans";
+        }
       } else {
         toast.error("Nieprawidłowy kod");
       }
@@ -119,41 +129,51 @@ export default function LoginPage() {
           </p>
 
           {step === "email" && (
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="mt-5 w-full max-w-xs space-y-5"
-              >
-                <FormField
-                  control={form.control}
-                  name="email"
-                  disabled={isLoading}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Adres e-mail</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="123456@student.pwr.edu.pl"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  size={"sm"}
-                  className="float-right"
-                  disabled={isLoading}
+            <div className="mt-5 flex w-full max-w-xs flex-col gap-4">
+              <Button variant="outline" className="w-full" asChild>
+                <Link href="/api/login">Zaloguj się przez USOS</Link>
+              </Button>
+              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                  Lub kontunuuj poprzez
+                </span>
+              </div>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="w-full space-y-5"
                 >
-                  {isLoading ? (
-                    <Icons.Loader className="size-4 animate-spin" />
-                  ) : null}
-                  Wyślij kod
-                </Button>
-              </form>
-            </Form>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    disabled={isLoading}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Adres e-mail</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="123456@student.pwr.edu.pl"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button
+                    type="submit"
+                    size={"sm"}
+                    className="w-full"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <Icons.Loader className="size-4 animate-spin" />
+                    ) : null}
+                    Wyślij kod
+                  </Button>
+                </form>
+              </Form>
+            </div>
           )}
           {step === "otp" && (
             <div className="flex w-full flex-col items-center justify-center">
@@ -168,7 +188,7 @@ export default function LoginPage() {
                     disabled={isLoading}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>One-Time Password</FormLabel>
+                        <FormLabel>Hasło jednorazowe</FormLabel>
                         <FormControl>
                           <InputOTP maxLength={6} {...field}>
                             <InputOTPGroup>
@@ -193,7 +213,7 @@ export default function LoginPage() {
                   <Button
                     type="submit"
                     size={"sm"}
-                    className="float-right"
+                    className="w-full"
                     disabled={isLoading}
                   >
                     {isLoading ? (

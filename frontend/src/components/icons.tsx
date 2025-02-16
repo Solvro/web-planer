@@ -130,4 +130,7 @@ export const Icons = {
       ></path>
     </svg>
   ),
+  USOS: ({ className }: { className?: string }) => (
+    <h1 className={cn("font-mono text-lg font-bold", className)}>USOS</h1>
+  ),
 };

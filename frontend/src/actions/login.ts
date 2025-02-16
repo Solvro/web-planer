@@ -6,7 +6,7 @@ import type { z } from "zod";
 import { ADONIS_COOKIES } from "@/constants";
 import { env } from "@/env.mjs";
 import { fetchToAdonis } from "@/lib/auth";
-import type { User } from "@/types";
+import type { VerifyOtpReponseType } from "@/types";
 import { loginOtpEmailSchema, otpPinSchema } from "@/types/schemas";
 
 export const sendOtpToEmail = async (
@@ -37,16 +37,6 @@ export const sendOtpToEmail = async (
   return data;
 };
 
-type VerifyReponse =
-  | {
-      success: true;
-      user: User;
-    }
-  | {
-      success: false;
-      errors: Record<string, string>;
-    };
-
 export const verifyOtp = async (
   email: string,
   values: z.infer<typeof otpPinSchema>,
@@ -70,7 +60,7 @@ export const verifyOtp = async (
     body: JSON.stringify({ email, ...values }),
   });
 
-  const data = (await response.json()) as VerifyReponse;
+  const data = (await response.json()) as VerifyOtpReponseType;
 
   if (!data.success) {
     return {

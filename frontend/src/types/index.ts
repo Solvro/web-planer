@@ -127,3 +127,13 @@ type SetPlanType = Dispatch<
     synced: boolean;
   }>
 >;
+
+export type VerifyOtpReponseType =
+  | {
+      success: true;
+      user: User;
+    }
+  | {
+      success: false;
+      errors: Record<string, string>;
+    };
