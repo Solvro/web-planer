@@ -74,6 +74,7 @@ export default class AuthController {
 
     const otp = crypto.randomInt(100000, 999999);
     user.otpCode = otp.toString();
+    user.otpAttempts = 0;
     user.otpExpire = DateTime.now().plus({ minutes: 15 });
     await user.save();
 
@@ -97,15 +98,47 @@ export default class AuthController {
       otp: string;
       email: string;
     };
+    if (!email.endsWith("@student.pwr.edu.pl")) {
+      return response.badRequest({
+        message: "Invalid email address",
+      });
+    }
     try {
       const user = await User.query()
         .where("studentNumber", email.split("@")[0])
-        .where("otp_code", otp)
         .where("otp_expire", ">", new Date())
         .first();
       if (user === null) {
         return response.unauthorized({
-          message: "Login failed.",
+          message: "Logowanie nieudane.",
+          error: "Invalid OTP",
+        });
+      }
+
+      if (user.blocked) {
+        return response.unauthorized({
+          message:
+            "Twoje konto zostało zablokowane na logowanie OTP. Skontaktuj się z administratorem.",
+          error: "User is blocked",
+        });
+      }
+
+      if (user.otpCode !== otp.toString()) {
+        user.otpAttempts += 1;
+        await user.save();
+        if (user.otpAttempts >= 5) {
+          user.otpCode = null;
+          user.otpExpire = null;
+          user.blocked = true;
+          await user.save();
+          return response.unauthorized({
+            message:
+              "Logowanie nieudane. Twoje konto zostało zablokowane na logowanie poprzez OTP.",
+            error: "Too many attempts",
+          });
+        }
+        return response.unauthorized({
+          message: "Logowanie nieudane.",
           error: "Invalid OTP",
         });
       }

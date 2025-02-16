@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.string("otp_code").defaultTo(null);
       table.integer("otp_attempts").defaultTo(0);
       table.dateTime("otp_expire").defaultTo(null);
+      table.boolean("blocked").defaultTo(false);
       table.dropUnique(["usos_id"]);
     });
   }
@@ -21,6 +22,7 @@ export default class extends BaseSchema {
       table.dropColumn("otp_code");
       table.dropColumn("otp_attempts");
       table.dropColumn("otp_expire");
+      table.dropColumn("blocked");
       table.unique(["usos_id"]);
     });
   }
