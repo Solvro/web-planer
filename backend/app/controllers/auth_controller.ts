@@ -6,6 +6,7 @@ import { HttpContext } from "@adonisjs/core/http";
 import mail from "@adonisjs/mail/services/main";
 
 import User from "#models/user";
+import { getOtpValidator, verifyOtpValidator } from "#validators/otp";
 
 import { createClient } from "../usos/usos_client.js";
 
@@ -53,12 +54,8 @@ export default class AuthController {
   }
 
   async getOTP({ request, response }: HttpContext) {
-    const { email } = request.only(["email"]) as { email: string };
-    if (!email.endsWith("@student.pwr.edu.pl")) {
-      return response.badRequest({
-        message: "Invalid email address",
-      });
-    }
+    const data = request.all();
+    const { email } = await getOtpValidator.validate(data);
     const studentNumber = email.split("@")[0];
     let user = await User.findBy("studentNumber", studentNumber);
     if (user === null) {
@@ -94,15 +91,8 @@ export default class AuthController {
   }
 
   async verifyOTP({ request, response, auth }: HttpContext) {
-    const { otp, email } = request.only(["otp", "email"]) as {
-      otp: string;
-      email: string;
-    };
-    if (!email.endsWith("@student.pwr.edu.pl")) {
-      return response.badRequest({
-        message: "Invalid email address",
-      });
-    }
+    const data = request.all();
+    const { email, otp } = await verifyOtpValidator.validate(data);
     try {
       const user = await User.query()
         .where("studentNumber", email.split("@")[0])
