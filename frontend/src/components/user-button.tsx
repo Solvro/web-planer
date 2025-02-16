@@ -40,7 +40,9 @@ export function UserButton({ profile }: { profile: User }) {
                 </p>
               </div>
 
-              <Badge variant="secondary">Zweryfikowany</Badge>
+              <Badge variant={profile.verified ? "secondary" : "destructive"}>
+                {profile.verified ? "Zweryfikowany" : "Niezweryfikowany"}
+              </Badge>
             </div>
           </div>
           <Link href="/plans/account" className="w-full">
@@ -91,10 +93,10 @@ export function UserButton({ profile }: { profile: User }) {
   );
 }
 
-function UserAvatar({ profile }: { profile: User }) {
+export function UserAvatar({ profile }: { profile: User }) {
   return (
     <Avatar>
-      <AvatarImage src={profile.avatar ?? "/avatar.png"} />
+      <AvatarImage src={profile.avatar ?? "/assets/avatar_placeholder.png"} />
       <AvatarFallback>
         {profile.firstName.slice(0, 1) + profile.lastName.slice(0, 1)}
       </AvatarFallback>

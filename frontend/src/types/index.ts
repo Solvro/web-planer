@@ -11,6 +11,7 @@ export interface User {
   studentNumber: number;
   usosId: string;
   avatar?: string | null | undefined;
+  verified: boolean;
   createdAt: string;
   updatedAt: string;
   allowNotifications: boolean;
