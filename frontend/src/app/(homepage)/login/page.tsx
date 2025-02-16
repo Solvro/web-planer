@@ -64,6 +64,7 @@ export default function LoginPage() {
       setStep("otp");
     } catch (error) {
       console.error(error);
+      toast.error("Wystąpił błąd podczas wysyłania kodu");
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +95,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error(error);
+      toast.error("Nieprawidłowy kod");
     } finally {
       setIsLoading(false);
     }

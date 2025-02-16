@@ -85,13 +85,15 @@ router
   .delete("/user/schedules/:schedule_id", [SchedulesController, "destroy"])
   .use(middleware.usosAuth());
 
-router.post("user/login", [AuthController, "store"]).use(middleware.guest());
 router
-  .post("user/verify_otp", [AuthController, "update"])
+  .post("user/login", [AuthController, "loginWithUSOS"])
   .use(middleware.guest());
-router.post("user/get_otp", [AuthController, "show"]).use(middleware.guest());
 router
-  .delete("user/logout", [AuthController, "destroy"])
+  .post("user/verify_otp", [AuthController, "verifyOTP"])
+  .use(middleware.guest());
+router.post("user/get_otp", [AuthController, "getOTP"]).use(middleware.guest());
+router
+  .delete("user/logout", [AuthController, "logout"])
   .use(middleware.usosAuth());
 
 router.patch("/user", [UsersController, "update"]).use(middleware.usosAuth());

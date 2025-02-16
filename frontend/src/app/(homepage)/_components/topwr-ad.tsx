@@ -11,7 +11,7 @@ export function ToPWrAd() {
         <div className="container relative mx-auto max-w-7xl px-4 py-16">
           <div className="mx-auto space-y-4 pb-6 text-center">
             <h2 className="font-mono text-sm font-medium uppercase tracking-wider text-orange-600">
-              jesteś studentem politechniki wrocławskiej?
+              Jesteś studentem politechniki wrocławskiej?
             </h2>
             <h3 className="mx-auto mt-4 max-w-xs text-3xl font-bold sm:max-w-none sm:text-4xl md:text-5xl">
               Koniecznie zainstaluj aplikację{" "}

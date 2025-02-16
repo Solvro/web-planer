@@ -9,11 +9,7 @@ import User from "#models/user";
 import { createClient } from "../usos/usos_client.js";
 
 export default class AuthController {
-  //login with usos
-  async store({ request, response, auth }: HttpContext) {
-    /**
-     * Step 1: Get credentials from the request body
-     */
+  async loginWithUSOS({ request, response, auth }: HttpContext) {
     const { accessToken, accessSecret } = request.only([
       "accessToken",
       "accessSecret",
@@ -67,11 +63,7 @@ export default class AuthController {
     }
   }
 
-  //get otp for login
-  async show({ request, response }: HttpContext) {
-    /**
-     * Step 1: Get credentials from the request body
-     */
+  async getOTP({ request, response }: HttpContext) {
     const { email } = request.only(["email"]) as { email: string };
     try {
       const studentNumber = email.split("@")[0];
@@ -92,7 +84,6 @@ export default class AuthController {
       user.otpExpire = DateTime.now().plus({ minutes: 15 });
       await user.save();
 
-      //send email
       await mail.send((message) => {
         message
           .from("Solvro Planer <planer@solvro.pl>")
@@ -116,12 +107,7 @@ export default class AuthController {
     }
   }
 
-  //login with otp
-  async update({ request, response, auth }: HttpContext) {
-    /**
-     * Step 1: Get credentials from the request body
-     */
-    // const { otp } = request.only(["otp"]) as { otp: string };
+  async verifyOTP({ request, response, auth }: HttpContext) {
     const { otp, email } = request.only(["otp", "email"]) as {
       otp: string;
       email: string;
@@ -159,8 +145,7 @@ export default class AuthController {
     }
   }
 
-  // logout
-  async destroy({ response }: HttpContext) {
+  async logout({ response }: HttpContext) {
     try {
       response.clearCookie("token");
 
