@@ -79,7 +79,7 @@ export default function LoginPage() {
     try {
       const response = (await verifyOtp(email, data)) as VerifyOtpReponseType;
       if (response.success) {
-        if (response.user.firstName === "") {
+        if (response.user.firstName === "" && response.user.lastName === "") {
           // new account = trigger onboard
           handleTriggerConfetti();
           setStep("onboard");
