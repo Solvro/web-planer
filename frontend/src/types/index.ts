@@ -10,6 +10,7 @@ export interface User {
   lastName: string;
   studentNumber: number;
   usosId: string;
+  avatar?: string | null | undefined;
   createdAt: string;
   updatedAt: string;
   allowNotifications: boolean;

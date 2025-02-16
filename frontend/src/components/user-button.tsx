@@ -9,13 +9,13 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { GetProfile } from "@/services/usos/get-profile";
+import type { User } from "@/types";
 
 import { Icons } from "./icons";
 import { Badge } from "./ui/badge";
 import { SignOutButton } from "./ui/signout-button";
 
-export function UserButton({ profile }: { profile: GetProfile }) {
+export function UserButton({ profile }: { profile: User }) {
   const [opened, setOpened] = React.useState(false);
 
   return (
@@ -33,10 +33,10 @@ export function UserButton({ profile }: { profile: GetProfile }) {
             <div className="flex w-full items-start gap-3">
               <div className="flex flex-col gap-1">
                 <h1 className="translate-y-0.5 text-lg font-semibold leading-none">
-                  {`${profile.first_name} ${profile.last_name}`}
+                  {`${profile.firstName} ${profile.lastName}`}
                 </h1>
                 <p className="text-xs font-medium leading-none">
-                  {profile.student_number}@student.pwr.edu.pl
+                  {profile.studentNumber}@student.pwr.edu.pl
                 </p>
               </div>
 
@@ -91,12 +91,12 @@ export function UserButton({ profile }: { profile: GetProfile }) {
   );
 }
 
-function UserAvatar({ profile }: { profile: GetProfile }) {
+function UserAvatar({ profile }: { profile: User }) {
   return (
     <Avatar>
-      <AvatarImage src={profile.photo_urls["50x50"]} />
+      <AvatarImage src={profile.avatar ?? "/avatar.png"} />
       <AvatarFallback>
-        {profile.first_name.slice(0, 1) + profile.last_name.slice(0, 1)}
+        {profile.firstName.slice(0, 1) + profile.lastName.slice(0, 1)}
       </AvatarFallback>
     </Avatar>
   );

@@ -10,7 +10,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { Particles } from "@/components/magicui/particles";
 import { Block } from "@/components/ui/block";
 import { Button } from "@/components/ui/button";
-import { createUsosService } from "@/lib/usos";
+import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 import PWrLogoColor from "../../../public/assets/logo/pwr_color.png";
@@ -107,8 +107,7 @@ function AnimationLogo() {
 
 const JoinUsBlock = async () => {
   try {
-    const usos = await createUsosService();
-    await usos.getProfile();
+    await auth();
 
     return (
       <div className="flex items-center justify-center gap-3">

@@ -5,7 +5,7 @@ import { SolvroLogo } from "@/components/solvro-logo";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
-import { createUsosService } from "@/lib/usos";
+import { auth } from "@/lib/auth";
 
 import { FeedbackButton } from "./feedback-button";
 import { SidebarTriggerButton } from "./sidebar-trigger-button";
@@ -58,8 +58,10 @@ export function PlansTopbar() {
 
 async function UserProfile() {
   try {
-    const usos = await createUsosService();
-    const profile = await usos.getProfile();
+    const profile = await auth();
+    if (profile == null) {
+      throw new Error("No profile");
+    }
 
     return <UserButton profile={profile} />;
   } catch {
