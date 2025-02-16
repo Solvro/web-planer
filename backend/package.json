@@ -44,6 +44,7 @@
     "@adonisjs/auth": "^9.2.4",
     "@adonisjs/core": "^6.12.1",
     "@adonisjs/cors": "^2.2.1",
+    "@adonisjs/limiter": "^2.3.3",
     "@adonisjs/lucid": "^21.2.0",
     "@adonisjs/mail": "^9.2.2",
     "@adonisjs/session": "^7.5.0",

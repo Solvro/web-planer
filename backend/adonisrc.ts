@@ -44,6 +44,7 @@ export default defineConfig({
     },
     () => import("@adonisjs/mail/mail_provider"),
     () => import("@adonisjs/shield/shield_provider"),
+    () => import("@adonisjs/limiter/limiter_provider"),
   ],
 
   /*

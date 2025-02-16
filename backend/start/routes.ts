@@ -13,6 +13,7 @@ import router from "@adonisjs/core/services/router";
 import swagger from "#config/swagger";
 
 import { middleware } from "./kernel.js";
+import { throttle } from "./limiter.js";
 
 const DepartmentsController = () =>
   import("#controllers/departments_controller");
@@ -90,8 +91,12 @@ router
   .use(middleware.guest());
 router
   .post("user/verify_otp", [AuthController, "verifyOTP"])
-  .use(middleware.guest());
-router.post("user/get_otp", [AuthController, "getOTP"]).use(middleware.guest());
+  .use(middleware.guest())
+  .use(throttle);
+router
+  .post("user/get_otp", [AuthController, "getOTP"])
+  .use(middleware.guest())
+  .use(throttle);
 router
   .delete("user/logout", [AuthController, "logout"])
   .use(middleware.usosAuth());
