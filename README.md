@@ -2,7 +2,7 @@
 
 > Welcome to the repository of the Solvro project, a student organization at the Wrocław University of Science and Technology!
 
-[![Welcome Page](https://i.imgur.com/PSnVCNN.png)](https://planer.solvro.pl)
+[![Welcome Page](https://i.imgur.com/dVjBfjS.png)](https://planer.solvro.pl)
 
 ## 🎯 Project Goal
 
