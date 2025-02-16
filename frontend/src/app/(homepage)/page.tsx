@@ -398,7 +398,14 @@ export default function Home() {
 
             <div className="flex w-full flex-col items-center justify-center space-y-4 pt-4 sm:flex-row sm:space-x-4 sm:space-y-0">
               <div className="mt-4 flex items-center gap-2">
-                <Link href="https://play.google.com/store/apps/details?id=com.solvro.topwr">
+                <Link
+                  href="https://play.google.com/store/apps/details?id=com.solvro.topwr"
+                  onClick={() => {
+                    void window.umami?.track("Download", {
+                      type: "Google Play",
+                    });
+                  }}
+                >
                   <Image
                     src={"/assets/google_play.png"}
                     alt={"Download on google play"}
@@ -407,7 +414,12 @@ export default function Home() {
                     className="w-[160px]"
                   />
                 </Link>
-                <Link href="https://apps.apple.com/us/app/topwr/id1644647395">
+                <Link
+                  href="https://apps.apple.com/us/app/topwr/id1644647395"
+                  onClick={() => {
+                    void window.umami?.track("Download", { type: "App Store" });
+                  }}
+                >
                   <Image
                     src={"/assets/apple_store.png"}
                     alt={"Download on google play"}
