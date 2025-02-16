@@ -7,6 +7,7 @@ const config = {
     "lint-staged.config.mjs",
     "src/components/class-block-stars.tsx",
     "src/lib/usos.ts",
+    "src/lib/auth/index.ts",
     "src/services/usos/**",
   ],
   // sharp is used in nextjs image optimization
