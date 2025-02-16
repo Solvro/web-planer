@@ -10,7 +10,7 @@ function createHmacSha1Base64(base_string: string, key: string) {
   return CryptoJS.enc.Base64.stringify(hmac);
 }
 
-export const oauth = new OAuth({
+const oauth = new OAuth({
   consumer: { key: env.USOS_CONSUMER_KEY, secret: env.USOS_CONSUMER_SECRET },
   signature_method: "HMAC-SHA1",
   hash_function(base_string, key) {

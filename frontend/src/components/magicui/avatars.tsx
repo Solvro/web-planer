@@ -35,7 +35,7 @@ export function AvatarCircles({ className, contributors }: AvatarCirclesProps) {
             >
               <img
                 key={index}
-                className="h-16 w-16 rounded-full border-2 border-white dark:border-gray-800"
+                className="h-16 w-16 rounded-full border-2 border-white bg-background dark:border-gray-800"
                 src={contributor.avatar}
                 width={64}
                 height={64}

@@ -126,13 +126,22 @@ const JoinUsBlock = async () => {
   } catch {
     return (
       <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
-        <Button
+        {/* <Button
           className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
           asChild={true}
         >
           <Link href="/api/login">
             <Icons.Lock className="size-4" />
             Zaloguj się z USOS
+          </Link>
+        </Button> */}
+        <Button
+          className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
+          asChild={true}
+        >
+          <Link href="/login">
+            <Icons.Lock className="size-4" />
+            Zaloguj się do planera
           </Link>
         </Button>
 
