@@ -108,7 +108,7 @@ export default class AuthController {
       });
     } catch (error) {
       assert(error instanceof Error);
-      return response.unauthorized({
+      return response.internalServerError({
         message: "Login failed.",
         error: error.message,
         success: false,

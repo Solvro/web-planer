@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -41,6 +42,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [step, setStep] = React.useState<"email" | "otp" | "onboard">("email");
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
     resolver: zodResolver(loginOtpEmailSchema),
@@ -85,7 +87,7 @@ export default function LoginPage() {
           setStep("onboard");
         } else {
           toast.success("Zalogowano pomyślnie");
-          window.location.href = "/plans";
+          router.push("/plans");
         }
       } else {
         toast.error("Nieprawidłowy kod");
