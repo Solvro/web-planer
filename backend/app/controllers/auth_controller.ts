@@ -30,7 +30,7 @@ export default class AuthController {
         last_name: string;
         photo_urls: Record<string, string>;
       }>("users/user?fields=id|student_number|first_name|last_name|photo_urls");
-      let user = await User.findBy("usos_id", profile.id);
+      let user = await User.findBy("student_number", profile.student_number);
       if (user === null) {
         user = await User.create({
           usos_id: profile.id,
@@ -40,6 +40,17 @@ export default class AuthController {
           avatar: profile.photo_urls["50x50"],
           verified: true,
         });
+      } else if (
+        user.avatar !== profile.photo_urls["50x50"] ||
+        user.firstName !== profile.first_name ||
+        user.lastName !== profile.last_name ||
+        user.usosId !== profile.id
+      ) {
+        user.avatar = profile.photo_urls["50x50"];
+        user.firstName = profile.first_name;
+        user.lastName = profile.last_name;
+        user.usosId = profile.id;
+        await user.save();
       }
 
       await auth.use("jwt").generate(user);
@@ -66,10 +77,8 @@ export default class AuthController {
       const studentNumber = email.split("@")[0];
       let user = await User.findBy("studentNumber", studentNumber);
       if (user === null) {
-        // generate random 10 digit id
-        const customId = Math.floor(1000000000 + Math.random() * 9000000000);
         user = await User.create({
-          usos_id: customId,
+          usos_id: "",
           studentNumber,
           firstName: "",
           lastName: "",
