@@ -25,7 +25,8 @@ export default class AuthController {
         student_number: string;
         first_name: string;
         last_name: string;
-      }>("users/user?fields=id|student_number|first_name|last_name");
+        photo_urls: Record<string, string>;
+      }>("users/user?fields=id|student_number|first_name|last_name|photo_urls");
       let user = await User.findBy("usos_id", profile.id);
       if (user === null) {
         user = await User.create({
@@ -33,6 +34,8 @@ export default class AuthController {
           studentNumber: profile.student_number,
           firstName: profile.first_name,
           lastName: profile.last_name,
+          avatar: profile.photo_urls["50x50"],
+          verified: true,
         });
       }
 
