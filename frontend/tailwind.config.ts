@@ -297,6 +297,10 @@ const config = {
             transform: "scale(0.8)",
           },
         },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "waving-hand": "flip 1s infinite",
@@ -315,6 +319,7 @@ const config = {
         "fade-up": "fade-up 1s var(--animation-delay, 0ms) ease forwards",
         "image-glow": "image-glow 4.1s ease-out .6s forwards",
         pulse2: "pulse2 2s infinite",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
       gridColumnStart: {
         "13": "13",

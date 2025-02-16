@@ -2,13 +2,12 @@
 
 import { cookies as cookiesPromise } from "next/headers";
 
-import { env } from "@/env.mjs";
 import { fetchToAdonis } from "@/lib/auth";
 
 export const signOutFunction = async () => {
   const cookies = await cookiesPromise();
   await fetchToAdonis({
-    url: `${env.NEXT_PUBLIC_API_URL}/user/logout`,
+    url: `/user/logout`,
     method: "DELETE",
   });
 

@@ -3,7 +3,7 @@
 import type { z } from "zod";
 
 import { env } from "@/env.mjs";
-import { feedbackFormSchema } from "@/types/schema";
+import { feedbackFormSchema } from "@/types/schemas";
 
 export const sendFeedbackForm = async (
   values: z.infer<typeof feedbackFormSchema>,

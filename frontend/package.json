@@ -49,6 +49,7 @@
     "fetch-cookie": "^3.0.1",
     "framer-motion": "^11.3.28",
     "html-to-image": "^1.11.11",
+    "input-otp": "^1.4.2",
     "jotai": "^2.9.3",
     "lru-cache": "^11.0.1",
     "lucide-react": "^0.426.0",
