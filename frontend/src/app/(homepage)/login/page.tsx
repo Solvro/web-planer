@@ -11,7 +11,7 @@ import type { z } from "zod";
 import SolvroLogoColor from "@/../public/assets/logo/logo_solvro_color.png";
 import SolvroLogoMono from "@/../public/assets/logo/logo_solvro_mono.png";
 import BgImage from "@/../public/assets/planer-bg.png";
-import { sendOtpToEmail, verifyOtp } from "@/actions/login";
+import { sendOtpToEmail, setOnboardData, verifyOtp } from "@/actions/login";
 import { handleTriggerConfetti } from "@/components/confetti";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -31,12 +31,16 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import type { VerifyOtpReponseType } from "@/types";
-import { loginOtpEmailSchema, otpPinSchema } from "@/types/schemas";
+import {
+  loginOtpEmailSchema,
+  otpPinSchema,
+  userDataSchema,
+} from "@/types/schemas";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
-  const [step, setStep] = React.useState<"email" | "otp">("email");
+  const [step, setStep] = React.useState<"email" | "otp" | "onboard">("email");
 
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
     resolver: zodResolver(loginOtpEmailSchema),
@@ -78,6 +82,7 @@ export default function LoginPage() {
         if (response.user.firstName === "") {
           // new account = trigger onboard
           handleTriggerConfetti();
+          setStep("onboard");
         } else {
           toast.success("Zalogowano pomyślnie");
           window.location.href = "/plans";
@@ -85,6 +90,25 @@ export default function LoginPage() {
       } else {
         toast.error("Nieprawidłowy kod");
       }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const formOnboard = useForm<z.infer<typeof userDataSchema>>({
+    resolver: zodResolver(userDataSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
+  });
+
+  async function onSubmitOnboard(data: z.infer<typeof userDataSchema>) {
+    setIsLoading(true);
+    try {
+      await setOnboardData(data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -122,11 +146,17 @@ export default function LoginPage() {
             height={100}
             className="hidden dark:block"
           />
-          <h1 className="mt-5 text-3xl font-bold">Zaloguj się do planera</h1>
-          <p className="text-balance text-center text-sm text-muted-foreground">
-            Podaj swój email z domeny Politechniki Wrocławskiej, na który
-            wyślemy jednorazowy kod
-          </p>
+          {step !== "onboard" && (
+            <>
+              <h1 className="mt-5 text-3xl font-bold">
+                Zaloguj się do planera
+              </h1>
+              <p className="text-balance text-center text-sm text-muted-foreground">
+                Podaj swój email z domeny Politechniki Wrocławskiej, na który
+                wyślemy jednorazowy kod
+              </p>
+            </>
+          )}
 
           {step === "email" && (
             <div className="mt-5 flex w-full max-w-xs flex-col gap-4">
@@ -223,6 +253,75 @@ export default function LoginPage() {
                   </Button>
                 </form>
               </Form>
+            </div>
+          )}
+          {step === "onboard" && (
+            <div className="flex w-full flex-col items-center justify-center">
+              <h1 className="text-2xl font-bold">Witaj w Planerze!</h1>
+              <p className="text-balance text-center text-sm text-muted-foreground">
+                Wypełnij opcjonalnie swoje dane, abyśmy mogli dostosować planer
+                do Twoich potrzeb.
+              </p>
+              <div className="flex w-full flex-col items-center justify-center">
+                <Form {...formOnboard}>
+                  <form
+                    onSubmit={formOnboard.handleSubmit(onSubmitOnboard)}
+                    className="mt-5 max-w-xs space-y-1"
+                  >
+                    <div className="mb-6 flex flex-col items-center gap-2 md:flex-row">
+                      <FormField
+                        control={formOnboard.control}
+                        name="firstName"
+                        disabled={isLoading}
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Imię</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Jan" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={formOnboard.control}
+                        name="lastName"
+                        disabled={isLoading}
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Nazwisko</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Kowalski" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      size={"sm"}
+                      className="w-full"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <Icons.Loader className="size-4 animate-spin" />
+                      ) : null}
+                      Zapisz dane
+                    </Button>
+                    <Button
+                      type="button"
+                      size={"sm"}
+                      className="w-full"
+                      variant={"ghost"}
+                      asChild
+                    >
+                      <Link href="/plans">Pomiń</Link>
+                    </Button>
+                  </form>
+                </Form>
+              </div>
             </div>
           )}
         </div>

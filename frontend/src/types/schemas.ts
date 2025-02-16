@@ -21,3 +21,8 @@ export const otpPinSchema = z.object({
     message: "Kod musi mieć 6 znaków",
   }),
 });
+
+export const userDataSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+});

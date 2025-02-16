@@ -1,13 +1,18 @@
 "use server";
 
 import { cookies as cookiesPromise } from "next/headers";
+import { redirect } from "next/navigation";
 import type { z } from "zod";
 
 import { ADONIS_COOKIES } from "@/constants";
 import { env } from "@/env.mjs";
 import { fetchToAdonis } from "@/lib/auth";
 import type { VerifyOtpReponseType } from "@/types";
-import { loginOtpEmailSchema, otpPinSchema } from "@/types/schemas";
+import {
+  loginOtpEmailSchema,
+  otpPinSchema,
+  userDataSchema,
+} from "@/types/schemas";
 
 export const sendOtpToEmail = async (
   values: z.infer<typeof loginOtpEmailSchema>,
@@ -99,4 +104,25 @@ export const verifyOtp = async (
   } catch {}
 
   return data;
+};
+
+export const setOnboardData = async (
+  values: z.infer<typeof userDataSchema>,
+) => {
+  const validatedFields = userDataSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  await fetchToAdonis<{ success: boolean; message: string }>({
+    url: "/user",
+    method: "PATCH",
+    body: JSON.stringify(values),
+  });
+
+  return redirect("/plans");
 };
