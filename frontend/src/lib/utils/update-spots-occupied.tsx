@@ -1,8 +1,7 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
-import type { LessonType } from "@/services/usos/types";
-import type { CourseType } from "@/types";
+import type { CourseType, LessonType } from "@/types";
 
 import type { usePlanType } from "../use-plan";
 
