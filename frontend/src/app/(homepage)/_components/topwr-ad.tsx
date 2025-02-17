@@ -35,6 +35,7 @@ export function ToPWrAd() {
                 href="https://play.google.com/store/apps/details?id=com.solvro.topwr"
                 data-umami-event="Download"
                 data-umami-event-type="Google Play"
+                target="_blank"
               >
                 <Image
                   src={"/assets/google_play.png"}
@@ -48,6 +49,7 @@ export function ToPWrAd() {
                 href="https://apps.apple.com/us/app/topwr/id1644647395"
                 data-umami-event="Download"
                 data-umami-event-type="App Store"
+                target="_blank"
               >
                 <Image
                   src={"/assets/apple_store.png"}
