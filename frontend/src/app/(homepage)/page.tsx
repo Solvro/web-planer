@@ -139,7 +139,7 @@ const JoinUsBlock = async () => {
         <Button
           asChild={true}
           className="animate-fade-in-2 opacity-0 [--animation-delay:600ms]"
-          variant={"outline"}
+          variant="outline"
         >
           <Link href="/plans">
             <Icons.Plans className="size-4" />

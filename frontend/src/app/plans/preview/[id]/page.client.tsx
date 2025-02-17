@@ -49,11 +49,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 
         <div className="flex items-center gap-1">
-          <Button
-            size={"sm"}
-            className="bg-white text-black"
-            onClick={copyPlan}
-          >
+          <Button size="sm" className="bg-white text-black" onClick={copyPlan}>
             <Icons.Copy className="size-4" />
             Skopiuj do siebie
           </Button>

@@ -136,7 +136,7 @@ function EmailStep({
       </Button>
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
         <span className="relative z-10 bg-background px-2 text-muted-foreground">
-          Lub kontunuuj poprzez
+          Lub kontynuuj poprzez
         </span>
       </div>
       <Form {...form}>
@@ -160,7 +160,7 @@ function EmailStep({
           />
           <Button
             type="submit"
-            size={"sm"}
+            size="sm"
             className="w-full"
             disabled={isLoading}
           >
@@ -257,7 +257,7 @@ function OtpStep({
 
           <Button
             type="submit"
-            size={"sm"}
+            size="sm"
             className="w-full"
             disabled={isLoading}
           >
@@ -350,7 +350,7 @@ function OnboardStep() {
 
             <Button
               type="submit"
-              size={"sm"}
+              size="sm"
               className="w-full"
               disabled={isLoading}
             >
@@ -361,9 +361,9 @@ function OnboardStep() {
             </Button>
             <Button
               type="button"
-              size={"sm"}
+              size="sm"
               className="w-full"
-              variant={"ghost"}
+              variant="ghost"
               asChild
             >
               <Link href="/plans">Pomiń</Link>

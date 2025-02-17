@@ -22,14 +22,14 @@ export function PlansTopbar() {
           <SidebarTriggerButton />
           <Button
             asChild={true}
-            variant={"ghost"}
+            variant="ghost"
             className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
           >
             <Link href="/plans">Moje plany</Link>
           </Button>
           <Button
             asChild={true}
-            variant={"ghost"}
+            variant="ghost"
             className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
           >
             <Link

@@ -81,7 +81,7 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Button
               asChild={true}
-              variant={"ghost"}
+              variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
             >
               <Link href="https://www.facebook.com/knsolvro" target="_blank">
@@ -90,7 +90,7 @@ export function Navbar() {
             </Button>
             <Button
               asChild={true}
-              variant={"ghost"}
+              variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
             >
               <Link
@@ -102,7 +102,7 @@ export function Navbar() {
             </Button>
             <Button
               asChild={true}
-              variant={"ghost"}
+              variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
             >
               <Link href="https://solvro.pwr.edu.pl/contact/" target="_blank">
@@ -117,7 +117,7 @@ export function Navbar() {
         {/* Mobile Menu Icon */}
         <div className="flex h-20 items-center gap-1 md:hidden">
           <ModeToggle />
-          <Button onClick={toggleMenu} size={"icon"} variant={"outline"}>
+          <Button onClick={toggleMenu} size={"icon"} variant="outline">
             {isMenuOpen ? (
               <Icons.X className="!size-6" />
             ) : (
