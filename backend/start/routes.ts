@@ -89,12 +89,13 @@ router
 router
   .post("user/login", [AuthController, "loginWithUSOS"])
   .use(middleware.guest());
+
 router
-  .post("user/verify_otp", [AuthController, "verifyOTP"])
-  .use(middleware.guest())
-  .use(throttle);
-router
-  .post("user/get_otp", [AuthController, "getOTP"])
+  .group(() => {
+    router.post("verify", [AuthController, "verifyOTP"]);
+    router.post("get", [AuthController, "getOTP"]);
+  })
+  .prefix("user/otp")
   .use(middleware.guest())
   .use(throttle);
 router

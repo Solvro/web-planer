@@ -114,7 +114,7 @@ function EmailStep({
   async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
     try {
       const result = await fetchClient({
-        url: `/user/get_otp`,
+        url: `/user/otp/get`,
         method: "POST",
         body: JSON.stringify(values),
       });
@@ -198,7 +198,7 @@ function OtpStep({
   async function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
     try {
       const result = await fetchClient({
-        url: `/user/verify_otp`,
+        url: `/user/otp/verify`,
         method: "POST",
         body: JSON.stringify({ email, ...data }),
       });
