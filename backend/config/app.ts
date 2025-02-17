@@ -1,3 +1,5 @@
+import proxyAddr from "proxy-addr";
+
 import { Secret } from "@adonisjs/core/helpers";
 import { defineConfig } from "@adonisjs/core/http";
 import app from "@adonisjs/core/services/app";
@@ -33,9 +35,15 @@ export const http = defineConfig({
   cookie: {
     domain: "",
     path: "/",
-    maxAge: "2h",
+    maxAge: "24h",
     httpOnly: true,
     secure: app.inProduction,
     sameSite: "lax",
   },
+
+  trustProxy: proxyAddr.compile([
+    "172.16.0.0/12",
+    "10.0.0.0/8",
+    "192.168.0.0/16",
+  ]),
 });

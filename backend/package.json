@@ -71,6 +71,7 @@
     "@swc/core": "^1.7.22",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.5.1",
+    "@types/proxy-addr": "^2.0.3",
     "eslint": "^9.17.0",
     "hot-hook": "^0.2.6",
     "pino-pretty": "^11.2.2",
