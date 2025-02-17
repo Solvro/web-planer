@@ -39,7 +39,6 @@ import {
 } from "@/types/schemas";
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [step, setStep] = React.useState<"email" | "otp" | "onboard">("email");
 
@@ -86,24 +85,10 @@ export default function LoginPage() {
           )}
 
           {step === "email" && (
-            <EmailStep
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              setStep={setStep}
-              setEmail={setEmail}
-            />
+            <EmailStep setStep={setStep} setEmail={setEmail} />
           )}
-          {step === "otp" && (
-            <OtpStep
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              setStep={setStep}
-              email={email}
-            />
-          )}
-          {step === "onboard" && (
-            <OnboardStep isLoading={isLoading} setIsLoading={setIsLoading} />
-          )}
+          {step === "otp" && <OtpStep setStep={setStep} email={email} />}
+          {step === "onboard" && <OnboardStep />}
         </div>
       </div>
     </div>
@@ -111,13 +96,9 @@ export default function LoginPage() {
 }
 
 function EmailStep({
-  isLoading,
-  setIsLoading,
   setStep,
   setEmail,
 }: {
-  isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
   setStep: (value: "email" | "otp") => void;
   setEmail: (value: string) => void;
 }) {
@@ -128,9 +109,10 @@ function EmailStep({
     },
   });
 
+  const isLoading = form.formState.isSubmitting;
+
   async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
     try {
-      setIsLoading(true);
       const result = await fetchClient({
         url: `/user/get_otp`,
         method: "POST",
@@ -145,8 +127,6 @@ function EmailStep({
     } catch (error) {
       console.error(error);
       toast.error("Wystąpił błąd podczas wysyłania kodu");
-    } finally {
-      setIsLoading(false);
     }
   }
   return (
@@ -196,13 +176,9 @@ function EmailStep({
 }
 
 function OtpStep({
-  isLoading,
-  setIsLoading,
   setStep,
   email,
 }: {
-  isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
   setStep: (value: "email" | "otp" | "onboard") => void;
   email: string;
 }) {
@@ -215,9 +191,10 @@ function OtpStep({
     },
   });
 
+  const isLoading = formOtp.formState.isSubmitting;
+
   async function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
     try {
-      setIsLoading(true);
       const result = await fetchClient({
         url: `/user/verify_otp`,
         method: "POST",
@@ -242,8 +219,6 @@ function OtpStep({
     } catch (error) {
       console.error(error);
       toast.error("Nieprawidłowy kod");
-    } finally {
-      setIsLoading(false);
     }
   }
   return (
@@ -297,13 +272,7 @@ function OtpStep({
   );
 }
 
-function OnboardStep({
-  isLoading,
-  setIsLoading,
-}: {
-  isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
-}) {
+function OnboardStep() {
   const router = useRouter();
 
   const formOnboard = useForm<z.infer<typeof userDataSchema>>({
@@ -314,9 +283,10 @@ function OnboardStep({
     },
   });
 
+  const isLoading = formOnboard.formState.isSubmitting;
+
   async function onSubmitOnboard(data: z.infer<typeof userDataSchema>) {
     try {
-      setIsLoading(true);
       const result = await fetchClient({
         url: `/user`,
         method: "POST",
@@ -330,8 +300,7 @@ function OnboardStep({
       router.push("/plans");
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
+      toast.error("Wystąpił błąd podczas zapisywania danych");
     }
   }
 
