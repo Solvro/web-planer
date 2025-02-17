@@ -193,5 +193,6 @@ export type VerifyOtpReponseType =
     }
   | {
       success: false;
+      message: string;
       errors: Record<string, string>;
     };

@@ -203,7 +203,12 @@ function OtpStep({
         body: JSON.stringify({ email, ...data }),
       });
       if (!result.ok) {
-        toast.error("Nieprawidłowy kod");
+        try {
+          const response = (await result.json()) as { message: string };
+          toast.error(response.message);
+        } catch {
+          toast.error("Wystąpił nieoczekiwany błąd");
+        }
         return;
       }
       const response = (await result.json()) as VerifyOtpReponseType;
@@ -220,7 +225,7 @@ function OtpStep({
       }
     } catch (error) {
       console.error(error);
-      toast.error("Nieprawidłowy kod");
+      toast.error("Wystąpił błąd podczas weryfikacji kodu");
     }
   }
   return (
