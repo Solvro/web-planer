@@ -13,6 +13,12 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
+    if (error instanceof Error) {
+      return ctx.response.status(500).send({
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
     return super.handle(error, ctx);
   }
 
