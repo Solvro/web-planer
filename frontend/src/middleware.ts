@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
 
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/plans/account");
-  const user = await auth({ payload, type: "adonis", disableThrow: true });
+  const user = await auth({ payload, type: "adonis", noThrow: true });
 
   if (!isProtectedRoute) {
     return nextResponse;

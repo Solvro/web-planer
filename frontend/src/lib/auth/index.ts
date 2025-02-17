@@ -94,7 +94,7 @@ export async function getRequestToken() {
 }
 
 type AuthType = {
-  disableThrow?: boolean;
+  noThrow?: boolean;
 } & (
   | {
       payload?: {
@@ -112,11 +112,7 @@ type AuthType = {
     }
 );
 
-export const auth = async ({
-  payload,
-  disableThrow = false,
-  type,
-}: AuthType) => {
+export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
   const cookies = await cookiesPromise();
   let accessToken, accessSecret, adonisSession, token;
   if (type === "usos") {
@@ -132,7 +128,7 @@ export const auth = async ({
     (type === "usos" && (accessToken === "" || accessSecret === "")) ||
     (type === "adonis" && (adonisSession === "" || token === ""))
   ) {
-    if (disableThrow) {
+    if (noThrow) {
       return null;
     }
     throw new Error("No access token or access secret");
@@ -170,7 +166,7 @@ export const auth = async ({
           path: "/",
         });
       } catch {}
-      if (disableThrow) {
+      if (noThrow) {
         return null;
       }
       throw new Error(data.error);

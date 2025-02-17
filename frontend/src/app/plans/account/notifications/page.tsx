@@ -7,7 +7,7 @@ import { auth } from "@/lib/auth";
 import { NotificationsForm } from "../../_components/notifications-form";
 
 export default async function NotificationsPage() {
-  const user = await auth({ disableThrow: true, type: "adonis" });
+  const user = await auth({ noThrow: true, type: "adonis" });
   if (user == null) {
     return notFound();
   }

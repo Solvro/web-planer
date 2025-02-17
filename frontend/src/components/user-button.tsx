@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -33,8 +33,9 @@ export function UserButton({ profile }: { profile: User }) {
             <div className="flex w-full items-start gap-3">
               <div className="flex flex-col gap-1">
                 <h1 className="translate-y-0.5 text-lg font-semibold leading-none">
-                  {`${profile.firstName} ${profile.lastName}`}
+                  {profile.firstName} {profile.lastName}
                 </h1>
+
                 <p className="text-xs font-medium leading-none">
                   {profile.studentNumber}@student.pwr.edu.pl
                 </p>
@@ -94,12 +95,35 @@ export function UserButton({ profile }: { profile: User }) {
 }
 
 export function UserAvatar({ profile }: { profile: User }) {
+  const isFirstNameEmpty = profile.firstName === "";
+  const isLastNameEmpty = profile.lastName === "";
+
+  const fallback = useMemo(() => {
+    if (isFirstNameEmpty && isLastNameEmpty) {
+      return profile.studentNumber.toString().slice(0, 2);
+    }
+
+    if (isFirstNameEmpty) {
+      return profile.lastName.slice(0, 1);
+    }
+
+    if (isLastNameEmpty) {
+      return profile.firstName.slice(0, 1);
+    }
+
+    return `${profile.firstName.slice(0, 1)}${profile.lastName.slice(0, 1)}`;
+  }, [
+    isFirstNameEmpty,
+    isLastNameEmpty,
+    profile.firstName,
+    profile.lastName,
+    profile.studentNumber,
+  ]);
+
   return (
     <Avatar>
       <AvatarImage src={profile.avatar ?? "/assets/avatar_placeholder.png"} />
-      <AvatarFallback>
-        {profile.firstName.slice(0, 1) + profile.lastName.slice(0, 1)}
-      </AvatarFallback>
+      <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
   );
 }

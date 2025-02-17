@@ -106,24 +106,10 @@ function AnimationLogo() {
   );
 }
 
-const JoinUsBlock = async () => {
-  try {
-    await auth({ type: "adonis" });
+async function JoinUsBlock() {
+  const user = await auth({ type: "adonis", noThrow: true });
 
-    return (
-      <div className="flex items-center justify-center gap-3">
-        <Button
-          className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
-          asChild={true}
-        >
-          <Link href="/plans">
-            <Icons.Plans className="size-4" />
-            Przejdź do swoich planów
-          </Link>
-        </Button>
-      </div>
-    );
-  } catch {
+  if (user === null) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
         <Button
@@ -149,7 +135,21 @@ const JoinUsBlock = async () => {
       </div>
     );
   }
-};
+
+  return (
+    <div className="flex items-center justify-center gap-3">
+      <Button
+        className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
+        asChild={true}
+      >
+        <Link href="/plans">
+          <Icons.Plans className="size-4" />
+          Przejdź do swoich planów
+        </Link>
+      </Button>
+    </div>
+  );
+}
 
 export default function Home() {
   return (

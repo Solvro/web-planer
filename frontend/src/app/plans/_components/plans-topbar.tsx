@@ -57,20 +57,14 @@ export function PlansTopbar() {
 }
 
 async function UserProfile() {
-  try {
-    const profile = await auth({ type: "adonis" });
-    if (profile == null) {
-      throw new Error("No profile");
-    }
+  const profile = await auth({ type: "adonis", noThrow: true });
 
-    return <UserButton profile={profile} />;
-  } catch {
+  if (profile == null) {
     return (
       <Button variant="default" size="sm" asChild={true}>
-        <Link href="/login" prefetch={false}>
-          Zaloguj się
-        </Link>
+        <Link href="/login">Zaloguj się</Link>
       </Button>
     );
   }
+  return <UserButton profile={profile} />;
 }

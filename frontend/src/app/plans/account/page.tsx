@@ -6,14 +6,8 @@ import { UserAvatar } from "@/components/user-button";
 import { auth } from "@/lib/auth";
 
 export default async function ProfilePage() {
-  let profile;
-
-  try {
-    profile = await auth({ type: "adonis" });
-    if (profile == null) {
-      return notFound();
-    }
-  } catch {
+  const profile = await auth({ type: "adonis", noThrow: true });
+  if (profile == null) {
     return notFound();
   }
 
@@ -30,7 +24,15 @@ export default async function ProfilePage() {
         <UserAvatar profile={profile} />
         <div className="flex w-full flex-col">
           <h1 className="text-lg font-semibold">
-            {profile.firstName} {profile.lastName}
+            {profile.firstName === "" && profile.lastName === "" ? (
+              <span className="font-medium italic text-muted-foreground">
+                Nie podano imienia i nazwiska
+              </span>
+            ) : (
+              <>
+                {profile.firstName} {profile.lastName}
+              </>
+            )}
           </h1>
           <div className="mt-2 w-full">
             <div className="flex w-full items-center justify-between">
