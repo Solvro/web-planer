@@ -32,8 +32,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { fetchClient } from "@/lib/fetch";
 import type { usePlanType } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
-import type { LessonType } from "@/services/usos/types";
-import type { CourseType, FacultyType, PlanResponseType } from "@/types";
+import type {
+  CourseType,
+  FacultyType,
+  LessonType,
+  PlanResponseType,
+} from "@/types";
 
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";

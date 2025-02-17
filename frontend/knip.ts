@@ -6,20 +6,10 @@ const config = {
     "next-sitemap.config.js",
     "lint-staged.config.mjs",
     "src/components/class-block-stars.tsx",
-    "src/lib/usos.ts",
-    "src/lib/auth/index.ts",
-    "src/services/usos/**",
+    "src/types/index.ts",
   ],
   // sharp is used in nextjs image optimization
-  ignoreDependencies: [
-    "sharp",
-    "@radix-ui/*",
-    "eslint",
-    "cheerio",
-    "fetch-cookie",
-    "node-fetch",
-    "lru-cache",
-  ],
+  ignoreDependencies: ["sharp", "@radix-ui/*", "eslint"],
 } satisfies KnipConfig;
 
 export default config;

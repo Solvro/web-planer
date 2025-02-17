@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 
 import { fetchToAdonis } from "@/lib/auth";
-import type { SharedPlan } from "@/lib/types";
+import type { SharedPlan } from "@/types";
 
 import { SharePlanPage } from "./page.client";
 

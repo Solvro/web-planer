@@ -25,7 +25,7 @@ import { usePlan } from "@/lib/use-plan";
 import { createOnlinePlan } from "@/lib/utils/create-online-plan";
 import { syncPlan } from "@/lib/utils/sync-plan";
 import { updateLocalPlan } from "@/lib/utils/update-local-plan";
-import { Day } from "@/services/usos/types";
+import { Day } from "@/types";
 import type { CourseType } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";

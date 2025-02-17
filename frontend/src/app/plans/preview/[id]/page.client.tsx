@@ -11,8 +11,8 @@ import { plansIds } from "@/atoms/plans-ids";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import type { SharedPlan } from "@/lib/types";
-import { Day } from "@/services/usos/types";
+import type { SharedPlan } from "@/types";
+import { Day } from "@/types";
 
 export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const uuid = useMemo(() => uuidv4(), []);
