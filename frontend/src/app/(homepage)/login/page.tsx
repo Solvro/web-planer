@@ -51,7 +51,6 @@ export default function LoginPage() {
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
     setIsLoading(true);
     try {
@@ -82,8 +81,7 @@ export default function LoginPage() {
     try {
       const response = (await verifyOtp(email, data)) as VerifyOtpReponseType;
       if (response.success) {
-        if (response.user.firstName === "" && response.user.lastName === "") {
-          // new account = trigger onboard
+        if (response.isNewAcccount) {
           handleTriggerConfetti();
           setStep("onboard");
         } else {

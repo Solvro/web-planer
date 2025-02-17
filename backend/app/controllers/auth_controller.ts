@@ -135,6 +135,10 @@ export default class AuthController {
 
       await auth.use("jwt").generate(user);
 
+      let isNewAccount = false;
+      if (user.verified === false) {
+        isNewAccount = true;
+      }
       user.verified = true;
       user.otpCode = null;
       user.otpExpire = null;
@@ -143,6 +147,7 @@ export default class AuthController {
       return response.ok({
         success: true,
         user: user.serialize(),
+        isNewAccount,
       });
     } catch (error) {
       assert(error instanceof Error);
