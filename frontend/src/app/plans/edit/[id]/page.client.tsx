@@ -25,6 +25,7 @@ import { usePlan } from "@/lib/use-plan";
 import { createOnlinePlan } from "@/lib/utils/create-online-plan";
 import { syncPlan } from "@/lib/utils/sync-plan";
 import { updateLocalPlan } from "@/lib/utils/update-local-plan";
+import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/services/usos/types";
 import type { CourseType } from "@/types";
 
@@ -48,6 +49,7 @@ export function CreateNewPlanPage({
   const [hideDays, setHideDays] = useState(false);
 
   const firstTime = useRef(true);
+  const spotsSynced = useRef(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -179,6 +181,23 @@ export function CreateNewPlanPage({
     }, 4000);
   };
 
+  const handleUpdateSpotsOccupied = async () => {
+    spotsSynced.current = true;
+    const response = await updateSpotsOccupied({
+      plan,
+      coursesFunction,
+    });
+    if (response.status === "SUCCESS") {
+      const { updatedCourses, isChanged } = response;
+      if (isChanged) {
+        plan.setPlan((previous) => ({
+          ...previous,
+          courses: updatedCourses,
+        }));
+      }
+    }
+  };
+
   useEffect(() => {
     if (plan.onlineId === null && firstTime.current) {
       void handleCreateOnlinePlan();
@@ -207,6 +226,13 @@ export function CreateNewPlanPage({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan.name, plan.courses, plan.registrations, plan.allGroups, user]);
+
+  useEffect(() => {
+    if (!spotsSynced.current) {
+      void handleUpdateSpotsOccupied();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (isLoading) {
     return (
