@@ -26,7 +26,7 @@ export const updateUser = async (payload: UserSettingsPayload) => {
   // Update user
   const data = await fetchToAdonis<UpdateUserSettingsResponse>({
     url: "/user",
-    method: "PATCH",
+    method: "POST",
     body: JSON.stringify(payload),
   });
 

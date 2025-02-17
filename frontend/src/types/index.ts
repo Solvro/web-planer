@@ -189,7 +189,7 @@ export type VerifyOtpReponseType =
   | {
       success: true;
       user: User;
-      isNewAcccount: boolean;
+      isNewAccount: boolean;
     }
   | {
       success: false;

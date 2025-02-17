@@ -12,7 +12,6 @@ import type { z } from "zod";
 import SolvroLogoColor from "@/../public/assets/logo/logo_solvro_color.png";
 import SolvroLogoMono from "@/../public/assets/logo/logo_solvro_mono.png";
 import BgImage from "@/../public/assets/planer-bg.png";
-import { sendOtpToEmail, setOnboardData, verifyOtp } from "@/actions/login";
 import { handleTriggerConfetti } from "@/components/confetti";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -31,6 +30,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { fetchClient } from "@/lib/fetch";
 import type { VerifyOtpReponseType } from "@/types";
 import {
   loginOtpEmailSchema,
@@ -54,8 +54,12 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
     setIsLoading(true);
     try {
-      const result = await sendOtpToEmail(values);
-      if (!result.success) {
+      const result = await fetchClient({
+        url: `/user/get_otp`,
+        method: "POST",
+        body: JSON.stringify(values),
+      });
+      if (!result.ok) {
         toast.error("Wystąpił błąd podczas wysyłania kodu");
         return;
       }
@@ -79,9 +83,19 @@ export default function LoginPage() {
   async function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
     setIsLoading(true);
     try {
-      const response = (await verifyOtp(email, data)) as VerifyOtpReponseType;
+      // const response = (await verifyOtp(email, data)) as VerifyOtpReponseType;
+      const result = await fetchClient({
+        url: `/user/verify_otp`,
+        method: "POST",
+        body: JSON.stringify({ email, ...data }),
+      });
+      if (!result.ok) {
+        toast.error("Nieprawidłowy kod");
+        return;
+      }
+      const response = (await result.json()) as VerifyOtpReponseType;
       if (response.success) {
-        if (response.isNewAcccount) {
+        if (response.isNewAccount) {
           handleTriggerConfetti();
           setStep("onboard");
         } else {
@@ -110,7 +124,17 @@ export default function LoginPage() {
   async function onSubmitOnboard(data: z.infer<typeof userDataSchema>) {
     setIsLoading(true);
     try {
-      await setOnboardData(data);
+      const result = await fetchClient({
+        url: `/user`,
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      if (!result.ok) {
+        toast.error("Wystąpił błąd podczas zapisywania danych");
+        return;
+      }
+      toast.success("Zapisano dane");
+      router.push("/plans");
     } catch (error) {
       console.error(error);
     } finally {

@@ -101,5 +101,5 @@ router
   .delete("user/logout", [AuthController, "logout"])
   .use(middleware.usosAuth());
 
-router.patch("/user", [UsersController, "update"]).use(middleware.usosAuth());
+router.post("/user", [UsersController, "update"]).use(middleware.usosAuth());
 router.get("/user", [UsersController, "show"]).use(middleware.usosAuth());

@@ -11,5 +11,5 @@
 import limiter from "@adonisjs/limiter/services/main";
 
 export const throttle = limiter.define("global", () => {
-  return limiter.allowRequests(5).every("1 minute");
+  return limiter.allowRequests(6).every("1 minute");
 });
