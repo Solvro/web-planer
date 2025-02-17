@@ -25,8 +25,10 @@ async function sendEmail(userNotifications: Map<string, string[]>) {
     `;
       await mail.send((message) => {
         message
+          .from("Planer Solvro <planer@solvro.pl>")
           .to(`${studentNumber}@student.pwr.edu.pl`)
-          .subject("Planer - nastąpiły zmiany w twoich planach")
+          .subject("Nastąpiły zmiany w twoich planach")
+          .text("Nastąpiły zmiany w twoich planach")
           .html(htmlContent);
       });
     }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -9,13 +9,13 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { GetProfile } from "@/services/usos/get-profile";
+import type { User } from "@/types";
 
 import { Icons } from "./icons";
 import { Badge } from "./ui/badge";
 import { SignOutButton } from "./ui/signout-button";
 
-export function UserButton({ profile }: { profile: GetProfile }) {
+export function UserButton({ profile }: { profile: User }) {
   const [opened, setOpened] = React.useState(false);
 
   return (
@@ -33,14 +33,17 @@ export function UserButton({ profile }: { profile: GetProfile }) {
             <div className="flex w-full items-start gap-3">
               <div className="flex flex-col gap-1">
                 <h1 className="translate-y-0.5 text-lg font-semibold leading-none">
-                  {`${profile.first_name} ${profile.last_name}`}
+                  {profile.firstName} {profile.lastName}
                 </h1>
+
                 <p className="text-xs font-medium leading-none">
-                  {profile.student_number}@student.pwr.edu.pl
+                  {profile.studentNumber}@student.pwr.edu.pl
                 </p>
               </div>
 
-              <Badge variant="secondary">Zweryfikowany</Badge>
+              <Badge variant={profile.verified ? "secondary" : "destructive"}>
+                {profile.verified ? "Zweryfikowany" : "Niezweryfikowany"}
+              </Badge>
             </div>
           </div>
           <Link href="/plans/account" className="w-full">
@@ -91,13 +94,36 @@ export function UserButton({ profile }: { profile: GetProfile }) {
   );
 }
 
-function UserAvatar({ profile }: { profile: GetProfile }) {
+export function UserAvatar({ profile }: { profile: User }) {
+  const isFirstNameEmpty = profile.firstName === "";
+  const isLastNameEmpty = profile.lastName === "";
+
+  const fallback = useMemo(() => {
+    if (isFirstNameEmpty && isLastNameEmpty) {
+      return profile.studentNumber.toString().slice(0, 2);
+    }
+
+    if (isFirstNameEmpty) {
+      return profile.lastName.slice(0, 1);
+    }
+
+    if (isLastNameEmpty) {
+      return profile.firstName.slice(0, 1);
+    }
+
+    return `${profile.firstName.slice(0, 1)}${profile.lastName.slice(0, 1)}`;
+  }, [
+    isFirstNameEmpty,
+    isLastNameEmpty,
+    profile.firstName,
+    profile.lastName,
+    profile.studentNumber,
+  ]);
+
   return (
     <Avatar>
-      <AvatarImage src={profile.photo_urls["50x50"]} />
-      <AvatarFallback>
-        {profile.first_name.slice(0, 1) + profile.last_name.slice(0, 1)}
-      </AvatarFallback>
+      <AvatarImage src={profile.avatar ?? "/assets/avatar_placeholder.png"} />
+      <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
   );
 }

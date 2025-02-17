@@ -13,6 +13,7 @@ import router from "@adonisjs/core/services/router";
 import swagger from "#config/swagger";
 
 import { middleware } from "./kernel.js";
+import { throttle } from "./limiter.js";
 
 const DepartmentsController = () =>
   import("#controllers/departments_controller");
@@ -85,10 +86,21 @@ router
   .delete("/user/schedules/:schedule_id", [SchedulesController, "destroy"])
   .use(middleware.usosAuth());
 
-router.post("user/login", [AuthController, "store"]).use(middleware.guest());
 router
-  .delete("user/logout", [AuthController, "destroy"])
+  .post("user/login", [AuthController, "loginWithUSOS"])
+  .use(middleware.guest());
+
+router
+  .group(() => {
+    router.post("verify", [AuthController, "verifyOTP"]);
+    router.post("get", [AuthController, "getOTP"]);
+  })
+  .prefix("user/otp")
+  .use(middleware.guest())
+  .use(throttle);
+router
+  .delete("user/logout", [AuthController, "logout"])
   .use(middleware.usosAuth());
 
-router.patch("/user", [UsersController, "update"]).use(middleware.usosAuth());
+router.post("/user", [UsersController, "update"]).use(middleware.usosAuth());
 router.get("/user", [UsersController, "show"]).use(middleware.usosAuth());

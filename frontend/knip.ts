@@ -5,7 +5,7 @@ const config = {
     "src/components/ui/**",
     "next-sitemap.config.js",
     "lint-staged.config.mjs",
-    "src/components/class-block-stars.tsx",
+    "src/types/index.ts",
   ],
   // sharp is used in nextjs image optimization
   ignoreDependencies: ["sharp", "@radix-ui/*", "eslint"],

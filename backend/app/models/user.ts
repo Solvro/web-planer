@@ -26,7 +26,20 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare studentNumber: string;
   @column()
+  declare avatar: string | null;
+  @column()
   declare allowNotifications: boolean;
+
+  @column()
+  declare otpCode: string | null;
+  @column()
+  declare otpAttempts: number;
+  @column()
+  declare otpExpire: DateTime | null;
+  @column()
+  declare verified: boolean;
+  @column()
+  declare blocked: boolean;
 
   @hasMany(() => Schedule)
   declare schedules: HasMany<typeof Schedule>;

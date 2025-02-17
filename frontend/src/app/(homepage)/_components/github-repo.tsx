@@ -90,7 +90,7 @@ export async function GithubRepo() {
         <Icons.FlexyArrow className="mt-12" />
         <Button
           className="group mt-4 bg-primary text-white ring-amber-500 ring-offset-2 transition-all hover:bg-blue-600 hover:ring-2 dark:bg-white dark:text-black dark:hover:bg-slate-200"
-          size={"lg"}
+          size="lg"
           asChild
         >
           <Link href="https://github.com/Solvro/web-planer" target="_blank">

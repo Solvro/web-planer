@@ -5,7 +5,7 @@ import { SolvroLogo } from "@/components/solvro-logo";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
-import { createUsosService } from "@/lib/usos";
+import { auth } from "@/lib/auth";
 
 import { FeedbackButton } from "./feedback-button";
 import { SidebarTriggerButton } from "./sidebar-trigger-button";
@@ -22,14 +22,14 @@ export function PlansTopbar() {
           <SidebarTriggerButton />
           <Button
             asChild={true}
-            variant={"ghost"}
+            variant="ghost"
             className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
           >
             <Link href="/plans">Moje plany</Link>
           </Button>
           <Button
             asChild={true}
-            variant={"ghost"}
+            variant="ghost"
             className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
           >
             <Link
@@ -57,18 +57,14 @@ export function PlansTopbar() {
 }
 
 async function UserProfile() {
-  try {
-    const usos = await createUsosService();
-    const profile = await usos.getProfile();
+  const profile = await auth({ type: "adonis", noThrow: true });
 
-    return <UserButton profile={profile} />;
-  } catch {
+  if (profile == null) {
     return (
       <Button variant="default" size="sm" asChild={true}>
-        <Link href="/api/login" prefetch={false}>
-          Zaloguj się
-        </Link>
+        <Link href="/login">Zaloguj się</Link>
       </Button>
     );
   }
+  return <UserButton profile={profile} />;
 }

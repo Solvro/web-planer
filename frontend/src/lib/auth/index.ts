@@ -2,6 +2,7 @@ import CryptoJS, { HmacSHA1 } from "crypto-js";
 import { cookies as cookiesPromise } from "next/headers";
 import OAuth from "oauth-1.0a";
 
+import { ADONIS_COOKIES } from "@/constants";
 import { env } from "@/env.mjs";
 import type { User } from "@/types";
 
@@ -10,7 +11,7 @@ function createHmacSha1Base64(base_string: string, key: string) {
   return CryptoJS.enc.Base64.stringify(hmac);
 }
 
-export const oauth = new OAuth({
+const oauth = new OAuth({
   consumer: { key: env.USOS_CONSUMER_KEY, secret: env.USOS_CONSUMER_SECRET },
   signature_method: "HMAC-SHA1",
   hash_function(base_string, key) {
@@ -92,45 +93,80 @@ export async function getRequestToken() {
   };
 }
 
-const ADONIS_COOKIES = new Set(["token", "adonis-session"]);
+type AuthType = {
+  noThrow?: boolean;
+} & (
+  | {
+      payload?: {
+        token: string;
+        secret: string;
+      };
+      type: "usos";
+    }
+  | {
+      payload?: {
+        adonisSession: string;
+        token: string;
+      };
+      type: "adonis";
+    }
+);
 
-export const auth = async (tokens?: {
-  token?: string | undefined;
-  secret?: string | undefined;
-  disableThrow?: boolean;
-}) => {
+export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
   const cookies = await cookiesPromise();
-  const accessToken = tokens?.token ?? cookies.get("access_token")?.value;
-  const accessSecret =
-    tokens?.secret ?? cookies.get("access_token_secret")?.value;
+  let accessToken, accessSecret, adonisSession, token;
+  if (type === "usos") {
+    accessToken = payload?.token ?? cookies.get("access_token")?.value;
+    accessSecret = payload?.secret ?? cookies.get("access_token_secret")?.value;
+  } else {
+    adonisSession =
+      payload?.adonisSession ?? cookies.get("adonis-session")?.value;
+    token = payload?.token ?? cookies.get("token")?.value;
+  }
 
-  if (accessToken === "" || accessSecret === "") {
-    if (tokens !== undefined) {
+  if (
+    (type === "usos" && (accessToken === "" || accessSecret === "")) ||
+    (type === "adonis" && (adonisSession === "" || token === ""))
+  ) {
+    if (noThrow) {
       return null;
     }
     throw new Error("No access token or access secret");
   }
 
   try {
-    const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/user/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${env.NEXT_PUBLIC_API_URL}${type === "usos" ? "/user/login" : "/user"}`,
+      {
+        method: type === "usos" ? "POST" : "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie:
+            type === "adonis"
+              ? `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`
+              : "",
+          "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
+        },
+        body:
+          type === "usos"
+            ? JSON.stringify({ accessToken, accessSecret })
+            : undefined,
+        credentials: "include",
       },
-      body: JSON.stringify({ accessToken, accessSecret }),
-      credentials: "include",
-    });
+    );
     const data = (await response.json()) as User | { error: string };
     if ("error" in data) {
-      cookies.delete({
-        name: "access_token",
-        path: "/",
-      });
-      cookies.delete({
-        name: "access_token_secret",
-        path: "/",
-      });
-      if (tokens !== undefined) {
+      try {
+        cookies.delete({
+          name: "access_token",
+          path: "/",
+        });
+        cookies.delete({
+          name: "access_token_secret",
+          path: "/",
+        });
+      } catch {}
+      if (noThrow) {
         return null;
       }
       throw new Error(data.error);
@@ -167,7 +203,7 @@ export const auth = async (tokens?: {
 
     return data;
   } catch {
-    if (tokens !== undefined) {
+    if (payload !== undefined) {
       return null;
     }
     throw new Error("Failed to authenticate");

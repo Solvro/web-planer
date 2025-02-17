@@ -3,12 +3,8 @@ import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 
 import { auth, getAccessToken } from "@/lib/auth";
-import { usosService } from "@/services/usos";
-import { createClient } from "@/services/usos/usos-client";
 
 export const dynamic = "force-dynamic";
-
-const BLACKLIST = new Set();
 
 export const GET = async (request: NextRequest) => {
   const url = request.nextUrl;
@@ -53,21 +49,10 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  const tokens = {
+  const payload = {
     token: access_token.token,
     secret: access_token.secret,
   };
-
-  const usos = usosService(createClient(tokens));
-  const profile = await usos.getProfile();
-  if (BLACKLIST.has(profile.student_number)) {
-    return new Response(
-      `Sorry ${profile.first_name}, ale ciebie nie obsługujemy 😘`,
-      {
-        status: 403,
-      },
-    );
-  }
 
   cookies.set("access_token", access_token.token, {
     path: "/",
@@ -84,6 +69,9 @@ export const GET = async (request: NextRequest) => {
     sameSite: "lax",
   });
 
-  await auth(tokens);
+  await auth({
+    payload,
+    type: "usos",
+  });
   return redirect("/plans");
 };

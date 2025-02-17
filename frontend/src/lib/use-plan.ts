@@ -2,8 +2,7 @@ import { useAtom } from "jotai";
 
 import { planFamily } from "@/atoms/plan-family";
 import type { ExtendedCourse } from "@/atoms/plan-family";
-
-import type { Registration } from "./types";
+import type { Registration } from "@/types";
 
 export type usePlanType = ReturnType<typeof usePlan>;
 

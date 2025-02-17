@@ -68,9 +68,9 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
       </p>
       {currentSharedPlanId === null || currentSharedPlanId === undefined ? (
         <Button
-          size={"sm"}
+          size="sm"
           className="rounded-full"
-          variant={"secondary"}
+          variant="secondary"
           disabled={generatingLink}
           onClick={handleSharePlan}
         >
@@ -84,9 +84,9 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
       ) : (
         <div className="flex items-center gap-1">
           <Button
-            size={"sm"}
+            size="sm"
             className="rounded-full rounded-r-none"
-            variant={"secondary"}
+            variant="secondary"
             disabled={generatingLink}
             onClick={handleSharePlan}
           >
@@ -98,9 +98,9 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
             Nowy link
           </Button>
           <Button
-            size={"sm"}
+            size="sm"
             className="rounded-full rounded-l-none"
-            variant={"outline"}
+            variant="outline"
             onClick={async () => handleCopyLink(currentSharedPlanId)}
           >
             <Icons.Copy className="size-4" />

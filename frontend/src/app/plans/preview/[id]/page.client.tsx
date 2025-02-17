@@ -11,8 +11,8 @@ import { plansIds } from "@/atoms/plans-ids";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import type { SharedPlan } from "@/lib/types";
-import { Day } from "@/services/usos/types";
+import type { SharedPlan } from "@/types";
+import { Day } from "@/types";
 
 export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const uuid = useMemo(() => uuidv4(), []);
@@ -49,11 +49,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 
         <div className="flex items-center gap-1">
-          <Button
-            size={"sm"}
-            className="bg-white text-black"
-            onClick={copyPlan}
-          >
+          <Button size="sm" className="bg-white text-black" onClick={copyPlan}>
             <Icons.Copy className="size-4" />
             Skopiuj do siebie
           </Button>

@@ -1,6 +1,6 @@
 import { atomFamily, atomWithStorage } from "jotai/utils";
 
-import type { ClassBlockProps, Course, Registration } from "@/lib/types";
+import type { ClassBlockProps, Course, Registration } from "@/types";
 
 export interface ExtendedCourse extends Course {
   isChecked: boolean;

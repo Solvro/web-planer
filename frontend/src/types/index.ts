@@ -1,8 +1,65 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import type { ExtendedCourse } from "@/atoms/plan-family";
-import type { Registration } from "@/lib/types";
-import type { Day } from "@/services/usos/types";
+
+export enum Day {
+  MONDAY = "poniedziałek",
+  TUESDAY = "wtorek",
+  WEDNESDAY = "środa",
+  THURSDAY = "czwartek",
+  FRIDAY = "piątek",
+  SATURDAY = "sobota",
+  SUNDAY = "niedziela",
+}
+
+export enum LessonType {
+  LECTURE = "wyklad",
+  EXERCISES = "cwiczenia",
+  LABORATORY = "laboratorium",
+  PROJECT = "projekt",
+  SEMINAR = "seminarium",
+}
+
+export interface ClassBlockProps {
+  startTime: string;
+  endTime: string;
+  groupId: string;
+  groupNumber: string;
+  groupOnlineId: number;
+  courseId: string;
+  courseName: string;
+  lecturer: string;
+  day: Day;
+  week: "" | "TN" | "TP";
+  courseType: "C" | "L" | "P" | "S" | "W";
+  registrationId: string;
+  spotsOccupied: number;
+  spotsTotal: number;
+  averageRating: number;
+  opinionsCount: number;
+}
+
+export interface Registration {
+  id: string;
+  name: string;
+}
+
+export interface Course {
+  name: string;
+  id: string;
+  type: string;
+  registrationId: string;
+}
+
+export interface SharedPlan {
+  id: string;
+  plan: {
+    name: string;
+    courses: ExtendedCourse[];
+    registrations: Registration[];
+    allGroups: ExtendedCourse["groups"];
+  };
+}
 
 export interface User {
   id: number;
@@ -10,6 +67,8 @@ export interface User {
   lastName: string;
   studentNumber: number;
   usosId: string;
+  avatar?: string | null | undefined;
+  verified: boolean;
   createdAt: string;
   updatedAt: string;
   allowNotifications: boolean;
@@ -125,3 +184,15 @@ type SetPlanType = Dispatch<
     synced: boolean;
   }>
 >;
+
+export type VerifyOtpReponseType =
+  | {
+      success: true;
+      user: User;
+      isNewAccount: boolean;
+    }
+  | {
+      success: false;
+      message: string;
+      errors: Record<string, string>;
+    };

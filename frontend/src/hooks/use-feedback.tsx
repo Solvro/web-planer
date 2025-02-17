@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { feedbackFormSchema } from "@/types/schema";
+import { feedbackFormSchema } from "@/types/schemas";
 
 interface FeedbackContextType {
   isDialogOpen: boolean;

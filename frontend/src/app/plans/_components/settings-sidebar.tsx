@@ -30,7 +30,7 @@ export function SidebarSettings({
         <Button
           asChild
           key={item.href}
-          variant={"ghost"}
+          variant="ghost"
           className={cn(
             pathname === item.href
               ? "bg-muted hover:bg-muted"
