@@ -33,30 +33,26 @@ export function ToPWrAd() {
             <div className="mt-4 flex items-center gap-2">
               <Link
                 href="https://play.google.com/store/apps/details?id=com.solvro.topwr"
-                onClick={() => {
-                  void window.umami?.track("Download", {
-                    type: "Google Play",
-                  });
-                }}
+                data-umami-event="Download"
+                data-umami-event-type="Google Play"
               >
                 <Image
                   src={"/assets/google_play.png"}
-                  alt={"Download on google play"}
-                  width={300}
+                  alt={"Pobierz z google play"}
+                  width={160}
                   height={50}
                   className="w-[160px]"
                 />
               </Link>
               <Link
                 href="https://apps.apple.com/us/app/topwr/id1644647395"
-                onClick={() => {
-                  void window.umami?.track("Download", { type: "App Store" });
-                }}
+                data-umami-event="Download"
+                data-umami-event-type="App Store"
               >
                 <Image
                   src={"/assets/apple_store.png"}
-                  alt={"Download on google play"}
-                  width={300}
+                  alt={"Pobierz z app store"}
+                  width={144}
                   height={50}
                   className="w-[144px]"
                 />
