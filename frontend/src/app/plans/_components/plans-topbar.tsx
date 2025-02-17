@@ -58,7 +58,7 @@ export function PlansTopbar() {
 
 async function UserProfile() {
   try {
-    const profile = await auth();
+    const profile = await auth({ type: "adonis" });
     if (profile == null) {
       throw new Error("No profile");
     }

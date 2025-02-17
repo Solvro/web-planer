@@ -108,7 +108,7 @@ function AnimationLogo() {
 
 const JoinUsBlock = async () => {
   try {
-    await auth();
+    await auth({ type: "adonis" });
 
     return (
       <div className="flex items-center justify-center gap-3">

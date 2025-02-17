@@ -40,14 +40,14 @@ export async function middleware(request: NextRequest) {
     contentSecurityPolicyHeaderValue,
   );
 
-  const tokens = {
-    adonisSession: request.cookies.get("adonis-session")?.value,
-    token: request.cookies.get("token")?.value,
+  const payload = {
+    adonisSession: request.cookies.get("adonis-session")?.value ?? "",
+    token: request.cookies.get("token")?.value ?? "",
   };
 
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/plans/account");
-  const user = await auth(tokens);
+  const user = await auth({ payload, type: "adonis", disableThrow: true });
 
   if (!isProtectedRoute) {
     return nextResponse;

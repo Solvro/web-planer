@@ -93,43 +93,84 @@ export async function getRequestToken() {
   };
 }
 
-export const authUSOS = async (tokens?: {
-  token?: string | undefined;
-  secret?: string | undefined;
+type AuthType = {
   disableThrow?: boolean;
-}) => {
-  const cookies = await cookiesPromise();
-  const accessToken = tokens?.token ?? cookies.get("access_token")?.value;
-  const accessSecret =
-    tokens?.secret ?? cookies.get("access_token_secret")?.value;
+} & (
+  | {
+      payload?: {
+        token: string;
+        secret: string;
+      };
+      type: "usos";
+    }
+  | {
+      payload?: {
+        adonisSession: string;
+        token: string;
+      };
+      type: "adonis";
+    }
+);
 
-  if (accessToken === "" || accessSecret === "") {
-    if (tokens !== undefined) {
+export const auth = async ({
+  payload,
+  disableThrow = false,
+  type,
+}: AuthType) => {
+  const cookies = await cookiesPromise();
+  let accessToken, accessSecret, adonisSession, token;
+  if (type === "usos") {
+    accessToken = payload?.token ?? cookies.get("access_token")?.value;
+    accessSecret = payload?.secret ?? cookies.get("access_token_secret")?.value;
+  } else {
+    adonisSession =
+      payload?.adonisSession ?? cookies.get("adonis-session")?.value;
+    token = payload?.token ?? cookies.get("token")?.value;
+  }
+
+  if (
+    (type === "usos" && (accessToken === "" || accessSecret === "")) ||
+    (type === "adonis" && (adonisSession === "" || token === ""))
+  ) {
+    if (disableThrow) {
       return null;
     }
     throw new Error("No access token or access secret");
   }
 
   try {
-    const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/user/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${env.NEXT_PUBLIC_API_URL}${type === "usos" ? "/user/login" : "/user"}`,
+      {
+        method: type === "usos" ? "POST" : "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie:
+            type === "adonis"
+              ? `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`
+              : "",
+          "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
+        },
+        body:
+          type === "usos"
+            ? JSON.stringify({ accessToken, accessSecret })
+            : undefined,
+        credentials: "include",
       },
-      body: JSON.stringify({ accessToken, accessSecret }),
-      credentials: "include",
-    });
+    );
     const data = (await response.json()) as User | { error: string };
     if ("error" in data) {
-      cookies.delete({
-        name: "access_token",
-        path: "/",
-      });
-      cookies.delete({
-        name: "access_token_secret",
-        path: "/",
-      });
-      if (tokens !== undefined) {
+      try {
+        cookies.delete({
+          name: "access_token",
+          path: "/",
+        });
+        cookies.delete({
+          name: "access_token_secret",
+          path: "/",
+        });
+      } catch {}
+      if (disableThrow) {
         return null;
       }
       throw new Error(data.error);
@@ -166,88 +207,7 @@ export const authUSOS = async (tokens?: {
 
     return data;
   } catch {
-    if (tokens !== undefined) {
-      return null;
-    }
-    throw new Error("Failed to authenticate");
-  }
-};
-
-export const auth = async (tokens?: {
-  adonisSession?: string | undefined;
-  token?: string | undefined;
-  disableThrow?: boolean;
-}) => {
-  const cookies = await cookiesPromise();
-  const adonisSession =
-    tokens?.adonisSession ?? cookies.get("adonis-session")?.value;
-  const token = tokens?.token ?? cookies.get("token")?.value;
-
-  if (adonisSession === "" || token === "") {
-    if (tokens !== undefined) {
-      return null;
-    }
-    throw new Error("No access token or access secret");
-  }
-
-  try {
-    const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/user`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`,
-        "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
-      },
-      credentials: "include",
-    });
-    const data = (await response.json()) as User | { error: string };
-    if ("error" in data) {
-      cookies.delete({
-        name: "access_token",
-        path: "/",
-      });
-      cookies.delete({
-        name: "access_token_secret",
-        path: "/",
-      });
-      if (tokens !== undefined) {
-        return null;
-      }
-      throw new Error(data.error);
-    }
-
-    try {
-      const setCookieHeaders = response.headers.getSetCookie();
-      for (const cookie of setCookieHeaders) {
-        const preparedCookie = cookie.split(";")[0];
-        const [name, value] = preparedCookie.split("=");
-        if (name === "XSRF-TOKEN") {
-          cookies.set({
-            name,
-            value,
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: false,
-            secure: true,
-            sameSite: "lax",
-          });
-        } else if (ADONIS_COOKIES.has(name)) {
-          cookies.set({
-            name,
-            value,
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: true,
-            secure: true,
-            sameSite: "lax",
-          });
-        }
-      }
-    } catch {}
-
-    return data;
-  } catch {
-    if (tokens !== undefined) {
+    if (payload !== undefined) {
       return null;
     }
     throw new Error("Failed to authenticate");

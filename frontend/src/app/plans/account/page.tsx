@@ -9,7 +9,7 @@ export default async function ProfilePage() {
   let profile;
 
   try {
-    profile = await auth();
+    profile = await auth({ type: "adonis" });
     if (profile == null) {
       return notFound();
     }

@@ -98,7 +98,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await auth({ disableThrow: true });
+  const user = await auth({ disableThrow: true, type: "adonis" });
   const headersList = await headers();
   const nonce = headersList.get("x-nonce");
 
