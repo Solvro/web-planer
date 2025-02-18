@@ -8,6 +8,11 @@ import {
   AnimatedGroupsDemo,
   AnimatedNotificationsDemo,
 } from "@/components/animated-list-components";
+import {
+  AnimatedTitle,
+  TitleHighlight,
+  TitleText,
+} from "@/components/animated-title";
 import { Icons } from "@/components/icons";
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
 import { childVariants, parentVariants } from "@/constants";
@@ -64,7 +69,7 @@ const features = [
 
 export function SolutionSection() {
   const ref = useRef(null);
-  const isInview = useInView(ref, { once: true, amount: 0.6 });
+  const isInview = useInView(ref, { once: true, amount: 0.4 });
   const controls = useAnimation();
 
   useEffect(() => {
@@ -92,12 +97,11 @@ export function SolutionSection() {
             >
               rozwiązanie
             </motion.h2>
-            <motion.h3
-              variants={childVariants}
-              className="mx-auto mt-4 max-w-xs text-3xl font-semibold sm:max-w-none sm:text-4xl md:text-5xl"
-            >
-              Ułóż swój wymarzony plan z planerem!
-            </motion.h3>
+            <AnimatedTitle>
+              <TitleText>Ułóż swój </TitleText>
+              <TitleHighlight>wymarzony plan</TitleHighlight>
+              <TitleText> z planerem!</TitleText>
+            </AnimatedTitle>
             <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600">
               Wybierz swój wydział, kierunek i już. Możesz ułożyć swój plan
               widząc swoje wszystkie zajęcia na jednej stronie.

@@ -19,7 +19,7 @@ const imageVariant = {
 
 export function ToPWrSection() {
   const ref = useRef(null);
-  const isInview = useInView(ref, { once: true, amount: 0.3 });
+  const isInview = useInView(ref, { once: true, amount: 0.2 });
   const controls = useAnimation();
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export function ToPWrSection() {
         transition={{ staggerChildren: 0.1 }}
         src={ToPwrBg.src}
         alt=""
-        className="absolute inset-0 left-0 z-0 w-full rounded-t-xl object-cover object-center opacity-30 blur-md"
+        className="absolute inset-0 left-0 z-0 w-full rounded-t-xl object-contain object-center opacity-30 blur-md"
       />
     </section>
   );

@@ -3,6 +3,11 @@
 import { motion, useAnimation, useInView } from "motion/react";
 import React, { useEffect, useRef } from "react";
 
+import {
+  AnimatedTitle,
+  TitleHighlight,
+  TitleText,
+} from "@/components/animated-title";
 import { Icons } from "@/components/icons";
 import { childVariants, parentVariants } from "@/constants";
 
@@ -34,12 +39,11 @@ export function ProblemSection() {
           >
             problem
           </motion.h2>
-          <motion.h3
-            variants={childVariants}
-            className="mx-auto mt-4 max-w-xs text-3xl font-semibold sm:max-w-none sm:text-4xl md:text-5xl"
-          >
-            Układanie planu zajęć to nie lada wyzwanie.
-          </motion.h3>
+          <AnimatedTitle>
+            <TitleText>Układanie planu zajęć to </TitleText>
+            <TitleHighlight>nie lada wyzwanie</TitleHighlight>
+            <TitleText>. </TitleText>
+          </AnimatedTitle>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
           <motion.div

@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 import HeroImageDark from "../../../public/assets/planer-dark.png";
 import HeroImageLight from "../../../public/assets/planer-light.png";
-import { GithubRepo } from "./_components/github-repo";
+import { GithubSection } from "./_components/github-section";
 import { ProblemSection } from "./_components/problem-section";
 import { SolutionSection } from "./_components/solution-section";
 import { ToPWrSection } from "./_components/topwr-section";
@@ -105,7 +105,7 @@ export default function Home() {
     <main className="mx-auto flex-1 overflow-hidden">
       <section
         id="hero"
-        className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-40 md:px-8 lg:mt-56"
+        className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-44 md:px-8"
       >
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
           <Link href="#topwr">
@@ -184,13 +184,9 @@ export default function Home() {
 
       <SolutionSection />
 
-      <section>
-        <div className="container relative mx-auto max-w-7xl px-4 py-16">
-          <Suspense>
-            <GithubRepo />
-          </Suspense>
-        </div>
-      </section>
+      <Suspense>
+        <GithubSection />
+      </Suspense>
 
       <ToPWrSection />
     </main>

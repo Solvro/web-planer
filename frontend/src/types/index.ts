@@ -196,3 +196,10 @@ export type VerifyOtpReponseType =
       message: string;
       errors: Record<string, string>;
     };
+
+export interface Contributor {
+  name: string;
+  avatar: string;
+  id: number;
+  contributions: number;
+}
