@@ -8,7 +8,8 @@ export function Footer() {
           className="font-bold text-blue-700 hover:underline"
         >
           SOLVRO
-        </a>
+        </a>{" "}
+        © {new Date().getFullYear()}
       </p>
     </footer>
   );
