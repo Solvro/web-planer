@@ -25,7 +25,8 @@ export default function PlansLayout({
             className="font-bold text-mainbutton hover:underline"
           >
             SOLVRO
-          </a>
+          </a>{" "}
+          © {new Date().getFullYear()}
         </p>
         <p className="text-balance text-center text-xs text-gray-300 dark:text-muted-foreground">
           Źródłem danych o zajęciach jest USOS i ich prawnym właścicielem jest

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import { cn } from "@/lib/utils";
@@ -49,6 +51,8 @@ export function ClassBlock({
   spotsTotal,
   onClick,
   isReadonly = false,
+  className,
+  disableTooltip,
 }: {
   startTime: string;
   endTime: string;
@@ -63,8 +67,10 @@ export function ClassBlock({
   spotsTotal: number;
   averageRating: number;
   opinionsCount: number;
-  onClick: () => void;
+  onClick?: () => void;
   isReadonly?: boolean;
+  className?: string;
+  disableTooltip?: boolean;
 }) {
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
@@ -89,6 +95,7 @@ export function ClassBlock({
                 ? "opacity-20 dark:opacity-10"
                 : "cursor-pointer opacity-60 dark:opacity-40",
             isReadonly ? "cursor-default" : null,
+            className,
           )}
         >
           <div
@@ -118,11 +125,13 @@ export function ClassBlock({
           </p>
         </button>
       </TooltipTrigger>
-      <TooltipContent>
-        <p>
-          {courseName} - {lecturer}
-        </p>
-      </TooltipContent>
+      {disableTooltip === false && (
+        <TooltipContent>
+          <p>
+            {courseName} - {lecturer}
+          </p>
+        </TooltipContent>
+      )}
     </Tooltip>
   );
 }
