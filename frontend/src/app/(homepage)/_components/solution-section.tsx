@@ -10,6 +10,7 @@ import {
 } from "@/components/animated-list-components";
 import { Icons } from "@/components/icons";
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
+import { childVariants, parentVariants } from "@/constants";
 
 const features = [
   {
@@ -60,26 +61,6 @@ const features = [
     ),
   },
 ];
-
-const parentVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-};
-
-const childVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-  },
-};
 
 export function SolutionSection() {
   const ref = useRef(null);

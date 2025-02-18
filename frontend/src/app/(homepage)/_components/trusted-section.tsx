@@ -6,26 +6,7 @@ import React, { useEffect, useRef } from "react";
 
 import PWrLogoColor from "@/../public/assets/logo/pwr_color.png";
 import PWrLogoMono from "@/../public/assets/logo/pwr_mono.png";
-
-const parentVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-};
-
-const childVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-  },
-};
+import { childVariants, parentVariants } from "@/constants";
 
 export function TrustedSection() {
   const ref = useRef(null);

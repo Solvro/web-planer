@@ -4,26 +4,7 @@ import { motion, useAnimation, useInView } from "motion/react";
 import React, { useEffect, useRef } from "react";
 
 import { Icons } from "@/components/icons";
-
-const parentVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-};
-
-const childVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-  },
-};
+import { childVariants, parentVariants } from "@/constants";
 
 export function ProblemSection() {
   const ref = useRef(null);

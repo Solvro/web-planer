@@ -6,26 +6,7 @@ import Link from "next/link";
 import React, { useEffect, useRef } from "react";
 
 import ToPwrBg from "@/../public/assets/topwr_bg.png";
-
-const parentVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-};
-
-const childVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-  },
-};
+import { childVariants, parentVariants } from "@/constants";
 
 const imageVariant = {
   hidden: {
