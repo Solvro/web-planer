@@ -75,9 +75,9 @@ export async function GithubRepo() {
         <h2 className="font-mono text-sm font-medium uppercase tracking-wider text-primary">
           autorzy
         </h2>
-        <h1 className="relative z-10 mx-auto mt-4 max-w-xs text-3xl font-semibold sm:max-w-none sm:text-4xl md:text-5xl">
+        <h1 className="group relative z-10 mx-auto mt-4 max-w-xs transform-gpu text-3xl font-semibold transition-all hover:scale-105 sm:max-w-none sm:text-4xl md:text-5xl">
           <span className="relative whitespace-nowrap text-white">
-            <span className="absolute -left-[5%] -top-[2.5%] z-0 h-[110%] w-[110%] -rotate-1 bg-blue-400/20 dark:bg-blue-200/10"></span>
+            <span className="absolute -left-[5%] -top-[2.5%] z-0 h-[110%] w-[110%] -rotate-1 transform-gpu bg-blue-400/20 transition-all group-hover:-rotate-0 group-hover:scale-105 dark:bg-blue-200/10"></span>
             <span className="relative z-10 text-blue-600 dark:text-blue-400">
               {contributorsCount} developerów
             </span>

@@ -1,15 +1,19 @@
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { MotionProps, Variants } from "motion/react";
+import { motion } from "motion/react";
+import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface BentoGridProps extends ComponentPropsWithoutRef<"div"> {
+interface BentoGridProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, keyof MotionProps> {
   children: ReactNode;
   className?: string;
 }
 
-interface BentoCardProps extends ComponentPropsWithoutRef<"div"> {
+interface BentoCardProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, keyof MotionProps> {
   name: string;
   className: string;
   background: ReactNode;
@@ -17,6 +21,7 @@ interface BentoCardProps extends ComponentPropsWithoutRef<"div"> {
   description: string;
   href: string;
   cta: string;
+  variants?: Variants | undefined;
 }
 
 function BentoGrid({ children, className, ...props }: BentoGridProps) {
@@ -44,7 +49,7 @@ function BentoCard({
   ...props
 }: BentoCardProps) {
   return (
-    <div
+    <motion.div
       key={name}
       className={cn(
         "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl",
@@ -83,7 +88,7 @@ function BentoCard({
         </Button>
       </div>
       <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10" />
-    </div>
+    </motion.div>
   );
 }
 

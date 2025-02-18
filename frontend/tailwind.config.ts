@@ -301,6 +301,14 @@ const config = {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" },
+        },
+        "marquee-vertical": {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
       },
       animation: {
         "waving-hand": "flip 1s infinite",
@@ -320,6 +328,8 @@ const config = {
         "image-glow": "image-glow 4.1s ease-out .6s forwards",
         pulse2: "pulse2 2s infinite",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        marquee: "marquee var(--duration) linear infinite",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
       },
       gridColumnStart: {
         "13": "13",
