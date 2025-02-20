@@ -8,7 +8,7 @@ const config = {
     "src/types/index.ts",
   ],
   // sharp is used in nextjs image optimization
-  ignoreDependencies: ["sharp", "@radix-ui/*", "eslint"],
+  ignoreDependencies: ["sharp", "eslint"],
 } satisfies KnipConfig;
 
 export default config;
