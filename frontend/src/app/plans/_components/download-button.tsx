@@ -25,7 +25,11 @@ export function DownloadPlanButton({
     setLoading(true);
     const element = captureRef.current;
     try {
-      const dataUrl = await toPng(element, { cacheBust: true });
+      const dataUrl = await toPng(element, {
+        cacheBust: true,
+        width: element.scrollWidth,
+        height: element.scrollHeight,
+      });
       const link = document.createElement("a");
       link.download = `${plan.name}.png`;
       link.href = dataUrl;
