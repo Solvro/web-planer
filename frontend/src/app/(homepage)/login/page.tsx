@@ -131,6 +131,16 @@ function EmailStep({
   }
   return (
     <div className="mt-5 flex w-full max-w-xs flex-col gap-4">
+      <Button variant="outline" className="w-full" asChild>
+        <Link href="/api/login" prefetch={false}>
+          Zaloguj się przez USOS
+        </Link>
+      </Button>
+      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+        <span className="relative z-10 bg-background px-2 text-muted-foreground">
+          Lub kontynuuj poprzez
+        </span>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
