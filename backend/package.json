@@ -9,6 +9,7 @@
     "format:fix": "prettier --write ."
   },
   "dependencies": {
+    "@elysiajs/cron": "^1.2.0",
     "@elysiajs/jwt": "^1.2.0",
     "@prisma/client": "^6.5.0",
     "elysia": "latest",
