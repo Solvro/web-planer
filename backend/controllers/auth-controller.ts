@@ -7,7 +7,7 @@ import { jwtAccessSetup } from "@/setups/jwt";
 import { createClient } from "../lib/usos/usos-client";
 
 export const AuthController = {
-  login: new Elysia().use(jwtAccessSetup).post(
+  loginWithUsos: new Elysia().use(jwtAccessSetup).post(
     "/login",
     async ({ jwt, cookie: { auth }, body }) => {
       const { accessToken, accessSecret } = body;
