@@ -1,5 +1,5 @@
 import { users } from '@prisma/client'
-import Elysia, { t } from 'elysia'
+import Elysia, { error, t } from 'elysia'
 
 import { prisma } from '@/lib/db'
 import { jwtAccessSetup } from '@/setups/jwt'
@@ -13,7 +13,7 @@ import { DateTime } from 'luxon'
 export const AuthController = {
   loginWithUsos: new Elysia().use(jwtAccessSetup).post(
     '/login',
-    async ({ jwt, cookie: { auth }, body }) => {
+    async ({ jwt, cookie: { token }, body }) => {
       const { accessToken, accessSecret } = body
 
       try {
@@ -74,7 +74,7 @@ export const AuthController = {
 
         const value = await jwt.sign(preparedUser)
 
-        auth.set({
+        token.set({
           value,
           httpOnly: true,
           maxAge: 7 * 86400,
@@ -137,8 +137,79 @@ export const AuthController = {
     .use(verifyOtpBody)
     .post(
       '/verify',
-      async ({ body }) => {
+      async ({ body, jwt, cookie: { token } }) => {
         const { email, otp } = body
+        const student_number = email.split('@')[0]
+
+        const user = await prisma.users.findFirst({
+          where: { student_number, otp_expire: { gt: new Date() } },
+        })
+        if (user === null) {
+          return error(400, {
+            success: false,
+            message: 'Kod weryfikacyjny wygasł',
+          })
+        }
+
+        if (user.blocked) {
+          return error(401, {
+            message:
+              'Twoje konto zostało zablokowane na logowanie OTP. Skontaktuj się z administratorem.',
+            error: 'User is blocked',
+          })
+        }
+
+        if (user.otp_code !== otp) {
+          await prisma.users.update({
+            where: { id: user.id },
+            data: {
+              otp_attempts: { increment: 1 },
+              blocked: (user.otp_attempts || 0) + 1 >= 5,
+              otp_expire: null,
+              otp_code: null,
+            },
+          })
+
+          return error(400, {
+            success: false,
+            message: 'Nieprawidłowy kod weryfikacyjny',
+          })
+        }
+
+        let isNewAccount = false
+        if (user.verified === false) {
+          isNewAccount = true
+        }
+        await prisma.users.update({
+          where: { id: user.id },
+          data: {
+            otp_expire: null,
+            otp_code: null,
+            otp_attempts: 0,
+            verified: true,
+          },
+        })
+
+        const preparedUser = {
+          id: user.id,
+          studentNumber: user.student_number!,
+          usosId: user.usos_id,
+          firstName: user.first_name!,
+          lastName: user.last_name!,
+          avatar: user.avatar!,
+          verified: user.verified!,
+        }
+
+        const value = await jwt.sign(preparedUser)
+
+        token.set({
+          value,
+          httpOnly: true,
+          maxAge: 7 * 86400,
+          path: '/',
+        })
+
+        return { success: true, message: 'Konto zweryfikowane', isNewAccount }
       },
       { body: 'verifyOtpBody' }
     ),

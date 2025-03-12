@@ -44,8 +44,8 @@ export const RouteUsers = (app: Elysia) =>
         },
         { body: 'updateUserBody' }
       )
-    users.use(isAuthenticated).get('/logout', async ({ cookie: { auth } }) => {
-      auth.remove()
+    users.use(isAuthenticated).get('/logout', async ({ cookie: { token } }) => {
+      token.remove()
       return { message: 'Logged out' }
     })
 
