@@ -1,91 +1,20 @@
 {
   "name": "backend",
-  "version": "0.0.0",
-  "private": true,
-  "license": "AGPL-3.0-only",
-  "type": "module",
-  "imports": {
-    "#controllers/*": "./app/controllers/*.js",
-    "#exceptions/*": "./app/exceptions/*.js",
-    "#models/*": "./app/models/*.js",
-    "#mails/*": "./app/mails/*.js",
-    "#services/*": "./app/services/*.js",
-    "#listeners/*": "./app/listeners/*.js",
-    "#events/*": "./app/events/*.js",
-    "#middleware/*": "./app/middleware/*.js",
-    "#validators/*": "./app/validators/*.js",
-    "#providers/*": "./providers/*.js",
-    "#policies/*": "./app/policies/*.js",
-    "#abilities/*": "./app/abilities/*.js",
-    "#utils/*": "./app/utils/*.js",
-    "#database/*": "./database/*.js",
-    "#start/*": "./start/*.js",
-    "#tests/*": "./tests/*.js",
-    "#config/*": "./config/*.js"
-  },
+  "version": "1.0.50",
   "scripts": {
-    "build": "node ace build",
-    "dev": "node ace serve --hmr",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint": "eslint . --max-warnings=0",
-    "start": "node bin/server.js",
-    "test": "node ace test",
-    "typecheck": "tsc --noEmit"
-  },
-  "lint-staged": {
-    "*": "prettier -w --ignore-unknown"
-  },
-  "prettier": "@solvro/config/prettier",
-  "resolutions": {
-    "strtok3": "8.0.1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build --compile --minify --target bun --outfile server ./src/index.ts"
   },
   "dependencies": {
-    "@adonisjs/auth": "^9.2.4",
-    "@adonisjs/core": "^6.12.1",
-    "@adonisjs/cors": "^2.2.1",
-    "@adonisjs/limiter": "^2.3.3",
-    "@adonisjs/lucid": "^21.2.0",
-    "@adonisjs/mail": "^9.2.2",
-    "@adonisjs/session": "^7.5.0",
-    "@adonisjs/shield": "^8.1.2",
-    "@maximemrf/adonisjs-jwt": "^0.2.2",
-    "@vinejs/vine": "^2.1.0",
-    "adonis-autoswagger": "^3.64.0",
-    "adonisjs-scheduler": "^1.0.5",
-    "cheerio": "^1.0.0",
-    "luxon": "^3.5.0",
-    "node-fetch": "^3.3.2",
+    "@elysiajs/jwt": "^1.2.0",
+    "@prisma/client": "^6.5.0",
+    "elysia": "latest",
     "oauth-1.0a": "^2.2.6",
-    "pg": "^8.13.0",
-    "reflect-metadata": "^0.2.2"
+    "pg": "^8.14.0"
   },
   "devDependencies": {
-    "@adonisjs/assembler": "^7.8.1",
-    "@adonisjs/tsconfig": "^1.4.0",
-    "@japa/api-client": "^2.0.3",
-    "@japa/assert": "^3.0.0",
-    "@japa/plugin-adonisjs": "^3.0.1",
-    "@japa/runner": "^3.1.4",
-    "@solvro/config": "^1.13.4",
-    "@swc/core": "^1.7.22",
-    "@types/luxon": "^3.4.2",
-    "@types/node": "^22.5.1",
-    "@types/proxy-addr": "^2.0.3",
-    "eslint": "^9.17.0",
-    "hot-hook": "^0.2.6",
-    "pino-pretty": "^11.2.2",
-    "prettier": "^3.4.2",
-    "ts-node-maintained": "^10.9.4",
-    "typescript": "~5.5"
+    "bun-types": "latest"
   },
-  "hotHook": {
-    "boundaries": [
-      "./app/controllers/**/*.ts",
-      "./app/middleware/*.ts"
-    ]
-  },
-  "overrides": {
-    "strtok3": "8.0.1"
-  }
+  "module": "src/index.js"
 }

@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model adonis_schema {
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(255)
+  batch          Int
+  migration_time DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model adonis_schema_versions {
+  version Int @id
+}
+
+model courses {
+  id               String             @id @db.VarChar(255)
+  name             String?            @db.VarChar(255)
+  registration_id  String?            @db.VarChar(255)
+  created_at       DateTime?          @db.Timestamptz(6)
+  updated_at       DateTime?          @db.Timestamptz(6)
+  is_active        Boolean?           @default(true)
+  registrations    registrations?     @relation(fields: [registration_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "courses_registration_id_foreign")
+  groups           groups[]
+  groups_archive   groups_archive[]
+  schedule_courses schedule_courses[]
+}
+
+model departments {
+  id            String          @id @db.VarChar(255)
+  name          String?         @db.VarChar(255)
+  url           String?         @db.VarChar(255)
+  created_at    DateTime?       @db.Timestamptz(6)
+  updated_at    DateTime?       @db.Timestamptz(6)
+  registrations registrations[]
+}
+
+model group_archive_lecturers {
+  id             Int             @id @default(autoincrement())
+  lecturer_id    Int?
+  group_id       Int?
+  created_at     DateTime?       @db.Timestamptz(6)
+  updated_at     DateTime?       @db.Timestamptz(6)
+  groups_archive groups_archive? @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_archive_lecturers_group_id_foreign")
+  lecturers      lecturers?      @relation(fields: [lecturer_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_archive_lecturers_lecturer_id_foreign")
+}
+
+model group_lecturers {
+  id          Int        @id @default(autoincrement())
+  lecturer_id Int?
+  group_id    Int?
+  created_at  DateTime?  @db.Timestamptz(6)
+  updated_at  DateTime?  @db.Timestamptz(6)
+  groups      groups?    @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_lecturers_group_id_foreign")
+  lecturers   lecturers? @relation(fields: [lecturer_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "group_lecturers_lecturer_id_foreign")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model groups {
+  id              Int               @id @default(autoincrement())
+  name            String?           @db.VarChar(255)
+  start_time      DateTime?         @db.Time(6)
+  end_time        DateTime?         @db.Time(6)
+  group           String?           @db.VarChar(255)
+  week            String?
+  day             String?           @db.VarChar(255)
+  type            String?           @db.VarChar(255)
+  url             String?           @db.VarChar(255)
+  course_id       String?           @db.VarChar(255)
+  created_at      DateTime?         @default(dbgenerated("'2025-02-16 12:01:46.996149+00'::timestamp with time zone")) @db.Timestamptz(6)
+  updated_at      DateTime?         @db.Timestamptz(6)
+  spots_occupied  Int?              @default(0)
+  spots_total     Int?              @default(0)
+  is_active       Boolean?          @default(true)
+  group_lecturers group_lecturers[]
+  courses         courses?          @relation(fields: [course_id], references: [id], onDelete: Cascade, map: "groups_course_id_foreign")
+  schedule_groups schedule_groups[]
+
+  @@unique([name, start_time, end_time, group, week, day, type, course_id], map: "groups_scraper_uindex")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model groups_archive {
+  id                      Int                       @id @default(autoincrement())
+  name                    String?                   @db.VarChar(255)
+  start_time              DateTime?                 @db.Time(6)
+  end_time                DateTime?                 @db.Time(6)
+  group                   String?                   @db.VarChar(255)
+  week                    String?
+  day                     String?                   @db.VarChar(255)
+  type                    String?                   @db.VarChar(255)
+  url                     String?                   @db.VarChar(255)
+  course_id               String?                   @db.VarChar(255)
+  created_at              DateTime?                 @default(dbgenerated("'2025-02-16 12:01:47.44789+00'::timestamp with time zone")) @db.Timestamptz(6)
+  updated_at              DateTime?                 @db.Timestamptz(6)
+  spots_occupied          Int?                      @default(0)
+  spots_total             Int?                      @default(0)
+  is_active               Boolean?                  @default(true)
+  group_archive_lecturers group_archive_lecturers[]
+  courses                 courses?                  @relation(fields: [course_id], references: [id], onDelete: Cascade, map: "groups_archive_course_id_foreign")
+}
+
+model lecturers {
+  id                      Int                       @id @default(autoincrement())
+  name                    String?                   @db.VarChar(255)
+  surname                 String?                   @db.VarChar(255)
+  created_at              DateTime?                 @db.Timestamptz(6)
+  updated_at              DateTime?                 @db.Timestamptz(6)
+  average_rating          String?                   @default("0.00") @db.VarChar(255)
+  opinions_count          String?                   @default("0") @db.VarChar(255)
+  group_archive_lecturers group_archive_lecturers[]
+  group_lecturers         group_lecturers[]
+  ratings                 ratings[]
+}
+
+model rate_limits {
+  key    String  @id @db.VarChar(255)
+  points Int     @default(0)
+  expire BigInt?
+}
+
+model ratings {
+  id          Int        @id @default(autoincrement())
+  lecturer_id Int?
+  created_at  DateTime?  @db.Timestamptz(6)
+  updated_at  DateTime?  @db.Timestamptz(6)
+  rating      Float?
+  lecturers   lecturers? @relation(fields: [lecturer_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "ratings_lecturer_id_foreign")
+}
+
+model registrations {
+  id                     String                   @id @db.VarChar(255)
+  name                   String?                  @db.VarChar(255)
+  department_id          String?                  @db.VarChar(255)
+  round                  Int?
+  created_at             DateTime?                @default(dbgenerated("'2025-02-16 12:01:46.876435+00'::timestamp with time zone")) @db.Timestamptz(6)
+  updated_at             DateTime?                @db.Timestamptz(6)
+  is_active              Boolean?                 @default(true)
+  courses                courses[]
+  departments            departments?             @relation(fields: [department_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "registrations_department_id_foreign")
+  schedule_registrations schedule_registrations[]
+}
+
+model schedule_courses {
+  id          Int        @id @default(autoincrement())
+  schedule_id Int?
+  course_id   String?    @db.VarChar(255)
+  created_at  DateTime?  @db.Timestamptz(6)
+  updated_at  DateTime?  @db.Timestamptz(6)
+  courses     courses?   @relation(fields: [course_id], references: [id], onDelete: Cascade, map: "schedule_courses_course_id_foreign")
+  schedules   schedules? @relation(fields: [schedule_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "schedule_courses_schedule_id_foreign")
+}
+
+model schedule_groups {
+  id          Int        @id @default(autoincrement())
+  schedule_id Int?
+  group_id    Int?
+  created_at  DateTime?  @db.Timestamptz(6)
+  updated_at  DateTime?  @db.Timestamptz(6)
+  groups      groups?    @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "schedule_groups_group_id_foreign")
+  schedules   schedules? @relation(fields: [schedule_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "schedule_groups_schedule_id_foreign")
+}
+
+model schedule_registrations {
+  id              Int            @id @default(autoincrement())
+  schedule_id     Int?
+  registration_id String?        @db.VarChar(255)
+  created_at      DateTime?      @db.Timestamptz(6)
+  updated_at      DateTime?      @db.Timestamptz(6)
+  registrations   registrations? @relation(fields: [registration_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "schedule_registrations_registration_id_foreign")
+  schedules       schedules?     @relation(fields: [schedule_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "schedule_registrations_schedule_id_foreign")
+}
+
+model schedules {
+  id                     Int                      @id @default(autoincrement())
+  user_id                Int?
+  name                   String?                  @default("Nowy plan") @db.VarChar(255)
+  created_at             DateTime?                @default(dbgenerated("'2025-02-16 12:01:47.118029+00'::timestamp with time zone")) @db.Timestamptz(6)
+  updated_at             DateTime?                @db.Timestamptz(6)
+  shared_id              String?                  @db.VarChar(255)
+  schedule_courses       schedule_courses[]
+  schedule_groups        schedule_groups[]
+  schedule_registrations schedule_registrations[]
+  users                  users?                   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "schedules_user_id_foreign")
+}
+
+model shareds {
+  id         String    @id @db.Uuid
+  plan       String?
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+}
+
+model users {
+  id                  Int         @id @default(autoincrement())
+  created_at          DateTime    @db.Timestamptz(6)
+  updated_at          DateTime?   @db.Timestamptz(6)
+  usos_id             String      @db.VarChar(255)
+  first_name          String?     @db.VarChar(255)
+  last_name           String?     @db.VarChar(255)
+  student_number      String?     @db.VarChar(255)
+  allow_notifications Boolean?    @default(false)
+  avatar              String?     @db.VarChar(255)
+  verified            Boolean?    @default(true)
+  otp_code            String?     @db.VarChar(255)
+  otp_expire          DateTime?   @db.Timestamptz(6)
+  otp_attempts        Int?        @default(0)
+  blocked             Boolean?    @default(false)
+  schedules           schedules[]
+}
