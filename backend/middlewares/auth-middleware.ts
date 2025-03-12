@@ -15,3 +15,15 @@ export const isAuthenticated = (app: Elysia) =>
 
     return { user }
   })
+
+export const isNotAuthenticated = (app: Elysia) =>
+  app.use(jwtAccessSetup).derive(async function handler({
+    cookie: { auth },
+    error,
+  }) {
+    if (auth.value) {
+      return error(401, 'Unauthorized')
+    }
+
+    return {}
+  })

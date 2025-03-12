@@ -9,6 +9,19 @@ export const updateUserBody = new Elysia().model({
   }),
 })
 
+export const getOtpBody = new Elysia().model({
+  getOtpBody: t.Object({
+    email: t.String(),
+  }),
+})
+
+export const verifyOtpBody = new Elysia().model({
+  verifyOtpBody: t.Object({
+    email: t.String(),
+    otp: t.String(),
+  }),
+})
+
 export const jwtSchema = t.Object({
   id: t.Number(),
   studentNumber: t.String(),

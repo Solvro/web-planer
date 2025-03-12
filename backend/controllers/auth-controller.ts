@@ -5,6 +5,10 @@ import { prisma } from '@/lib/db'
 import { jwtAccessSetup } from '@/setups/jwt'
 
 import { createClient } from '../lib/usos/usos-client'
+import { isNotAuthenticated } from '@/middlewares/auth-middleware'
+import { getOtpBody, verifyOtpBody } from '@/validators'
+import crypto from 'node:crypto'
+import { DateTime } from 'luxon'
 
 export const AuthController = {
   loginWithUsos: new Elysia().use(jwtAccessSetup).post(
@@ -87,18 +91,55 @@ export const AuthController = {
       body: t.Object({ accessToken: t.String(), accessSecret: t.String() }),
     }
   ),
-  logout: async () => {
-    try {
-      return {
-        data: [],
-        message: 'User logged out',
-      }
-    } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
-      return {
-        data: [],
-        message: 'Failed to logout',
-      }
-    }
-  },
+  otpGet: new Elysia()
+    .use(isNotAuthenticated)
+    .use(getOtpBody)
+    .post(
+      '/get',
+      async ({ body }) => {
+        const { email } = body
+        const student_number = email.split('@')[0]
+        let user = await prisma.users.findFirst({
+          where: { student_number },
+        })
+        if (user === null) {
+          user = await prisma.users.create({
+            data: {
+              usos_id: '',
+              student_number,
+              first_name: '',
+              last_name: '',
+              avatar: '',
+              verified: false,
+              created_at: new Date(),
+            },
+          })
+        }
+
+        const otp = crypto.randomInt(100000, 999999).toString()
+        await prisma.users.update({
+          where: { id: user.id },
+          data: {
+            otp_code: otp,
+            otp_attempts: 0,
+            otp_expire: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+          },
+        })
+
+        // send mail
+
+        return { success: true, message: 'Wysłano kod weryfikacyjny' }
+      },
+      { body: 'getOtpBody' }
+    ),
+  otpVerify: new Elysia()
+    .use(isNotAuthenticated)
+    .use(verifyOtpBody)
+    .post(
+      '/verify',
+      async ({ body }) => {
+        const { email, otp } = body
+      },
+      { body: 'verifyOtpBody' }
+    ),
 }
