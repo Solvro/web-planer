@@ -4,6 +4,7 @@ import { departmentsRoute } from '@/routes/departments'
 import { usersRoute } from '@/routes/user'
 import cron from '@elysiajs/cron'
 import swagger from '@elysiajs/swagger'
+import { loggerConfig } from '@/setups/logger'
 
 const app = new Elysia()
   .get('/', () => 'Hello Elysia')
@@ -20,6 +21,7 @@ const app = new Elysia()
     })
   )
   .use(swagger())
+  .use(loggerConfig)
   .listen(process.env.PORT || 3000)
 
 console.log(

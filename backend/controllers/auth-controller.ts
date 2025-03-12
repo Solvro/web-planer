@@ -157,13 +157,29 @@ export const AuthController = {
         }
 
         if (user.otp_code !== otp) {
+          const newAttempts = (user.otp_attempts || 0) + 1
+          if (newAttempts >= 5) {
+            await prisma.users.update({
+              where: { id: user.id },
+              data: {
+                otp_attempts: { increment: 1 },
+                blocked: (user.otp_attempts || 0) + 1 >= 5,
+                otp_expire: null,
+                otp_code: null,
+              },
+            })
+
+            return error(401, {
+              message:
+                'Twoje konto zostało zablokowane na logowanie OTP. Skontaktuj się z administratorem.',
+              error: 'User is blocked',
+            })
+          }
+
           await prisma.users.update({
             where: { id: user.id },
             data: {
               otp_attempts: { increment: 1 },
-              blocked: (user.otp_attempts || 0) + 1 >= 5,
-              otp_expire: null,
-              otp_code: null,
             },
           })
 

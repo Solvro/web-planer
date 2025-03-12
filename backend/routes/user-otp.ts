@@ -1,4 +1,5 @@
 import { AuthController } from '@/controllers/auth-controller'
+import { loggerConfig } from '@/setups/logger'
 import Elysia from 'elysia'
 import { rateLimit } from 'elysia-rate-limit'
 import { Server } from 'elysia-rate-limit/dist/@types/Server'
@@ -23,5 +24,6 @@ export const usersOtp = new Elysia({ prefix: '/otp' })
       errorResponse: new Response('Too many requests', { status: 429 }),
     })
   )
+  .use(loggerConfig)
   .use(AuthController.otpVerify)
   .use(AuthController.otpGet)
