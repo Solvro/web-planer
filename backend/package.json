@@ -7,7 +7,8 @@
     "build": "bun build --compile --minify --target bun --outfile server ./src/index.ts",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@elysiajs/cron": "^1.2.0",
