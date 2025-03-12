@@ -1,4 +1,4 @@
-import Elysia, { t } from "elysia";
+import Elysia, { t } from 'elysia'
 
 export const updateUserBody = new Elysia().model({
   updateUserBody: t.Object({
@@ -7,7 +7,7 @@ export const updateUserBody = new Elysia().model({
     firstName: t.Optional(t.String()),
     lastName: t.Optional(t.String()),
   }),
-});
+})
 
 export const jwtSchema = t.Object({
   id: t.Number(),
@@ -17,4 +17,4 @@ export const jwtSchema = t.Object({
   lastName: t.String(),
   avatar: t.String(),
   verified: t.Boolean(),
-});
+})

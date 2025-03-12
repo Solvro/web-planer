@@ -3,14 +3,14 @@ export const UserController = {
     try {
       return {
         data: [],
-        message: "User data",
-      };
+        message: 'User data',
+      }
     } catch (error) {
-      console.log("🚀 ~ getDepartments: ~ error:", error);
+      console.log('🚀 ~ getDepartments: ~ error:', error)
       return {
         data: [],
-        message: "Failed to get user data",
-      };
+        message: 'Failed to get user data',
+      }
     }
   },
-};
+}

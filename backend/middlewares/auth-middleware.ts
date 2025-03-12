@@ -1,6 +1,6 @@
-import type { Elysia } from "elysia";
+import type { Elysia } from 'elysia'
 
-import { jwtAccessSetup } from "../setups/jwt";
+import { jwtAccessSetup } from '../setups/jwt'
 
 export const isAuthenticated = (app: Elysia) =>
   app.use(jwtAccessSetup).derive(async function handler({
@@ -8,10 +8,10 @@ export const isAuthenticated = (app: Elysia) =>
     cookie: { auth },
     error,
   }) {
-    const user = await jwt.verify(auth.value);
+    const user = await jwt.verify(auth.value)
     if (!user) {
-      return error(401, "Unauthorized");
+      return error(401, 'Unauthorized')
     }
 
-    return { user };
-  });
+    return { user }
+  })

@@ -1,17 +1,17 @@
-import { prisma } from "../lib/db";
-import { strings } from "../utils/strings";
+import { prisma } from '../lib/db'
+import { strings } from '../utils/strings'
 
 export const DepartmentsController = {
   getDepartments: async () => {
     try {
-      const departments = await prisma.departments.findMany({});
-      return departments;
+      const departments = await prisma.departments.findMany({})
+      return departments
     } catch (error) {
-      console.log("🚀 ~ getDepartments: ~ error:", error);
+      console.log('🚀 ~ getDepartments: ~ error:', error)
       return {
         data: [],
         message: strings.response.failed,
-      };
+      }
     }
   },
   getDepartmentById: async (id: string) => {
@@ -20,14 +20,14 @@ export const DepartmentsController = {
         where: {
           id,
         },
-      });
-      return department;
+      })
+      return department
     } catch (error) {
-      console.log("🚀 ~ getDepartmentById: ~ error:", error);
+      console.log('🚀 ~ getDepartmentById: ~ error:', error)
       return {
         data: {},
         message: strings.response.failed,
-      };
+      }
     }
   },
-};
+}

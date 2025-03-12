@@ -1,6 +1,6 @@
 export const strings = {
   response: {
-    success: "Success",
-    failed: "Failed",
+    success: 'Success',
+    failed: 'Failed',
   },
-};
+}

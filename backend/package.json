@@ -4,7 +4,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "build": "bun build --compile --minify --target bun --outfile server ./src/index.ts"
+    "build": "bun build --compile --minify --target bun --outfile server ./src/index.ts",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "dependencies": {
     "@elysiajs/jwt": "^1.2.0",
@@ -14,7 +16,8 @@
     "pg": "^8.14.0"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prettier": "3.5.3"
   },
   "module": "src/index.js"
 }
