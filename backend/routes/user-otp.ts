@@ -14,7 +14,7 @@ const getRealIp = (req: Request, server: Server | null): string => {
   return server?.requestIP(req)?.address ?? req.headers.get('x-real-ip') ?? ''
 }
 
-export const usersOtp = new Elysia({ prefix: '/user/otp' })
+export const usersOtp = new Elysia({ prefix: '/otp' })
   .use(
     rateLimit({
       max: 6,
@@ -23,5 +23,5 @@ export const usersOtp = new Elysia({ prefix: '/user/otp' })
       errorResponse: new Response('Too many requests', { status: 429 }),
     })
   )
-  .post('/verify', AuthController.otpVerify)
-  .post('/get', AuthController.otpGet)
+  .use(AuthController.otpVerify)
+  .use(AuthController.otpGet)

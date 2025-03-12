@@ -91,47 +91,44 @@ export const AuthController = {
       body: t.Object({ accessToken: t.String(), accessSecret: t.String() }),
     }
   ),
-  otpGet: new Elysia()
-    .use(isNotAuthenticated)
-    .use(getOtpBody)
-    .post(
-      '/get',
-      async ({ body }) => {
-        const { email } = body
-        const student_number = email.split('@')[0]
-        let user = await prisma.users.findFirst({
-          where: { student_number },
-        })
-        if (user === null) {
-          user = await prisma.users.create({
-            data: {
-              usos_id: '',
-              student_number,
-              first_name: '',
-              last_name: '',
-              avatar: '',
-              verified: false,
-              created_at: new Date(),
-            },
-          })
-        }
-
-        const otp = crypto.randomInt(100000, 999999).toString()
-        await prisma.users.update({
-          where: { id: user.id },
+  otpGet: new Elysia().use(getOtpBody).post(
+    '/get',
+    async ({ body }) => {
+      const { email } = body
+      const student_number = email.split('@')[0]
+      let user = await prisma.users.findFirst({
+        where: { student_number },
+      })
+      if (user === null) {
+        user = await prisma.users.create({
           data: {
-            otp_code: otp,
-            otp_attempts: 0,
-            otp_expire: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+            usos_id: '',
+            student_number,
+            first_name: '',
+            last_name: '',
+            avatar: '',
+            verified: false,
+            created_at: new Date(),
           },
         })
+      }
 
-        // send mail
+      const otp = crypto.randomInt(100000, 999999).toString()
+      await prisma.users.update({
+        where: { id: user.id },
+        data: {
+          otp_code: otp,
+          otp_attempts: 0,
+          otp_expire: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+        },
+      })
 
-        return { success: true, message: 'Wysłano kod weryfikacyjny' }
-      },
-      { body: 'getOtpBody' }
-    ),
+      // send mail
+
+      return { success: true, message: 'Wysłano kod weryfikacyjny' }
+    },
+    { body: 'getOtpBody' }
+  ),
   otpVerify: new Elysia()
     .use(isNotAuthenticated)
     .use(verifyOtpBody)

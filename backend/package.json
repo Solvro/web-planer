@@ -13,6 +13,7 @@
   "dependencies": {
     "@elysiajs/cron": "^1.2.0",
     "@elysiajs/jwt": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.2",
     "@prisma/client": "^6.5.0",
     "elysia": "latest",
     "elysia-rate-limit": "^4.2.1",

@@ -1,11 +1,11 @@
 import Elysia from 'elysia'
 
-import { CoursesController } from '../controllers/courses-controller'
-import { DepartmentsController } from '../controllers/departments-controller'
-import { GroupsController } from '../controllers/groups-controller'
-import { RegistrationsController } from '../controllers/registrations-controller'
+import { CoursesController } from '@/controllers/courses-controller'
+import { DepartmentsController } from '@/controllers/departments-controller'
+import { GroupsController } from '@/controllers/groups-controller'
+import { RegistrationsController } from '@/controllers/registrations-controller'
 
-export const RouteDepartments = (app: Elysia) =>
+export const departmentsRoute = (app: Elysia) =>
   app.group('/departments', (departments) => {
     departments.get('/', () => DepartmentsController.getDepartments())
     departments.get('/:department_id', ({ params }) =>

@@ -1,22 +1,25 @@
 import { Elysia } from 'elysia'
 
-import { RouteDepartments } from '../routes/departments'
-import { RouteUsers } from '../routes/user'
-import cron, { Patterns } from '@elysiajs/cron'
+import { departmentsRoute } from '@/routes/departments'
+import { usersRoute } from '@/routes/user'
+import cron from '@elysiajs/cron'
+import swagger from '@elysiajs/swagger'
 
 const app = new Elysia()
   .get('/', () => 'Hello Elysia')
-  .use(RouteDepartments)
-  .use(RouteUsers)
+  .use(departmentsRoute)
+  .use(usersRoute)
   .use(
     cron({
       name: 'scraper',
-      pattern: Patterns.everyDayAt('01:00'),
+      // pattern everyday at 01:00
+      pattern: '0 1 * * *',
       run() {
         console.log('Run USOS scraper')
       },
     })
   )
+  .use(swagger())
   .listen(process.env.PORT || 3000)
 
 console.log(
