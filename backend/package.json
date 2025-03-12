@@ -6,7 +6,8 @@
     "dev": "bun run --watch src/index.ts",
     "build": "bun build --compile --minify --target bun --outfile server ./src/index.ts",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@elysiajs/cron": "^1.2.0",
@@ -19,6 +20,7 @@
     "pg": "^8.14.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "bun-types": "latest",
     "prettier": "3.5.3"
   },
