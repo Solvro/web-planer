@@ -8,7 +8,8 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "email": "email dev --dir ./emails"
   },
   "dependencies": {
     "@bogeychan/elysia-logger": "^0.1.8",
@@ -16,17 +17,25 @@
     "@elysiajs/jwt": "^1.2.0",
     "@elysiajs/swagger": "^1.2.2",
     "@prisma/client": "^6.5.0",
+    "@react-email/components": "^0.0.33",
     "elysia": "latest",
     "elysia-rate-limit": "^4.2.1",
     "luxon": "^3.5.0",
+    "nodemailer": "^6.10.0",
     "oauth-1.0a": "^2.2.6",
     "pg": "^8.14.0",
-    "prisma": "^6.5.0"
+    "prisma": "^6.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/luxon": "^3.4.2",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "bun-types": "latest",
-    "prettier": "3.5.3"
+    "prettier": "3.5.3",
+    "react-email": "^3.0.7"
   },
   "module": "src/index.js"
 }

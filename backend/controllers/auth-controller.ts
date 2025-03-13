@@ -10,6 +10,10 @@ import { getOtpBody, verifyOtpBody } from '@/validators'
 import crypto from 'node:crypto'
 import { DateTime } from 'luxon'
 
+import { renderToStaticMarkup } from 'react-dom/server'
+import OTPEmail from '@/emails/otp'
+import { transporter } from '@/lib/email'
+
 export const AuthController = {
   loginWithUsos: new Elysia().use(jwtAccessSetup).post(
     '/login',
@@ -111,17 +115,25 @@ export const AuthController = {
         })
       }
 
-      const otp = crypto.randomInt(100000, 999999).toString()
+      const otp = crypto.randomInt(100000, 999999)
       await prisma.users.update({
         where: { id: user.id },
         data: {
-          otpCode: otp,
+          otpCode: otp.toString(),
           otpAttempts: 0,
           otpExpire: DateTime.now().plus({ minutes: 15 }).toJSDate(),
         },
       })
 
-      // send mail
+      const html = renderToStaticMarkup(OTPEmail({ otp }))
+
+      await transporter.sendMail({
+        from: 'Planer Solvro <planer@solvro.pl>',
+        to: email,
+        subject: 'Kod weryfikacyjny',
+        text: `Twój kod weryfikacyjny to: ${otp}`,
+        html,
+      })
 
       return { success: true, message: 'Wysłano kod weryfikacyjny' }
     },
