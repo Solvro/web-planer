@@ -11,8 +11,8 @@ const coursesTransformer = (courses: any[]) => {
     createdAt: course.created_at,
     updatedAt: course.updated_at,
     groups: course.groups.map((group: any) => ({
-      lecturer: Array.isArray(group.group_lecturers)
-        ? group.group_lecturers
+      lecturer: Array.isArray(group.groupLecturers)
+        ? group.groupLecturers
             .map(
               (lecturer: any) =>
                 `${lecturer.lecturers?.name} ${lecturer.lecturers?.surname}`
@@ -20,20 +20,20 @@ const coursesTransformer = (courses: any[]) => {
             .join(', ')
         : 'Brak prowadzącego',
       averageRating:
-        Array.isArray(group.group_lecturers) && group.group_lecturers.length > 0
+        Array.isArray(group.groupLecturers) && group.groupLecturers.length > 0
           ? (
-              group.group_lecturers
+              group.groupLecturers
                 .map((lecturer: any) =>
                   Number.parseFloat(lecturer.lecturers?.average_rating || '0')
                 )
                 .filter((rating: any) => !Number.isNaN(rating))
                 .reduce((total: any, rating: any) => total + rating, 0) /
-              group.group_lecturers.length
+              group.groupLecturers.length
             ).toFixed(2)
           : '0.00',
       opinionsCount:
-        Array.isArray(group.group_lecturers) && group.group_lecturers.length > 0
-          ? group.group_lecturers
+        Array.isArray(group.groupLecturers) && group.groupLecturers.length > 0
+          ? group.groupLecturers
               .map((lecturer: any) =>
                 Number.parseInt(lecturer.lecturers?.opinions_count || '0', 10)
               )
@@ -52,16 +52,16 @@ export const CoursesController = {
       const registrationId = decodeURIComponent(registration_id)
       const courses = await prisma.courses.findMany({
         where: {
-          registration_id: registrationId,
-          OR: [{ is_active: true }, { is_active: null }],
+          registrationId,
+          OR: [{ isActive: true }, { isActive: null }],
         },
         include: {
           groups: {
             where: {
-              OR: [{ is_active: true }, { is_active: null }],
+              OR: [{ isActive: true }, { isActive: null }],
             },
             include: {
-              group_lecturers: {
+              groupLecturers: {
                 include: {
                   lecturers: true,
                 },
@@ -90,16 +90,16 @@ export const CoursesController = {
       const courses = await prisma.courses.findMany({
         where: {
           id: courseId,
-          registration_id: registrationId,
-          OR: [{ is_active: true }, { is_active: null }],
+          registrationId,
+          OR: [{ isActive: true }, { isActive: null }],
         },
         include: {
           groups: {
             where: {
-              OR: [{ is_active: true }, { is_active: null }],
+              OR: [{ isActive: true }, { isActive: null }],
             },
             include: {
-              group_lecturers: {
+              groupLecturers: {
                 include: {
                   lecturers: true,
                 },

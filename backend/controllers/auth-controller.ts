@@ -24,16 +24,14 @@ export const AuthController = {
 
         const profile = await usosClient.get<{
           id: string
-          student_number: string
-          first_name: string
-          last_name: string
+          studentNumber: string
+          firstName: string
+          lastName: string
           photo_urls: Record<string, string>
-        }>(
-          'users/user?fields=id|student_number|first_name|last_name|photo_urls'
-        )
+        }>('users/user?fields=id|studentNumber|firstName|lastName|photo_urls')
 
         const existingUser = await prisma.users.findFirst({
-          where: { student_number: profile.student_number },
+          where: { studentNumber: profile.studentNumber },
         })
 
         let user: users
@@ -41,9 +39,9 @@ export const AuthController = {
           user = await prisma.users.update({
             where: { id: existingUser.id },
             data: {
-              usos_id: profile.id,
-              first_name: profile.first_name,
-              last_name: profile.last_name,
+              usosId: profile.id,
+              firstName: profile.firstName,
+              lastName: profile.lastName,
               avatar: profile.photo_urls['50x50'],
               verified: true,
             },
@@ -51,23 +49,23 @@ export const AuthController = {
         } else {
           user = await prisma.users.create({
             data: {
-              student_number: profile.student_number,
-              usos_id: profile.id,
-              first_name: profile.first_name,
-              last_name: profile.last_name,
+              studentNumber: profile.studentNumber,
+              usosId: profile.id,
+              firstName: profile.firstName,
+              lastName: profile.lastName,
               avatar: profile.photo_urls['50x50'],
               verified: true,
-              created_at: new Date(),
+              createdAt: new Date(),
             },
           })
         }
 
         const preparedUser = {
           id: user.id,
-          studentNumber: user.student_number!,
-          usosId: user.usos_id,
-          firstName: user.first_name!,
-          lastName: user.last_name!,
+          studentNumber: user.studentNumber!,
+          usosId: user.usosId,
+          firstName: user.firstName!,
+          lastName: user.lastName!,
           avatar: user.avatar!,
           verified: user.verified!,
         }
@@ -95,20 +93,20 @@ export const AuthController = {
     '/get',
     async ({ body }) => {
       const { email } = body
-      const student_number = email.split('@')[0]
+      const studentNumber = email.split('@')[0]
       let user = await prisma.users.findFirst({
-        where: { student_number },
+        where: { studentNumber },
       })
       if (user === null) {
         user = await prisma.users.create({
           data: {
-            usos_id: '',
-            student_number,
-            first_name: '',
-            last_name: '',
+            usosId: '',
+            studentNumber,
+            firstName: '',
+            lastName: '',
             avatar: '',
             verified: false,
-            created_at: new Date(),
+            createdAt: new Date(),
           },
         })
       }
@@ -117,9 +115,9 @@ export const AuthController = {
       await prisma.users.update({
         where: { id: user.id },
         data: {
-          otp_code: otp,
-          otp_attempts: 0,
-          otp_expire: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+          otpCode: otp,
+          otpAttempts: 0,
+          otpExpire: DateTime.now().plus({ minutes: 15 }).toJSDate(),
         },
       })
 
@@ -136,10 +134,10 @@ export const AuthController = {
       '/verify',
       async ({ body, jwt, cookie: { token } }) => {
         const { email, otp } = body
-        const student_number = email.split('@')[0]
+        const studentNumber = email.split('@')[0]
 
         const user = await prisma.users.findFirst({
-          where: { student_number, otp_expire: { gt: new Date() } },
+          where: { studentNumber, otpExpire: { gt: new Date() } },
         })
         if (user === null) {
           return error(400, {
@@ -156,16 +154,16 @@ export const AuthController = {
           })
         }
 
-        if (user.otp_code !== otp) {
-          const newAttempts = (user.otp_attempts || 0) + 1
+        if (user.otpCode !== otp) {
+          const newAttempts = (user.otpAttempts || 0) + 1
           if (newAttempts >= 5) {
             await prisma.users.update({
               where: { id: user.id },
               data: {
-                otp_attempts: { increment: 1 },
-                blocked: (user.otp_attempts || 0) + 1 >= 5,
-                otp_expire: null,
-                otp_code: null,
+                otpAttempts: { increment: 1 },
+                blocked: (user.otpAttempts || 0) + 1 >= 5,
+                otpExpire: null,
+                otpCode: null,
               },
             })
 
@@ -179,7 +177,7 @@ export const AuthController = {
           await prisma.users.update({
             where: { id: user.id },
             data: {
-              otp_attempts: { increment: 1 },
+              otpAttempts: { increment: 1 },
             },
           })
 
@@ -196,19 +194,19 @@ export const AuthController = {
         await prisma.users.update({
           where: { id: user.id },
           data: {
-            otp_expire: null,
-            otp_code: null,
-            otp_attempts: 0,
+            otpExpire: null,
+            otpCode: null,
+            otpAttempts: 0,
             verified: true,
           },
         })
 
         const preparedUser = {
           id: user.id,
-          studentNumber: user.student_number!,
-          usosId: user.usos_id,
-          firstName: user.first_name!,
-          lastName: user.last_name!,
+          studentNumber: user.studentNumber!,
+          usosId: user.usosId,
+          firstName: user.firstName!,
+          lastName: user.lastName!,
           avatar: user.avatar!,
           verified: user.verified!,
         }

@@ -6,11 +6,11 @@ export const GroupsController = {
     try {
       const groups = await prisma.groups.findMany({
         where: {
-          course_id: courseId,
-          OR: [{ is_active: true }, { is_active: null }],
+          courseId,
+          OR: [{ isActive: true }, { isActive: null }],
         },
         include: {
-          group_lecturers: {
+          groupLecturers: {
             include: {
               lecturers: true,
             },
@@ -19,8 +19,8 @@ export const GroupsController = {
       })
 
       const transformedGroups = groups.map((group) => ({
-        lecturer: group.group_lecturers.length
-          ? group.group_lecturers
+        lecturer: group.groupLecturers.length
+          ? group.groupLecturers
               .map(
                 (lecturer) =>
                   `${lecturer.lecturers?.name} ${lecturer.lecturers?.surname}`
@@ -28,16 +28,16 @@ export const GroupsController = {
               .join(', ')
           : 'Brak prowadzącego',
         averageRating:
-          group.group_lecturers.length > 0
+          group.groupLecturers.length > 0
             ? (
-                group.group_lecturers.reduce(
+                group.groupLecturers.reduce(
                   (total, lecturer) =>
                     total +
                     (Number.parseFloat(
-                      lecturer.lecturers?.average_rating || '0'
+                      lecturer.lecturers?.averageRating || '0'
                     ) || 0),
                   0
-                ) / group.group_lecturers.length
+                ) / group.groupLecturers.length
               ).toFixed(2)
             : '0.00',
         ...group,
@@ -56,12 +56,12 @@ export const GroupsController = {
     try {
       const group = await prisma.groups.findFirst({
         where: {
-          course_id: courseId,
+          courseId,
           id: parseInt(groupId || '0'),
-          OR: [{ is_active: true }, { is_active: null }],
+          OR: [{ isActive: true }, { isActive: null }],
         },
         include: {
-          group_lecturers: {
+          groupLecturers: {
             include: {
               lecturers: true,
             },
@@ -77,8 +77,8 @@ export const GroupsController = {
       }
 
       const transformedGroup = {
-        lecturer: Array.isArray(group.group_lecturers)
-          ? group.group_lecturers
+        lecturer: Array.isArray(group.groupLecturers)
+          ? group.groupLecturers
               .map(
                 (lecturer) =>
                   `${lecturer.lecturers?.name} ${lecturer.lecturers?.surname}`
@@ -86,24 +86,22 @@ export const GroupsController = {
               .join(', ')
           : 'Brak prowadzącego',
         averageRating:
-          Array.isArray(group.group_lecturers) &&
-          group.group_lecturers.length > 0
+          Array.isArray(group.groupLecturers) && group.groupLecturers.length > 0
             ? (
-                group.group_lecturers
+                group.groupLecturers
                   .map((lecturer) =>
-                    Number.parseFloat(lecturer.lecturers?.average_rating || '0')
+                    Number.parseFloat(lecturer.lecturers?.averageRating || '0')
                   )
                   .filter((rating) => !Number.isNaN(rating))
                   .reduce((total, rating) => total + rating, 0) /
-                group.group_lecturers.length
+                group.groupLecturers.length
               ).toFixed(2)
             : '0.00',
         opinionsCount:
-          Array.isArray(group.group_lecturers) &&
-          group.group_lecturers.length > 0
-            ? group.group_lecturers
+          Array.isArray(group.groupLecturers) && group.groupLecturers.length > 0
+            ? group.groupLecturers
                 .map((lecturer) =>
-                  Number.parseInt(lecturer.lecturers?.opinions_count || '0', 10)
+                  Number.parseInt(lecturer.lecturers?.opinionsCount || '0', 10)
                 )
                 .filter((count) => !Number.isNaN(count))
                 .reduce((total, count) => total + count, 0)

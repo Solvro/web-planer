@@ -9,8 +9,8 @@ export const RegistrationsController = {
         const departmentId = decodeURIComponent(department_id)
         const departments = await prisma.registrations.findMany({
           where: {
-            department_id: departmentId,
-            OR: [{ is_active: true }, { is_active: null }],
+            departmentId,
+            OR: [{ isActive: true }, { isActive: null }],
           },
         })
         return departments
@@ -40,9 +40,9 @@ export const RegistrationsController = {
         const registrationId = decodeURIComponent(registration_id)
         const department = await prisma.registrations.findFirst({
           where: {
-            department_id: departmentId,
+            departmentId,
             id: registrationId,
-            OR: [{ is_active: true }, { is_active: null }],
+            OR: [{ isActive: true }, { isActive: null }],
           },
         })
         return department

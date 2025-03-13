@@ -7,6 +7,7 @@ import { isAuthenticated } from '@/middlewares/auth-middleware'
 import { jwtAccessSetup } from '@/setups/jwt'
 import { prisma } from '@/lib/db'
 import { usersOtp } from './user-otp'
+import { usersSchedules } from './user-schedules'
 
 const protectedRoutes = new Elysia()
   .use(isAuthenticated)
@@ -53,7 +54,7 @@ export const usersRoute = (app: Elysia) =>
       return { message: 'Testsss' }
     })
     users.use(protectedRoutes)
-
     users.use(usersOtp)
+    users.use(usersSchedules)
     return users
   })
