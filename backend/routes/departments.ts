@@ -30,11 +30,7 @@ export const departmentsRoute = (app: Elysia) =>
     )
     departments.get(
       '/:department_id/registrations/:registration_id/courses/:course_id',
-      ({ params }) =>
-        CoursesController.getCourseById(
-          params.registration_id,
-          params.course_id
-        )
+      ({ params }) => CoursesController.getCourseById(params.course_id)
     )
 
     departments.get(

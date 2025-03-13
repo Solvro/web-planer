@@ -13,11 +13,13 @@
   },
   "dependencies": {
     "@bogeychan/elysia-logger": "^0.1.8",
+    "@elysiajs/cors": "^1.2.0",
     "@elysiajs/cron": "^1.2.0",
     "@elysiajs/jwt": "^1.2.0",
     "@elysiajs/swagger": "^1.2.2",
     "@prisma/client": "^6.5.0",
     "@react-email/components": "^0.0.33",
+    "date-fns": "^4.1.0",
     "elysia": "latest",
     "elysia-rate-limit": "^4.2.1",
     "luxon": "^3.5.0",

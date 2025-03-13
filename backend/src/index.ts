@@ -4,10 +4,12 @@ import { departmentsRoute } from '@/routes/departments'
 import { usersRoute } from '@/routes/user'
 import cron from '@elysiajs/cron'
 import swagger from '@elysiajs/swagger'
-import { loggerConfig } from '@/setups/logger'
 import { sharedRoute } from '@/routes/shared'
 import { scraperScript } from '@/scripts/scraper'
 import { notificationsScript } from '@/scripts/notifications'
+import cors from '@elysiajs/cors'
+
+const CORS_DOMAINS = ['https://planer.solvro.pl', 'http://localhost:3000']
 
 const app = new Elysia()
   .get('/', () => 'Hello Elysia')
@@ -37,7 +39,11 @@ const app = new Elysia()
     })
   )
   .use(swagger())
-  .use(loggerConfig)
+  .use(
+    cors({
+      origin: CORS_DOMAINS,
+    })
+  )
   .listen(process.env.PORT || 3000)
 
 console.log(

@@ -1,5 +1,4 @@
 import { AuthController } from '@/controllers/auth-controller'
-import { loggerConfig } from '@/setups/logger'
 import Elysia from 'elysia'
 import { rateLimit } from 'elysia-rate-limit'
 import { Server } from 'elysia-rate-limit/dist/@types/Server'
@@ -16,14 +15,13 @@ const getRealIp = (req: Request, server: Server | null): string => {
 }
 
 export const usersOtp = new Elysia({ prefix: '/otp' })
-  .use(
-    rateLimit({
-      max: 6,
-      duration: 60000,
-      generator: (req, server) => getRealIp(req, server),
-      errorResponse: new Response('Too many requests', { status: 429 }),
-    })
-  )
-  .use(loggerConfig)
+  // .use(
+  //   rateLimit({
+  //     max: 6,
+  //     duration: 60000,
+  //     generator: (req, server) => getRealIp(req, server),
+  //     errorResponse: new Response('Too many requests', { status: 429 }),
+  //   })
+  // )
   .use(AuthController.otpVerify)
   .use(AuthController.otpGet)

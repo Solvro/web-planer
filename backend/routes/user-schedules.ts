@@ -24,11 +24,15 @@ export const usersSchedules = new Elysia({ prefix: '/schedules' })
     new Elysia()
       .use(isAuthenticated)
       .guard({
-        params: t.Object({ schedule_id: t.String({ minLength: 1 }) }),
+        params: t.Object({ schedule_id: t.Number() }),
         body: updateScheduleSchema,
       })
       .patch('/:schedule_id', async ({ user, body, params }) =>
-        SchedulesController.updateOne(user.id, params.schedule_id, body)
+        SchedulesController.updateOne(
+          user.id,
+          params.schedule_id.toString(),
+          body
+        )
       )
   )
   .delete(

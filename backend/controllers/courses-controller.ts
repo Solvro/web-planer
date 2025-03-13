@@ -2,54 +2,14 @@ import assert from 'node:assert'
 
 import { prisma } from '../lib/db'
 import { strings } from '../utils/strings'
-
-const coursesTransformer = (courses: any[]) => {
-  return courses.map((course: any) => ({
-    id: course.id,
-    name: course.name,
-    registrationId: course.registration_id,
-    createdAt: course.created_at,
-    updatedAt: course.updated_at,
-    groups: course.groups.map((group: any) => ({
-      lecturer: Array.isArray(group.groupLecturers)
-        ? group.groupLecturers
-            .map(
-              (lecturer: any) =>
-                `${lecturer.lecturers?.name} ${lecturer.lecturers?.surname}`
-            )
-            .join(', ')
-        : 'Brak prowadzącego',
-      averageRating:
-        Array.isArray(group.groupLecturers) && group.groupLecturers.length > 0
-          ? (
-              group.groupLecturers
-                .map((lecturer: any) =>
-                  Number.parseFloat(lecturer.lecturers?.average_rating || '0')
-                )
-                .filter((rating: any) => !Number.isNaN(rating))
-                .reduce((total: any, rating: any) => total + rating, 0) /
-              group.groupLecturers.length
-            ).toFixed(2)
-          : '0.00',
-      opinionsCount:
-        Array.isArray(group.groupLecturers) && group.groupLecturers.length > 0
-          ? group.groupLecturers
-              .map((lecturer: any) =>
-                Number.parseInt(lecturer.lecturers?.opinions_count || '0', 10)
-              )
-              .filter((count: any) => !Number.isNaN(count))
-              .reduce((total: any, count: any) => total + count, 0)
-          : 0,
-      ...group,
-    })),
-  }))
-}
+import { format } from 'date-fns'
 
 export const CoursesController = {
   getCourses: async (registration_id: string) => {
     try {
       assert(typeof registration_id === 'string')
       const registrationId = decodeURIComponent(registration_id)
+
       const courses = await prisma.courses.findMany({
         where: {
           registrationId,
@@ -57,65 +17,134 @@ export const CoursesController = {
         },
         include: {
           groups: {
-            where: {
-              OR: [{ isActive: true }, { isActive: null }],
-            },
+            where: { OR: [{ isActive: true }, { isActive: null }] },
             include: {
               groupLecturers: {
-                include: {
-                  lecturers: true,
-                },
+                include: { lecturers: true },
               },
             },
           },
         },
       })
 
-      const transformedCourses = coursesTransformer(courses)
+      const transformedCourses = courses.map(
+        ({ id, name, registrationId, createdAt, updatedAt, groups }) => ({
+          id,
+          name,
+          registrationId,
+          createdAt,
+          updatedAt,
+          groups: groups.map(
+            ({ id, name, groupLecturers, startTime, endTime, ...rest }) => ({
+              id,
+              name,
+              lecturer: groupLecturers.length
+                ? groupLecturers
+                    .map(({ lecturers }) =>
+                      `${lecturers?.name ?? ''} ${lecturers?.surname ?? ''}`.trim()
+                    )
+                    .join(', ')
+                : 'Brak prowadzącego',
+              averageRating: groupLecturers.length
+                ? (
+                    groupLecturers.reduce(
+                      (total, { lecturers }) =>
+                        total +
+                        (Number.parseFloat(lecturers?.averageRating ?? '0') ||
+                          0),
+                      0
+                    ) / groupLecturers.length
+                  ).toFixed(2)
+                : '0.00',
+              opinionsCount: groupLecturers.reduce(
+                (total, { lecturers }) =>
+                  total +
+                  (Number.parseInt(lecturers?.opinionsCount ?? '0', 10) || 0),
+                0
+              ),
+              startTime: format(startTime!, 'HH:mm:ss'),
+              endTime: format(endTime!, 'HH:mm:ss'),
+              ...rest,
+            })
+          ),
+        })
+      )
 
+      console.log(transformedCourses)
       return transformedCourses
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getCourses ~ error:', error)
       return {
         data: [],
         message: strings.response.failed,
       }
     }
   },
-  getCourseById: async (registration_id: string, course_id: string) => {
+  getCourseById: async (course_id: string) => {
     try {
-      assert(typeof registration_id === 'string')
-      const registrationId = decodeURIComponent(registration_id)
+      assert(typeof course_id === 'string')
       const courseId = decodeURIComponent(course_id)
-      const courses = await prisma.courses.findMany({
-        where: {
-          id: courseId,
-          registrationId,
-          OR: [{ isActive: true }, { isActive: null }],
-        },
+
+      const course = await prisma.courses.findFirst({
+        where: { id: courseId },
         include: {
           groups: {
-            where: {
-              OR: [{ isActive: true }, { isActive: null }],
-            },
+            where: { OR: [{ isActive: true }, { isActive: null }] },
             include: {
               groupLecturers: {
-                include: {
-                  lecturers: true,
-                },
+                include: { lecturers: true },
               },
             },
           },
         },
       })
 
-      const transformedCourses = coursesTransformer(courses)
+      const transformedCourse = {
+        id: course?.id,
+        name: course?.name,
+        registrationId: course?.registrationId,
+        createdAt: course?.createdAt,
+        updatedAt: course?.updatedAt,
+        groups: course?.groups.map(
+          ({ id, name, groupLecturers, startTime, endTime, ...rest }) => ({
+            id,
+            name,
+            lecturer: groupLecturers.length
+              ? groupLecturers
+                  .map(({ lecturers }) =>
+                    `${lecturers?.name ?? ''} ${lecturers?.surname ?? ''}`.trim()
+                  )
+                  .join(', ')
+              : 'Brak prowadzącego',
+            averageRating: groupLecturers.length
+              ? (
+                  groupLecturers.reduce(
+                    (total, { lecturers }) =>
+                      total +
+                      (Number.parseFloat(lecturers?.averageRating ?? '0') || 0),
+                    0
+                  ) / groupLecturers.length
+                ).toFixed(2)
+              : '0.00',
+            opinionsCount: groupLecturers.reduce(
+              (total, { lecturers }) =>
+                total +
+                (Number.parseInt(lecturers?.opinionsCount ?? '0', 10) || 0),
+              0
+            ),
+            startTime: format(startTime!, 'HH:mm:ss'),
+            endTime: format(endTime!, 'HH:mm:ss'),
+            ...rest,
+          })
+        ),
+      }
 
-      return transformedCourses[0]
+      console.log(transformedCourse)
+      return transformedCourse
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getCourseById ~ error:', error)
       return {
-        data: [],
+        data: {},
         message: strings.response.failed,
       }
     }

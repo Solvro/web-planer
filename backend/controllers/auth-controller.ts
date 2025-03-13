@@ -1,4 +1,4 @@
-import { users } from '@prisma/client'
+import { Users } from '@prisma/client'
 import Elysia, { error, t } from 'elysia'
 
 import { prisma } from '@/lib/db'
@@ -32,13 +32,15 @@ export const AuthController = {
           firstName: string
           lastName: string
           photo_urls: Record<string, string>
-        }>('users/user?fields=id|studentNumber|firstName|lastName|photo_urls')
+        }>(
+          'users/user?fields=id|student_number|first_name|last_name|photo_urls'
+        )
 
         const existingUser = await prisma.users.findFirst({
           where: { studentNumber: profile.studentNumber },
         })
 
-        let user: users
+        let user: Users
         if (existingUser) {
           user = await prisma.users.update({
             where: { id: existingUser.id },
@@ -81,6 +83,7 @@ export const AuthController = {
           httpOnly: true,
           maxAge: 7 * 86400,
           path: '/',
+          secure: process.env.NODE_ENV === 'production',
         })
 
         return preparedUser

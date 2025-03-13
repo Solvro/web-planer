@@ -35,8 +35,8 @@ export const jwtSchema = t.Object({
 export const createScheduleSchema = t.Object({
   name: t.String({ minLength: 1 }),
   groups: t.Optional(t.Array(t.Object({ id: t.Number() }))),
-  courses: t.Optional(t.Array(t.Object({ id: t.Number() }))),
-  registrations: t.Optional(t.Array(t.Object({ id: t.Number() }))),
+  courses: t.Optional(t.Array(t.Object({ id: t.String() }))),
+  registrations: t.Optional(t.Array(t.Object({ id: t.String() }))),
 })
 export type createScheduleType = Static<typeof createScheduleSchema>
 
@@ -44,7 +44,7 @@ export const updateScheduleSchema = t.Intersect([
   createScheduleSchema,
   t.Object({
     name: t.Optional(t.String({ minLength: 1 })),
-    sharedId: t.Optional(t.String({ minLength: 1 })),
+    sharedId: t.Optional(t.Union([t.String({ minLength: 1 }), t.Null()])),
     updatedAt: t.Optional(t.String({ minLength: 1 })),
   }),
 ])

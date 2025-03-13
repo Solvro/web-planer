@@ -10,7 +10,7 @@ export const isAuthenticated = (app: Elysia) =>
   }) {
     const user = await jwt.verify(token.value)
     if (!user) {
-      return error(401, 'Unauthorized')
+      return error(401, { message: 'Unauthorized' })
     }
 
     return { user }
@@ -22,7 +22,7 @@ export const isNotAuthenticated = (app: Elysia) =>
     error,
   }) {
     if (token.value) {
-      return error(401, 'Unauthorized')
+      return error(401, { message: 'Unauthorized' })
     }
 
     return {}

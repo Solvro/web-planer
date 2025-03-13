@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { createScheduleType, updateScheduleType } from '@/validators'
+import { format } from 'date-fns'
 
 export const SchedulesController = {
   getAll: async (userId: number) => {
@@ -52,13 +53,15 @@ export const SchedulesController = {
       updatedAt: schedule.updatedAt,
       name: schedule.name,
       sharedId: schedule.sharedId,
-      registrations: schedule.scheduleRegistrations,
+      registrations: schedule.scheduleRegistrations.map(
+        ({ registrations }) => ({
+          ...registrations,
+        })
+      ),
       courses: schedule.scheduleCourses.map((course) => ({
         id: course.courses?.id,
         name: course.courses?.name,
         groups: course.courses?.groups.map((group) => ({
-          id: group.id,
-          name: group.name,
           lecturer: group.groupLecturers.length
             ? group.groupLecturers
                 .map((lecturer) =>
@@ -92,6 +95,9 @@ export const SchedulesController = {
                   .filter((count) => !Number.isNaN(count))
                   .reduce((total, count) => total + count, 0)
               : 0,
+          ...group,
+          startTime: format(group.startTime!, 'HH:mm:ss'),
+          endTime: format(group.endTime!, 'HH:mm:ss'),
         })),
       })),
     }))
@@ -145,9 +151,11 @@ export const SchedulesController = {
       updatedAt: schedule.updatedAt,
       name: schedule.name,
       sharedId: schedule.sharedId,
-      registrations: schedule.scheduleRegistrations.map((reg) => ({
-        ...reg,
-      })),
+      registrations: schedule.scheduleRegistrations.map(
+        ({ registrations }) => ({
+          ...registrations,
+        })
+      ),
       courses: schedule.scheduleCourses.map((course) => ({
         id: course.courses?.id,
         name: course.courses?.name,
@@ -186,110 +194,112 @@ export const SchedulesController = {
                   .reduce((total, count) => total + count, 0)
               : 0,
           ...group,
+          startTime: format(group.startTime!, 'HH:mm:ss'),
+          endTime: format(group.endTime!, 'HH:mm:ss'),
         })),
       })),
     }
   },
   create: async (userId: number, body: createScheduleType) => {
-    const schedule = await prisma.schedules.create({
-      data: {
-        userId,
-        ...body,
-      },
+    const { name, groups, registrations, courses } = body
+
+    const newSchedule = await prisma.$transaction(async (prisma) => {
+      const schedule = await prisma.schedules.create({
+        data: { userId, name, updatedAt: new Date() },
+      })
+
+      if (groups?.length) {
+        await prisma.scheduleGroups.createMany({
+          data: groups.map((group) => ({
+            scheduleId: schedule.id,
+            groupId: group.id,
+          })),
+          skipDuplicates: true,
+        })
+      }
+
+      if (registrations?.length) {
+        await prisma.scheduleRegistrations.createMany({
+          data: registrations.map((registration) => ({
+            scheduleId: schedule.id,
+            registrationId: registration.id.toString(),
+          })),
+          skipDuplicates: true,
+        })
+      }
+
+      if (courses?.length) {
+        await prisma.scheduleCourses.createMany({
+          data: courses.map((course) => ({
+            scheduleId: schedule.id,
+            courseId: course.id.toString(),
+          })),
+          skipDuplicates: true,
+        })
+      }
+
+      return schedule
     })
 
-    if (body.groups) {
-      await prisma.scheduleGroups.createMany({
-        data: body.groups.map((group) => ({
-          scheduleId: schedule.id,
-          groupId: group.id,
-        })),
-        skipDuplicates: true,
-      })
-    }
-
-    if (body.registrations) {
-      await prisma.scheduleRegistrations.createMany({
-        data: body.registrations.map((registration) => ({
-          scheduleId: schedule.id,
-          registrationId: registration.id.toString(),
-        })),
-        skipDuplicates: true,
-      })
-    }
-
-    if (body.courses) {
-      await prisma.scheduleCourses.createMany({
-        data: body.courses.map((course) => ({
-          scheduleId: schedule.id,
-          courseId: course.id.toString(),
-        })),
-        skipDuplicates: true,
-      })
-    }
-
-    return schedule
+    return { message: 'Schedule created.', schedule: newSchedule }
   },
   updateOne: async (
     userId: number,
     scheduleId: string,
     body: updateScheduleType
   ) => {
-    const { name, sharedId, updatedAt } = body
-    const toUpdate = { name, sharedId, updatedAt }
-    const schedule = await prisma.schedules.update({
-      where: {
-        id: parseInt(scheduleId),
-        userId,
-      },
-      data: {
-        ...toUpdate,
-      },
+    const { name, sharedId, updatedAt, groups, registrations, courses } = body
+    const scheduleIdInt = parseInt(scheduleId)
+
+    const updatedSchedule = await prisma.$transaction(async (prisma) => {
+      const schedule = await prisma.schedules.update({
+        where: { id: scheduleIdInt, userId },
+        data: { name, sharedId, updatedAt },
+      })
+
+      if (groups) {
+        await prisma.scheduleGroups.deleteMany({
+          where: { scheduleId: schedule.id },
+        })
+        await prisma.scheduleGroups.createMany({
+          data: groups.map((group) => ({
+            scheduleId: schedule.id,
+            groupId: group.id,
+          })),
+          skipDuplicates: true,
+        })
+      }
+
+      if (registrations) {
+        await prisma.scheduleRegistrations.deleteMany({
+          where: { scheduleId: schedule.id },
+        })
+        await prisma.scheduleRegistrations.createMany({
+          data: registrations.map((registration) => ({
+            scheduleId: schedule.id,
+            registrationId: registration.id.toString(),
+          })),
+          skipDuplicates: true,
+        })
+      }
+
+      if (courses) {
+        await prisma.scheduleCourses.deleteMany({
+          where: { scheduleId: schedule.id },
+        })
+        await prisma.scheduleCourses.createMany({
+          data: courses.map((course) => ({
+            scheduleId: schedule.id,
+            courseId: course.id.toString(),
+          })),
+          skipDuplicates: true,
+        })
+      }
+
+      return { success: true, schedule }
     })
 
-    if (body.groups) {
-      await prisma.scheduleGroups.deleteMany({
-        where: { scheduleId: schedule.id },
-      })
-
-      await prisma.scheduleGroups.createMany({
-        data: body.groups.map((group) => ({
-          scheduleId: schedule.id,
-          groupId: group.id,
-        })),
-        skipDuplicates: true,
-      })
-    }
-
-    if (body.registrations) {
-      await prisma.scheduleRegistrations.deleteMany({
-        where: { scheduleId: schedule.id },
-      })
-
-      await prisma.scheduleRegistrations.createMany({
-        data: body.registrations.map((registration) => ({
-          scheduleId: schedule.id,
-          registrationId: registration.id.toString(),
-        })),
-        skipDuplicates: true,
-      })
-    }
-
-    if (body.courses) {
-      await prisma.scheduleCourses.deleteMany({
-        where: { scheduleId: schedule.id },
-      })
-
-      await prisma.scheduleCourses.createMany({
-        data: body.courses.map((course) => ({
-          scheduleId: schedule.id,
-          courseId: course.id.toString(),
-        })),
-        skipDuplicates: true,
-      })
-    }
-
-    return schedule
+    return updatedSchedule
   },
   deleteOne: async (userId: number, scheduleId: string) => {
     await prisma.schedules.delete({
@@ -298,5 +308,7 @@ export const SchedulesController = {
         userId,
       },
     })
+
+    return { success: true, message: 'Schedule successfully deleted.' }
   },
 }
