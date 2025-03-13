@@ -114,19 +114,17 @@ type AuthType = {
 
 export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
   const cookies = await cookiesPromise();
-  let accessToken, accessSecret, adonisSession, token;
+  let accessToken, accessSecret, token;
   if (type === "usos") {
     accessToken = payload?.token ?? cookies.get("access_token")?.value;
     accessSecret = payload?.secret ?? cookies.get("access_token_secret")?.value;
   } else {
-    adonisSession =
-      payload?.adonisSession ?? cookies.get("adonis-session")?.value;
     token = payload?.token ?? cookies.get("token")?.value;
   }
 
   if (
     (type === "usos" && (accessToken === "" || accessSecret === "")) ||
-    (type === "adonis" && (adonisSession === "" || token === ""))
+    (type === "adonis" && token === "")
   ) {
     if (noThrow) {
       return null;
@@ -141,10 +139,7 @@ export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
         method: type === "usos" ? "POST" : "GET",
         headers: {
           "Content-Type": "application/json",
-          Cookie:
-            type === "adonis"
-              ? `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`
-              : "",
+          Cookie: type === "adonis" ? `token=${token ?? ""}` : "",
           "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
         },
         body:
@@ -154,6 +149,12 @@ export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
         credentials: "include",
       },
     );
+    if (!response.ok) {
+      if (noThrow) {
+        return null;
+      }
+      throw new Error("Failed to authenticate");
+    }
     const data = (await response.json()) as User | { error: string };
     if ("error" in data) {
       try {
@@ -221,14 +222,13 @@ export const fetchToAdonis = async <T>({
 }): Promise<T | null> => {
   try {
     const cookies = await cookiesPromise();
-    const adonisSession = cookies.get("adonis-session")?.value;
     const token = cookies.get("token")?.value;
 
     const fetchOptions: RequestInit = {
       method,
       headers: {
         "Content-Type": "application/json",
-        Cookie: `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`,
+        Cookie: `token=${token ?? ""}`,
         "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
       },
       credentials: "include",

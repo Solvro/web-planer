@@ -28,6 +28,7 @@ export const createNewPlan = async ({
       method: "POST",
       body: JSON.stringify({ name, courses, registrations, groups }),
     });
+
     if (data === null) {
       return null;
     }
