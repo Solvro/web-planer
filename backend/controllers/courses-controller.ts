@@ -70,7 +70,6 @@ export const CoursesController = {
         })
       )
 
-      console.log(transformedCourses)
       return transformedCourses
     } catch (error) {
       console.log('🚀 ~ getCourses ~ error:', error)
@@ -139,7 +138,6 @@ export const CoursesController = {
         ),
       }
 
-      console.log(transformedCourse)
       return transformedCourse
     } catch (error) {
       console.log('🚀 ~ getCourseById ~ error:', error)
