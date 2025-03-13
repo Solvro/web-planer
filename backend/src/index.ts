@@ -5,11 +5,13 @@ import { usersRoute } from '@/routes/user'
 import cron from '@elysiajs/cron'
 import swagger from '@elysiajs/swagger'
 import { loggerConfig } from '@/setups/logger'
+import { sharedRoute } from '@/routes/shared'
 
 const app = new Elysia()
   .get('/', () => 'Hello Elysia')
   .use(departmentsRoute)
   .use(usersRoute)
+  .use(sharedRoute)
   .use(
     cron({
       name: 'scraper',

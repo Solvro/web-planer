@@ -38,7 +38,7 @@ export const createScheduleSchema = t.Object({
   courses: t.Optional(t.Array(t.Object({ id: t.Number() }))),
   registrations: t.Optional(t.Array(t.Object({ id: t.Number() }))),
 })
-export type createScheduleSchemaType = Static<typeof createScheduleSchema>
+export type createScheduleType = Static<typeof createScheduleSchema>
 
 export const updateScheduleSchema = t.Intersect([
   createScheduleSchema,
@@ -48,4 +48,10 @@ export const updateScheduleSchema = t.Intersect([
     updatedAt: t.Optional(t.String({ minLength: 1 })),
   }),
 ])
-export type updateScheduleSchemaType = Static<typeof updateScheduleSchema>
+export type updateScheduleType = Static<typeof updateScheduleSchema>
+
+export const createSharedPlanSchema = t.Object({
+  id: t.String({ minLength: 1 }),
+  plan: t.String({ minLength: 1 }),
+})
+export type createSharedPlanType = Static<typeof createSharedPlanSchema>

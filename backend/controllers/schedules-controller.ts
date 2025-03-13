@@ -1,8 +1,5 @@
 import { prisma } from '@/lib/db'
-import {
-  createScheduleSchemaType,
-  updateScheduleSchemaType,
-} from '@/validators'
+import { createScheduleType, updateScheduleType } from '@/validators'
 
 export const SchedulesController = {
   getAll: async (userId: number) => {
@@ -193,7 +190,7 @@ export const SchedulesController = {
       })),
     }
   },
-  create: async (userId: number, body: createScheduleSchemaType) => {
+  create: async (userId: number, body: createScheduleType) => {
     const schedule = await prisma.schedules.create({
       data: {
         userId,
@@ -236,7 +233,7 @@ export const SchedulesController = {
   updateOne: async (
     userId: number,
     scheduleId: string,
-    body: updateScheduleSchemaType
+    body: updateScheduleType
   ) => {
     const { name, sharedId, updatedAt } = body
     const toUpdate = { name, sharedId, updatedAt }
