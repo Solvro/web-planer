@@ -4,11 +4,12 @@ WORKDIR /app
 
 # Cache packages installation
 COPY package.json package.json
-COPY bun.lock bun.lock
+COPY bun.lockb bun.lockb
+COPY prisma prisma
 
 RUN bun install
 
-COPY ./src ./src
+COPY . .
 
 ENV NODE_ENV=production
 
@@ -30,4 +31,4 @@ ENV NODE_ENV=production
 
 CMD ["./server"]
 
-EXPOSE 3000
+EXPOSE 3333
