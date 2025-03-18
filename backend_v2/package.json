@@ -1,0 +1,43 @@
+{
+  "name": "backend",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build --compile --minify --target bun --outfile server ./src/index.ts",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
+    "email": "email dev --dir ./emails"
+  },
+  "dependencies": {
+    "@bogeychan/elysia-logger": "^0.1.8",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/cron": "^1.2.0",
+    "@elysiajs/jwt": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.2",
+    "@prisma/client": "^6.5.0",
+    "@react-email/components": "^0.0.33",
+    "date-fns": "^4.1.0",
+    "elysia": "latest",
+    "elysia-rate-limit": "^4.2.1",
+    "luxon": "^3.5.0",
+    "nodemailer": "^6.10.0",
+    "oauth-1.0a": "^2.2.6",
+    "pg": "^8.14.0",
+    "prisma": "^6.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "bun-types": "latest",
+    "prettier": "3.5.3",
+    "react-email": "^3.0.7"
+  },
+  "module": "src/index.js"
+}

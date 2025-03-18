@@ -1,41 +1,29 @@
-FROM oven/bun AS build
+FROM node:22.14.0-alpine3.21 AS base
 
+# All deps stage
+FROM base AS deps
 WORKDIR /app
+ADD package.json package-lock.json ./
+RUN npm ci
 
-# Cache packages installation
-COPY package.json package.json
-COPY bun.lockb bun.lockb
-COPY prisma prisma
-
-RUN bun install
-
-COPY . .
-
-ENV NODE_ENV=production
-
-RUN bun build \
-	--compile \
-	--minify-whitespace \
-	--minify-syntax \
-	--target bun \
-	--outfile server \
-	./src/index.ts
-
-FROM ubuntu:20.04 AS runtime
-
+# Production only deps stage
+FROM base AS production-deps
 WORKDIR /app
+ADD package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-RUN apt-get update && apt-get install -y \
-    openssl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Build stage
+FROM base AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules /app/node_modules
+ADD . .
+RUN node ace build
 
-COPY --from=build /app/server server
-COPY --from=build /app/node_modules/.prisma /app/node_modules/.prisma
-COPY --from=build /app/node_modules/@prisma /app/node_modules/@prisma
-
+# Production stage
+FROM base
 ENV NODE_ENV=production
-
-CMD ["./server"]
-
-EXPOSE 3333
+WORKDIR /app
+COPY --from=production-deps /app/node_modules /app/node_modules
+COPY --from=build /app/build /app
+EXPOSE 8080
+CMD ["node", "./bin/server.js"]
