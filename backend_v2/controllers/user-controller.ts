@@ -6,7 +6,7 @@ export const UserController = {
         message: 'User data',
       }
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getUser: ~ error:', error)
       return {
         data: [],
         message: 'Failed to get user data',

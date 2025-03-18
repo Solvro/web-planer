@@ -45,7 +45,7 @@ export const GroupsController = {
 
       return transformedGroups
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getGroups: ~ error:', error)
       return {
         data: [],
         message: strings.response.failed,
@@ -111,7 +111,7 @@ export const GroupsController = {
 
       return transformedGroup
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getGroupsById: ~ error:', error)
       return {
         data: [],
         message: strings.response.failed,

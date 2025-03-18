@@ -20,7 +20,7 @@ export const RegistrationsController = {
         message: strings.response.failed,
       }
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getRegistrations: ~ error:', error)
       return {
         data: [],
         message: strings.response.failed,
@@ -52,7 +52,7 @@ export const RegistrationsController = {
         message: strings.response.failed,
       }
     } catch (error) {
-      console.log('🚀 ~ getDepartments: ~ error:', error)
+      console.log('🚀 ~ getRegistrationById: ~ error:', error)
       return {
         data: [],
         message: strings.response.failed,

@@ -9,7 +9,9 @@ import { scraperScript } from '@/scripts/scraper'
 import { notificationsScript } from '@/scripts/notifications'
 import cors from '@elysiajs/cors'
 
-const CORS_DOMAINS = ['https://planer.solvro.pl', 'http://localhost:3000']
+const CORS_DOMAINS = process.env.CORS_ORIGIN?.split(',') || [
+  'https://planer.solvro.pl',
+]
 
 const app = new Elysia()
   .get('/', () => 'Hello Elysia')
@@ -33,7 +35,7 @@ const app = new Elysia()
       // pattern everyday at 01:30
       pattern: '30 1 * * *',
       run() {
-        console.log('🚀 ~ cron ~ scraper')
+        console.log('🚀 ~ cron ~ notifications')
         notificationsScript()
       },
     })
