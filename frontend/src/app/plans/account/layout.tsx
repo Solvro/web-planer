@@ -41,7 +41,7 @@ export default async function SettingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await auth({ type: "adonis" });
+  const user = await auth({ type: "elysia" });
   if (user === null) {
     return notFound();
   }

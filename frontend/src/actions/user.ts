@@ -4,7 +4,7 @@ import { auth, fetchToAdonis } from "@/lib/auth";
 import type { UserSettingsPayload } from "@/types";
 
 export const getCurrentUser = async () => {
-  const user = await auth({ type: "adonis" });
+  const user = await auth({ type: "elysia" });
   if (user == null) {
     throw new Error("Not logged in");
   }
@@ -18,7 +18,7 @@ interface UpdateUserSettingsResponse {
 }
 
 export const updateUser = async (payload: UserSettingsPayload) => {
-  const user = await auth({ type: "adonis" });
+  const user = await auth({ type: "elysia" });
   if (user == null) {
     throw new Error("Not logged in");
   }

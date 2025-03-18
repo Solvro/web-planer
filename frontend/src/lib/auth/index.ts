@@ -110,26 +110,56 @@ type AuthType = {
       };
       type: "adonis";
     }
+  | {
+      payload?: {
+        token: string;
+      };
+      type: "elysia";
+    }
 );
 
 export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
   const cookies = await cookiesPromise();
-  let accessToken, accessSecret, token;
-  if (type === "usos") {
-    accessToken = payload?.token ?? cookies.get("access_token")?.value;
-    accessSecret = payload?.secret ?? cookies.get("access_token_secret")?.value;
-  } else {
-    token = payload?.token ?? cookies.get("token")?.value;
+  let accessToken, accessSecret, adonisSession, token;
+  switch (type) {
+    case "usos": {
+      accessToken = payload?.token ?? cookies.get("access_token")?.value;
+      accessSecret =
+        payload?.secret ?? cookies.get("access_token_secret")?.value;
+
+      break;
+    }
+    case "adonis": {
+      adonisSession =
+        payload?.adonisSession ?? cookies.get("adonis-session")?.value;
+      token = payload?.token ?? cookies.get("token")?.value;
+
+      break;
+    }
+    case "elysia": {
+      token = payload?.token ?? cookies.get("token")?.value;
+
+      break;
+    }
+    // No default
   }
 
   if (
     (type === "usos" && (accessToken === "" || accessSecret === "")) ||
-    (type === "adonis" && token === "")
+    (type === "adonis" && (adonisSession === "" || token === "")) ||
+    (type === "elysia" && token === "")
   ) {
     if (noThrow) {
       return null;
     }
     throw new Error("No access token or access secret");
+  }
+
+  let cookieToHeaders;
+  if (type === "adonis") {
+    cookieToHeaders = `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`;
+  } else if (type === "elysia") {
+    cookieToHeaders = `token=${token ?? ""}`;
   }
 
   try {
@@ -139,7 +169,7 @@ export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
         method: type === "usos" ? "POST" : "GET",
         headers: {
           "Content-Type": "application/json",
-          Cookie: type === "adonis" ? `token=${token ?? ""}` : "",
+          Cookie: cookieToHeaders ?? "",
           "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
         },
         body:
@@ -222,13 +252,14 @@ export const fetchToAdonis = async <T>({
 }): Promise<T | null> => {
   try {
     const cookies = await cookiesPromise();
+    const adonisSession = cookies.get("adonis-session")?.value;
     const token = cookies.get("token")?.value;
 
     const fetchOptions: RequestInit = {
       method,
       headers: {
         "Content-Type": "application/json",
-        Cookie: `token=${token ?? ""}`,
+        Cookie: `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`,
         "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
       },
       credentials: "include",
