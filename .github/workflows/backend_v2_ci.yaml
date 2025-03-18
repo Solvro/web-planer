@@ -1,4 +1,4 @@
-name: Backend - CI
+name: Backend v2 - CI
 
 on:
   push:
@@ -6,20 +6,20 @@ on:
     paths:
       - ".github/workflows/backend_v2_ci.yaml"
       - "*"
-      - "backend/**"
+      - "backend_v2/**"
   pull_request:
     branches: ["main"]
     paths:
       - ".github/workflows/backend_v2_ci.yaml"
       - "*"
-      - "backend/**"
+      - "backend_v2/**"
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
+        working-directory: backend_v2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
