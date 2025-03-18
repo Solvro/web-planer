@@ -87,9 +87,12 @@ export const AuthController = {
         })
 
         return preparedUser
-      } catch (error) {
-        console.error('🚀 ~ login: ~ error:', error)
-        return error
+      } catch (err) {
+        console.error('🚀 ~ login: ~ error:', err)
+        return error(401, {
+          message: 'Nie udało się zalogować',
+          error: 'Invalid credentials',
+        })
       }
     },
     {
