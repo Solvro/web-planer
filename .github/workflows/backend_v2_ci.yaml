@@ -4,13 +4,13 @@ on:
   push:
     branches: ["main"]
     paths:
-      - ".github/workflows/backend_ci.yaml"
+      - ".github/workflows/backend_v2_ci.yaml"
       - "*"
       - "backend/**"
   pull_request:
     branches: ["main"]
     paths:
-      - ".github/workflows/backend_ci.yaml"
+      - ".github/workflows/backend_v2_ci.yaml"
       - "*"
       - "backend/**"
 
@@ -28,28 +28,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+      
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install deps
-        run: npm ci
-
-      - name: Set up AdonisJS environment
-        run: |
-          cp .env.development .env
-          node ace generate:key
-
-      - name: Lint
-        run: npm run lint
-        if: always()
+        run: bun install
 
       - name: Format
-        run: npm run format:check
-        if: always()
+        run: bun run format
 
       - name: Type check
-        run: npm run typecheck
-        if: always()
+        run: bun run typecheck
 
       - name: Run Test Build
-        run: npm run build
-        if: always()
+        run: bun run build
