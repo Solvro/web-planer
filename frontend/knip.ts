@@ -6,6 +6,8 @@ const config = {
     "next-sitemap.config.js",
     "lint-staged.config.mjs",
     "src/types/index.ts",
+    "src/robots.ts",
+    "src/sitemap.ts",
   ],
   // sharp is used in nextjs image optimization
   ignoreDependencies: ["sharp", "eslint"],
