@@ -83,7 +83,7 @@ export function CreateNewPlanPage({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
       const response = await fetchClient({
-        url: `/departments/${encodeURIComponent(faculty ?? "")}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        url: `/departments/${encodeURIComponent(faculty ?? "W4N")}/registrations/${encodeURIComponent(registrationId)}/courses`,
         method: "GET",
       });
 

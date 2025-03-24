@@ -21,13 +21,14 @@ export const createNewPlan = async ({
   groups: { id: number }[];
 }) => {
   try {
-    await auth({ type: "adonis" });
+    await auth({ type: "elysia" });
 
     const data = await fetchToAdonis<CreatePlanResponseType>({
       url: "/user/schedules",
       method: "POST",
       body: JSON.stringify({ name, courses, registrations, groups }),
     });
+
     if (data === null) {
       return null;
     }
@@ -53,7 +54,7 @@ export const updatePlan = async ({
   registrations: { id: string }[];
   groups: { id: number }[];
 }) => {
-  await auth({ type: "adonis" });
+  await auth({ type: "elysia" });
 
   const data = await fetchToAdonis<CreatePlanResponseType>({
     url: `/user/schedules/${id.toString()}`,
@@ -69,7 +70,7 @@ export const updatePlan = async ({
 
 export const deletePlan = async ({ id }: { id: number }) => {
   try {
-    await auth({ type: "adonis" });
+    await auth({ type: "elysia" });
     const data = await fetchToAdonis<DeletePlanResponseType>({
       url: `/user/schedules/${id.toString()}`,
       method: "DELETE",
@@ -86,7 +87,7 @@ export const deletePlan = async ({ id }: { id: number }) => {
 
 export const getPlan = async ({ id }: { id: number }) => {
   try {
-    await auth({ type: "adonis" });
+    await auth({ type: "elysia" });
     const data = await fetchToAdonis<PlanResponseType>({
       url: `/user/schedules/${id.toString()}`,
       method: "GET",

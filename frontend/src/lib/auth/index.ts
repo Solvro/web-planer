@@ -110,28 +110,56 @@ type AuthType = {
       };
       type: "adonis";
     }
+  | {
+      payload?: {
+        token: string;
+      };
+      type: "elysia";
+    }
 );
 
 export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
   const cookies = await cookiesPromise();
   let accessToken, accessSecret, adonisSession, token;
-  if (type === "usos") {
-    accessToken = payload?.token ?? cookies.get("access_token")?.value;
-    accessSecret = payload?.secret ?? cookies.get("access_token_secret")?.value;
-  } else {
-    adonisSession =
-      payload?.adonisSession ?? cookies.get("adonis-session")?.value;
-    token = payload?.token ?? cookies.get("token")?.value;
+  switch (type) {
+    case "usos": {
+      accessToken = payload?.token ?? cookies.get("access_token")?.value;
+      accessSecret =
+        payload?.secret ?? cookies.get("access_token_secret")?.value;
+
+      break;
+    }
+    case "adonis": {
+      adonisSession =
+        payload?.adonisSession ?? cookies.get("adonis-session")?.value;
+      token = payload?.token ?? cookies.get("token")?.value;
+
+      break;
+    }
+    case "elysia": {
+      token = payload?.token ?? cookies.get("token")?.value;
+
+      break;
+    }
+    // No default
   }
 
   if (
     (type === "usos" && (accessToken === "" || accessSecret === "")) ||
-    (type === "adonis" && (adonisSession === "" || token === ""))
+    (type === "adonis" && (adonisSession === "" || token === "")) ||
+    (type === "elysia" && token === "")
   ) {
     if (noThrow) {
       return null;
     }
     throw new Error("No access token or access secret");
+  }
+
+  let cookieToHeaders;
+  if (type === "adonis") {
+    cookieToHeaders = `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`;
+  } else if (type === "elysia") {
+    cookieToHeaders = `token=${token ?? ""}`;
   }
 
   try {
@@ -141,10 +169,7 @@ export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
         method: type === "usos" ? "POST" : "GET",
         headers: {
           "Content-Type": "application/json",
-          Cookie:
-            type === "adonis"
-              ? `adonis-session=${adonisSession ?? ""}; token=${token ?? ""}`
-              : "",
+          Cookie: cookieToHeaders ?? "",
           "X-XSRF-TOKEN": cookies.get("XSRF-TOKEN")?.value ?? "",
         },
         body:
@@ -154,6 +179,12 @@ export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
         credentials: "include",
       },
     );
+    if (!response.ok) {
+      if (noThrow) {
+        return null;
+      }
+      throw new Error("Failed to authenticate");
+    }
     const data = (await response.json()) as User | { error: string };
     if ("error" in data) {
       try {
