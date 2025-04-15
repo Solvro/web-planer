@@ -14,10 +14,7 @@ export default class RegistrationsController {
 
     if (typeof departmentId === "string") {
       const tmpDepId = decodeURIComponent(departmentId);
-      return Registration.query()
-        .where("departmentId", tmpDepId)
-        .andWhere("isActive", true)
-        .orWhereNull("isActive");
+      return Registration.query().where("departmentId", tmpDepId);
     }
 
     return {};
@@ -45,9 +42,7 @@ export default class RegistrationsController {
     if (departmentId && registrationId) {
       return await Registration.query()
         .where("departmentId", departmentId)
-        .andWhere("id", registrationId)
-        .andWhere("isActive", true)
-        .orWhereNull("isActive");
+        .andWhere("id", registrationId);
     }
 
     return {};
