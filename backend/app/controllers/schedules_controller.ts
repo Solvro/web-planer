@@ -22,10 +22,10 @@ export default class SchedulesController {
     const schedules = await Schedule.query()
       .where("userId", userId)
       .preload("registrations", (registrationQuery) => {
-        void registrationQuery.where("isActive", true).orWhereNull("isActive");
+        void registrationQuery;
       })
       .preload("courses", (courseQuery) => {
-        void courseQuery.where("isActive", true).orWhereNull("isActive");
+        void courseQuery;
       });
 
     const transformedSchedules = await Promise.all(
@@ -36,7 +36,6 @@ export default class SchedulesController {
           .preload("groups", (groupQuery) => {
             void groupQuery
               .preload("lecturers")
-              .where("isActive", true)
               .whereExists((subQuery) =>
                 subQuery
                   .from("schedule_groups")
@@ -142,10 +141,10 @@ export default class SchedulesController {
       .where("id", scheduleId)
       .andWhere("userId", userId)
       .preload("registrations", (registrationQuery) => {
-        void registrationQuery.where("isActive", true).orWhereNull("isActive");
+        void registrationQuery;
       })
       .preload("courses", (courseQuery) => {
-        void courseQuery.where("isActive", true).orWhereNull("isActive");
+        void courseQuery;
       })
       .firstOrFail();
 
@@ -155,7 +154,6 @@ export default class SchedulesController {
       .preload("groups", (groupQuery) => {
         void groupQuery
           .preload("lecturers")
-          .where("isActive", true)
           .whereExists((subQuery) =>
             subQuery
               .from("schedule_groups")

@@ -19,14 +19,7 @@ export default class CoursesController {
 
     const courses = await Course.query()
       .where("registrationId", registrationId)
-      .andWhere("isActive", true)
-      .orWhereNull("isActive")
-      .preload("groups", (groupQuery) =>
-        groupQuery
-          .where("isActive", true)
-          .orWhereNull("isActive")
-          .preload("lecturers"),
-      );
+      .preload("groups", (groupQuery) => groupQuery.preload("lecturers"));
 
     const transformedCourses = courses.map((course) => ({
       id: course.id,
@@ -93,14 +86,7 @@ export default class CoursesController {
     const course = await Course.query()
       .where("registrationId", registrationId)
       .andWhere("id", params.id)
-      .andWhere("isActive", true)
-      .orWhereNull("isActive")
-      .preload("groups", (groupQuery) =>
-        groupQuery
-          .where("isActive", true)
-          .orWhereNull("isActive")
-          .preload("lecturers"),
-      )
+      .preload("groups", (groupQuery) => groupQuery.preload("lecturers"))
       .firstOrFail();
 
     const transformedCourse = {
