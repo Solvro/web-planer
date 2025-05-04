@@ -55,7 +55,9 @@ export function AppSidebar({
   inputRef,
   offlineAlert,
   faculty,
+  isLoggedIn,
 }: {
+  isLoggedIn: boolean;
   plan: usePlanType;
   handleUpdateLocalPlan: () => Promise<void>;
   handleSyncPlan: () => Promise<void>;
@@ -91,16 +93,14 @@ export function AppSidebar({
       <SidebarContent>
         <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
           {offlineAlert ? <OfflineAlert /> : null}
-          <SyncErrorAlert
-            downloadChanges={() => {
-              void handleUpdateLocalPlan();
-            }}
-            sendChanges={() => {
-              void handleSyncPlan();
-            }}
-            planDate={plan.updatedAt}
-            onlinePlan={onlinePlan}
-          />
+          {isLoggedIn && onlinePlan !== null ? (
+            <SyncErrorAlert
+              onlinePlan={onlinePlan}
+              planDate={plan.updatedAt}
+              downloadChanges={handleUpdateLocalPlan}
+              sendChanges={handleSyncPlan}
+            />
+          ) : null}
 
           <div className="flex w-full flex-col justify-start gap-3">
             <div className="flex w-full items-end gap-1">

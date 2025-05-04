@@ -90,10 +90,15 @@ export const getPlan = async ({ id }: { id: number | string }) => {
   }
   try {
     await auth({ type: "adonis" });
-    const data = await fetchToAdonis<PlanResponseType>({
+    const data = await fetchToAdonis<
+      PlanResponseType | { error: string; message: string }
+    >({
       url: `/user/schedules/${id.toString()}`,
       method: "GET",
     });
+    if (data !== null && "error" in data) {
+      return null;
+    }
     return data;
   } catch {
     return null;

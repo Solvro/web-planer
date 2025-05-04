@@ -25,14 +25,14 @@ export default async function CreateNewPlan({
   const cookies = await cookiesPromise();
   const faculties = await getFaculties(cookies);
 
-  const isLoggedIn = (await auth({ type: "adonis" })) !== null;
+  const user = await auth({ type: "adonis" });
   const initialPlan = await getPlan({ id });
 
   return (
     <CreateNewPlanPage
       planId={id}
       faculties={faculties}
-      isLoggedIn={isLoggedIn}
+      user={user}
       initialPlan={initialPlan}
     />
   );

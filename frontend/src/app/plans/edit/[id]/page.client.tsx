@@ -9,7 +9,6 @@ import { toast } from "sonner";
 
 import { getPlan } from "@/actions/plans";
 import { ClassSchedule } from "@/components/class-schedule";
-import { Icons } from "@/components/icons";
 import {
   Dialog,
   DialogContent,
@@ -18,51 +17,47 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SidebarInset } from "@/components/ui/sidebar";
-import { useSession } from "@/hooks/use-session";
+import { useSavePlan } from "@/hooks/use-save-plan";
 import { useShare } from "@/hooks/use-share";
 import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
-import { createOnlinePlan } from "@/lib/utils/create-online-plan";
-import { syncPlan } from "@/lib/utils/sync-plan";
-import { updateLocalPlan } from "@/lib/utils/update-local-plan";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
-import type { CourseType, PlanResponseType } from "@/types";
+import type { CourseType, PlanResponseType, User } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
 import { AppSidebar } from "./_components/app-sidebar";
 import { HideDaysSettings } from "./_components/hide-days-settings";
+import { SaveOfflineFunction } from "./_components/save-offline";
+import { SaveOnlineFunction } from "./_components/save-online";
 
 export function CreateNewPlanPage({
   planId,
   faculties,
-  isLoggedIn,
+  user,
   initialPlan,
 }: {
   planId: string;
   faculties: { name: string; value: string }[];
-  isLoggedIn: boolean;
+  user: User | null;
   initialPlan: PlanResponseType | null;
 }) {
-  const [syncing, setSyncing] = useState(false);
+  const isLoggedIn = user !== null;
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
-  const { user } = useSession();
   const { isDialogOpen, setIsDialogOpen } = useShare();
   const [hideDays, setHideDays] = useState(false);
 
-  const firstTime = useRef(true);
   const spotsSynced = useRef(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const inactivityTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const router = useRouter();
   const plan = usePlan({ planId });
 
   const { data: onlinePlan, refetch: refetchOnlinePlan } = useQuery({
-    enabled: plan.onlineId !== null,
+    enabled: isLoggedIn,
     queryKey: ["onlinePlan", plan.onlineId],
     initialData: initialPlan,
     queryFn: async () => {
@@ -96,91 +91,17 @@ export function CreateNewPlanPage({
     },
   });
 
-  const handleCreateOnlinePlan = async () => {
-    firstTime.current = false;
-    const response = await createOnlinePlan(plan);
-
-    if (response.status === "SUCCESS") {
-      const { updatedAt, onlineId } = response;
-      plan.setPlan((previous) => ({
-        ...previous,
-        synced: true,
-        updatedAt: new Date(updatedAt),
-        onlineId,
-      }));
-
-      toast.success("Utworzono plan");
-    } else if (response.status === "NOT_LOGGED_IN") {
-      setOfflineAlert(true);
-    } else {
-      toast.error("Nie udało się utworzyć planu w wersji online", {
-        description: response.message,
-        duration: 10_000,
-      });
-    }
-  };
-
-  const handleSyncPlan = async () => {
-    setSyncing(true);
-    const response = await syncPlan(plan);
-
-    if (response.status === "SUCCESS") {
-      await refetchOnlinePlan();
-
-      plan.setPlan((previous) => ({
-        ...previous,
-        synced: true,
-        updatedAt: response.updatedAt
-          ? new Date(response.updatedAt)
-          : new Date(),
-      }));
-    } else {
-      toast.error(response.message, {
-        duration: 10_000,
-      });
-    }
-    setSyncing(false);
-  };
-
-  const handleUpdateLocalPlan = async () => {
-    firstTime.current = false;
-    const response = await updateLocalPlan(onlinePlan, coursesFunction);
-
-    if (response.status === "SUCCESS") {
-      const { updatedRegistrations, updatedCourses, updatedAt } = response;
-      plan.setPlan({
-        ...plan,
-        registrations: updatedRegistrations,
-        courses: updatedCourses,
-        synced: true,
-        toCreate: false,
-        updatedAt,
-      });
-    } else {
-      toast.error(response.message, {
-        duration: 10_000,
-      });
-    }
-  };
-
-  const resetInactivityTimer = () => {
-    if (user == null) {
-      return;
-    }
-    if (inactivityTimeout.current !== null) {
-      clearTimeout(inactivityTimeout.current);
-    }
-    inactivityTimeout.current = setTimeout(() => {
-      if (
-        !plan.synced &&
-        plan.onlineId !== null &&
-        !offlineAlert &&
-        !plan.toCreate
-      ) {
-        void handleSyncPlan();
-      }
-    }, 4000);
-  };
+  const {
+    syncing,
+    handleSyncPlan,
+    handleUpdateLocalPlan,
+    handleCreateOnlinePlan,
+  } = useSavePlan({
+    plan,
+    onlinePlan,
+    coursesFunction,
+    refetchOnlinePlan,
+  });
 
   const handleUpdateSpotsOccupied = async () => {
     spotsSynced.current = true;
@@ -200,35 +121,6 @@ export function CreateNewPlanPage({
   };
 
   useEffect(() => {
-    if (plan.onlineId === null && firstTime.current) {
-      void handleCreateOnlinePlan();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan.onlineId]);
-
-  useEffect(() => {
-    if (
-      onlinePlan != null &&
-      plan.onlineId !== null &&
-      plan.toCreate &&
-      firstTime.current
-    ) {
-      void handleUpdateLocalPlan();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan, onlinePlan]);
-
-  useEffect(() => {
-    resetInactivityTimer();
-    return () => {
-      if (inactivityTimeout.current !== null) {
-        clearTimeout(inactivityTimeout.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan.name, plan.courses, plan.registrations, plan.allGroups, user]);
-
-  useEffect(() => {
     if (!spotsSynced.current) {
       void handleUpdateSpotsOccupied();
     }
@@ -238,6 +130,7 @@ export function CreateNewPlanPage({
   return (
     <>
       <AppSidebar
+        isLoggedIn={isLoggedIn}
         plan={plan}
         handleUpdateLocalPlan={handleUpdateLocalPlan}
         handleSyncPlan={handleSyncPlan}
@@ -392,6 +285,22 @@ export function CreateNewPlanPage({
           </AnimatePresence>
         </DialogContent>
       </Dialog>
+
+      {isLoggedIn ? (
+        <SaveOnlineFunction
+          plan={plan}
+          setOfflineAlert={setOfflineAlert}
+          handleCreateOnlinePlan={handleCreateOnlinePlan}
+          user={user}
+          offlineAlert={offlineAlert}
+          handleSyncPlan={handleSyncPlan}
+        />
+      ) : null}
+      <SaveOfflineFunction
+        plan={plan}
+        onlinePlan={onlinePlan}
+        coursesFunction={coursesFunction}
+      />
     </>
   );
 }
