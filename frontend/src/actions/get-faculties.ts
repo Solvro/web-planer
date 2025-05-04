@@ -1,6 +1,5 @@
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { notFound } from "next/navigation";
-import "server-only";
 
 import { env } from "@/env.mjs";
 

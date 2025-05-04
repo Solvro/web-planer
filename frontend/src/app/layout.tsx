@@ -8,8 +8,6 @@ import { ClientProviders } from "@/components/providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
-import { SessionProvider } from "@/hooks/use-session";
-import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
 
@@ -98,35 +96,32 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await auth({ noThrow: true, type: "adonis" });
   const headersList = await headers();
   const nonce = headersList.get("x-nonce");
 
   return (
     <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
-      <SessionProvider user={user}>
-        <ClientProviders>
-          <body className={cn(inter.className, "min-h-screen")}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
-            <Script
-              async={true}
-              defer={true}
-              src="https://analytics.solvro.pl/script.js"
-              data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
-              data-domains="planer.solvro.pl"
-              nonce={nonce ?? undefined}
-            />
-            <Toaster richColors={true} />
-          </body>
-        </ClientProviders>
-      </SessionProvider>
+      <ClientProviders>
+        <body className={cn(inter.className, "min-h-screen")}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+          <Script
+            async={true}
+            defer={true}
+            src="https://analytics.solvro.pl/script.js"
+            data-website-id="ab126a0c-c0ab-401b-bf9d-da652aab69ec"
+            data-domains="planer.solvro.pl"
+            nonce={nonce ?? undefined}
+          />
+          <Toaster richColors={true} />
+        </body>
+      </ClientProviders>
     </html>
   );
 }
