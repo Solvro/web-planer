@@ -27,7 +27,7 @@ import { syncPlan } from "@/lib/utils/sync-plan";
 import { updateLocalPlan } from "@/lib/utils/update-local-plan";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
-import type { CourseType } from "@/types";
+import type { CourseType, PlanResponseType } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
@@ -37,9 +37,13 @@ import { HideDaysSettings } from "./_components/hide-days-settings";
 export function CreateNewPlanPage({
   planId,
   faculties,
+  isLoggedIn,
+  initialPlan,
 }: {
   planId: string;
   faculties: { name: string; value: string }[];
+  isLoggedIn: boolean;
+  initialPlan: PlanResponseType | null;
 }) {
   const [syncing, setSyncing] = useState(false);
   const [offlineAlert, setOfflineAlert] = useState(false);
@@ -57,17 +61,14 @@ export function CreateNewPlanPage({
   const router = useRouter();
   const plan = usePlan({ planId });
 
-  const {
-    data: onlinePlan,
-    refetch: refetchOnlinePlan,
-    isLoading,
-  } = useQuery({
+  const { data: onlinePlan, refetch: refetchOnlinePlan } = useQuery({
     enabled: plan.onlineId !== null,
     queryKey: ["onlinePlan", plan.onlineId],
+    initialData: initialPlan,
     queryFn: async () => {
       const response = await getPlan({ id: Number(plan.onlineId) });
       if (
-        response === false ||
+        response === null ||
         (response as unknown as { status: number }).status === 404
       ) {
         plan.remove();
@@ -234,15 +235,6 @@ export function CreateNewPlanPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <Icons.Loader size={64} className="mb-4 animate-spin text-primary" />
-        <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
-        <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
-      </div>
-    );
-  }
   return (
     <>
       <AppSidebar

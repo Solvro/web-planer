@@ -84,16 +84,16 @@ export const deletePlan = async ({ id }: { id: number }) => {
   }
 };
 
-export const getPlan = async ({ id }: { id: number }) => {
+export const getPlan = async ({ id }: { id: number | string }) => {
+  if (typeof id === "string") {
+    id = Number.parseInt(id);
+  }
   try {
     await auth({ type: "adonis" });
     const data = await fetchToAdonis<PlanResponseType>({
       url: `/user/schedules/${id.toString()}`,
       method: "GET",
     });
-    if (data === null) {
-      return false;
-    }
     return data;
   } catch {
     return null;
