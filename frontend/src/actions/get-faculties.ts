@@ -1,11 +1,14 @@
-import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+"use server";
+
+import { cookies as cookiesPromise } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { env } from "@/env.mjs";
 
 import { extractNumber } from "../lib/utils";
 
-export const getFaculties = async (cookies: ReadonlyRequestCookies) => {
+export const getFaculties = async () => {
+  const cookies = await cookiesPromise();
   const csrfToken = cookies.get("XSRF-TOKEN")?.value;
   const facultiesResponse = await fetch(
     `${env.NEXT_PUBLIC_API_URL}/departments`,

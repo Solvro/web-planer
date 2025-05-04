@@ -5,10 +5,12 @@ import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useLocalStorage } from "react-use";
 import { toast } from "sonner";
 
 import { getPlan } from "@/actions/plans";
 import { ClassSchedule } from "@/components/class-schedule";
+import { Icons } from "@/components/icons";
 import {
   Dialog,
   DialogContent,
@@ -18,12 +20,13 @@ import {
 } from "@/components/ui/dialog";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { useSavePlan } from "@/hooks/use-save-plan";
+import { useSession } from "@/hooks/use-session";
 import { useShare } from "@/hooks/use-share";
 import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
-import type { CourseType, User } from "@/types";
+import type { CourseType, PlanResponseType } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
@@ -32,15 +35,8 @@ import { HideDaysSettings } from "./_components/hide-days-settings";
 import { SaveOfflineFunction } from "./_components/save-offline";
 import { SaveOnlineFunction } from "./_components/save-online";
 
-export function CreateNewPlanPage({
-  planId,
-  faculties,
-  user,
-}: {
-  planId: string;
-  faculties: { name: string; value: string }[];
-  user: User | null;
-}) {
+export function CreateNewPlanPage({ planId }: { planId: string }) {
+  const { user } = useSession();
   const isLoggedIn = user !== null;
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
@@ -54,9 +50,19 @@ export function CreateNewPlanPage({
   const router = useRouter();
   const plan = usePlan({ planId });
 
-  const { data: onlinePlan, refetch: refetchOnlinePlan } = useQuery({
+  const [value] = useLocalStorage<{
+    cached: Date | null;
+    onlinePlan: PlanResponseType | null;
+  }>(`locale-cache-${plan.id}`);
+
+  const {
+    data: onlinePlan,
+    refetch: refetchOnlinePlan,
+    isLoading,
+  } = useQuery({
     enabled: plan.onlineId !== null && plan.onlineId !== "",
     queryKey: ["onlinePlan", plan.onlineId],
+    initialData: value?.onlinePlan,
     queryFn: async () => {
       const response = await getPlan({ id: Number(plan.onlineId) });
       if (
@@ -124,6 +130,16 @@ export function CreateNewPlanPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="flex w-full flex-1 flex-col items-center justify-center">
+        <Icons.Loader size={64} className="mb-4 animate-spin text-primary" />
+        <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
+        <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <AppSidebar
@@ -133,7 +149,6 @@ export function CreateNewPlanPage({
         handleSyncPlan={handleSyncPlan}
         onlinePlan={onlinePlan}
         syncing={syncing}
-        faculties={faculties}
         setFaculty={setFaculty}
         coursesFunction={coursesFunction}
         inputRef={inputRef}

@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import { cookies as cookiesPromise } from "next/headers";
 import { notFound } from "next/navigation";
 import React from "react";
-
-import { getFaculties } from "@/actions/get-faculties";
-import { auth } from "@/lib/auth";
 
 import { CreateNewPlanPage } from "./page.client";
 
@@ -21,10 +17,6 @@ export default async function CreateNewPlan({
   if (typeof id !== "string" || id.length === 0) {
     return notFound();
   }
-  const cookies = await cookiesPromise();
-  const faculties = await getFaculties(cookies);
 
-  const user = await auth({ type: "adonis" });
-
-  return <CreateNewPlanPage planId={id} faculties={faculties} user={user} />;
+  return <CreateNewPlanPage planId={id} />;
 }

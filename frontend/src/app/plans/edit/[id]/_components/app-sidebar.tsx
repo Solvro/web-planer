@@ -7,6 +7,7 @@ import { format } from "date-fns/format";
 import Link from "next/link";
 import React from "react";
 
+import { getFaculties } from "@/actions/get-faculties";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
 import { Icons } from "@/components/icons";
@@ -49,7 +50,6 @@ export function AppSidebar({
   handleSyncPlan,
   onlinePlan,
   syncing,
-  faculties,
   setFaculty,
   coursesFunction,
   inputRef,
@@ -63,13 +63,17 @@ export function AppSidebar({
   handleSyncPlan: () => Promise<void>;
   onlinePlan: PlanResponseType | null | undefined;
   syncing: boolean;
-  faculties: { name: string; value: string }[];
   setFaculty: React.Dispatch<React.SetStateAction<string | null>>;
   coursesFunction: UseMutationResult<CourseType, Error, string>;
   inputRef: React.RefObject<HTMLInputElement>;
   offlineAlert: boolean;
   faculty: string | null;
 }) {
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
   const registrations = useQuery({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
@@ -179,7 +183,7 @@ export function AppSidebar({
                 <SelectValue placeholder="Wybierz swój wydział" />
               </SelectTrigger>
               <SelectContent className="max-w-full">
-                {faculties.map((f) => (
+                {faculties?.map((f) => (
                   <SelectItem
                     className="mr-2 max-w-full truncate"
                     key={f.value}
