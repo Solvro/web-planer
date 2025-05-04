@@ -18,7 +18,7 @@ export const useSavePlan = ({
   refetchOnlinePlan,
 }: {
   plan: usePlanType;
-  onlinePlan: PlanResponseType | null;
+  onlinePlan: PlanResponseType | null | undefined;
   coursesFunction: UseMutationResult<CourseType, Error, string>;
   refetchOnlinePlan: () => Promise<
     QueryObserverResult<PlanResponseType | null>

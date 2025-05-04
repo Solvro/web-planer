@@ -23,7 +23,7 @@ import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
-import type { CourseType, PlanResponseType, User } from "@/types";
+import type { CourseType, User } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
@@ -36,12 +36,10 @@ export function CreateNewPlanPage({
   planId,
   faculties,
   user,
-  initialPlan,
 }: {
   planId: string;
   faculties: { name: string; value: string }[];
   user: User | null;
-  initialPlan: PlanResponseType | null;
 }) {
   const isLoggedIn = user !== null;
   const [offlineAlert, setOfflineAlert] = useState(false);
@@ -57,9 +55,8 @@ export function CreateNewPlanPage({
   const plan = usePlan({ planId });
 
   const { data: onlinePlan, refetch: refetchOnlinePlan } = useQuery({
-    enabled: isLoggedIn,
+    enabled: plan.onlineId !== null && plan.onlineId !== "",
     queryKey: ["onlinePlan", plan.onlineId],
-    initialData: initialPlan,
     queryFn: async () => {
       const response = await getPlan({ id: Number(plan.onlineId) });
       if (

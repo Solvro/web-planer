@@ -12,7 +12,7 @@ export function SaveOfflineFunction({
   coursesFunction,
 }: {
   plan: usePlanType;
-  onlinePlan: PlanResponseType | null;
+  onlinePlan: PlanResponseType | null | undefined;
   coursesFunction: UseMutationResult<CourseType, Error, string>;
 }) {
   const firstTime = useRef(true);

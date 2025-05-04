@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import React from "react";
 
 import { getFaculties } from "@/actions/get-faculties";
-import { getPlan } from "@/actions/plans";
 import { auth } from "@/lib/auth";
 
 import { CreateNewPlanPage } from "./page.client";
@@ -26,14 +25,6 @@ export default async function CreateNewPlan({
   const faculties = await getFaculties(cookies);
 
   const user = await auth({ type: "adonis" });
-  const initialPlan = await getPlan({ id });
 
-  return (
-    <CreateNewPlanPage
-      planId={id}
-      faculties={faculties}
-      user={user}
-      initialPlan={initialPlan}
-    />
-  );
+  return <CreateNewPlanPage planId={id} faculties={faculties} user={user} />;
 }
