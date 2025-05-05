@@ -184,6 +184,16 @@ export function AppSidebar({
               </SelectTrigger>
               {faculties.isLoading ? (
                 <Skeleton className="h-[40px] w-full rounded-sm" />
+              ) : faculties.isError ? (
+                <SelectContent className="max-w-full">
+                  <SelectItem
+                    className="mr-2 max-w-full truncate"
+                    key="error"
+                    value="error"
+                  >
+                    Wystąpił błąd podczas ładowania wydziałów
+                  </SelectItem>
+                </SelectContent>
               ) : (
                 <SelectContent className="max-w-full">
                   {faculties.data?.map((f) => (
