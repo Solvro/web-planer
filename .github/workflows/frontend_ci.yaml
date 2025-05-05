@@ -72,13 +72,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup node
-        uses: ./.github/composite-actions/install
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-      - name: List files in public/assets
-        run: ls public/assets
+      - name: Install deps
+        run: npm ci
 
       - name: Type check
         run: npm run typecheck
+        if: always()
           
 
   deadcode:
