@@ -43,7 +43,9 @@ function AnimationLogo() {
             width={200}
             height={200}
             className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
-            unoptimized
+            quality={100}
+            priority={true}
+            placeholder="blur"
           />
         </Link>
 
@@ -158,11 +160,17 @@ export default function Home() {
             <BorderBeam colorFrom="hsl(var(--primary))" />
             <Image
               src={HeroImageDark}
+              priority={true}
+              quality={100}
+              placeholder="blur"
               alt="Hero Image"
               className="relative hidden h-full w-full rounded-[inherit] border object-contain dark:block"
             />
             <Image
               src={HeroImageLight}
+              priority={true}
+              quality={100}
+              placeholder="blur"
               alt="Hero Image"
               className="relative block h-full w-full rounded-[inherit] border object-contain dark:hidden"
             />
