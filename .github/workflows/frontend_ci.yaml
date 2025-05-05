@@ -30,8 +30,7 @@ jobs:
       - name: Run commitlint check
         run: npx commitlint -f ${{ github.event.pull_request.base.sha }}
 
-  lint:
-    name: Lint 
+  lint: 
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -75,8 +74,12 @@ jobs:
       - name: Setup node
         uses: ./.github/composite-actions/install
 
+      - name: Show pwd
+        run: pwd
+
       - name: Type check
         run: npm run typecheck
+          
 
   deadcode:
     name: Find deadcode
