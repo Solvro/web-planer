@@ -19,9 +19,14 @@ export const getFaculties = async () => {
         "X-XSRF-TOKEN": csrfToken ?? "",
       },
     },
-  ).then(
-    async (r) => r.json() as Promise<{ id: string; name: string }[] | null>,
-  );
+  ).then(async (r) => {
+    if (!r.ok) {
+      throw new Error(
+        `Failed to fetch faculties: ${r.status.toString()} ${r.statusText}`,
+      );
+    }
+    return r.json() as Promise<{ id: string; name: string }[] | null>;
+  });
 
   if (facultiesResponse == null) {
     return notFound();

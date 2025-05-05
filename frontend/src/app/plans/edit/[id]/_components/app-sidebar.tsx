@@ -69,7 +69,7 @@ export function AppSidebar({
   offlineAlert: boolean;
   faculty: string | null;
 }) {
-  const { data: faculties } = useQuery({
+  const faculties = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
   });
@@ -182,17 +182,21 @@ export function AppSidebar({
               >
                 <SelectValue placeholder="Wybierz swój wydział" />
               </SelectTrigger>
-              <SelectContent className="max-w-full">
-                {faculties?.map((f) => (
-                  <SelectItem
-                    className="mr-2 max-w-full truncate"
-                    key={f.value}
-                    value={f.value}
-                  >
-                    {registrationReplacer(f.name)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
+              {faculties.isLoading ? (
+                <Skeleton className="h-[40px] w-full rounded-sm" />
+              ) : (
+                <SelectContent className="max-w-full">
+                  {faculties.data?.map((f) => (
+                    <SelectItem
+                      className="mr-2 max-w-full truncate"
+                      key={f.value}
+                      value={f.value}
+                    >
+                      {registrationReplacer(f.name)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              )}
             </Select>
           </div>
           {registrations.isLoading ? (
