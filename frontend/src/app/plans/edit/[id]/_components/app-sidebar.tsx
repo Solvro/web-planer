@@ -187,9 +187,10 @@ export function AppSidebar({
               ) : faculties.isError ? (
                 <SelectContent className="max-w-full">
                   <SelectItem
-                    className="mr-2 max-w-full truncate"
+                    className="mr-2 max-w-full truncate text-red-500"
                     key="error"
                     value="error"
+                    disabled={true}
                   >
                     Wystąpił błąd podczas ładowania wydziałów
                   </SelectItem>
