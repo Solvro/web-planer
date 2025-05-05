@@ -30,7 +30,7 @@ jobs:
       - name: Run commitlint check
         run: npx commitlint -f ${{ github.event.pull_request.base.sha }}
 
-  eslint:
+  lint:
     name: Lint 
     runs-on: ubuntu-latest
     defaults:
