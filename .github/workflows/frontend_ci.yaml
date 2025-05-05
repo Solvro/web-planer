@@ -74,8 +74,8 @@ jobs:
       - name: Setup node
         uses: ./.github/composite-actions/install
 
-      - name: Show pwd
-        run: pwd
+      - name: List files in public/assets
+        run: ls public/assets
 
       - name: Type check
         run: npm run typecheck
