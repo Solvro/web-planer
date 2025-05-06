@@ -22,7 +22,7 @@ export const useSavePlan = ({
   coursesFunction: UseMutationResult<CourseType, Error, string>;
   refetchOnlinePlan: () => Promise<
     QueryObserverResult<PlanResponseType | null>
-  >;
+  > | null;
 }) => {
   const [syncing, setSyncing] = useState(false);
   const firstTime = useRef(true);

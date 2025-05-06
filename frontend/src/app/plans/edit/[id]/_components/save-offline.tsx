@@ -18,7 +18,7 @@ export function SaveOfflineFunction({
     plan,
     onlinePlan,
     coursesFunction,
-    refetchOnlinePlan: async () => ({ data: null }) as any, // Mock since we don't need refetch here
+    refetchOnlinePlan: () => null,
   });
 
   useEffect(() => {
