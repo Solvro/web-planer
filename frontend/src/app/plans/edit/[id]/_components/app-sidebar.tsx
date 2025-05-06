@@ -7,6 +7,7 @@ import { format } from "date-fns/format";
 import Link from "next/link";
 import React from "react";
 
+import { getFaculties } from "@/actions/get-faculties";
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
 import { Icons } from "@/components/icons";
@@ -49,25 +50,30 @@ export function AppSidebar({
   handleSyncPlan,
   onlinePlan,
   syncing,
-  faculties,
   setFaculty,
   coursesFunction,
   inputRef,
   offlineAlert,
   faculty,
+  isLoggedIn,
 }: {
+  isLoggedIn: boolean;
   plan: usePlanType;
   handleUpdateLocalPlan: () => Promise<void>;
   handleSyncPlan: () => Promise<void>;
   onlinePlan: PlanResponseType | null | undefined;
   syncing: boolean;
-  faculties: { name: string; value: string }[];
   setFaculty: React.Dispatch<React.SetStateAction<string | null>>;
   coursesFunction: UseMutationResult<CourseType, Error, string>;
   inputRef: React.RefObject<HTMLInputElement>;
   offlineAlert: boolean;
   faculty: string | null;
 }) {
+  const faculties = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
   const registrations = useQuery({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
@@ -91,16 +97,14 @@ export function AppSidebar({
       <SidebarContent>
         <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
           {offlineAlert ? <OfflineAlert /> : null}
-          <SyncErrorAlert
-            downloadChanges={() => {
-              void handleUpdateLocalPlan();
-            }}
-            sendChanges={() => {
-              void handleSyncPlan();
-            }}
-            planDate={plan.updatedAt}
-            onlinePlan={onlinePlan}
-          />
+          {isLoggedIn && onlinePlan !== null ? (
+            <SyncErrorAlert
+              onlinePlan={onlinePlan}
+              planDate={plan.updatedAt}
+              downloadChanges={handleUpdateLocalPlan}
+              sendChanges={handleSyncPlan}
+            />
+          ) : null}
 
           <div className="flex w-full flex-col justify-start gap-3">
             <div className="flex w-full items-end gap-1">
@@ -178,17 +182,32 @@ export function AppSidebar({
               >
                 <SelectValue placeholder="Wybierz swój wydział" />
               </SelectTrigger>
-              <SelectContent className="max-w-full">
-                {faculties.map((f) => (
+              {faculties.isLoading ? (
+                <Skeleton className="h-[40px] w-full rounded-sm" />
+              ) : faculties.isError ? (
+                <SelectContent className="max-w-full">
                   <SelectItem
-                    className="mr-2 max-w-full truncate"
-                    key={f.value}
-                    value={f.value}
+                    className="mr-2 max-w-full truncate text-red-500"
+                    key="error"
+                    value="error"
+                    disabled={true}
                   >
-                    {registrationReplacer(f.name)}
+                    Wystąpił błąd podczas ładowania wydziałów
                   </SelectItem>
-                ))}
-              </SelectContent>
+                </SelectContent>
+              ) : (
+                <SelectContent className="max-w-full">
+                  {faculties.data?.map((f) => (
+                    <SelectItem
+                      className="mr-2 max-w-full truncate"
+                      key={f.value}
+                      value={f.value}
+                    >
+                      {registrationReplacer(f.name)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              )}
             </Select>
           </div>
           {registrations.isLoading ? (

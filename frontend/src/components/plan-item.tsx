@@ -4,10 +4,11 @@ import { format } from "date-fns";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
+import { useHoverDirty, useLocalStorage } from "react-use";
 import { toast } from "sonner";
 
-import { deletePlan } from "@/actions/plans";
+import { deletePlan, getPlan } from "@/actions/plans";
 import { plansIds } from "@/atoms/plans-ids";
 import {
   Dialog,
@@ -28,6 +29,7 @@ import {
 import { usePlan } from "@/lib/use-plan";
 import { pluralize } from "@/lib/utils";
 import { generateICSFile } from "@/lib/utils/generate-ics-file";
+import type { PlanResponseType } from "@/types";
 
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
@@ -69,6 +71,12 @@ export function PlanItem({
   const [dialogOpened, setDialogOpened] = React.useState(false);
   const [dropdownOpened, setDropdownOpened] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const isHovering = useHoverDirty(ref);
+  const [_, setValue, remove] = useLocalStorage<{
+    cached: Date | null;
+    onlinePlan: PlanResponseType | null;
+  }>(`locale-cache-${plan.id}`);
 
   const copyPlan = () => {
     setDropdownOpened(false);
@@ -129,8 +137,34 @@ export function PlanItem({
 
   const plansLength = plan.registrations.length;
 
+  const handleCacheOnlinePlan = async () => {
+    if (plan.onlineId !== null) {
+      const response = await getPlan({ id: Number(plan.onlineId) });
+      if (
+        response === null ||
+        (response as unknown as { status: number }).status === 404
+      ) {
+        remove();
+      }
+      setValue({
+        cached: new Date(),
+        onlinePlan: response,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isHovering) {
+      void handleCacheOnlinePlan();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHovering]);
+
   return (
-    <Card className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md">
+    <Card
+      className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md"
+      ref={ref}
+    >
       <CardHeader className="space-y-1 p-4">
         <CardTitle className="w-5/6 text-balance text-lg leading-4">
           {name}

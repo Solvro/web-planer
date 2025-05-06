@@ -37,3 +37,8 @@ export function pluralize(
   }
   return plural;
 }
+
+export const extractNumber = (value: string): number | null => {
+  const match = /W(\d+)/.exec(value);
+  return match === null ? null : Number.parseInt(match[1], 10);
+};

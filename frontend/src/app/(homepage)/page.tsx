@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import SolvroLogo from "@/../public/assets/logo/logo_solvro_color.png";
 import { Icons } from "@/components/icons";
 import { AnimatedGradientText } from "@/components/magicui/animated-text";
 import { BorderBeam } from "@/components/magicui/border-beam";
@@ -38,12 +39,14 @@ function AnimationLogo() {
           className="flex items-center justify-center"
         >
           <Image
-            src="/assets/logo/logo_solvro_color.png"
+            src={SolvroLogo}
             alt="Logo Koła Naukowego Solvro w kolorze"
             width={200}
             height={200}
             className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
-            unoptimized
+            quality={100}
+            priority={true}
+            placeholder="blur"
           />
         </Link>
 
@@ -158,11 +161,17 @@ export default function Home() {
             <BorderBeam colorFrom="hsl(var(--primary))" />
             <Image
               src={HeroImageDark}
+              priority={true}
+              quality={100}
+              placeholder="blur"
               alt="Hero Image"
               className="relative hidden h-full w-full rounded-[inherit] border object-contain dark:block"
             />
             <Image
               src={HeroImageLight}
+              priority={true}
+              quality={100}
+              placeholder="blur"
               alt="Hero Image"
               className="relative block h-full w-full rounded-[inherit] border object-contain dark:hidden"
             />

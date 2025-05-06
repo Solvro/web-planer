@@ -15,7 +15,22 @@ on:
       - "frontend/**"
 
 jobs:
-  lint:
+  commitlint:
+    name: Commitlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install
+        uses: ./.github/composite-actions/install
+
+      - name: Run commitlint check
+        run: npx commitlint -f ${{ github.event.pull_request.base.sha }}
+
+  lint: 
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,25 +40,60 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Format check
-        run: npm run format:check
-        if: always()
+        uses: ./.github/composite-actions/install
 
       - name: Lint
         run: npm run lint
-        if: always()
 
       - name: Type check
         run: npm run typecheck
         if: always()
+    
+  prettier:
+    name: Format 
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: ./.github/composite-actions/install
+
+      - name: Format check
+        run: npm run format:check
+          
+
+  deadcode:
+    name: Find deadcode
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: ./.github/composite-actions/install
+
+      - name: Find deadcode
+        run: npm run knip
+
+  build:
+    name: Test build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: ./.github/composite-actions/install
 
       - name: Build
         run: npm run build
@@ -51,8 +101,3 @@ jobs:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello
           NEXT_PUBLIC_API_URL: http://localhost:3333
-        if: always()
-
-      - name: Find deadcode
-        run: npm run knip
-        if: always()
