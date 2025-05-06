@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import SolvroLogo from "@/../public/assets/logo/logo_solvro_color.png";
 import { Icons } from "@/components/icons";
 import { AnimatedGradientText } from "@/components/magicui/animated-text";
 import { BorderBeam } from "@/components/magicui/border-beam";
@@ -38,7 +39,7 @@ function AnimationLogo() {
           className="flex items-center justify-center"
         >
           <Image
-            src="/assets/logo/logo_solvro_color.png"
+            src={SolvroLogo}
             alt="Logo Koła Naukowego Solvro w kolorze"
             width={200}
             height={200}
