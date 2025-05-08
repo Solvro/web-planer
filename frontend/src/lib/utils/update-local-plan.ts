@@ -1,12 +1,15 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 
-import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
+import type { ExtendedCourse } from "@/atoms/plan-family";
 import type {
   CourseType,
-  LessonType,
   PlanResponseType,
   Registration,
+  SingleCourse,
+  SingleGroup,
 } from "@/types";
+
+import { serverToLocalPlan } from "./server-to-local-plan";
 
 type UpdateLocalPlanResult =
   | {
@@ -41,40 +44,19 @@ export const updateLocalPlan = async (
   for (const registration of onlinePlan.registrations) {
     try {
       const courses = await coursesFunction.mutateAsync(registration.id);
-      const extendedCourses: ExtendedCourse[] = courses
-        .map((c) => {
-          const groups: ExtendedGroup[] = c.groups.map((g) => ({
-            groupId: g.group + c.id + g.type,
-            groupNumber: g.group.toString(),
-            groupOnlineId: g.id,
-            courseId: c.id,
-            courseName: c.name,
-            isChecked:
-              onlinePlan.courses
-                .find((oc) => oc.id === c.id)
-                ?.groups.some((og) => og.id === g.id) ?? false,
-            courseType: g.type,
-            day: g.day,
-            lecturer: g.lecturer,
-            registrationId: c.registrationId,
-            week: g.week.replace("-", "") as "" | "TN" | "TP",
-            endTime: g.endTime.split(":").slice(0, 2).join(":"),
-            startTime: g.startTime.split(":").slice(0, 2).join(":"),
-            spotsOccupied: g.spotsOccupied,
-            spotsTotal: g.spotsTotal,
-            opinionsCount: g.opinionsCount,
-            averageRating: g.averageRating,
-          }));
-          return {
-            id: c.id,
-            name: c.name,
-            isChecked: onlinePlan.courses.some((oc) => oc.id === c.id),
-            registrationId: c.registrationId,
-            type: c.groups.at(0)?.type ?? ("" as LessonType),
-            groups,
-          };
-        })
-        .sort((a, b) => a.name.localeCompare(b.name));
+      const extendedCourses = serverToLocalPlan(
+        courses,
+        (course: SingleCourse) => {
+          return onlinePlan.courses.some((oc) => oc.id === course.id);
+        },
+        (courseId: SingleCourse, groupId: SingleGroup) => {
+          return (
+            onlinePlan.courses
+              .find((oc) => oc.id === courseId.id)
+              ?.groups.some((og) => og.id === groupId.id) ?? false
+          );
+        },
+      );
 
       // Add unique registrations to the updatedRegistrations array
       updatedRegistrations = [...updatedRegistrations, registration].filter(
