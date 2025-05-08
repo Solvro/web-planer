@@ -1,11 +1,12 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { useHoverDirty, useLocalStorage } from "react-use";
+import { useHoverDirty } from "react-use";
 import { toast } from "sonner";
 
 import { deletePlan, getPlan } from "@/actions/plans";
@@ -29,7 +30,6 @@ import {
 import { usePlan } from "@/lib/use-plan";
 import { pluralize } from "@/lib/utils";
 import { generateICSFile } from "@/lib/utils/generate-ics-file";
-import type { PlanResponseType } from "@/types";
 
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
@@ -73,10 +73,6 @@ export function PlanItem({
   const [loading, setLoading] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
   const isHovering = useHoverDirty(ref);
-  const [_, setValue, remove] = useLocalStorage<{
-    cached: Date | null;
-    onlinePlan: PlanResponseType | null;
-  }>(`locale-cache-${plan.id}`);
 
   const copyPlan = () => {
     setDropdownOpened(false);
@@ -136,26 +132,20 @@ export function PlanItem({
     .filter((group) => group.isChecked).length;
 
   const plansLength = plan.registrations.length;
+  const queryClient = useQueryClient();
 
-  const handleCacheOnlinePlan = async () => {
+  const handleCacheOnlinePlan = () => {
     if (plan.onlineId !== null) {
-      const response = await getPlan({ id: Number(plan.onlineId) });
-      if (
-        response === null ||
-        (response as unknown as { status: number }).status === 404
-      ) {
-        remove();
-      }
-      setValue({
-        cached: new Date(),
-        onlinePlan: response,
+      void queryClient.prefetchQuery({
+        queryKey: ["onlinePlan", plan.onlineId],
+        queryFn: async () => getPlan({ id: Number(plan.onlineId) }),
       });
     }
   };
 
   useEffect(() => {
     if (isHovering) {
-      void handleCacheOnlinePlan();
+      handleCacheOnlinePlan();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovering]);

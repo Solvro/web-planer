@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useLocalStorage } from "react-use";
 import { toast } from "sonner";
 
 import { getPlan } from "@/actions/plans";
@@ -26,7 +25,7 @@ import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
-import type { CourseType, PlanResponseType } from "@/types";
+import type { CourseType } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
@@ -50,11 +49,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
   const router = useRouter();
   const plan = usePlan({ planId });
 
-  const [value] = useLocalStorage<{
-    cached: Date | null;
-    onlinePlan: PlanResponseType | null;
-  }>(`locale-cache-${plan.id}`);
-
   const {
     data: onlinePlan,
     refetch: refetchOnlinePlan,
@@ -62,7 +56,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
   } = useQuery({
     enabled: plan.onlineId !== null && plan.onlineId !== "",
     queryKey: ["onlinePlan", plan.onlineId],
-    initialData: value?.onlinePlan,
     queryFn: async () => {
       const response = await getPlan({ id: Number(plan.onlineId) });
       if (
