@@ -49,11 +49,11 @@ export const updateLocalPlan = async (
         (course: SingleCourse) => {
           return onlinePlan.courses.some((oc) => oc.id === course.id);
         },
-        (courseId: SingleCourse, groupId: SingleGroup) => {
+        (course: SingleCourse, group: SingleGroup) => {
           return (
             onlinePlan.courses
-              .find((oc) => oc.id === courseId.id)
-              ?.groups.some((og) => og.id === groupId.id) ?? false
+              .find((oc) => oc.id === course.id)
+              ?.groups.some((og) => og.id === group.id) ?? false
           );
         },
       );
