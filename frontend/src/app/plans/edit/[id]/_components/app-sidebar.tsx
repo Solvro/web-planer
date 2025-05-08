@@ -8,7 +8,6 @@ import Link from "next/link";
 import React from "react";
 
 import { getFaculties } from "@/actions/get-faculties";
-import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
 import { Icons } from "@/components/icons";
 import { PlanDisplayLink } from "@/components/plan-display-link";
@@ -33,12 +32,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { fetchClient } from "@/lib/fetch";
 import type { usePlanType } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
-import type {
-  CourseType,
-  FacultyType,
-  LessonType,
-  PlanResponseType,
-} from "@/types";
+import { serverToLocalPlan } from "@/lib/utils/server-to-local-plan";
+import type { CourseType, FacultyType, PlanResponseType } from "@/types";
 
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
@@ -240,48 +235,11 @@ export function AppSidebar({
                   } else {
                     coursesFunction.mutate(selectedRegistration.id, {
                       onSuccess: (data) => {
-                        const extendedCourses: ExtendedCourse[] = data
-                          .map((c) => ({
-                            id: c.id,
-                            name: c.name,
-                            isChecked: true,
-                            registrationId: c.registrationId,
-                            type: c.groups.at(0)?.type ?? ("" as LessonType),
-                            groups: c.groups.map(
-                              (g) =>
-                                ({
-                                  groupId: g.group + c.id + g.type,
-                                  groupNumber: g.group.toString(),
-                                  groupOnlineId: g.id,
-                                  courseId: c.id,
-                                  courseName: c.name,
-                                  isChecked: false,
-                                  courseType: g.type,
-                                  day: g.day,
-                                  lecturer: g.lecturer,
-                                  registrationId: c.registrationId,
-                                  week: g.week.replace("-", "") as
-                                    | ""
-                                    | "TN"
-                                    | "TP",
-                                  endTime: g.endTime
-                                    .split(":")
-                                    .slice(0, 2)
-                                    .join(":"),
-                                  startTime: g.startTime
-                                    .split(":")
-                                    .slice(0, 2)
-                                    .join(":"),
-                                  spotsOccupied: g.spotsOccupied,
-                                  spotsTotal: g.spotsTotal,
-                                  averageRating: g.averageRating,
-                                  opinionsCount: g.opinionsCount,
-                                }) satisfies ExtendedGroup,
-                            ),
-                          }))
-                          .sort((a, b) => {
-                            return a.name.localeCompare(b.name);
-                          });
+                        const extendedCourses = serverToLocalPlan(
+                          data,
+                          true,
+                          false,
+                        );
                         plan.addRegistration(
                           selectedRegistration,
                           extendedCourses,

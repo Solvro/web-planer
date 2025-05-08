@@ -124,30 +124,34 @@ export interface DeletePlanResponseType {
   message: string;
 }
 
-export type CourseType = {
+export interface SingleGroup {
+  id: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+  group: string;
+  lecturer: string;
+  week: "-" | "TN" | "TP";
+  day: Day;
+  type: "C" | "L" | "P" | "S" | "W";
+  url: string;
+  courseId: string;
+  spotsOccupied: number;
+  spotsTotal: number;
+  averageRating: number;
+  createdAt: string;
+  updatedAt: string;
+  opinionsCount: number;
+}
+
+export interface SingleCourse {
   id: string;
   name: string;
   registrationId: string;
-  groups: {
-    id: number;
-    name: string;
-    startTime: string;
-    endTime: string;
-    group: string;
-    lecturer: string;
-    week: "-" | "TN" | "TP";
-    day: Day;
-    type: "C" | "L" | "P" | "S" | "W";
-    url: string;
-    courseId: string;
-    spotsOccupied: number;
-    spotsTotal: number;
-    averageRating: number;
-    createdAt: string;
-    updatedAt: string;
-    opinionsCount: number;
-  }[];
-}[];
+  groups: SingleGroup[];
+}
+
+export type CourseType = SingleCourse[];
 
 export type FacultyType = {
   id: string;
