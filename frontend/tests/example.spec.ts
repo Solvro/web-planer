@@ -35,7 +35,6 @@ test("should create plan", async ({ page }) => {
     });
   });
 
-  // MOCK: courses
   await page.route(
     "**/departments/W4N/registrations/W04-IST-SI-6-24L/courses",
     async (route) => {
@@ -48,7 +47,7 @@ test("should create plan", async ({ page }) => {
   );
 
   await page.goto(`${BASE_URL}/plans`);
-  await page.locator("button.border-dashed").click();
+  await page.locator("button.group").click();
 
   await expect(page).toHaveURL(/\/plans\/edit\/[a-f0-9-]+$/);
 
