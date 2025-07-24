@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import ResizeObserver from "resize-observer-polyfill";
-import { afterEach, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, vi } from "vitest";
+
+import { server } from "../mocks/server";
 
 //import { server } from "./mocks/server";
 
@@ -28,8 +30,14 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-// Element.prototype.scrollIntoView = vi.fn();
+Element.prototype.scrollIntoView = vi.fn();
 
-// beforeAll(() => server.listen());
-// afterEach(() => server.resetHandlers());
-// afterAll(() => server.close());
+beforeAll(() => {
+  server.listen();
+});
+afterEach(() => {
+  server.resetHandlers();
+});
+afterAll(() => {
+  server.close();
+});
