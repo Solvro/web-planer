@@ -80,13 +80,15 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       });
 
       if (!response.ok) {
+        toast.error(
+          "Coś poszło nie tak podczas pobierania kursów, spróbuj ponownie",
+        );
         throw new Error("Network response was not ok");
       }
 
       return response.json() as Promise<CourseType>;
     },
   });
-
   const {
     syncing,
     handleSyncPlan,
@@ -132,7 +134,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       </div>
     );
   }
-
   return (
     <>
       <AppSidebar
