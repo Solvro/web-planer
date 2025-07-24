@@ -9,6 +9,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "web": "cd frontend && npm run dev",
+    "backend": "cd backend && npm run dev",
     "db": "docker compose up",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -27,7 +29,9 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
+    "@playwright/test": "^1.54.1",
     "@solvro/config": "^1.13.4",
+    "@types/node": "^24.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "prettier": "^3.4.2"

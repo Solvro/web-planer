@@ -26,6 +26,10 @@ const CoursesController = () => import("#controllers/courses_controller");
 const GroupsController = () => import("#controllers/groups_controller");
 const UsersController = () => import("#controllers/users_controller");
 
+router.get("/", async () => {
+  return "OK";
+});
+
 router.get("/swagger", async () => {
   return AutoSwagger.default.docs(router.toJSON(), swagger);
 });

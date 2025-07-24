@@ -85,9 +85,8 @@ jobs:
     name: Playwright tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
+    env:
+      TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
