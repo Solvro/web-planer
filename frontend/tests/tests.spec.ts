@@ -41,7 +41,7 @@ test("should show available classes for selected registration", async ({
   await expect(course).toBeVisible();
 });
 
-test("should display proper toast when cannot fetch courses", async ({
+test("should display error toast when fetching courses fails", async ({
   page,
 }) => {
   await page.route(
@@ -171,7 +171,7 @@ test("should download plan as .ics file", async ({ page }) => {
   expect(suggestedFilename).toMatch(/\.ics$/);
 });
 
-test("should not allow to report an issue without correct email", async ({
+test("should not allow to report an issue with invalid email", async ({
   page,
 }) => {
   await page.goto(BASE_URL);
@@ -184,7 +184,7 @@ test("should not allow to report an issue without correct email", async ({
   await expect(page.getByText(/invalid/i)).toBeVisible();
 });
 
-test("should allow to report an issue with correct email", async ({ page }) => {
+test("should allow to report an issue with vaild email", async ({ page }) => {
   await page.goto(BASE_URL);
   await page.getByText(/błąd/i).click();
 
