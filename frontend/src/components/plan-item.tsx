@@ -191,7 +191,11 @@ export function PlanItem({
       <CardFooter className="justify-between gap-2 border-t p-3">
         <DropdownMenu open={dropdownOpened} onOpenChange={setDropdownOpened}>
           <DropdownMenuTrigger asChild={true}>
-            <Button variant="secondary" size="iconSm">
+            <Button
+              variant="secondary"
+              size="iconSm"
+              data-testid="plan-item-dropdown"
+            >
               <Icons.EllipsisVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>

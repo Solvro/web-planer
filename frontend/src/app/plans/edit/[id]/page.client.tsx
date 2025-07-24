@@ -80,6 +80,9 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       });
 
       if (!response.ok) {
+        toast.error(
+          "Coś poszło nie tak podczas pobierania kursów, spróbuj ponownie",
+        );
         throw new Error("Network response was not ok");
       }
 
