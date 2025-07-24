@@ -1,11 +1,14 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { expect, test } from "vitest";
 
 import { ToPWrSection } from "@/app/(homepage)/_components/topwr-section";
 
-test("Home", () => {
+test("Home", async () => {
   render(<ToPWrSection />);
-  screen.debug();
+  const heading = screen.getByText(/Jesteś studentem/i);
+  const user = userEvent.setup();
+  await user.click(heading);
 });
 
 test("pobiera usera", async () => {
