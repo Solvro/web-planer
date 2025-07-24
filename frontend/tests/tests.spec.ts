@@ -36,7 +36,7 @@ test("should show available classes for selected registration", async ({
 
   await selectFacultyAndRegistration(page);
 
-  const course = page.getByText("Tuzinkiewicz");
+  const course = page.getByText("Maleszka").first();
 
   await expect(course).toBeVisible();
 });
@@ -85,6 +85,41 @@ test("should allow to edit and save plan", async ({ page }) => {
   await expect(page.getByText("1 kurs")).toBeVisible();
 });
 
+test("should allow to share plan with selected courses", async ({ page }) => {
+  await page.goto(`${BASE_URL}/plans`);
+  await page.getByTestId("add-new-plan-button").click();
+
+  const nameInput = page.locator('input[name="name"]');
+  await nameInput.fill("Plan to be shared");
+
+  await selectFacultyAndRegistration(page);
+
+  const firstSelectedCourse = page.getByText("Kawala").first();
+  await firstSelectedCourse.click();
+  const secondSelectedCourse = page.getByText("Tuzinkiewicz").first();
+  await secondSelectedCourse.click();
+
+  await page.getByTestId("share-plan-button").click();
+
+  const generateButton = page.getByText(/wygeneruj/i);
+  await expect(generateButton).toBeVisible();
+  await generateButton.click();
+
+  const link = await page.getByText("/plans/preview/").textContent();
+
+  await page.goto(link ?? "");
+
+  await expect(page.getByText("Plan to be shared")).toBeVisible();
+  await expect(firstSelectedCourse).toBeVisible();
+
+  await page.getByText(/skopiuj/i).click();
+  await page.waitForTimeout(2000);
+
+  await expect(page.locator('input[name="name"]')).toHaveValue(
+    "Plan to be shared",
+  );
+});
+
 test("should allow to delete plan", async ({ page }) => {
   await page.goto(`${BASE_URL}/plans`);
   await page.getByTestId("add-new-plan-button").click();
@@ -103,8 +138,37 @@ test("should allow to delete plan", async ({ page }) => {
   await expect(page.getByText(/usunięty/i)).toBeVisible();
 });
 
+test("should download plan as .png file", async ({ page }) => {
+  await page.goto(`${BASE_URL}/plans`);
+
+  await page.getByTestId("add-new-plan-button").click();
+
+  await page.getByTestId("share-plan-button").click();
+
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    page.getByText(/pobierz/i).click(),
+  ]);
+
+  const suggestedFilename = download.suggestedFilename();
+  expect(suggestedFilename).toMatch(/\.png$/);
+});
+
 test("should download plan as .ics file", async ({ page }) => {
   await page.goto(`${BASE_URL}/plans`);
+
+  await page.getByTestId("add-new-plan-button").click();
+  await page.getByRole("link", { name: /plany/i }).click();
+
+  await page.getByTestId("plan-item-dropdown").click();
+
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    page.getByTestId("download-ics-menu-item").click(),
+  ]);
+
+  const suggestedFilename = download.suggestedFilename();
+  expect(suggestedFilename).toMatch(/\.ics$/);
 });
 
 test("should not allow to report an issue without correct email", async ({

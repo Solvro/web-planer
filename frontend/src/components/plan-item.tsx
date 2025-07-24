@@ -207,6 +207,7 @@ export function PlanItem({
               <span>Kopiuj</span>
             </DropdownMenuItem>
             <DropdownMenuItem
+              data-testid="download-ics-menu-item"
               onClick={() => {
                 generateICSFile(plan.allGroups, plan.name);
               }}

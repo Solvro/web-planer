@@ -60,7 +60,7 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
 
   return (
     <div className="flex items-center gap-2 rounded-full border bg-background/50 p-1">
-      <p className="hidden truncate pl-2 md:block">
+      <p className="pl-2 md:block">
         {env.NEXT_PUBLIC_API_URL.includes("localhost")
           ? "http://localhost:3000"
           : "https://planer.solvro.pl"}
