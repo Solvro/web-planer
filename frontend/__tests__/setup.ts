@@ -5,8 +5,6 @@ import { afterAll, afterEach, beforeAll, vi } from "vitest";
 
 import { server } from "../mocks/server";
 
-//import { server } from "./mocks/server";
-
 globalThis.ResizeObserver = ResizeObserver;
 
 const takeRecordsMock = () => [];
