@@ -30,7 +30,7 @@ jobs:
       - name: Run commitlint check
         run: npx commitlint -f ${{ github.event.pull_request.base.sha }}
 
-  lint: 
+  lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,9 +48,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
         if: always()
-    
+
   prettier:
-    name: Format 
+    name: Format
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -64,7 +64,6 @@ jobs:
 
       - name: Format check
         run: npm run format:check
-          
 
   deadcode:
     name: Find deadcode
@@ -81,6 +80,30 @@ jobs:
 
       - name: Find deadcode
         run: npm run knip
+
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
   build:
     name: Test build
