@@ -58,7 +58,7 @@ export default class AuthController {
         firstName: "",
         lastName: "",
         avatar: "",
-        verified: false,
+        verified: email === testEmail,
       });
     }
 
@@ -72,7 +72,7 @@ export default class AuthController {
     user.otpExpire = DateTime.now().plus({ minutes: 15 });
     await user.save();
 
-    if (testEmail !== email && email !== "test@student.pwr.edu.pl") {
+    if (testEmail !== email) {
       await mail.send((message) => {
         message
           .from("Solvro Planer <planer@solvro.pl>")

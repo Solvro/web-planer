@@ -44,7 +44,7 @@ test.describe("Login tests", () => {
   // });
 
   test("submit incorrect otp", async ({ page }) => {
-    await fillEmailInput(page, "test@student.pwr.edu.pl");
+    await fillEmailInput(page, TEST_EMAIL);
     await expect(page.getByLabel(/Hasło jednorazowe/i)).toBeVisible();
     await fillOtpInput(page, "999999");
     await expect(page.getByText(/Logowanie nieudane/i)).toBeVisible();
