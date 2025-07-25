@@ -111,7 +111,7 @@ test.describe("Plans logic online", () => {
 
     await page.goto("/plans");
 
-    await page.getByTestId("plan-item-dropdown").click();
+    await page.getByTestId("plan-item-dropdown").first().click();
     await page.getByText("Usuń").click();
     await page.waitForTimeout(1000);
     await page.getByText("Usuń", { exact: true }).click();
