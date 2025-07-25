@@ -1,6 +1,6 @@
 import { defineConfig } from "@adonisjs/cors";
 
-// import env from "#start/env";
+import env from "#start/env";
 
 /**
  * Configuration options to tweak the CORS policy. The following
@@ -10,13 +10,13 @@ import { defineConfig } from "@adonisjs/cors";
  */
 const corsConfig = defineConfig({
   enabled: true,
-  // origin: env.get("CORS_ORIGIN", "planer.solvro.pl").split(","),
-  origin: [
-    "http://localhost:3000",
-    "https://planer.solvro.pl",
-    "planer.solvro.pl",
-    "localhost:3000",
-  ],
+  origin: env.get("CORS_ORIGIN", "planer.solvro.pl").split(","),
+  // origin: [
+  //   "http://localhost:3000",
+  //   "https://planer.solvro.pl",
+  //   "planer.solvro.pl",
+  //   "localhost:3000",
+  // ],
   methods: ["GET", "HEAD", "POST", "PUT", "DELETE"],
   headers: true,
   exposeHeaders: [],

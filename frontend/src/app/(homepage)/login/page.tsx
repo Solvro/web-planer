@@ -38,8 +38,6 @@ import {
   userDataSchema,
 } from "@/types/schemas";
 
-/* eslint-disable no-console */
-
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
   const [step, setStep] = React.useState<"email" | "otp" | "onboard">("email");
@@ -122,18 +120,12 @@ function EmailStep({
       });
       if (!result.ok) {
         toast.error("Wystąpił błąd podczas wysyłania kodu");
-        try {
-          const response = (await result.json()) as string;
-          console.log(response);
-        } catch {
-          console.log("Wystąpił nieoczekiwany błąd");
-        }
         return;
       }
       setEmail(values.email);
       setStep("otp");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Wystąpił błąd podczas wysyłania kodu");
     }
   }
