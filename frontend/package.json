@@ -14,6 +14,7 @@
     "start": "next start",
     "test": "vitest",
     "test:lint": "next lint --max-warnings=0 && prettier --check . && tsc --noEmit",
+    "test:ui": "vitest --ui",
     "typecheck": "tsc"
   },
   "lint-staged": {
@@ -77,6 +78,7 @@
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/ui": "^3.2.4",
     "eslint": "^9.17.0",
     "jsdom": "^26.1.0",
     "knip": "^5.41.0",
