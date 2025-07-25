@@ -2,6 +2,8 @@
 
 import { env } from "@/env.mjs";
 
+/* eslint-disable no-console */
+
 export const fetchClient = async ({
   url,
   method,
@@ -29,8 +31,19 @@ export const fetchClient = async ({
     fetchOptions.body = body;
   }
 
-  // eslint-disable-next-line no-console
-  console.log(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
+  try {
+    const testResponse = await fetch(
+      `${env.NEXT_PUBLIC_API_URL}${url}`,
+      fetchOptions,
+    );
+    if (testResponse.ok) {
+      console.log(`Successfully fetched ${url}`);
+    } else {
+      console.log(`Error fetching ${url}:`, testResponse.statusText);
+    }
+  } catch (error) {
+    console.log(`Failed to fetch ${url}:`, error);
+  }
 
   const response = fetch(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
   return await response;
