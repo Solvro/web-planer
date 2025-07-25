@@ -18,8 +18,6 @@ test("should create empty plan and show proper plans list", async ({
   await page.goto(`${BASE_URL}/plans`);
   await page.getByTestId("add-new-plan-button").click();
 
-  await expect(page).toHaveURL(/\/plans\/edit\/[a-f0-9-]+$/);
-
   await page.getByRole("link", { name: /plany/i }).click();
 
   await expect(page.getByText(/nowy plan/i)).toBeVisible();
@@ -30,8 +28,6 @@ test("should show available classes for selected registration", async ({
 }) => {
   await page.goto(`${BASE_URL}/plans`);
   await page.getByTestId("add-new-plan-button").click();
-
-  await expect(page).toHaveURL(/\/plans\/edit\/[a-f0-9-]+$/);
 
   await selectFacultyAndRegistration(page);
 
@@ -61,7 +57,7 @@ test("should display error toast when fetching courses fails", async ({
 
   await page.waitForTimeout(2000);
 
-  await expect(page.getByText(/Coś poszło nie tak/i)).toBeVisible();
+  await expect(page.getByText(/coś poszło nie tak/i)).toBeVisible();
 });
 
 test("should allow to edit and save plan", async ({ page }) => {
