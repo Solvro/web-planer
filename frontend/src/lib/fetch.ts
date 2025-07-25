@@ -41,10 +41,14 @@ export const fetchClient = async ({
 };
 
 async function getTest(url: string) {
-  const testResponse = await fetch(url, { method: "GET" });
-  if (testResponse.ok) {
-    console.log(`Successfully fetched ${url}`);
-  } else {
-    console.log(`Error fetching ${url}:`, testResponse);
+  try {
+    const testResponse = await fetch(url, { method: "GET" });
+    if (testResponse.ok) {
+      console.log(`Successfully fetched ${url}`);
+    } else {
+      console.log(`Error fetching ${url}:`, testResponse);
+    }
+  } catch {
+    console.log("URL FAILED", url);
   }
 }
