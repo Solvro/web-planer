@@ -8,8 +8,10 @@ export const selectFacultyAndRegistration = async (page: Page) => {
   console.log("selectFacultyAndRegistration - 2");
 
   // Wait for the dropdown content to be visible
-  await page.waitForSelector('[role="option"]', { state: "visible" });
-
+  const selector = await page.waitForSelector('[role="option"]', {
+    state: "visible",
+  });
+  console.log("selectFacultyAndRegistration - 2.2", selector);
   // Wait specifically for the W5 option to be available
   const chosenFaculty = page
     .locator('[role="option"]')
