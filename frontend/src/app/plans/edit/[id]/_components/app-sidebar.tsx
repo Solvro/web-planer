@@ -174,6 +174,7 @@ export function AppSidebar({
               <SelectTrigger
                 className="pl-2"
                 disabled={registrations.isLoading}
+                data-testid="faculty-select"
               >
                 <SelectValue placeholder="Wybierz swój wydział" />
               </SelectTrigger>
