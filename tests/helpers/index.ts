@@ -5,7 +5,9 @@ export const selectFacultyAndRegistration = async (page: Page) => {
   const facultyButton = page.getByText(/wybierz swój/i);
   await facultyButton.click();
   console.log("selectFacultyAndRegistration - 2");
+  await page.waitForTimeout(1000);
   const chosenFaculty = page.getByRole("option", { name: /w5/i });
+  console.log("selectFacultyAndRegistration - 2.5");
   await chosenFaculty.click();
   console.log("selectFacultyAndRegistration - 3");
   const registrationButton = page.locator('button[name="registration"]');
