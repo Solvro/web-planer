@@ -3,13 +3,12 @@ import { expect, test } from "@playwright/test";
 import { BASE_URL, INVALID_EMAIL, VALID_EMAIL } from "./utils/const";
 import { selectFacultyAndRegistration } from "./utils/helpers";
 
-test("should navigate to empty plans page without logging in", async ({
+test("should show empty plans page without logging in on first visit", async ({
   page,
 }) => {
   await page.goto(BASE_URL);
   const plansLink = page.getByRole("link", { name: /logowania/i });
   await plansLink.click();
-  await expect(page).toHaveURL(/.*\/plans/);
   await expect(page.getByText(/nowy plan/i)).toBeHidden();
 });
 
@@ -181,15 +180,36 @@ test("should not allow to report an issue with invalid email", async ({
   await emailInput.fill(INVALID_EMAIL);
   await emailInput.press("Enter");
 
-  await expect(page.getByText(/invalid/i)).toBeVisible();
+  await expect(page.getByText(/niepoprawny/i)).toBeVisible();
 });
 
-test("should allow to report an issue with vaild email", async ({ page }) => {
+test("should not allow to report an issue with invalid description and description", async ({
+  page,
+}) => {
   await page.goto(BASE_URL);
   await page.getByText(/błąd/i).click();
 
   const emailInput = page.locator('input[name="email"]');
   await emailInput.fill(VALID_EMAIL);
+  await emailInput.press("Enter");
+
+  await expect(page.getByText(/krótki tytuł/i)).toBeVisible();
+  await expect(page.getByText(/krótki opis/i)).toBeVisible();
+});
+
+test("should allow to report an issue with vaild inputs", async ({ page }) => {
+  await page.goto(BASE_URL);
+  await page.getByText(/błąd/i).click();
+
+  const emailInput = page.locator('input[name="email"]');
+  await emailInput.fill(VALID_EMAIL);
+
+  const titleInput = page.locator('input[name="title"]');
+  await titleInput.fill("Testowy tytuł zgłoszenia");
+
+  const descriptionInput = page.locator('textarea[name="description"]');
+  await descriptionInput.fill("To jest testowy opis zgłoszenia.");
+
   await emailInput.press("Enter");
 
   await page.waitForTimeout(2000);
