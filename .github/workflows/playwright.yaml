@@ -19,7 +19,6 @@ jobs:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_DATABASE: postgres
-      DB_NAME: postgres
 
     services:
       postgres:
@@ -71,6 +70,13 @@ jobs:
 
       - name: Run Playwright tests
         run: npx playwright test
+        env:
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_DATABASE: postgres
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
