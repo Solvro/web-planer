@@ -31,18 +31,11 @@ export const fetchClient = async ({
     fetchOptions.body = body;
   }
 
-  try {
-    const testResponse = await fetch(
-      `${env.NEXT_PUBLIC_API_URL}${url}`,
-      fetchOptions,
-    );
-    if (testResponse.ok) {
-      console.log(`Successfully fetched ${url}`);
-    } else {
-      console.log(`Error fetching ${url}:`, testResponse.statusText);
-    }
-  } catch (error) {
-    console.log(`Failed to fetch ${url}:`, error);
+  const testResponse = await fetch(env.NEXT_PUBLIC_API_URL, { method: "GET" });
+  if (testResponse.ok) {
+    console.log(`Successfully fetched ${env.NEXT_PUBLIC_API_URL}`);
+  } else {
+    console.log(`Error fetching ${env.NEXT_PUBLIC_API_URL}:`, testResponse);
   }
 
   const response = fetch(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
