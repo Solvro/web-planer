@@ -2,11 +2,19 @@ import { Page, expect } from "@playwright/test";
 
 export const selectFacultyAndRegistration = async (page: Page) => {
   console.log("selectFacultyAndRegistration - 1");
+  await page.waitForTimeout(1000);
   const facultyButton = page.getByText(/wybierz swój/i);
   await facultyButton.click();
   console.log("selectFacultyAndRegistration - 2");
-  await page.waitForTimeout(1000);
-  const chosenFaculty = page.getByRole("option", { name: /w5/i });
+
+  // Wait for the dropdown content to be visible
+  await page.waitForSelector('[role="option"]', { state: "visible" });
+
+  // Wait specifically for the W5 option to be available
+  const chosenFaculty = page
+    .locator('[role="option"]')
+    .filter({ hasText: "W5" });
+  await expect(chosenFaculty).toBeVisible();
   console.log("selectFacultyAndRegistration - 2.5");
   await chosenFaculty.click();
   console.log("selectFacultyAndRegistration - 3");
