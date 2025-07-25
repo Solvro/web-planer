@@ -117,12 +117,17 @@ export function PlanItem({
 
   const handleDeletePlan = async () => {
     setLoading(true);
+    if (onlineId !== null) {
+      const response = await deletePlan({ id: Number(onlineId) });
+      if (!response.success) {
+        toast.error(response.message);
+        setLoading(false);
+        return;
+      }
+    }
     plan.remove();
     if (!onlineOnly) {
       setPlans(plans.filter((p) => p.id !== id));
-    }
-    if (onlineId !== null) {
-      await deletePlan({ id: Number(onlineId) });
     }
     toast.success("Plan został usunięty.");
   };
