@@ -9,7 +9,7 @@ import {
   mockGroups2,
   mockGroups3,
   mockPlans,
-} from "@/tests/mocks/plans";
+} from "@/tests/mocks/mock-data";
 import { push } from "@/tests/mocks/utils";
 
 describe("Plans Page", () => {
@@ -27,7 +27,9 @@ describe("Plans Page", () => {
     setup();
     expect(screen.getByText(mockPlans[0].name)).toBeInTheDocument();
     expect(
-      screen.getByText(`${mockPlans[0].registrations.length} kurs`),
+      screen.getByText(
+        new RegExp(`${mockPlans[0].registrations.length} kurs(y)?`, "i"),
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getAllByText(

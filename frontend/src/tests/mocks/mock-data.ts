@@ -1,6 +1,6 @@
 import { PlanResponseDataType } from "@/app/plans/page";
 import { ExtendedGroup } from "@/atoms/plan-family";
-import { Day } from "@/types";
+import { Day, FacultyType, Registration } from "@/types";
 
 export const mockGroups1: ExtendedGroup[] = [
   {
@@ -106,6 +106,29 @@ export const mockGroups3: ExtendedGroup[] = [
   },
 ];
 
+export const mockFaculties: FacultyType[] = [
+  {
+    id: "id1",
+    name: "faculty 1",
+    departmentId: "dep1",
+  },
+  {
+    id: "id2",
+    name: "faculty 2",
+    departmentId: "dep2",
+  },
+  {
+    id: "id3",
+    name: "faculty 3",
+    departmentId: "dep2",
+  },
+];
+
+export const mockRegistrations: Registration[] = [
+  { id: "reg1", name: "Registration 1" },
+  { id: "reg2", name: "Registration 2" },
+];
+
 export const mockPlans: PlanResponseDataType[] = [
   {
     id: 1,
@@ -140,12 +163,7 @@ export const mockPlans: PlanResponseDataType[] = [
         groups: mockGroups3,
       },
     ],
-    registrations: [
-      {
-        id: "reg-1",
-        name: "Semestr 1",
-      },
-    ],
+    registrations: mockRegistrations,
   },
 ];
 
@@ -182,10 +200,5 @@ export const newPlan: PlanResponseDataType = {
       groups: mockGroups3,
     },
   ],
-  registrations: [
-    {
-      id: "reg-2",
-      name: "Semestr 2",
-    },
-  ],
+  registrations: mockRegistrations,
 };

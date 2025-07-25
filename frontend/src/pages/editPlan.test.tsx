@@ -12,20 +12,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CreateNewPlanPage } from "@/app/plans/edit/[id]/page.client";
 import { Providers } from "@/tests/Providers";
 import { respond_with_404 } from "@/tests/mocks/handlers";
-import { newPlan } from "@/tests/mocks/plans";
+import {
+  mockFaculties,
+  mockRegistrations,
+  newPlan,
+} from "@/tests/mocks/mock-data";
 import { server } from "@/tests/mocks/server";
 import { push } from "@/tests/mocks/utils";
 
 describe("Edit Plan", () => {
   const setup = async () => {
     const user = userEvent.setup();
-    await act(async () => {
-      render(
-        <Providers>
-          <CreateNewPlanPage planId="testplan1" />
-        </Providers>,
-      );
-    });
+    render(
+      <Providers>
+        <CreateNewPlanPage planId="testplan1" />
+      </Providers>,
+    );
     return user;
   };
 
@@ -41,35 +43,49 @@ describe("Edit Plan", () => {
     const label = screen.getByText("Wydział");
     expect(label.tagName).toBe("LABEL");
 
-    const facultyTrigger = screen.getByRole("combobox");
-    await act(async () => {
-      await user.click(facultyTrigger);
-    });
-    const option = await within(document.body).findByRole("option", {
-      name: /faculty 1/i,
-    });
-    await act(async () => {
-      await user.click(option);
-    });
+    const facultyTrigger = screen.getByTestId("faculty-select");
+    await user.click(facultyTrigger);
 
-    const fac1 = screen.queryByText(/faculty 1/i);
-    const fac2 = screen.queryByText(/faculty 2/i);
-    expect(fac1).toBeVisible();
-    expect(fac2).not.toBeVisible();
+    const option = await screen.findByText(
+      new RegExp(mockFaculties[1].name, "i"),
+    );
+    await user.click(option);
+
+    const fac1 = screen.queryByText(new RegExp(mockFaculties[0].name, "i"));
+    const fac2 = screen.queryByText(new RegExp(mockFaculties[1].name, "i"));
+    expect(fac1).toBeNull();
+    expect(fac2).toBeVisible();
   });
 
   it("should allow user to select registration", async () => {
     const user = await setup();
-    const facultyTrigger = screen.getByRole("combobox");
-    await act(async () => {
-      await user.click(facultyTrigger);
-    });
-    const option = await screen.findByText(/faculty 1/i);
+    const facultyTrigger = screen.getByTestId("faculty-select");
+    await user.click(facultyTrigger);
+
+    const option = await screen.findByText(
+      new RegExp(mockFaculties[1].name, "i"),
+    );
     await user.click(option);
 
     await waitFor(() => {
       const label = screen.getByText("Rejestracja");
       expect(label.tagName).toBe("LABEL");
     });
+
+    const registrationTrigger = screen.getByTestId("registration-select");
+    await user.click(registrationTrigger);
+
+    const regOption = await screen.findByText(
+      new RegExp(mockRegistrations[0].name, "i"),
+    );
+
+    await user.click(regOption);
+
+    const reg1 = screen.queryByText(new RegExp(mockRegistrations[0].name, "i"));
+    const reg2 = screen.queryByText(new RegExp(mockRegistrations[1].name, "i"));
+    expect(reg1).toBeVisible();
+    expect(reg2).toBeNull();
+
+    // screen.debug();
   });
 });

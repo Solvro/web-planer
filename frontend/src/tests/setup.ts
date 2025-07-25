@@ -7,9 +7,23 @@ import "./mocks/utils";
 
 process.env.NEXT_PUBLIC_API_URL = "http://localhost:3333";
 
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;
+
 beforeAll(() => {
   if (!Element.prototype.hasPointerCapture) {
     Element.prototype.hasPointerCapture = () => false;
+  }
+  if (!window.HTMLElement.prototype.setPointerCapture) {
+    window.HTMLElement.prototype.setPointerCapture = () => {};
+  }
+  if (!window.HTMLElement.prototype.releasePointerCapture) {
+    window.HTMLElement.prototype.releasePointerCapture = () => {};
   }
   Element.prototype.scrollIntoView = vi.fn();
   Object.defineProperty(window, "matchMedia", {
