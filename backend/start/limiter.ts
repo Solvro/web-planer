@@ -10,11 +10,9 @@
 */
 import limiter from "@adonisjs/limiter/services/main";
 
-import env from "./env.js";
-
 export const throttle = limiter.define("global", (ctx) => {
   return limiter
-    .allowRequests(env.get("CI", "false") === "true" ? 1000 : 10)
+    .allowRequests(50)
     .every("1 minute")
     .usingKey(`ip_${ctx.request.ip()}`);
 });
