@@ -1,23 +1,34 @@
 import { HttpResponse, http } from "msw";
 
-import { mockFaculties, mockRegistrations, newPlan } from "./mock-data";
+import {
+  mockCourses,
+  mockFaculties,
+  mockRegistrations,
+  newPlan,
+} from "./mock-data";
 
 const NEXT_PUBLIC_API_URL = "http://localhost:3333";
 
 export const handlers = [
   http.get(`${NEXT_PUBLIC_API_URL}/user/schedules/:id`, () => {
-    return Response.json({
+    return HttpResponse.json({
       newPlan,
     });
   }),
 
   http.get(`${NEXT_PUBLIC_API_URL}/departments`, () => {
-    return Response.json(mockFaculties);
+    return HttpResponse.json(mockFaculties);
   }),
 
   http.get(`${NEXT_PUBLIC_API_URL}/departments/:faculty/registrations`, () => {
     return HttpResponse.json(mockRegistrations);
   }),
+  http.get(
+    `${NEXT_PUBLIC_API_URL}/departments/:faculty/registrations/:registration/courses`,
+    () => {
+      return HttpResponse.json(mockCourses);
+    },
+  ),
 ];
 
 export const respond_with_404 = http.get(

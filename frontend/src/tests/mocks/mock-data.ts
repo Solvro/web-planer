@@ -1,6 +1,12 @@
 import { PlanResponseDataType } from "@/app/plans/page";
 import { ExtendedGroup } from "@/atoms/plan-family";
-import { Day, FacultyType, Registration } from "@/types";
+import {
+  CourseType,
+  Day,
+  FacultyType,
+  Registration,
+  SingleGroup,
+} from "@/types";
 
 export const mockGroups1: ExtendedGroup[] = [
   {
@@ -202,3 +208,119 @@ export const newPlan: PlanResponseDataType = {
   ],
   registrations: mockRegistrations,
 };
+
+export const groupsForCourses1: SingleGroup[] = [
+  {
+    id: 122,
+    name: "grupa1",
+    startTime: "08:00",
+    endTime: "09:30",
+    courseId: "c1",
+    group: "1",
+    lecturer: "Dr. Smith",
+    day: Day.THURSDAY,
+    week: "-",
+    spotsOccupied: 15,
+    type: "C",
+    url: "empty",
+    spotsTotal: 30,
+    averageRating: 4.5,
+    createdAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    updatedAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    opinionsCount: 10,
+  },
+  {
+    id: 122,
+    name: "grupa2",
+    startTime: "08:00",
+    endTime: "09:30",
+    courseId: "c1",
+    group: "2",
+    lecturer: "Dr. Smith",
+    day: Day.WEDNESDAY,
+    week: "-",
+    spotsOccupied: 15,
+    type: "C",
+    url: "empty",
+    spotsTotal: 30,
+    averageRating: 4.5,
+    createdAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    updatedAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    opinionsCount: 10,
+  },
+  {
+    id: 122,
+    name: "grupa3",
+    startTime: "17:00",
+    endTime: "18:30",
+    courseId: "c1",
+    group: "3",
+    lecturer: "Dr. Smith",
+    day: Day.FRIDAY,
+    week: "-",
+    spotsOccupied: 15,
+    type: "C",
+    url: "empty",
+    spotsTotal: 30,
+    averageRating: 4.5,
+    createdAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    updatedAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    opinionsCount: 10,
+  },
+];
+
+export const groupsForCourses2: SingleGroup[] = [
+  {
+    id: 122,
+    name: "grupa1",
+    startTime: "08:00",
+    endTime: "09:30",
+    courseId: "c2",
+    group: "1",
+    lecturer: "Dr. Smith",
+    day: Day.THURSDAY,
+    week: "-",
+    spotsOccupied: 15,
+    type: "C",
+    url: "empty",
+    spotsTotal: 30,
+    averageRating: 4.5,
+    createdAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    updatedAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    opinionsCount: 10,
+  },
+  {
+    id: 122,
+    name: "grupa2",
+    startTime: "10:00",
+    endTime: "12:30",
+    courseId: "c2",
+    group: "2",
+    lecturer: "Dr. Smith",
+    day: Day.MONDAY,
+    week: "-",
+    spotsOccupied: 15,
+    type: "C",
+    url: "empty",
+    spotsTotal: 15,
+    averageRating: 4.5,
+    createdAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    updatedAt: new Date("2024-01-01T12:00:00Z").toISOString(),
+    opinionsCount: 10,
+  },
+];
+
+export const mockCourses: CourseType = [
+  {
+    id: "c1",
+    name: "Analizka",
+    registrationId: mockRegistrations[0].id,
+    groups: groupsForCourses1,
+  },
+  {
+    id: "c2",
+    name: "Algebra",
+    registrationId: mockRegistrations[0].id,
+    groups: groupsForCourses2,
+  },
+];
