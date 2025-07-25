@@ -1,18 +1,24 @@
 import { Page, expect } from "@playwright/test";
 
 export const selectFacultyAndRegistration = async (page: Page) => {
+  console.log("selectFacultyAndRegistration - 1");
   const facultyButton = page.getByText(/wybierz swój/i);
   await facultyButton.click();
+  console.log("selectFacultyAndRegistration - 2");
   const chosenFaculty = page.getByRole("option", { name: /w5/i });
   await chosenFaculty.click();
+  console.log("selectFacultyAndRegistration - 3");
   const registrationButton = page.locator('button[name="registration"]');
   await registrationButton.click();
+  console.log("selectFacultyAndRegistration - 4");
   const registrationInput = page.getByPlaceholder("Wybierz rejestrację...");
   await registrationInput.fill(
     "W5 zapisy wydziałowe dla kierunku APR SI 3 SEM, 2025/26Z W05-APRP-000P-OSIW7 [W05-APR-SI-3-25Z]",
   );
+  console.log("selectFacultyAndRegistration - 5");
   const chosenRegistration = page.getByRole("option").first();
   await chosenRegistration.click();
+  console.log("selectFacultyAndRegistration - 6");
 };
 
 export const TEST_EMAIL = process.env.TEST_EMAIL || "test@student.pwr.edu.pl";
