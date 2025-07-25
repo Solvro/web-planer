@@ -49,6 +49,11 @@ jobs:
           cp .env.example .env
           node ace generate:key
 
+      - name: Set up Next.JS environment
+        working-directory: frontend
+        run: |
+          cp .env.example .env
+
       - name: Run AdonisJS migrations
         run: node ace migration:run
         working-directory: backend
