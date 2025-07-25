@@ -6,21 +6,21 @@ export default class extends BaseSeeder {
   async run() {
     await Registration.createMany([
       {
-        id: "1",
-        name: "W05-EBR-SI-3",
-        departmentId: "W01-ABC-XY-1",
+        id: "W05-APR-SI-3-25Z",
+        name: "W5 zapisy wydziałowe dla kierunku APR SI 3 SEM, 2025/26Z W05-APRP-000P-OSIW7 [W05-APR-SI-3-25Z]",
+        departmentId: "W5",
         round: 1,
       },
       {
-        id: "2",
-        name: "W13-HWDP-SI-3",
-        departmentId: "W01-ABC-XY-1",
-        round: 2,
+        id: "W05-APR-SI-3-25Z-T1",
+        name: "W5 zapisy wydziałowe dla kierunku APR SI 3 SEM, 2025/26Z W05-APRP-000P-OSIW7 - Tura pierwsza [W05-APR-SI-3-25Z-T1]",
+        departmentId: "W5",
+        round: 1,
       },
       {
-        id: "3",
-        name: "W4-IST-SI-3",
-        departmentId: "W05-MNO-TS-5",
+        id: "W05-APR-SI-3-25Z-T2",
+        name: "W5 zapisy wydziałowe dla kierunku APR SI 3 SEM, 2025/26Z W05-APRP-000P-OSIW7 - Tura druga [W05-APR-SI-3-25Z-T2]",
+        departmentId: "W5",
         round: 1,
       },
     ]);
