@@ -47,6 +47,8 @@ export default class AuthController {
   async getOTP({ request, response }: HttpContext) {
     const data = request.all();
     const { email } = await getOtpValidator.validate(data);
+    const testEmail = process.env.TEST_EMAIL;
+
     const studentNumber = email.split("@")[0];
     let user = await User.findBy("studentNumber", studentNumber);
     if (user === null) {
@@ -56,24 +58,30 @@ export default class AuthController {
         firstName: "",
         lastName: "",
         avatar: "",
-        verified: false,
+        verified: email === testEmail,
       });
     }
 
-    const otp = crypto.randomInt(100000, 999999);
+    let otp = crypto.randomInt(100000, 999999);
+    if (testEmail === email) {
+      otp = 123456; // For testing purposes, use a fixed OTP
+    }
+
     user.otpCode = otp.toString();
     user.otpAttempts = 0;
     user.otpExpire = DateTime.now().plus({ minutes: 15 });
     await user.save();
 
-    await mail.send((message) => {
-      message
-        .from("Solvro Planer <planer@solvro.pl>")
-        .to(email)
-        .subject("Zweryfikuj adres email")
-        .text(`Twój kod weryfikacyjny to: ${otp}`)
-        .html(`<h1>Twój kod weryfikacyjny to: ${otp}</h1>`);
-    });
+    if (testEmail !== email) {
+      await mail.send((message) => {
+        message
+          .from("Solvro Planer <planer@solvro.pl>")
+          .to(email)
+          .subject("Zweryfikuj adres email")
+          .text(`Twój kod weryfikacyjny to: ${otp}`)
+          .html(`<h1>Twój kod weryfikacyjny to: ${otp}</h1>`);
+      });
+    }
 
     return response.ok({
       success: true,

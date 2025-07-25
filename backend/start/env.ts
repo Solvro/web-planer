@@ -58,4 +58,6 @@ export default await Env.create(new URL("../", import.meta.url), {
   |----------------------------------------------------------
   */
   LIMITER_STORE: Env.schema.enum(["database", "memory"] as const),
+  TEST_EMAIL: Env.schema.string.optional(),
+  CI: Env.schema.string.optional(),
 });
