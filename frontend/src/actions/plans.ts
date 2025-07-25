@@ -75,12 +75,18 @@ export const deletePlan = async ({ id }: { id: number }) => {
       method: "DELETE",
     });
     if (data === null) {
-      throw new Error("Failed to delete plan");
+      return {
+        success: false,
+        message: "Nie udało się usunąć planu",
+      };
     }
     revalidatePath("/plans");
     return data;
   } catch {
-    throw new Error("Not logged in");
+    return {
+      success: false,
+      message: "Nie udało się usunąć planu, użytkownik niezalogowany",
+    };
   }
 };
 

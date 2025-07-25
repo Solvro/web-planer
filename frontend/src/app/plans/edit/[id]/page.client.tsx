@@ -89,7 +89,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       return response.json() as Promise<CourseType>;
     },
   });
-
   const {
     syncing,
     handleSyncPlan,
@@ -135,7 +134,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       </div>
     );
   }
-
   return (
     <>
       <AppSidebar
