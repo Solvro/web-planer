@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-      DB_HOST: 127.0.0.1
+      DB_HOST: localhost
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
@@ -72,7 +72,7 @@ jobs:
         run: npx playwright test
         env:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-          DB_HOST: 127.0.0.1
+          DB_HOST: localhost
           DB_PORT: 5432
           DB_USER: postgres
           DB_PASSWORD: postgres

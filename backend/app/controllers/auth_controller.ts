@@ -46,6 +46,8 @@ export default class AuthController {
 
   async getOTP({ request, response }: HttpContext) {
     const data = request.all();
+    // eslint-disable-next-line no-console
+    console.log("getOTP", data);
     const { email } = await getOtpValidator.validate(data);
     const testEmail = process.env.TEST_EMAIL;
 
