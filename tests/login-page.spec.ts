@@ -36,6 +36,13 @@ test.describe("Login tests", () => {
     await expect(page.getByText(/il musi być z domeny Polite/i)).toBeVisible();
   });
 
+  test("check if backend failing on github", async ({ page }) => {
+    await fillEmailInput(page, TEST_EMAIL);
+    await expect(
+      page.getByText(/Wystąpił błąd podczas wysyłania kodu/i),
+    ).toBeVisible();
+  });
+
   test("submit incorrect otp", async ({ page }) => {
     await fillEmailInput(page, TEST_EMAIL);
     await fillOtpInput(page, "999999");
