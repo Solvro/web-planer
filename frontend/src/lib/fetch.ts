@@ -29,6 +29,9 @@ export const fetchClient = async ({
     fetchOptions.body = body;
   }
 
+  // eslint-disable-next-line no-console
+  console.log(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
+
   const response = fetch(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
   return await response;
 };
