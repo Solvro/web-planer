@@ -19,6 +19,7 @@ jobs:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_DATABASE: postgres
+      CORS_ORIGIN: http://localhost:3000
 
     services:
       postgres:

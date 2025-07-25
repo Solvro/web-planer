@@ -2,8 +2,6 @@
 
 import { env } from "@/env.mjs";
 
-/* eslint-disable no-console */
-
 export const fetchClient = async ({
   url,
   method,
@@ -31,24 +29,6 @@ export const fetchClient = async ({
     fetchOptions.body = body;
   }
 
-  await getTest(env.NEXT_PUBLIC_API_URL);
-  await getTest("http://localhost:3333");
-  await getTest("http://127.0.0.1:3333");
-  await getTest("http://0.0.0.0:3333");
-
   const response = fetch(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
   return await response;
 };
-
-async function getTest(url: string) {
-  try {
-    const testResponse = await fetch(url, { method: "GET" });
-    if (testResponse.ok) {
-      console.log(`Successfully fetched ${url}`);
-    } else {
-      console.log(`Error fetching ${url}:`, testResponse);
-    }
-  } catch {
-    console.log("URL FAILED", url);
-  }
-}

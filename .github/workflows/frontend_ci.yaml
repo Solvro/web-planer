@@ -100,4 +100,4 @@ jobs:
         env:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello
-          NEXT_PUBLIC_API_URL: http://127.0.0.1:3333
+          NEXT_PUBLIC_API_URL: http://localhost:3333
