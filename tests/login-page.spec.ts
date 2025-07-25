@@ -44,20 +44,16 @@ test.describe("Login tests", () => {
   // });
 
   test("submit incorrect otp", async ({ page }) => {
-    await fillEmailInput(page, TEST_EMAIL);
+    await fillEmailInput(page, "test@student.pwr.edu.pl");
     await expect(page.getByLabel(/Hasło jednorazowe/i)).toBeVisible();
     await fillOtpInput(page, "999999");
-
     await expect(page.getByText(/Logowanie nieudane/i)).toBeVisible();
   });
 
-  test("should submit correct otp", async ({ page }) => {
+  test("submit correct otp", async ({ page }) => {
     await fillEmailInput(page, TEST_EMAIL);
     await expect(page.getByLabel(/Hasło jednorazowe/i)).toBeVisible();
-    const otpCode = "123456";
-
-    await fillOtpInput(page, otpCode);
-
+    await fillOtpInput(page, "123456");
     await expect(page.getByText(/Zalogowano pomyślnie/i)).toBeVisible();
   });
 });
