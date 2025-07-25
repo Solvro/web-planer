@@ -179,7 +179,7 @@ test("should not allow to report an issue with invalid email", async ({
   await expect(page.getByText(/niepoprawny/i)).toBeVisible();
 });
 
-test("should not allow to report an issue with invalid description and description", async ({
+test("should not allow to report an issue with invalid title and description", async ({
   page,
 }) => {
   await page.goto(BASE_URL);
@@ -193,7 +193,7 @@ test("should not allow to report an issue with invalid description and descripti
   await expect(page.getByText(/krótki opis/i)).toBeVisible();
 });
 
-test("should allow to report an issue with vaild inputs", async ({ page }) => {
+test("should allow to report an issue with valid inputs", async ({ page }) => {
   await page.goto(BASE_URL);
   await page.getByText(/błąd/i).click();
 
