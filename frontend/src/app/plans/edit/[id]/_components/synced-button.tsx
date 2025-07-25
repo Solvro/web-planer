@@ -67,6 +67,7 @@ export function SyncedButton({
           size="icon"
           variant="outline"
           className="min-w-10"
+          data-testId="synced-button"
           onClick={() => {
             if (!isEqualsDates) {
               toast.info(

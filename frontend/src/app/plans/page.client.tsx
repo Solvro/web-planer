@@ -71,6 +71,7 @@ export function PlansPage({
     <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4 pt-24">
       <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
         <button
+          data-testid="create-plan-button"
           onClick={addNewPlan}
           className="group flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:border-primary hover:bg-primary/5 hover:shadow-xl dark:border-gray-800"
         >
