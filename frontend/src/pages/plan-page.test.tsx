@@ -11,7 +11,7 @@ import {
   mockPlans,
 } from "@/tests/mocks/mock-data";
 import { pushFunction } from "@/tests/mocks/utils";
-import { Providers } from "@/tests/providers";
+import { Providers } from "@/tests/setup-providers";
 
 describe("Plans Page", () => {
   const setup = () => {
@@ -39,7 +39,7 @@ describe("Plans Page", () => {
       screen.getAllByText(
         `${(mockGroups1.length + mockGroups2.length + mockGroups3.length).toString()} wybranych grup`,
       ),
-    );
+    ).toBeInTheDocument();
   });
 
   it("should navigate when pressing the create plan button", async () => {

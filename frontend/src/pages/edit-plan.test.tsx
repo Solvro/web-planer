@@ -11,7 +11,7 @@ import {
   mockRegistrations,
 } from "@/tests/mocks/mock-data";
 import { generateMockUser } from "@/tests/mocks/user";
-import { Providers } from "@/tests/providers";
+import { Providers } from "@/tests/setup-providers";
 
 const selectRegistration = async (user: UserEvent) => {
   const registrationTrigger = await screen.findByTestId("registration-select");

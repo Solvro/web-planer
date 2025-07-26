@@ -209,7 +209,7 @@ export const newPlan: PlanResponseDataType = {
   registrations: mockRegistrations,
 };
 
-export const groupsForCourses1: SingleGroup[] = [
+const groupsForCourses1: SingleGroup[] = [
   {
     id: 122,
     name: "grupa1",
@@ -269,7 +269,7 @@ export const groupsForCourses1: SingleGroup[] = [
   },
 ];
 
-export const groupsForCourses2: SingleGroup[] = [
+const groupsForCourses2: SingleGroup[] = [
   {
     id: 122,
     name: "grupa1",

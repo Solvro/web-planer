@@ -30,10 +30,3 @@ export const handlers = [
     },
   ),
 ];
-
-export const respond_with_404 = http.get(
-  `${NEXT_PUBLIC_API_URL}/user/schedules/:id`,
-  () => {
-    return new HttpResponse(null, { status: 404 });
-  },
-);
