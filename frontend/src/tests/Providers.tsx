@@ -1,22 +1,22 @@
-// Providers.tsx or similar file
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
+import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import type { PropsWithChildren } from "react";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SessionProvider } from "@/hooks/use-session";
 import { ShareProvider } from "@/hooks/use-share";
-import { User } from "@/types";
+import type { User } from "@/types";
 
 export function Providers({
   children,
   user,
-}: PropsWithChildren<{ user: User | null }>) {
-  const queryClient = new QueryClient();
+  queryClient,
+}: PropsWithChildren<{ user?: User | null; queryClient: QueryClient }>) {
   return (
     <SidebarProvider>
       <TooltipProvider>
-        <SessionProvider user={user}>
+        <SessionProvider user={user ?? null}>
           <ShareProvider>
             <QueryClientProvider client={queryClient}>
               {children}

@@ -1,10 +1,10 @@
 import { vi } from "vitest";
 
-export const push = vi.fn();
+export const pushFunction = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: push,
+    push: pushFunction,
   }),
 }));
 
@@ -19,8 +19,3 @@ vi.mock("next/headers", () => ({
     .fn()
     .mockReturnValue(new Map([["XSRF-TOKEN", { value: "test-csrf-token" }]])),
 }));
-// vi.mock("@/actions/get-faculties", () => ({
-//   cookies: vi
-//     .fn()
-//     .mockReturnValue(new Map([["XSRF-TOKEN", { value: "test-csrf-token" }]])),
-// }));

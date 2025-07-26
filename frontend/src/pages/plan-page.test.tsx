@@ -1,22 +1,23 @@
+import { QueryClient } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { PlansPage } from "@/app/plans/page.client";
-import { Providers } from "@/tests/Providers";
 import {
   mockGroups1,
   mockGroups2,
   mockGroups3,
   mockPlans,
 } from "@/tests/mocks/mock-data";
-import { push } from "@/tests/mocks/utils";
+import { pushFunction } from "@/tests/mocks/utils";
+import { Providers } from "@/tests/providers";
 
 describe("Plans Page", () => {
   const setup = () => {
     const user = userEvent.setup();
     render(
-      <Providers>
+      <Providers queryClient={new QueryClient()}>
         <PlansPage plans={mockPlans} />
       </Providers>,
     );
@@ -28,12 +29,15 @@ describe("Plans Page", () => {
     expect(screen.getByText(mockPlans[0].name)).toBeInTheDocument();
     expect(
       screen.getByText(
-        new RegExp(`${mockPlans[0].registrations.length} kurs(y)?`, "i"),
+        new RegExp(
+          `${mockPlans[0].registrations.length.toString()} kurs(y)?`,
+          "i",
+        ),
       ),
     ).toBeInTheDocument();
     expect(
       screen.getAllByText(
-        `${mockGroups1.length + mockGroups2.length + mockGroups3.length} wybranych grup`,
+        `${(mockGroups1.length + mockGroups2.length + mockGroups3.length).toString()} wybranych grup`,
       ),
     );
   });
@@ -42,6 +46,8 @@ describe("Plans Page", () => {
     const user = setup();
     const createButton = screen.getByTestId("create-button");
     await user.click(createButton);
-    expect(push).toHaveBeenCalledWith(expect.stringContaining("plans/edit/"));
+    expect(pushFunction).toHaveBeenCalledWith(
+      expect.stringContaining("plans/edit/"),
+    );
   });
 });

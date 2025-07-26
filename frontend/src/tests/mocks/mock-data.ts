@@ -1,12 +1,12 @@
-import { PlanResponseDataType } from "@/app/plans/page";
-import { ExtendedGroup } from "@/atoms/plan-family";
-import {
+import type { PlanResponseDataType } from "@/app/plans/page";
+import type { ExtendedGroup } from "@/atoms/plan-family";
+import type {
   CourseType,
-  Day,
   FacultyType,
   Registration,
   SingleGroup,
 } from "@/types";
+import { Day } from "@/types";
 
 export const mockGroups1: ExtendedGroup[] = [
   {
@@ -112,7 +112,7 @@ export const mockGroups3: ExtendedGroup[] = [
   },
 ];
 
-export const mockFaculties: FacultyType[] = [
+export const mockFaculties: FacultyType = [
   {
     id: "id1",
     name: "faculty 1",

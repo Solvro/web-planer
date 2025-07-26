@@ -9,28 +9,25 @@ import "./mocks/utils";
 process.env.NEXT_PUBLIC_API_URL = "http://localhost:3333";
 
 class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
 }
 
-global.ResizeObserver = ResizeObserver;
+globalThis.ResizeObserver = ResizeObserver;
 
 beforeAll(() => {
-  if (!Element.prototype.hasPointerCapture) {
-    Element.prototype.hasPointerCapture = () => false;
-  }
-  if (!window.HTMLElement.prototype.setPointerCapture) {
-    window.HTMLElement.prototype.setPointerCapture = () => {};
-  }
-  if (!window.HTMLElement.prototype.releasePointerCapture) {
-    window.HTMLElement.prototype.releasePointerCapture = () => {};
-  }
+  Element.prototype.hasPointerCapture = () => false;
+
+  window.HTMLElement.prototype.setPointerCapture = vi.fn();
+
+  window.HTMLElement.prototype.releasePointerCapture = vi.fn();
+
   Element.prototype.scrollIntoView = vi.fn();
 
   Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: vi.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -47,5 +44,8 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   cleanup();
+  window.localStorage.clear();
 });
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});

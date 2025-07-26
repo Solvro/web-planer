@@ -1,53 +1,55 @@
+import { QueryClient } from "@tanstack/react-query";
 import { act, render, screen, waitFor, within } from "@testing-library/react";
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
+import type { UserEvent } from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { CreateNewPlanPage } from "@/app/plans/edit/[id]/page.client";
-import { Providers } from "@/tests/Providers";
 import {
   mockCourses,
   mockFaculties,
   mockRegistrations,
 } from "@/tests/mocks/mock-data";
 import { generateMockUser } from "@/tests/mocks/user";
+import { Providers } from "@/tests/providers";
+
+const selectRegistration = async (user: UserEvent) => {
+  const registrationTrigger = await screen.findByTestId("registration-select");
+  await user.click(registrationTrigger);
+
+  const regOption = await screen.findByText(
+    new RegExp(mockRegistrations[0].name, "i"),
+  );
+  await act(async () => {
+    await user.click(regOption);
+  });
+};
+
+const selectFaculty = async (user: UserEvent) => {
+  const facultyTrigger = await screen.findByTestId("faculty-select");
+  await user.click(facultyTrigger);
+
+  const option = await screen.findByText(
+    new RegExp(mockFaculties[1].name, "i"),
+  );
+  await act(async () => {
+    await user.click(option);
+  });
+};
 
 describe("Edit Plan", () => {
   const setup = () => {
     const user = userEvent.setup();
     render(
-      <Providers user={generateMockUser()}>
+      <Providers user={generateMockUser()} queryClient={new QueryClient()}>
         <CreateNewPlanPage planId="testplan1" />
       </Providers>,
     );
     return user;
   };
 
-  const selectRegistration = async (user: UserEvent) => {
-    const registrationTrigger = screen.getByTestId("registration-select");
-    await user.click(registrationTrigger);
-
-    const regOption = await screen.findByText(
-      new RegExp(mockRegistrations[0].name, "i"),
-    );
-    await act(async () => {
-      await user.click(regOption);
-    });
-  };
-
-  const selectFaculty = async (user: UserEvent) => {
-    const facultyTrigger = screen.getByTestId("faculty-select");
-    await user.click(facultyTrigger);
-
-    const option = await screen.findByText(
-      new RegExp(mockFaculties[1].name, "i"),
-    );
-    await act(async () => {
-      await user.click(option);
-    });
-  };
-
-  it("should create a new plan", async () => {
-    await setup();
+  it("should create a new plan", () => {
+    setup();
     const name = screen.getByRole("textbox", { name: "Nazwa" });
     expect(name).toHaveValue("Nowy plan");
   });
@@ -84,8 +86,12 @@ describe("Edit Plan", () => {
     const regs2 = screen.getAllByText(
       new RegExp(mockRegistrations[1].name, "i"),
     );
-    const span1 = regs1.find((el) => el.tagName.toLowerCase() === "span");
-    const span2 = regs2.find((el) => el.tagName.toLowerCase() === "span");
+    const span1 = regs1.find(
+      (element) => element.tagName.toLowerCase() === "span",
+    );
+    const span2 = regs2.find(
+      (element) => element.tagName.toLowerCase() === "span",
+    );
     expect(span1).toBeVisible();
     expect(span2).toBeUndefined();
   });
@@ -93,12 +99,17 @@ describe("Edit Plan", () => {
   it("should display all groups for a course", async () => {
     const user = setup();
     await selectFaculty(user);
-    // await selectRegistration(user);
+    await selectRegistration(user);
 
     const courseLabels = await screen.findAllByText(mockCourses[0].name);
-    const courseButtons = courseLabels.map((el) => el.closest("button"));
+    const courseButtons = courseLabels.map((element) =>
+      element.closest("button"),
+    );
     const groupLabels = courseButtons.map((button) => {
-      const groupText = within(button!).getByText(/Grupa \d+/i);
+      if (button == null) {
+        return "";
+      }
+      const groupText = within(button).getByText(/Grupa \d+/i);
       return groupText.textContent;
     });
     const uniqueGroups = new Set(groupLabels);
@@ -109,12 +120,19 @@ describe("Edit Plan", () => {
   it("should disable other groups if one group selected", async () => {
     const user = setup();
     await selectFaculty(user);
-    //the tests are linked so this is disabled, i can't find why
-    // await selectRegistration(user);
+    await selectRegistration(user);
 
     const courseLabels = await screen.findAllByText(mockCourses[0].name);
-    const courseButtons = courseLabels.map((el) => el.closest("button"));
-    await user.click(courseButtons[0]!);
+    const courseButtons = courseLabels.map((element) =>
+      element.closest("button"),
+    );
+
+    await waitFor(async () => {
+      if (courseButtons[0] == null) {
+        throw new Error("First course button not found");
+      }
+      await user.click(courseButtons[0]);
+    });
     expect(courseButtons[1]).toBeDisabled();
   });
 });
