@@ -1,5 +1,11 @@
 import { vi } from "vitest";
 
+vi.mock("next/headers", () => ({
+  cookies: () => ({
+    get: (key: string) => ({ name: key, value: "mocked-value" }),
+  }),
+}));
+
 vi.mock("@/lib/auth", () => ({
   getAccessToken: vi.fn(() => ({ token: "mock", secret: "mock" })),
   getRequestToken: vi.fn(() => ({

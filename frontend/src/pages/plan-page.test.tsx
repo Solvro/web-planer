@@ -38,8 +38,8 @@ describe("Plans Page", () => {
     expect(
       screen.getAllByText(
         `${(mockGroups1.length + mockGroups2.length + mockGroups3.length).toString()} wybranych grup`,
-      ),
-    ).toBeInTheDocument();
+      ).length,
+    ).toBeGreaterThan(0);
   });
 
   it("should navigate when pressing the create plan button", async () => {
