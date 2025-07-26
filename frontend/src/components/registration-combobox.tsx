@@ -45,6 +45,7 @@ export function RegistrationCombobox({
             name={name}
             variant="outline"
             className="w-full justify-start truncate font-normal"
+            data-testid="registration-select"
           >
             {selectedRegistrations === null
               ? "Rejestracja"
@@ -71,6 +72,7 @@ export function RegistrationCombobox({
           name={name}
           variant="outline"
           className="w-full justify-start truncate font-normal"
+          data-testid="registration-select"
         >
           {selectedRegistrations === null
             ? "Wybierz rejestracje"

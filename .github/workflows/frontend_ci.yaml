@@ -30,7 +30,7 @@ jobs:
       - name: Run commitlint check
         run: npx commitlint -f ${{ github.event.pull_request.base.sha }}
 
-  lint: 
+  lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,9 +48,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
         if: always()
-    
+
   prettier:
-    name: Format 
+    name: Format
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -64,7 +64,22 @@ jobs:
 
       - name: Format check
         run: npm run format:check
-          
+
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: ./.github/composite-actions/install
+
+      - name: Format check
+        run: npm run code-test
 
   deadcode:
     name: Find deadcode
