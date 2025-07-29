@@ -6,6 +6,7 @@ import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
 import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 
 import { getFaculties } from "@/actions/get-faculties";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
@@ -79,6 +80,9 @@ export function AppSidebar({
       });
 
       if (!response.ok) {
+        toast.error(
+          "Coś poszło nie tak podczas pobierania rejestracji, spróbuj ponownie",
+        );
         throw new Error("Network response was not ok");
       }
 
