@@ -26,7 +26,6 @@ class IntersectionObserverMock {
 
 vi.stubGlobal("IntersectionObserver", IntersectionObserverMock);
 
-// Mock pointer capture methods for Radix UI components
 Element.prototype.hasPointerCapture = vi.fn();
 Element.prototype.setPointerCapture = vi.fn();
 Element.prototype.releasePointerCapture = vi.fn();
@@ -37,8 +36,8 @@ Object.defineProperty(window, "matchMedia", {
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(), // deprecated
-    removeListener: vi.fn(), // deprecated
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
@@ -52,10 +51,12 @@ afterEach(() => {
 
 Element.prototype.scrollIntoView = vi.fn();
 
-// Mock additional DOM methods that might be missing in JSDOM
 Element.prototype.scroll = vi.fn();
 Element.prototype.scrollTo = vi.fn();
 HTMLElement.prototype.scrollIntoView = vi.fn();
+
+window.scrollTo = vi.fn();
+window.scroll = vi.fn();
 
 beforeAll(() => {
   server.listen();

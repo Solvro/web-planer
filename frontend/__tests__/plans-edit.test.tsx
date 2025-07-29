@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CreateNewPlanPage } from "@/app/plans/edit/[id]/page.client";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
-import { departmentHandler } from "../mocks/handlers";
+import { departmentHandler, registrationsHandler } from "../mocks/handlers";
 import { server } from "../mocks/server";
 
 const mockUseSession = vi.fn(() => ({
@@ -131,6 +131,35 @@ describe("Create plan page errors", () => {
     expect(
       await screen.findByText(
         /coś poszło nie tak podczas pobierania rejestracji, spróbuj ponownie/i,
+      ),
+    ).toBeInTheDocument();
+  });
+  it("should display error toast after selecting registration but failing to load courses", async () => {
+    server.use(departmentHandler);
+    server.use(registrationsHandler);
+    const user = userEvent.setup();
+    renderWithQueryClientSideBarProvider(
+      <CreateNewPlanPage planId="a5e9b042-9151-4719-9f1d-8ff6fb216900" />,
+    );
+
+    const dropdownButton = screen.getByRole("combobox");
+    await user.click(dropdownButton);
+    const faculty = await screen.findByText("W1");
+
+    await user.click(faculty);
+
+    expect(dropdownButton).toHaveTextContent("W1");
+
+    const registrationButton = await screen.findByText("0 wybranych");
+
+    await user.click(registrationButton);
+    const registration = await screen.findByText("Test rejestracja 1");
+
+    await user.click(registration);
+
+    expect(
+      await screen.findByText(
+        /coś poszło nie tak podczas pobierania kursów, spróbuj ponownie/i,
       ),
     ).toBeInTheDocument();
   });

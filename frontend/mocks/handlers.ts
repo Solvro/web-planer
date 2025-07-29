@@ -7,6 +7,15 @@ export const handlers = [
   http.get("http://localhost:3333/api/departments/W1/registrations", () => {
     return new HttpResponse(null, { status: 500 });
   }),
+  http.get(
+    "http://localhost:3333/api/departments/W1/registrations/W04-CBE-SM-1-24L/courses",
+    () => {
+      return new HttpResponse(null, { status: 500 });
+    },
+  ),
+  http.delete("http://localhost:3333/api/user/schedules/123", () => {
+    return new HttpResponse(null, { status: 500 });
+  }),
 ];
 
 export const departmentHandler = http.get(
@@ -25,6 +34,32 @@ export const departmentHandler = http.get(
       { id: "W10", name: "Wydział Elektryczny" },
       { id: "W11", name: "Wydział Podstawowych Problemów Techniki" },
       { id: "W12", name: "Wydział Microsystem Electronics and Photonics" },
+    ]);
+  },
+);
+
+export const registrationsHandler = http.get(
+  "http://localhost:3333/api/departments/W1/registrations",
+  () => {
+    return HttpResponse.json([
+      {
+        id: "W04-CBE-SM-1-24L",
+        name: "test rejestracja 1",
+        departmentId: "W1",
+        round: null,
+        createdAt: "2025-07-24T16:18:55.601+00:00",
+        updatedAt: "2025-07-24T16:18:55.601+00:00",
+        isActive: true,
+      },
+      {
+        id: "W04-CBE-SM-3-24L",
+        name: "test rejestracja 2",
+        departmentId: "W1",
+        round: null,
+        createdAt: "2025-07-24T16:18:55.602+00:00",
+        updatedAt: "2025-07-24T16:18:55.602+00:00",
+        isActive: true,
+      },
     ]);
   },
 );
