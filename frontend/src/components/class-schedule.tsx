@@ -61,15 +61,15 @@ function ClassSchedule({
 
   return (
     <div
-      className={cn("flex min-w-fit flex-col border-y p-3", {
+      className={cn("flex min-w-full flex-col border-y p-3", {
         "rounded-lg border-x": isReadonly || isMobile,
       })}
     >
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
       </div>
-      <div className="flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]">
-        <div className="grid min-w-[1400px] grid-cols-dayPlan px-[10px]">
+      <div className="flex min-w-[1000px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]">
+        <div className="grid grid-rows-dayPlan">
           {upperHours.map((hour) => (
             <Hour hour={hour} key={hour} />
           ))}
@@ -77,8 +77,8 @@ function ClassSchedule({
             <Hour hour={hour} key={hour} />
           ))}
         </div>
-        <div className="grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5">
-          <div className="absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200" />
+        <div className="grid grid-flow-row grid-cols-1 grid-rows-dayPlan gap-y-[0.55rem] py-5">
+          <div className="absolute after:absolute after:bg-slate-200" />
           {groups.map((block) => {
             const isThisCourseChecked = selectedGroups.some(
               (g) =>

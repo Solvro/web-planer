@@ -82,13 +82,13 @@ export function ClassBlock({
           disabled={isDisabled}
           onClick={isReadonly ? undefined : onClick}
           style={{
-            gridColumnStart: startGrid,
-            gridColumnEnd: `span ${durationSpan.toString()}`,
+            gridRowStart: startGrid,
+            gridRowEnd: `span ${durationSpan.toString()}`,
           }}
           className={cn(
             position,
             typeBgColors[courseType],
-            `border-l-3 relative flex flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
+            `border-l-3 relative flex w-48 flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
             isChecked
               ? "cursor-pointer"
               : isDisabled

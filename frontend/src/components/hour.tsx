@@ -7,10 +7,10 @@ function Hour({ hour }: { hour: string }) {
 
   return (
     <div
-      className="after:top- relative z-0 -translate-x-1/2 transform text-center text-xs leading-6 text-gray-500 after:absolute after:left-1/2 after:top-[-30px] after:-z-10 after:h-screen after:w-[1px] after:bg-slate-200 dark:after:bg-slate-800"
+      className="relative z-0 text-xs leading-6 text-gray-500 after:absolute after:top-1/2 after:-z-10 after:h-[1px] after:w-screen after:bg-slate-200 dark:after:bg-slate-800"
       style={{
-        gridColumnStart: startGrid,
-        gridColumnEnd: `span 4`,
+        gridRowStart: startGrid,
+        gridRowEnd: `span 1`,
       }}
     >
       <span className="bg-white py-0.5 dark:bg-background">{hour}</span>
