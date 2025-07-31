@@ -344,7 +344,7 @@ const config = {
         dayPlan: "repeat(174, 1fr)",
       },
       gridTemplateRows: {
-        dayPlan: "repeat(174, 0.1fr)",
+        dayPlan: "repeat(174, 6px)",
       },
     },
   },

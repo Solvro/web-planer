@@ -77,7 +77,7 @@ function ClassSchedule({
             <Hour hour={hour} key={hour} />
           ))}
         </div>
-        <div className="grid grid-flow-row grid-cols-1 grid-rows-dayPlan gap-y-[0.55rem] py-5">
+        <div className="grid grid-rows-dayPlan gap-x-3 py-[12px]">
           <div className="absolute after:absolute after:bg-slate-200" />
           {groups.map((block) => {
             const isThisCourseChecked = selectedGroups.some(
