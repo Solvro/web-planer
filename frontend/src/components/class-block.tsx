@@ -49,6 +49,7 @@ export function ClassBlock({
   isDisabled,
   spotsOccupied,
   spotsTotal,
+  isHorizontal,
   onClick,
   isReadonly = false,
   className,
@@ -67,6 +68,7 @@ export function ClassBlock({
   spotsTotal: number;
   averageRating: number;
   opinionsCount: number;
+  isHorizontal: boolean;
   onClick?: () => void;
   isReadonly?: boolean;
   className?: string;
@@ -81,10 +83,17 @@ export function ClassBlock({
           suppressHydrationWarning={true}
           disabled={isDisabled}
           onClick={isReadonly ? undefined : onClick}
-          style={{
-            gridRowStart: startGrid,
-            gridRowEnd: `span ${durationSpan.toString()}`,
-          }}
+          style={
+            isHorizontal
+              ? {
+                  gridRowStart: startGrid,
+                  gridRowEnd: `span ${durationSpan.toString()}`,
+                }
+              : {
+                  gridColumnStart: startGrid,
+                  gridColumnEnd: `span ${durationSpan.toString()}`,
+                }
+          }
           className={cn(
             position,
             typeBgColors[courseType],

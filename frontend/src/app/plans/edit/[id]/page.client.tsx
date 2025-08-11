@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SidebarInset } from "@/components/ui/sidebar";
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { useSavePlan } from "@/hooks/use-save-plan";
 import { useSession } from "@/hooks/use-session";
 import { useShare } from "@/hooks/use-share";
@@ -41,6 +42,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
   const [faculty, setFaculty] = useState<string | null>(null);
   const { isDialogOpen, setIsDialogOpen } = useShare();
   const [hideDays, setHideDays] = useState(false);
+  const { isHorizontal } = usePlanOrientation();
 
   const spotsSynced = useRef(false);
   const captureRef = useRef<HTMLDivElement>(null);
@@ -162,6 +164,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
               <ClassSchedule
                 key={day}
                 day={label}
+                isHorizontal={isHorizontal}
                 selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
                 groups={plan.allGroups.filter(
                   (g) => (g.day.toLocaleLowerCase() as Day) === day,
@@ -180,6 +183,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
                   <ClassSchedule
                     key={day}
                     day={label}
+                    isHorizontal={isHorizontal}
                     selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
                     groups={plan.allGroups.filter((g) => g.day === day)}
                     onSelectGroup={(groupdId) => {
@@ -221,6 +225,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
                     <ClassSchedule
                       key={day}
                       day={label}
+                      isHorizontal={isHorizontal}
                       isReadonly={true}
                       selectedGroups={[]}
                       groups={plan.allGroups.filter(
@@ -241,6 +246,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
                     <ClassSchedule
                       key={day}
                       day={label}
+                      isHorizontal={isHorizontal}
                       isReadonly={true}
                       selectedGroups={[]}
                       groups={plan.allGroups.filter(

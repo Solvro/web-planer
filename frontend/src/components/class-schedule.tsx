@@ -48,12 +48,14 @@ function ClassSchedule({
   day,
   groups,
   selectedGroups,
+  isHorizontal,
   onSelectGroup,
   isReadonly = false,
 }: {
   day: string;
   groups: ExtendedGroup[];
   selectedGroups: ExtendedGroup[];
+  isHorizontal: boolean;
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
 }) {
@@ -61,24 +63,48 @@ function ClassSchedule({
 
   return (
     <div
-      className={cn("flex min-w-full flex-col border-y p-3", {
+      className={cn("flex min-w-fit flex-col border-y p-3", {
         "rounded-lg border-x": isReadonly || isMobile,
       })}
     >
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
       </div>
-      <div className="flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]">
-        <div className="grid grid-rows-dayPlan">
+      <div
+        className={cn(
+          isHorizontal
+            ? "flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]"
+            : "flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]",
+        )}
+      >
+        <div
+          className={cn(
+            isHorizontal
+              ? "grid grid-rows-dayPlan"
+              : "grid min-w-[1400px] grid-cols-dayPlan px-[10px]",
+          )}
+        >
           {upperHours.map((hour) => (
-            <Hour hour={hour} key={hour} />
+            <Hour hour={hour} isHorizontal={isHorizontal} key={hour} />
           ))}
           {bottomHours.map((hour) => (
-            <Hour hour={hour} key={hour} />
+            <Hour hour={hour} isHorizontal={isHorizontal} key={hour} />
           ))}
         </div>
-        <div className="grid grid-rows-dayPlan gap-x-3 py-3">
-          <div className="absolute after:absolute after:bg-slate-200" />
+        <div
+          className={cn(
+            isHorizontal
+              ? "grid grid-rows-dayPlan gap-x-3 py-3"
+              : "grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5",
+          )}
+        >
+          <div
+            className={cn(
+              isHorizontal
+                ? "absolute after:absolute after:bg-slate-200"
+                : "absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200",
+            )}
+          />
           {groups.map((block) => {
             const isThisCourseChecked = selectedGroups.some(
               (g) =>
@@ -89,6 +115,7 @@ function ClassSchedule({
               <ClassBlock
                 isReadonly={isReadonly}
                 isDisabled={block.isChecked ? false : isThisCourseChecked}
+                isHorizontal={isHorizontal}
                 key={block.groupId + block.courseId + block.registrationId}
                 {...block}
                 onClick={() => {
