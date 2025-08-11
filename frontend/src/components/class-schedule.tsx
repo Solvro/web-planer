@@ -68,7 +68,7 @@ function ClassSchedule({
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
       </div>
-      <div className="flex min-w-[1000px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]">
+      <div className="flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]">
         <div className="grid grid-rows-dayPlan">
           {upperHours.map((hour) => (
             <Hour hour={hour} key={hour} />
@@ -77,7 +77,7 @@ function ClassSchedule({
             <Hour hour={hour} key={hour} />
           ))}
         </div>
-        <div className="grid grid-rows-dayPlan gap-x-3 py-[12px]">
+        <div className="grid grid-rows-dayPlan gap-x-3 py-3">
           <div className="absolute after:absolute after:bg-slate-200" />
           {groups.map((block) => {
             const isThisCourseChecked = selectedGroups.some(
