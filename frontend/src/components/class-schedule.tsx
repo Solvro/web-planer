@@ -2,6 +2,7 @@ import React from "react";
 
 import type { ExtendedGroup } from "@/atoms/plan-family";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
 import { ClassBlock } from "./class-block";
@@ -57,6 +58,7 @@ function ClassSchedule({
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
 }) {
+  const { isHorizontal } = usePlanOrientation();
   const isMobile = useIsMobile();
 
   return (
@@ -68,8 +70,20 @@ function ClassSchedule({
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
       </div>
-      <div className="flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]">
-        <div className="grid min-w-[1400px] grid-cols-dayPlan px-[10px]">
+      <div
+        className={cn(
+          isHorizontal
+            ? "flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]"
+            : "flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]",
+        )}
+      >
+        <div
+          className={cn(
+            isHorizontal
+              ? "grid grid-rows-dayPlan"
+              : "grid min-w-[1400px] grid-cols-dayPlan px-[10px]",
+          )}
+        >
           {upperHours.map((hour) => (
             <Hour hour={hour} key={hour} />
           ))}
@@ -77,8 +91,20 @@ function ClassSchedule({
             <Hour hour={hour} key={hour} />
           ))}
         </div>
-        <div className="grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5">
-          <div className="absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200" />
+        <div
+          className={cn(
+            isHorizontal
+              ? "grid grid-rows-dayPlan gap-x-3 py-3"
+              : "grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5",
+          )}
+        >
+          <div
+            className={cn(
+              isHorizontal
+                ? "absolute after:absolute after:bg-slate-200"
+                : "absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200",
+            )}
+          />
           {groups.map((block) => {
             const isThisCourseChecked = selectedGroups.some(
               (g) =>

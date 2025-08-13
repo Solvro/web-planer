@@ -4,16 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
-import Link from "next/link";
 import React from "react";
 
 import { getFaculties } from "@/actions/get-faculties";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
-import { Icons } from "@/components/icons";
 import { PlanDisplayLink } from "@/components/plan-display-link";
+import { PlanOrientationButton } from "@/components/plan-orientation-button";
 import { RegistrationCombobox } from "@/components/registration-combobox";
 import { Accordion } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -104,16 +102,6 @@ export function AppSidebar({
           <div className="flex w-full flex-col justify-start gap-3">
             <div className="flex w-full items-end gap-1">
               <div className="flex w-full items-end gap-1">
-                <Button
-                  variant="outline"
-                  className="aspect-square"
-                  size="icon"
-                  asChild={true}
-                >
-                  <Link href="/plans">
-                    <Icons.ArrowBack size={20} />
-                  </Link>
-                </Button>
                 <form
                   className="flex w-full items-center justify-center"
                   onSubmit={(event) => {
@@ -153,6 +141,7 @@ export function AppSidebar({
                 )}
               />
               <PlanDisplayLink />
+              <PlanOrientationButton />
             </div>
 
             <p className="text-xs text-muted-foreground">

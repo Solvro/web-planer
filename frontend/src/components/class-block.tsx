@@ -3,6 +3,7 @@
 import React from "react";
 
 import { StarsRating } from "@/components/class-block-stars";
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
 import { Icons } from "./icons";
@@ -75,6 +76,7 @@ export function ClassBlock({
   className?: string;
   disableTooltip?: boolean;
 }) {
+  const { isHorizontal } = usePlanOrientation();
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
   return (
@@ -84,20 +86,28 @@ export function ClassBlock({
           suppressHydrationWarning={true}
           disabled={isDisabled}
           onClick={isReadonly ? undefined : onClick}
-          style={{
-            gridColumnStart: startGrid,
-            gridColumnEnd: `span ${durationSpan.toString()}`,
-          }}
+          style={
+            isHorizontal
+              ? {
+                  gridRowStart: startGrid,
+                  gridRowEnd: `span ${durationSpan.toString()}`,
+                }
+              : {
+                  gridColumnStart: startGrid,
+                  gridColumnEnd: `span ${durationSpan.toString()}`,
+                }
+          }
           className={cn(
             position,
             typeBgColors[courseType],
-            `border-l-3 relative flex flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
+            `border-l-3 relative flex flex-col justify-between overflow-hidden truncate rounded-md p-2 shadow-md`,
             isChecked
               ? "cursor-pointer"
               : isDisabled
                 ? "opacity-20 dark:opacity-10"
                 : "cursor-pointer opacity-60 dark:opacity-40",
             isReadonly ? "cursor-default" : null,
+            isHorizontal ? "w-48" : null,
             className,
           )}
         >
@@ -113,8 +123,10 @@ export function ClassBlock({
             </div>
             <p>{`Grupa ${groupNumber}`}</p>
           </div>
-          <p className="truncate font-bold">{courseName}</p>
-          <p className="truncate font-semibold">{lecturer}</p>
+          <div>
+            <p className="truncate font-bold">{courseName}</p>
+            <p className="truncate font-semibold">{lecturer}</p>
+          </div>
           <p className="mt-2 flex w-full justify-between truncate">
             <Icons.UsersRound className="size-3" />
             <span

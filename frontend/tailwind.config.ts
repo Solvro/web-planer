@@ -343,6 +343,9 @@ const config = {
         "16": "repeat(16, minmax(0, 1fr))",
         dayPlan: "repeat(174, 1fr)",
       },
+      gridTemplateRows: {
+        dayPlan: "repeat(174, 6px)",
+      },
     },
   },
   plugins: [tailwindAnimate, tailwindScrollbar],
