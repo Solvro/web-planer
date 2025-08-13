@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { getPlan } from "@/actions/plans";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
+import { PlanOrientationButton } from "@/components/plan-orientation-button";
 import {
   Dialog,
   DialogContent,
@@ -286,6 +287,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
               exit={{ opacity: 0, y: -30 }}
               className="absolute bottom-6 right-8 z-20 flex flex-col items-center gap-2 rounded-xl border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px] md:flex-row md:rounded-full"
             >
+              <PlanOrientationButton rounded={true} />
               <DownloadPlanButton
                 plan={plan}
                 captureRef={captureRef}

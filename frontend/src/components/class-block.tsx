@@ -97,13 +97,14 @@ export function ClassBlock({
           className={cn(
             position,
             typeBgColors[courseType],
-            `border-l-3 relative flex w-48 flex-col overflow-hidden truncate rounded-md p-2 shadow-md`,
+            `border-l-3 relative flex flex-col justify-between overflow-hidden truncate rounded-md p-2 shadow-md`,
             isChecked
               ? "cursor-pointer"
               : isDisabled
                 ? "opacity-20 dark:opacity-10"
                 : "cursor-pointer opacity-60 dark:opacity-40",
             isReadonly ? "cursor-default" : null,
+            isHorizontal ? "w-48" : null,
             className,
           )}
         >
@@ -119,8 +120,10 @@ export function ClassBlock({
             </div>
             <p>{`Grupa ${groupNumber}`}</p>
           </div>
-          <p className="truncate font-bold">{courseName}</p>
-          <p className="truncate font-semibold">{lecturer}</p>
+          <div>
+            <p className="truncate font-bold">{courseName}</p>
+            <p className="truncate font-semibold">{lecturer}</p>
+          </div>
           <p className="mt-2 flex w-full justify-between truncate">
             <Icons.UsersRound className="size-3" />
             <span

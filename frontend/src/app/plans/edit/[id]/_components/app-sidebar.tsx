@@ -130,7 +130,6 @@ export function AppSidebar({
                   </div>
                 </form>
               </div>
-              <PlanOrientationButton />
               <SyncedButton
                 plan={plan}
                 isSyncing={syncing}
@@ -142,6 +141,7 @@ export function AppSidebar({
                 )}
               />
               <PlanDisplayLink />
+              <PlanOrientationButton />
             </div>
 
             <p className="text-xs text-muted-foreground">
