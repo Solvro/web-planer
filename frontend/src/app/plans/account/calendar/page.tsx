@@ -3,11 +3,6 @@ import React from "react";
 
 import { Separator } from "@/components/ui/separator";
 
-import TutorialImage1 from "/public/assets/tutorial/tutorial-1.png";
-import TutorialImage2 from "/public/assets/tutorial/tutorial-2.jpg";
-import TutorialImage3 from "/public/assets/tutorial/tutorial-3.jpg";
-import TutorialImage4 from "/public/assets/tutorial/tutorial-4.jpg";
-
 export default function FAQCalendarPage() {
   return (
     <div className="w-full space-y-6">
@@ -25,7 +20,7 @@ export default function FAQCalendarPage() {
           Kliknij przycisk &quot;Dodaj do kalendarza (.ics)&quot;
         </p>
         <Image
-          src={TutorialImage1}
+          src={"/assets/tutorial/tutorial-1.jpg"}
           alt="Strona z planami, przycisk dodaj do kalendarza"
           unoptimized
           className="w-full"
@@ -41,13 +36,13 @@ export default function FAQCalendarPage() {
           &gt; importuj
         </p>
         <Image
-          src={TutorialImage2}
+          src={"/assets/tutorial/tutorial-2.jpg"}
           alt="Strona główna kalendarza google z zaznaczonym na czerwono przyciskiem dodaj"
           unoptimized
           className="w-full"
         />
         <Image
-          src={TutorialImage3}
+          src={"/assets/tutorial/tutorial-3.jpg"}
           alt="Strona kalendarza google z zaznaczonym na czerwono przyciskiem importuj"
           unoptimized
           className="w-full"
@@ -60,7 +55,7 @@ export default function FAQCalendarPage() {
           importuj
         </p>
         <Image
-          src={TutorialImage4}
+          src={"/assets/tutorial/tutorial-4.jpg"}
           alt="Strona importu pliku do kalendarza google"
           unoptimized
           className="w-full"
