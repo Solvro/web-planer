@@ -11,7 +11,6 @@ import { plansIds } from "@/atoms/plans-ids";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import type { SharedPlan } from "@/types";
 import { Day } from "@/types";
 
@@ -19,7 +18,6 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const uuid = useMemo(() => uuidv4(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
-  const { isHorizontal } = usePlanOrientation();
 
   const router = useRouter();
   const captureRef = useRef<HTMLDivElement>(null);
@@ -72,7 +70,6 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
           <ClassSchedule
             key={day}
             day={label}
-            isHorizontal={isHorizontal}
             isReadonly={true}
             selectedGroups={[]}
             groups={plan.allGroups.filter((g) => g.day === day && g.isChecked)}
@@ -91,7 +88,6 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
                 key={day}
                 day={label}
                 isReadonly={true}
-                isHorizontal={isHorizontal}
                 selectedGroups={[]}
                 groups={plan.allGroups.filter(
                   (g) => g.day === day && g.isChecked,

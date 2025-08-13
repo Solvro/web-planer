@@ -2,6 +2,7 @@ import React from "react";
 
 import type { ExtendedGroup } from "@/atoms/plan-family";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
 import { ClassBlock } from "./class-block";
@@ -48,17 +49,16 @@ function ClassSchedule({
   day,
   groups,
   selectedGroups,
-  isHorizontal,
   onSelectGroup,
   isReadonly = false,
 }: {
   day: string;
   groups: ExtendedGroup[];
   selectedGroups: ExtendedGroup[];
-  isHorizontal: boolean;
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
 }) {
+  const { isHorizontal } = usePlanOrientation();
   const isMobile = useIsMobile();
 
   return (
@@ -85,10 +85,10 @@ function ClassSchedule({
           )}
         >
           {upperHours.map((hour) => (
-            <Hour hour={hour} isHorizontal={isHorizontal} key={hour} />
+            <Hour hour={hour} key={hour} />
           ))}
           {bottomHours.map((hour) => (
-            <Hour hour={hour} isHorizontal={isHorizontal} key={hour} />
+            <Hour hour={hour} key={hour} />
           ))}
         </div>
         <div
@@ -115,7 +115,6 @@ function ClassSchedule({
               <ClassBlock
                 isReadonly={isReadonly}
                 isDisabled={block.isChecked ? false : isThisCourseChecked}
-                isHorizontal={isHorizontal}
                 key={block.groupId + block.courseId + block.registrationId}
                 {...block}
                 onClick={() => {

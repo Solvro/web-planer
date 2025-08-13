@@ -1,8 +1,10 @@
 import React from "react";
 
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
-function Hour({ hour, isHorizontal }: { hour: string; isHorizontal: boolean }) {
+function Hour({ hour }: { hour: string }) {
+  const { isHorizontal } = usePlanOrientation();
   const [startHour, startMinute] = hour.split(":").map(Number);
 
   const startGrid = startHour * 12 - 7 * 12 - 5 + startMinute / 5;

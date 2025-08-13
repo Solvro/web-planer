@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
 import { Icons } from "./icons";
@@ -49,7 +50,6 @@ export function ClassBlock({
   isDisabled,
   spotsOccupied,
   spotsTotal,
-  isHorizontal,
   onClick,
   isReadonly = false,
   className,
@@ -68,12 +68,12 @@ export function ClassBlock({
   spotsTotal: number;
   averageRating: number;
   opinionsCount: number;
-  isHorizontal: boolean;
   onClick?: () => void;
   isReadonly?: boolean;
   className?: string;
   disableTooltip?: boolean;
 }) {
+  const { isHorizontal } = usePlanOrientation();
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
   return (

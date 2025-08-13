@@ -3,7 +3,6 @@
 import Image from "next/image";
 
 import { AnimatedList } from "@/components/magicui/animated-list";
-import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
 import { ClassBlock } from "./class-block";
@@ -164,13 +163,11 @@ export function AnimatedNotificationsDemo({
 }
 
 export function AnimatedGroupsDemo({ className }: { className?: string }) {
-  const { isHorizontal } = usePlanOrientation();
   return (
     <Marquee pauseOnHover className={className}>
       {courses.map((f, index) => (
         <ClassBlock
           key={`${f.courseName}-${index.toString()}`}
-          isHorizontal={isHorizontal}
           {...f}
           isChecked
           isDisabled
