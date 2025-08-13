@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import { StarsRating } from "@/components/class-block-stars";
 import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +55,8 @@ export function ClassBlock({
   isReadonly = false,
   className,
   disableTooltip,
+  averageRating,
+  opinionsCount,
 }: {
   startTime: string;
   endTime: string;
@@ -135,6 +138,15 @@ export function ClassBlock({
               {spotsOccupied}/{spotsTotal}
             </span>
           </p>
+          <div className={"flex w-full justify-between truncate"}>
+            <StarsRating
+              rating={averageRating > 0 ? averageRating : 1}
+              hideStars={durationSpan < 10}
+            />
+            <p className="font-bold">
+              {averageRating} ({opinionsCount})
+            </p>
+          </div>
         </button>
       </TooltipTrigger>
       {disableTooltip === false && (
