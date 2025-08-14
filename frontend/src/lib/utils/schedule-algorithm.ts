@@ -1,9 +1,12 @@
-interface TimeSlot {
+import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
+import { Day } from "@/types";
+
+export interface TimeSlot {
   start: string;
   end: string;
 }
 
-interface WeekPreferences {
+export interface WeekPreferences {
   monday: TimeSlot[];
   tuesday: TimeSlot[];
   wednesday: TimeSlot[];
@@ -13,205 +16,18 @@ interface WeekPreferences {
   sunday?: TimeSlot[];
 }
 
-interface CourseGroup {
-  groupId: string;
-  day: keyof WeekPreferences;
-  hours: TimeSlot;
-  lecturer?: string;
-  room?: string;
-}
-
-interface Course {
-  courseId: string;
-  courseName: string;
-  groups: CourseGroup[];
-}
-
-const dummyUserPreferences: WeekPreferences = {
-  monday: [
-    { start: "9:00", end: "11:00" },
-    { start: "14:00", end: "19:00" },
-  ],
-  tuesday: [{ start: "11:00", end: "20:00" }],
-  wednesday: [
-    { start: "8:00", end: "12:00" },
-    { start: "15:00", end: "18:00" },
-  ],
-  thursday: [{ start: "10:00", end: "16:00" }],
-  friday: [{ start: "9:00", end: "13:00" }],
+const dayToWeekKey: Record<Day, keyof WeekPreferences> = {
+  [Day.MONDAY]: "monday",
+  [Day.TUESDAY]: "tuesday",
+  [Day.WEDNESDAY]: "wednesday",
+  [Day.THURSDAY]: "thursday",
+  [Day.FRIDAY]: "friday",
+  [Day.SATURDAY]: "saturday",
+  [Day.SUNDAY]: "sunday",
 };
 
-const dummyCourses: Course[] = [
-  {
-    courseId: "MATH101",
-    courseName: "Advanced Mathematics",
-    groups: [
-      {
-        groupId: "MATH101_G1",
-        day: "monday",
-        hours: { start: "9:00", end: "11:00" },
-        lecturer: "Dr. Smith",
-        room: "A101",
-      },
-      {
-        groupId: "MATH101_G2",
-        day: "tuesday",
-        hours: { start: "14:00", end: "16:00" },
-        lecturer: "Dr. Smith",
-        room: "A102",
-      },
-      {
-        groupId: "MATH101_G3",
-        day: "wednesday",
-        hours: { start: "16:00", end: "18:00" },
-        lecturer: "Prof. Johnson",
-        room: "B201",
-      },
-    ],
-  },
-  {
-    courseId: "CS202",
-    courseName: "Data Structures",
-    groups: [
-      {
-        groupId: "CS202_G1",
-        day: "monday",
-        hours: { start: "15:00", end: "17:00" },
-        lecturer: "Dr. Brown",
-        room: "C301",
-      },
-      {
-        groupId: "CS202_G2",
-        day: "wednesday",
-        hours: { start: "9:00", end: "11:00" },
-        lecturer: "Dr. Brown",
-        room: "C302",
-      },
-      {
-        groupId: "CS202_G3",
-        day: "friday",
-        hours: { start: "10:00", end: "12:00" },
-        lecturer: "Prof. Davis",
-        room: "C303",
-      },
-    ],
-  },
-  {
-    courseId: "PHYS303",
-    courseName: "Quantum Physics",
-    groups: [
-      {
-        groupId: "PHYS303_G1",
-        day: "tuesday",
-        hours: { start: "12:00", end: "14:00" },
-        lecturer: "Prof. Wilson",
-        room: "D401",
-      },
-      {
-        groupId: "PHYS303_G2",
-        day: "thursday",
-        hours: { start: "11:00", end: "13:00" },
-        lecturer: "Prof. Wilson",
-        room: "D402",
-      },
-      {
-        groupId: "PHYS303_G3",
-        day: "friday",
-        hours: { start: "14:00", end: "16:00" },
-        lecturer: "Dr. Taylor",
-        room: "D403",
-      },
-    ],
-  },
-];
-
-// Second dummy dataset - courses that DON'T fit user preferences well
-const dummyCoursesWithPoorFit: Course[] = [
-  {
-    courseId: "CHEM101",
-    courseName: "Organic Chemistry",
-    groups: [
-      {
-        groupId: "CHEM101_G1",
-        day: "monday",
-        hours: { start: "7:00", end: "9:00" }, // Before user preference (9:00-11:00)
-        lecturer: "Dr. Adams",
-        room: "E101",
-      },
-      {
-        groupId: "CHEM101_G2",
-        day: "tuesday",
-        hours: { start: "8:00", end: "10:00" }, // Before user preference (11:00-20:00)
-        lecturer: "Dr. Adams",
-        room: "E102",
-      },
-      {
-        groupId: "CHEM101_G3",
-        day: "saturday",
-        hours: { start: "10:00", end: "12:00" }, // User has no Saturday preferences
-        lecturer: "Prof. White",
-        room: "E103",
-      },
-    ],
-  },
-  {
-    courseId: "HIST202",
-    courseName: "World History",
-    groups: [
-      {
-        groupId: "HIST202_G1",
-        day: "wednesday",
-        hours: { start: "12:00", end: "14:00" }, // Gap between user preferences (8:00-12:00, 15:00-18:00)
-        lecturer: "Prof. Green",
-        room: "F201",
-      },
-      {
-        groupId: "HIST202_G2",
-        day: "thursday",
-        hours: { start: "17:00", end: "19:00" }, // Partially outside user preference (10:00-16:00)
-        lecturer: "Prof. Green",
-        room: "F202",
-      },
-      {
-        groupId: "HIST202_G3",
-        day: "friday",
-        hours: { start: "15:00", end: "17:00" }, // Outside user preference (9:00-13:00)
-        lecturer: "Dr. Black",
-        room: "F203",
-      },
-    ],
-  },
-  {
-    courseId: "ART303",
-    courseName: "Digital Art",
-    groups: [
-      {
-        groupId: "ART303_G1",
-        day: "monday",
-        hours: { start: "12:00", end: "14:00" }, // Between user preferences (9:00-11:00, 14:00-19:00) - fits!
-        lecturer: "Prof. Blue",
-        room: "G301",
-      },
-      {
-        groupId: "ART303_G2",
-        day: "tuesday",
-        hours: { start: "21:00", end: "23:00" }, // Way outside user preference (11:00-20:00)
-        lecturer: "Prof. Blue",
-        room: "G302",
-      },
-      {
-        groupId: "ART303_G3",
-        day: "sunday",
-        hours: { start: "14:00", end: "16:00" }, // User has no Sunday preferences
-        lecturer: "Dr. Purple",
-        room: "G303",
-      },
-    ],
-  },
-];
-
 interface ScheduleResult {
-  groups: CourseGroup[];
+  groups: ExtendedGroup[];
   score: number;
 }
 
@@ -221,16 +37,17 @@ const timeToMinutes = (time: string): number => {
 };
 
 const fitsUserPreferences = (
-  group: CourseGroup,
+  group: ExtendedGroup,
   preferences: WeekPreferences,
 ): boolean => {
-  const dayPrefs = preferences[group.day];
+  const dayKey = dayToWeekKey[group.day];
+  const dayPrefs = preferences[dayKey];
   if (dayPrefs === undefined) {
     return false;
   }
 
-  const groupStart = timeToMinutes(group.hours.start);
-  const groupEnd = timeToMinutes(group.hours.end);
+  const groupStart = timeToMinutes(group.startTime);
+  const groupEnd = timeToMinutes(group.endTime);
 
   return dayPrefs.some((pref) => {
     const prefStart = timeToMinutes(pref.start);
@@ -239,47 +56,45 @@ const fitsUserPreferences = (
   });
 };
 
-const hasTimeConflict = (group1: CourseGroup, group2: CourseGroup): boolean => {
+const hasTimeConflict = (
+  group1: ExtendedGroup,
+  group2: ExtendedGroup,
+): boolean => {
   if (group1.day !== group2.day) {
     return false;
   }
 
-  const start1 = timeToMinutes(group1.hours.start);
-  const end1 = timeToMinutes(group1.hours.end);
-  const start2 = timeToMinutes(group2.hours.start);
-  const end2 = timeToMinutes(group2.hours.end);
+  const start1 = timeToMinutes(group1.startTime);
+  const end1 = timeToMinutes(group1.endTime);
+  const start2 = timeToMinutes(group2.startTime);
+  const end2 = timeToMinutes(group2.endTime);
 
   return !(end1 <= start2 || end2 <= start1);
 };
 
-const conflictsWithSelected = (
-  newGroup: CourseGroup,
-  selectedGroups: CourseGroup[],
-): boolean => {
-  return selectedGroups.some((group) => hasTimeConflict(newGroup, group));
-};
-
 const calculateScore = (
-  groups: CourseGroup[],
+  groups: ExtendedGroup[],
   preferences: WeekPreferences,
 ): number => {
-  let score = 0;
+  if (groups.length === 0) {
+    return 0;
+  }
+
+  let matchingGroups = 0;
 
   for (const group of groups) {
     if (fitsUserPreferences(group, preferences)) {
-      score += 10;
-    } else {
-      score -= 5;
+      matchingGroups++;
     }
   }
 
-  return score;
+  return Math.round((matchingGroups / groups.length) * 100);
 };
 
 const findBestSchedule = (
-  courses: Course[],
+  courses: ExtendedCourse[],
   preferences: WeekPreferences,
-  currentSchedule: CourseGroup[] = [],
+  currentSchedule: ExtendedGroup[] = [],
   courseIndex = 0,
 ): ScheduleResult | null => {
   if (courseIndex >= courses.length) {
@@ -292,50 +107,135 @@ const findBestSchedule = (
   let bestSchedule: ScheduleResult | null = null;
   const currentCourse = courses[courseIndex];
 
-  for (const group of currentCourse.groups) {
-    if (!conflictsWithSelected(group, currentSchedule)) {
-      currentSchedule.push(group);
+  const availableGroups = currentCourse.groups.filter(
+    (group) => group.spotsTotal === 0 || group.spotsOccupied < group.spotsTotal,
+  );
 
-      const result = findBestSchedule(
-        courses,
+  if (availableGroups.length === 0) {
+    return findBestSchedule(
+      courses,
+      preferences,
+      currentSchedule,
+      courseIndex + 1,
+    );
+  }
+
+  for (const group of availableGroups) {
+    const conflictingGroupIndex = currentSchedule.findIndex((existingGroup) =>
+      hasTimeConflict(group, existingGroup),
+    );
+
+    const newSchedule = [...currentSchedule];
+
+    if (conflictingGroupIndex === -1) {
+      newSchedule.push(group);
+    } else {
+      const existingGroup = currentSchedule[conflictingGroupIndex];
+
+      const newGroupFitsPrefs = fitsUserPreferences(group, preferences);
+      const existingGroupFitsPrefs = fitsUserPreferences(
+        existingGroup,
         preferences,
-        currentSchedule,
-        courseIndex + 1,
       );
 
-      if (
-        result !== null &&
-        (bestSchedule === null || result.score > bestSchedule.score)
-      ) {
-        bestSchedule = result;
+      let shouldReplace = false;
+
+      if (newGroupFitsPrefs && !existingGroupFitsPrefs) {
+        shouldReplace = true;
+      } else if (newGroupFitsPrefs === existingGroupFitsPrefs) {
+        const newRating =
+          typeof group.averageRating === "string"
+            ? Number.parseFloat(group.averageRating)
+            : group.averageRating;
+        const existingRating =
+          typeof existingGroup.averageRating === "string"
+            ? Number.parseFloat(existingGroup.averageRating)
+            : existingGroup.averageRating;
+        shouldReplace = newRating > existingRating;
       }
 
-      currentSchedule.pop();
+      if (shouldReplace) {
+        newSchedule[conflictingGroupIndex] = group;
+      } else {
+        continue;
+      }
     }
+
+    const result = findBestSchedule(
+      courses,
+      preferences,
+      newSchedule,
+      courseIndex + 1,
+    );
+
+    if (
+      result !== null &&
+      (bestSchedule === null || result.score > bestSchedule.score)
+    ) {
+      bestSchedule = result;
+    }
+  }
+
+  const resultWithoutCourse = findBestSchedule(
+    courses,
+    preferences,
+    currentSchedule,
+    courseIndex + 1,
+  );
+
+  if (
+    resultWithoutCourse !== null &&
+    (bestSchedule === null || resultWithoutCourse.score > bestSchedule.score)
+  ) {
+    bestSchedule = resultWithoutCourse;
   }
 
   return bestSchedule;
 };
 
 export const createScheduleBasedOnCoursesAndPreferences = (
-  userPreferences: WeekPreferences = dummyUserPreferences,
-  availableCourses: Course[] = dummyCourses,
+  userPreferences: WeekPreferences,
+  availableCourses: ExtendedCourse[],
 ) => {
-  const bestSchedule = findBestSchedule(availableCourses, userPreferences);
+  const coursesWithGroups = availableCourses.filter(
+    (course) => course.groups.length > 0,
+  );
 
-  if (bestSchedule === null) {
+  if (coursesWithGroups.length === 0) {
     return {
       success: false,
-      message: "No valid schedule found",
+      message: "Brak dostępnych kursów z grupami",
       userPreferences,
       availableCourses,
     };
   }
 
+  const bestSchedule = findBestSchedule(coursesWithGroups, userPreferences);
+
+  if (bestSchedule === null || bestSchedule.groups.length === 0) {
+    return {
+      success: false,
+      message: "Nie udało się wygenerować planu - sprawdź dostępność grup",
+      userPreferences,
+      availableCourses,
+    };
+  }
+
+  const score = Math.round(
+    (bestSchedule.groups.length / availableCourses.length) * 100,
+  );
+  bestSchedule.score = score;
+
+  const isSuccess = bestSchedule.score > 0;
+  const message = isSuccess
+    ? `Plan wygenerowany z ${String(bestSchedule.score)}% dopasowaniem do preferencji`
+    : "Plan wygenerowany, ale żadna grupa nie pasuje do Twoich preferencji czasowych";
+
   return {
-    success: true,
+    success: isSuccess,
     schedule: bestSchedule.groups,
     score: bestSchedule.score,
+    message,
     userPreferences,
     availableCourses,
   };

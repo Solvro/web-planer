@@ -7,6 +7,7 @@ import { format } from "date-fns/format";
 import React from "react";
 
 import { getFaculties } from "@/actions/get-faculties";
+import { AlgorithmDialog } from "@/components/algo-dialog";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
 import { PlanDisplayLink } from "@/components/plan-display-link";
 import { PlanOrientationButton } from "@/components/plan-orientation-button";
@@ -141,13 +142,17 @@ export function AppSidebar({
                 )}
               />
               <PlanDisplayLink />
-              <PlanOrientationButton />
             </div>
 
             <p className="text-xs text-muted-foreground">
               Ostatnia aktualizacja online:{" "}
               {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
             </p>
+
+            <div className="flex items-center gap-2">
+              <AlgorithmDialog availableCourses={plan.courses} />
+              <PlanOrientationButton />
+            </div>
           </div>
 
           <div className="w-full">
