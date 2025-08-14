@@ -8,8 +8,10 @@ import {
   Trash2,
 } from "lucide-react";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
+import { usePlan } from "@/lib/use-plan";
 import type { TimeSlot, WeekPreferences } from "@/lib/utils/schedule-algorithm";
 import { createScheduleBasedOnCoursesAndPreferences } from "@/lib/utils/schedule-algorithm";
 
@@ -56,9 +58,12 @@ const wait = async (ms: number) =>
 
 export function AlgorithmDialog({
   availableCourses,
+  planId,
 }: {
   availableCourses: ExtendedCourse[];
+  planId: string;
 }) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [baseOnRating, setBaseOnRating] = useState(false);
   const [preferences, setPreferences] = useState<
     Record<keyof WeekPreferences, DayState>
@@ -74,11 +79,11 @@ export function AlgorithmDialog({
     saturday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
     sunday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
   });
-
   const [scheduleResult, setScheduleResult] = useState<ScheduleResult | null>(
     null,
   );
   const [isGenerating, setIsGenerating] = useState(false);
+  const plan = usePlan({ planId });
 
   const toggleDay = (day: keyof WeekPreferences) => {
     setPreferences((previous) => ({
@@ -153,8 +158,45 @@ export function AlgorithmDialog({
     setIsGenerating(false);
   };
 
+  const handleAddToUserPlan = () => {
+    if (scheduleResult?.schedule !== undefined) {
+      // najpierw odznacz wszystkie grupy
+      const updatedPlan = {
+        ...plan,
+        courses: plan.courses.map((course) => ({
+          ...course,
+          groups: course.groups.map((group) => ({
+            ...group,
+            isChecked: false,
+          })),
+        })),
+        synced: false,
+      };
+
+      // następnie zaznacz grupy z wygenerowanego planu
+      const finalPlan = {
+        ...updatedPlan,
+        courses: updatedPlan.courses.map((course) => ({
+          ...course,
+          groups: course.groups.map((group) => {
+            const isInSchedule =
+              scheduleResult.schedule?.some(
+                (scheduleGroup) => scheduleGroup.groupId === group.groupId,
+              ) ?? false;
+            return isInSchedule ? { ...group, isChecked: true } : group;
+          }),
+        })),
+      };
+
+      plan.setPlan(finalPlan);
+
+      setDialogOpen(false);
+      toast.success("Plan został ustawiony poprawnie.");
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger>
         <Button className="w-full" variant={"default"}>
           Automatyczny plan <Sparkles />
@@ -341,7 +383,7 @@ export function AlgorithmDialog({
             )}
 
             {scheduleResult === null ? null : (
-              <Button>
+              <Button onClick={handleAddToUserPlan}>
                 <FolderInput />
                 Wstaw do swojego planu
               </Button>

@@ -150,7 +150,10 @@ export function AppSidebar({
             </p>
 
             <div className="flex items-center gap-2">
-              <AlgorithmDialog availableCourses={plan.courses} />
+              <AlgorithmDialog
+                availableCourses={plan.courses}
+                planId={plan.id}
+              />
               <PlanOrientationButton />
             </div>
           </div>
