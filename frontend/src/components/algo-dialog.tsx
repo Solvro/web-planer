@@ -136,7 +136,6 @@ export function AlgorithmDialog({
     setIsGenerating(true);
     await wait(500);
 
-    // Konwertuj preferencje do formatu wymaganego przez algorytm
     const weekPreferences: WeekPreferences = {} as WeekPreferences;
 
     for (const { key } of DAYS) {

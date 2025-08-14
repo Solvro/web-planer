@@ -122,7 +122,6 @@ const findBestSchedule = (
     );
   }
 
-  // Sortuj grupy po ratingu jeśli basedOnRating jest włączone
   const sortedGroups = basedOnRating
     ? [...availableGroups].sort((a, b) => {
         const ratingA =
@@ -133,7 +132,7 @@ const findBestSchedule = (
           typeof b.averageRating === "string"
             ? Number.parseFloat(b.averageRating)
             : b.averageRating;
-        return ratingB - ratingA; // Sortuj malejąco (najlepsze oceny pierwsze)
+        return ratingB - ratingA;
       })
     : availableGroups;
 
@@ -158,7 +157,6 @@ const findBestSchedule = (
       let shouldReplace = false;
 
       if (basedOnRating) {
-        // Gdy basedOnRating jest włączone, najpierw porównaj rating, potem preferencje
         const newRating =
           typeof group.averageRating === "string"
             ? Number.parseFloat(group.averageRating)
@@ -173,7 +171,6 @@ const findBestSchedule = (
             ? newGroupFitsPrefs && !existingGroupFitsPrefs
             : newRating > existingRating;
       } else {
-        // Standardowa logika: najpierw preferencje czasowe, potem rating
         if (newGroupFitsPrefs && !existingGroupFitsPrefs) {
           shouldReplace = true;
         } else if (newGroupFitsPrefs === existingGroupFitsPrefs) {
