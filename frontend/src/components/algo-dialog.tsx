@@ -1,11 +1,19 @@
 "use client";
 
-import { Loader2, Sparkles, Trash2 } from "lucide-react";
+import {
+  FolderInput,
+  Loader2,
+  RefreshCcw,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import React, { useState } from "react";
 
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
+import type { TimeSlot, WeekPreferences } from "@/lib/utils/schedule-algorithm";
 import { createScheduleBasedOnCoursesAndPreferences } from "@/lib/utils/schedule-algorithm";
 
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -18,21 +26,6 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
-
-interface TimeSlot {
-  start: string;
-  end: string;
-}
-
-interface WeekPreferences {
-  monday: TimeSlot[];
-  tuesday: TimeSlot[];
-  wednesday: TimeSlot[];
-  thursday: TimeSlot[];
-  friday: TimeSlot[];
-  saturday?: TimeSlot[];
-  sunday?: TimeSlot[];
-}
 
 interface DayState {
   enabled: boolean;
@@ -66,19 +59,20 @@ export function AlgorithmDialog({
 }: {
   availableCourses: ExtendedCourse[];
 }) {
+  const [baseOnRating, setBaseOnRating] = useState(false);
   const [preferences, setPreferences] = useState<
     Record<keyof WeekPreferences, DayState>
   >({
-    monday: { enabled: false, timeSlots: [{ start: "09:00", end: "17:00" }] },
-    tuesday: { enabled: false, timeSlots: [{ start: "09:00", end: "17:00" }] },
+    monday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
+    tuesday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
     wednesday: {
       enabled: false,
-      timeSlots: [{ start: "09:00", end: "17:00" }],
+      timeSlots: [{ start: "07:00", end: "20:00" }],
     },
-    thursday: { enabled: false, timeSlots: [{ start: "09:00", end: "17:00" }] },
-    friday: { enabled: false, timeSlots: [{ start: "09:00", end: "17:00" }] },
-    saturday: { enabled: false, timeSlots: [{ start: "09:00", end: "17:00" }] },
-    sunday: { enabled: false, timeSlots: [{ start: "09:00", end: "17:00" }] },
+    thursday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
+    friday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
+    saturday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
+    sunday: { enabled: false, timeSlots: [{ start: "07:00", end: "20:00" }] },
   });
 
   const [scheduleResult, setScheduleResult] = useState<ScheduleResult | null>(
@@ -120,7 +114,7 @@ export function AlgorithmDialog({
         ...previous[day],
         timeSlots: [
           ...previous[day].timeSlots,
-          { start: "09:00", end: "17:00" },
+          { start: "07:00", end: "20:00" },
         ],
       },
     }));
@@ -154,6 +148,7 @@ export function AlgorithmDialog({
     const result = createScheduleBasedOnCoursesAndPreferences(
       weekPreferences,
       availableCourses,
+      baseOnRating,
     );
     setScheduleResult(result);
     setIsGenerating(false);
@@ -166,7 +161,7 @@ export function AlgorithmDialog({
           Automatyczny plan <Sparkles />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto focus:outline-none">
         <DialogHeader>
           <DialogTitle>Ułóż plan automatycznie</DialogTitle>
           <DialogDescription>
@@ -176,134 +171,181 @@ export function AlgorithmDialog({
         </DialogHeader>
 
         <div className="space-y-6">
-          {DAYS.map(({ key, label }) => (
-            <div key={key} className="space-y-3 rounded-lg bg-muted/30 p-4">
-              <div className="flex items-center space-x-3">
-                <Switch
-                  checked={preferences[key].enabled}
-                  onCheckedChange={() => {
-                    toggleDay(key);
-                  }}
-                  id={`switch-${key}`}
-                />
-                <Label
-                  htmlFor={`switch-${key}`}
-                  className={`text-sm font-medium ${preferences[key].enabled ? "" : "text-gray-400"}`}
+          {scheduleResult === null ? (
+            <>
+              {DAYS.map(({ key, label }) => (
+                <div
+                  key={key}
+                  className="flex justify-between space-y-3 rounded-lg bg-muted/30 p-4"
                 >
-                  {label}
-                </Label>
-              </div>
-
-              {preferences[key].enabled ? (
-                <div className="space-y-2">
-                  {preferences[key].timeSlots.map((slot, slotIndex) => (
-                    <div
-                      key={`${key}-${String(slotIndex)}`}
-                      className="flex items-center space-x-2"
+                  <div className="flex items-center space-x-3">
+                    <Switch
+                      checked={preferences[key].enabled}
+                      onCheckedChange={() => {
+                        toggleDay(key);
+                      }}
+                      id={`switch-${key}`}
+                    />
+                    <Label
+                      htmlFor={`switch-${key}`}
+                      className={`text-sm font-medium ${preferences[key].enabled ? "" : "text-gray-400"}`}
                     >
-                      <span className="w-8 text-xs">Od:</span>
-                      <Input
-                        type="time"
-                        value={slot.start}
-                        onChange={(event) => {
-                          updateTimeSlot(
-                            key,
-                            slotIndex,
-                            "start",
-                            event.target.value,
-                          );
-                        }}
-                        className="w-24"
-                      />
-                      <span className="w-8 text-xs">Do:</span>
-                      <Input
-                        type="time"
-                        value={slot.end}
-                        onChange={(event) => {
-                          updateTimeSlot(
-                            key,
-                            slotIndex,
-                            "end",
-                            event.target.value,
-                          );
-                        }}
-                        className="w-24"
-                      />
-                      {preferences[key].timeSlots.length > 1 && (
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => {
-                            removeTimeSlot(key, slotIndex);
-                          }}
-                          className="min-w-9 px-2"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      addTimeSlot(key);
-                    }}
-                    className="text-xs"
-                  >
-                    + Dodaj przedział
-                  </Button>
-                </div>
-              ) : null}
-            </div>
-          ))}
+                      {label}
+                    </Label>
+                  </div>
 
-          <div className="flex flex-col space-y-4 pt-4">
-            <Button
-              onClick={generateSchedule}
-              disabled={
-                isGenerating ||
-                !DAYS.some(({ key }) => preferences[key].enabled)
-              }
-              className="w-full"
-            >
-              {isGenerating ? "Generowanie..." : "Wygeneruj plan"}
-              {isGenerating ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                <Sparkles />
-              )}
-            </Button>
-
-            {scheduleResult !== null && (
-              <div className="rounded-lg bg-muted p-4">
-                <h3 className="mb-2 font-medium">Wyniki:</h3>
-                {scheduleResult.success ? (
-                  <div>
-                    <p className="mb-2 text-sm text-green-600">
-                      Plan został wygenerowany! Dopasowanie:{" "}
-                      {scheduleResult.score}%
-                    </p>
-                    <div className="space-y-1 text-xs">
-                      {scheduleResult.schedule?.map((group, index) => (
+                  {preferences[key].enabled ? (
+                    <div className="space-y-2">
+                      {preferences[key].timeSlots.map((slot, slotIndex) => (
                         <div
-                          key={`${group.groupId}-${String(index)}`}
-                          className="rounded p-2"
+                          key={`${key}-${String(slotIndex)}`}
+                          className="flex items-center space-x-2"
                         >
-                          <span className="font-medium">
-                            {group.courseName} ({group.courseType})
-                          </span>{" "}
-                          - {group.day} {group.startTime}-{group.endTime}
+                          <span className="w-8 text-xs">Od:</span>
+                          <Input
+                            type="time"
+                            value={slot.start}
+                            onChange={(event) => {
+                              updateTimeSlot(
+                                key,
+                                slotIndex,
+                                "start",
+                                event.target.value,
+                              );
+                            }}
+                            className="w-24"
+                          />
+                          <span className="w-8 text-xs">Do:</span>
+                          <Input
+                            type="time"
+                            value={slot.end}
+                            onChange={(event) => {
+                              updateTimeSlot(
+                                key,
+                                slotIndex,
+                                "end",
+                                event.target.value,
+                              );
+                            }}
+                            className="w-24"
+                          />
+                          {preferences[key].timeSlots.length > 1 && (
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => {
+                                removeTimeSlot(key, slotIndex);
+                              }}
+                              className="min-w-9 px-2"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       ))}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          addTimeSlot(key);
+                        }}
+                        className="w-full text-xs"
+                      >
+                        + Dodaj przedział
+                      </Button>
                     </div>
-                  </div>
-                ) : (
-                  <p className="text-sm text-red-600">
-                    {scheduleResult.message}
-                  </p>
-                )}
+                  ) : null}
+                </div>
+              ))}
+            </>
+          ) : null}
+
+          <div className="flex flex-col space-y-4 pt-4">
+            {scheduleResult === null ? (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Switch
+                    checked={baseOnRating}
+                    onCheckedChange={setBaseOnRating}
+                  />
+                  <p>Dopasuj na podstawie ocen</p>
+                </div>
+                <Button
+                  onClick={generateSchedule}
+                  disabled={
+                    isGenerating ||
+                    !DAYS.some(({ key }) => preferences[key].enabled)
+                  }
+                  className=""
+                >
+                  {isGenerating ? "Generowanie..." : "Wygeneruj plan"}
+                  {isGenerating ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    <Sparkles />
+                  )}
+                </Button>
               </div>
+            ) : (
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  setScheduleResult(null);
+                }}
+              >
+                <RefreshCcw /> Spróbuj ponownie
+              </Button>
+            )}
+
+            {scheduleResult !== null && (
+              <>
+                <p className="text-xs text-muted-foreground">
+                  Wybrane dni:{" "}
+                  {DAYS.filter(({ key }) => preferences[key].enabled)
+                    .map(({ label }) => label)
+                    .join(", ")}
+                </p>
+                <div className="rounded-lg bg-muted/50 p-4">
+                  <div className="mb-2 flex items-center gap-2">
+                    <h3 className="font-medium">Wyniki:</h3>
+                    <Badge
+                      variant={
+                        scheduleResult.success ? "default" : "destructive"
+                      }
+                    >
+                      Dopasowanie: {scheduleResult.score}%
+                    </Badge>
+                  </div>
+                  {scheduleResult.success ? (
+                    <div>
+                      <div className="space-y-1 text-xs">
+                        {scheduleResult.schedule?.map((group, index) => (
+                          <div
+                            key={`${group.groupId}-${String(index)}`}
+                            className="rounded p-2"
+                          >
+                            <span className="font-medium">
+                              {group.courseName} ({group.courseType})
+                            </span>{" "}
+                            - {group.day} {group.startTime}-{group.endTime}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-red-600">
+                      {scheduleResult.message}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
+
+            {scheduleResult === null ? null : (
+              <Button>
+                <FolderInput />
+                Wstaw do swojego planu
+              </Button>
             )}
           </div>
         </div>

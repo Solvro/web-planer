@@ -96,6 +96,7 @@ const findBestSchedule = (
   preferences: WeekPreferences,
   currentSchedule: ExtendedGroup[] = [],
   courseIndex = 0,
+  basedOnRating = false,
 ): ScheduleResult | null => {
   if (courseIndex >= courses.length) {
     return {
@@ -117,10 +118,26 @@ const findBestSchedule = (
       preferences,
       currentSchedule,
       courseIndex + 1,
+      basedOnRating,
     );
   }
 
-  for (const group of availableGroups) {
+  // Sortuj grupy po ratingu jeśli basedOnRating jest włączone
+  const sortedGroups = basedOnRating
+    ? [...availableGroups].sort((a, b) => {
+        const ratingA =
+          typeof a.averageRating === "string"
+            ? Number.parseFloat(a.averageRating)
+            : a.averageRating;
+        const ratingB =
+          typeof b.averageRating === "string"
+            ? Number.parseFloat(b.averageRating)
+            : b.averageRating;
+        return ratingB - ratingA; // Sortuj malejąco (najlepsze oceny pierwsze)
+      })
+    : availableGroups;
+
+  for (const group of sortedGroups) {
     const conflictingGroupIndex = currentSchedule.findIndex((existingGroup) =>
       hasTimeConflict(group, existingGroup),
     );
@@ -140,9 +157,8 @@ const findBestSchedule = (
 
       let shouldReplace = false;
 
-      if (newGroupFitsPrefs && !existingGroupFitsPrefs) {
-        shouldReplace = true;
-      } else if (newGroupFitsPrefs === existingGroupFitsPrefs) {
+      if (basedOnRating) {
+        // Gdy basedOnRating jest włączone, najpierw porównaj rating, potem preferencje
         const newRating =
           typeof group.averageRating === "string"
             ? Number.parseFloat(group.averageRating)
@@ -151,7 +167,26 @@ const findBestSchedule = (
           typeof existingGroup.averageRating === "string"
             ? Number.parseFloat(existingGroup.averageRating)
             : existingGroup.averageRating;
-        shouldReplace = newRating > existingRating;
+
+        shouldReplace =
+          newRating === existingRating
+            ? newGroupFitsPrefs && !existingGroupFitsPrefs
+            : newRating > existingRating;
+      } else {
+        // Standardowa logika: najpierw preferencje czasowe, potem rating
+        if (newGroupFitsPrefs && !existingGroupFitsPrefs) {
+          shouldReplace = true;
+        } else if (newGroupFitsPrefs === existingGroupFitsPrefs) {
+          const newRating =
+            typeof group.averageRating === "string"
+              ? Number.parseFloat(group.averageRating)
+              : group.averageRating;
+          const existingRating =
+            typeof existingGroup.averageRating === "string"
+              ? Number.parseFloat(existingGroup.averageRating)
+              : existingGroup.averageRating;
+          shouldReplace = newRating > existingRating;
+        }
       }
 
       if (shouldReplace) {
@@ -166,6 +201,7 @@ const findBestSchedule = (
       preferences,
       newSchedule,
       courseIndex + 1,
+      basedOnRating,
     );
 
     if (
@@ -181,6 +217,7 @@ const findBestSchedule = (
     preferences,
     currentSchedule,
     courseIndex + 1,
+    basedOnRating,
   );
 
   if (
@@ -196,6 +233,7 @@ const findBestSchedule = (
 export const createScheduleBasedOnCoursesAndPreferences = (
   userPreferences: WeekPreferences,
   availableCourses: ExtendedCourse[],
+  basedOnRating = false,
 ) => {
   const coursesWithGroups = availableCourses.filter(
     (course) => course.groups.length > 0,
@@ -210,7 +248,13 @@ export const createScheduleBasedOnCoursesAndPreferences = (
     };
   }
 
-  const bestSchedule = findBestSchedule(coursesWithGroups, userPreferences);
+  const bestSchedule = findBestSchedule(
+    coursesWithGroups,
+    userPreferences,
+    [],
+    0,
+    basedOnRating,
+  );
 
   if (bestSchedule === null || bestSchedule.groups.length === 0) {
     return {
