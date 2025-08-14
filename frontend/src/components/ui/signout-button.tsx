@@ -11,6 +11,7 @@ const signOut = async () => {
   await signOutFunction();
 
   // usuwanie planów z localStorage ktore sa zsynchronizowane z serwerem
+  // eslint-disable-next-line @typescript-eslint/no-misused-spread
   const items = { ...localStorage };
   const removedPlans: string[] = [];
   for (const key in items) {

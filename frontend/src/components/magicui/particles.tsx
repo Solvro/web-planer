@@ -51,6 +51,7 @@ function hexToRgb(hex: string): number[] {
   hex = hex.replace("#", "");
 
   if (hex.length === 3) {
+    // eslint-disable-next-line @typescript-eslint/no-misused-spread
     hex = [...hex].map((char) => char + char).join("");
   }
 
