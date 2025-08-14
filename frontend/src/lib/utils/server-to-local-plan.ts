@@ -27,7 +27,7 @@ export const serverToLocalPlan = (
         (g) =>
           ({
             groupId: g.group + c.id + g.type,
-            groupNumber: g.group.toString(),
+            groupNumber: g.group,
             groupOnlineId: g.id,
             courseId: c.id,
             courseName: c.name,

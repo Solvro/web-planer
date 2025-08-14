@@ -19,5 +19,5 @@ export function useIsMobile() {
     };
   }, []);
 
-  return !!(isMobile ?? false);
+  return isMobile ?? false;
 }
