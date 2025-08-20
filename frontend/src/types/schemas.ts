@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const feedbackFormSchema = z.object({
-  email: z.string().email(),
-  title: z.string(),
-  description: z.string(),
+  email: z.string().email("Niepoprawny email"),
+  title: z.string().min(1, "Za krótki tytuł!"),
+  description: z.string().min(1, "Za krótki opis!"),
 });
 
 const emailWithDomainRegex = /^[a-zA-Z0-9._%+-]+@(student\.)?pwr\.edu\.pl$/;

@@ -38,3 +38,10 @@ next-env.d.ts
 
 # seo/public
 **/sitemap*.xml
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

@@ -73,6 +73,7 @@ export function PlansPage({
         <button
           onClick={addNewPlan}
           className="group flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:border-primary hover:bg-primary/5 hover:shadow-xl dark:border-gray-800"
+          data-testid="add-new-plan-button"
         >
           <Icons.Plus className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
         </button>
