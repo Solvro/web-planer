@@ -97,8 +97,9 @@ export function PlansPage({
               synced={true}
               onlineId={plan.id.toString()}
               onlineOnly={true}
-              groupCount={plan.courses.flatMap((c) => c.groups).length}
-              registrationCount={plan.registrations.length}
+              groupsCount={plan.courses.flatMap((c) => c.groups).length}
+              coursesCount={plan.courses.length}
+              registrationsCount={plan.registrations.length}
               updatedAt={new Date(plan.updatedAt)}
             />
           );
