@@ -13,6 +13,8 @@ export default class GroupsController {
     if (courseId) {
       const groups = await Group.query()
         .where("courseId", courseId)
+        .andWhere("isActive", true)
+        .orWhereNull("isActive")
         .preload("lecturers");
 
       const transformedGroups = groups.map((group) => ({
@@ -60,6 +62,8 @@ export default class GroupsController {
       const group = await Group.query()
         .where("courseId", courseId)
         .andWhere("id", params.id)
+        .andWhere("isActive", true)
+        .orWhereNull("isActive")
         .preload("lecturers")
         .firstOrFail();
 
