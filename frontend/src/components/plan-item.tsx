@@ -49,8 +49,9 @@ export function PlanItem({
   synced,
   onlineId,
   onlineOnly = false,
-  groupCount = 0,
-  registrationCount = 0,
+  groupsCount = 0,
+  coursesCount = 0,
+  registrationsCount = 0,
   updatedAt = new Date(),
 }: {
   id: string;
@@ -58,8 +59,9 @@ export function PlanItem({
   synced: boolean;
   onlineId: string | null;
   onlineOnly?: boolean;
-  groupCount?: number;
-  registrationCount?: number;
+  groupsCount?: number;
+  coursesCount?: number;
+  registrationsCount?: number;
   updatedAt?: Date;
 }) {
   const uuid = React.useMemo(() => crypto.randomUUID(), []);
@@ -136,7 +138,8 @@ export function PlanItem({
     .flatMap((c) => c.groups)
     .filter((group) => group.isChecked).length;
 
-  const plansLength = plan.registrations.length;
+  const registrationsLength = plan.registrations.length;
+  const coursesLength = plan.courses.length;
   const queryClient = useQueryClient();
 
   const handleCacheOnlinePlan = () => {
@@ -175,18 +178,22 @@ export function PlanItem({
       </CardHeader>
       <CardContent className="flex-1 p-4 pt-0">
         <p className="text-sm">
-          {registrationCount || plansLength}{" "}
+          {registrationsCount || registrationsLength}{" "}
           {pluralize(
-            registrationCount || plansLength,
-            "kurs",
-            "kursy",
-            "kursów",
+            registrationsCount || registrationsLength,
+            "rejestracja",
+            "rejestracje",
+            "rejestracji",
           )}
         </p>
         <p className="text-sm">
-          {groupCount || groupCountLocal}{" "}
+          {coursesCount || coursesLength}{" "}
+          {pluralize(coursesCount || coursesLength, "kurs", "kursy", "kursów")}
+        </p>
+        <p className="text-sm">
+          {groupsCount || groupCountLocal}{" "}
           {pluralize(
-            groupCount || groupCountLocal,
+            groupsCount || groupCountLocal,
             "wybrana grupa",
             "wybrane grupy",
             "wybranych grup",
