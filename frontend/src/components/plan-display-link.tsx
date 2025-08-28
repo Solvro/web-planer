@@ -14,7 +14,12 @@ export function PlanDisplayLink() {
   return (
     <Tooltip>
       <TooltipTrigger asChild={true}>
-        <Button size="icon" className="min-w-10" onClick={openDialog}>
+        <Button
+          size="icon"
+          className="min-w-10"
+          onClick={openDialog}
+          data-testid="share-plan-button"
+        >
           <Icons.Share className="size-4" />
         </Button>
       </TooltipTrigger>
