@@ -73,7 +73,7 @@ function ClassSchedule({
       <div
         className={cn(
           isHorizontal
-            ? "flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden text-[9px]"
+            ? "flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden p-2 text-[9px]"
             : "flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]",
         )}
       >
@@ -94,7 +94,7 @@ function ClassSchedule({
         <div
           className={cn(
             isHorizontal
-              ? "grid grid-rows-dayPlan gap-x-3 py-3"
+              ? "grid grid-rows-dayPlan gap-x-3 px-5 py-3"
               : "grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5",
           )}
         >
