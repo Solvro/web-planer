@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { ClassBlock } from "./class-block";
 import { Hour } from "./hour";
 
-const upperHours = [
+const upperHoursBase = [
   "7:30",
   "8:00",
   "9:00",
@@ -27,7 +27,7 @@ const upperHours = [
   "21:40",
 ] as const;
 
-const bottomHours = [
+const bottomHoursBase = [
   "8:15",
   "9:15",
   "10:15",
@@ -44,6 +44,27 @@ const bottomHours = [
   "20:55",
   "21:50",
 ] as const;
+
+const findMatchingScheduleTime = (inputTime: string): string | null => {
+  const [hours, minutes] = inputTime.split(':').map(Number);
+  const totalMinutes = hours * 60 + minutes;
+  
+  const allHours = [...upperHoursBase, ...bottomHoursBase];
+  
+  for (const scheduleTime of allHours) {
+    const [scheduleHours, scheduleMinutes] = scheduleTime.split(':').map(Number);
+    const scheduleTotalMinutes = scheduleHours * 60 + scheduleMinutes;
+    
+    if (Math.abs(totalMinutes - scheduleTotalMinutes) <= 5) {
+      return scheduleTime;
+    }
+  }
+  
+  return null;
+};
+
+const upperHours = upperHoursBase;
+const bottomHours = bottomHoursBase;
 
 function ClassSchedule({
   day,
@@ -129,4 +150,4 @@ function ClassSchedule({
   );
 }
 
-export { ClassSchedule };
+export { ClassSchedule, findMatchingScheduleTime };

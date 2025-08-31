@@ -6,6 +6,7 @@ import { StarsRating } from "@/components/class-block-stars";
 import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { cn } from "@/lib/utils";
 
+import { findMatchingScheduleTime } from "./class-schedule";
 import { Icons } from "./icons";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -26,8 +27,12 @@ const typeBarColors = {
 };
 
 function calculatePosition(startTime: string, endTime: string) {
-  const [startHour, startMinute] = startTime.split(":").map(Number);
-  const [endHour, endMinute] = endTime.split(":").map(Number);
+  // normalizacja godzin zajec ±5 minut
+  const normalizedStartTime = findMatchingScheduleTime(startTime) ?? startTime;
+  const normalizedEndTime = findMatchingScheduleTime(endTime) ?? endTime;
+  
+  const [startHour, startMinute] = normalizedStartTime.split(":").map(Number);
+  const [endHour, endMinute] = normalizedEndTime.split(":").map(Number);
 
   const startGrid = startHour * 12 - 7 * 12 - 5 + startMinute / 5;
 
