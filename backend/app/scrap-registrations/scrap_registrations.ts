@@ -127,27 +127,32 @@ export async function scrapRegistrations(
 
 export async function scrapCourses(registrationUrl: string): Promise<string[]> {
   const coursesUrls: string[] = [];
-  const response = await fetchData(registrationUrl);
-  if (!response.ok) {
-    throw new Error(
-      `Got response code ${response.status} ${response.statusText} while fetching courses`,
-    );
-  }
-
-  const body = await response.text();
-  const $ = cheerio.load(body);
-
-  const courses = $("main#layout-main-content")
-    .find("table")
-    .find("tbody")
-    .children("tr");
-
-  courses.each((_, element) => {
-    const courseUrl = $(element).find("usos-link").find("a").attr("href");
-    if (courseUrl !== undefined) {
-      coursesUrls.push(courseUrl);
+  let nextUrl: string | undefined = registrationUrl;
+  while (nextUrl !== undefined) {
+    const response = await fetchData(nextUrl);
+    if (!response.ok) {
+      throw new Error(
+        `Got response code ${response.status} ${response.statusText} while fetching courses`,
+      );
     }
-  });
+
+    const body = await response.text();
+    const $ = cheerio.load(body);
+
+    const courses = $("main#layout-main-content")
+      .find("table")
+      .find("tbody")
+      .children("tr");
+
+    courses.each((_, element) => {
+      const courseUrl = $(element).find("usos-link").find("a").attr("href");
+      if (courseUrl !== undefined) {
+        coursesUrls.push(courseUrl);
+      }
+    });
+
+    nextUrl = $("table-nav-bar").attr("next-page-url");
+  }
   return coursesUrls;
 }
 
