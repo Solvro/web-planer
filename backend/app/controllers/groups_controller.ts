@@ -15,6 +15,7 @@ export default class GroupsController {
         .where("courseId", courseId)
         .andWhere("isActive", true)
         .orWhereNull("isActive")
+        .preload("meetings")
         .preload("lecturers");
 
       const transformedGroups = groups.map((group) => ({
@@ -64,6 +65,7 @@ export default class GroupsController {
         .andWhere("id", params.id)
         .andWhere("isActive", true)
         .orWhereNull("isActive")
+        .preload("meetings")
         .preload("lecturers")
         .firstOrFail();
 

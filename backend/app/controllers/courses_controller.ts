@@ -25,6 +25,7 @@ export default class CoursesController {
         groupQuery
           .where("isActive", true)
           .orWhereNull("isActive")
+          .preload("meetings")
           .preload("lecturers"),
       );
 
@@ -99,6 +100,7 @@ export default class CoursesController {
         groupQuery
           .where("isActive", true)
           .orWhereNull("isActive")
+          .preload("meetings")
           .preload("lecturers"),
       )
       .firstOrFail();
