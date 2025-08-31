@@ -30,7 +30,7 @@ function calculatePosition(startTime: string, endTime: string) {
   // normalizacja godzin zajec ±5 minut
   const normalizedStartTime = findMatchingScheduleTime(startTime) ?? startTime;
   const normalizedEndTime = findMatchingScheduleTime(endTime) ?? endTime;
-  
+
   const [startHour, startMinute] = normalizedStartTime.split(":").map(Number);
   const [endHour, endMinute] = normalizedEndTime.split(":").map(Number);
 

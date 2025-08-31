@@ -46,20 +46,22 @@ const bottomHoursBase = [
 ] as const;
 
 const findMatchingScheduleTime = (inputTime: string): string | null => {
-  const [hours, minutes] = inputTime.split(':').map(Number);
+  const [hours, minutes] = inputTime.split(":").map(Number);
   const totalMinutes = hours * 60 + minutes;
-  
+
   const allHours = [...upperHoursBase, ...bottomHoursBase];
-  
+
   for (const scheduleTime of allHours) {
-    const [scheduleHours, scheduleMinutes] = scheduleTime.split(':').map(Number);
+    const [scheduleHours, scheduleMinutes] = scheduleTime
+      .split(":")
+      .map(Number);
     const scheduleTotalMinutes = scheduleHours * 60 + scheduleMinutes;
-    
+
     if (Math.abs(totalMinutes - scheduleTotalMinutes) <= 5) {
       return scheduleTime;
     }
   }
-  
+
   return null;
 };
 
