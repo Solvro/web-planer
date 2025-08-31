@@ -1,3 +1,5 @@
+import { GraduationCap } from "lucide-react";
+
 import type { ExtendedCourse } from "@/atoms/plan-family";
 import {
   AccordionContent,
@@ -9,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
-import { GraduationCap } from "lucide-react";
 
 export function GroupsAccordionItem({
   registrationName,
