@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
 
-import { BaseModel, column, manyToMany } from "@adonisjs/lucid/orm";
-import type { ManyToMany } from "@adonisjs/lucid/types/relations";
+import { BaseModel, column, hasMany, manyToMany } from "@adonisjs/lucid/orm";
+import type { HasMany, ManyToMany } from "@adonisjs/lucid/types/relations";
 
+import GroupArchiveMeeting from "./group_archive_meeting.js";
 import Lecturer from "./lecturer.js";
 
 export default class GroupArchive extends BaseModel {
@@ -12,12 +13,6 @@ export default class GroupArchive extends BaseModel {
 
   @column()
   declare name: string;
-
-  @column()
-  declare startTime: string;
-
-  @column()
-  declare endTime: string;
 
   @column()
   declare group: string;
@@ -31,12 +26,6 @@ export default class GroupArchive extends BaseModel {
     pivotTimestamps: true,
   })
   declare lecturers: ManyToMany<typeof Lecturer>;
-
-  @column()
-  declare week: "-" | "TP" | "TN";
-
-  @column()
-  declare day: string;
 
   @column()
   declare type: string;
@@ -62,4 +51,6 @@ export default class GroupArchive extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime;
 
+  @hasMany(() => GroupArchiveMeeting)
+  declare meetings: HasMany<typeof GroupArchiveMeeting>;
 }
