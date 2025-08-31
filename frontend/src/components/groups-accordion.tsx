@@ -9,14 +9,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
-
-const typeClasses = {
-  W: "bg-red-300 dark:bg-red-600",
-  L: "bg-blue-300 dark:bg-blue-600",
-  C: "bg-green-300 dark:bg-green-600",
-  S: "bg-orange-300 dark:bg-orange-600",
-  P: "bg-fuchsia-200 dark:bg-fuchsia-500",
-} as const;
+import { GraduationCap } from "lucide-react";
 
 export function GroupsAccordionItem({
   registrationName,
@@ -69,10 +62,9 @@ export function GroupsAccordionItem({
               <div
                 className={cn(
                   "flex size-[45px] items-center justify-center rounded-full bg-secondary",
-                  typeClasses[course.type as keyof typeof typeClasses],
                 )}
               >
-                {course.type}
+                <GraduationCap className="size-5" />
               </div>
               <label className="ml-4 flex h-full items-center justify-between text-wrap leading-tight hover:cursor-pointer">
                 {course.name}
