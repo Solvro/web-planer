@@ -254,9 +254,7 @@ export function AlgorithmDialog({
             }
           }
           // If all conflict, just take the highest rated (first) to ensure coverage.
-          if (chosen == null) {
-            chosen = sorted[0];
-          }
+          chosen ??= sorted[0];
           selectedGroupIds.add(chosen.groupId);
           selectedGroupObjects.push(chosen);
           selectedTypesForCourse.add(type);
