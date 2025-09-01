@@ -65,6 +65,8 @@ export function AlgorithmDialog({
 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [baseOnRating, setBaseOnRating] = useState(false);
+  const [includeLectures, setIncludeLectures] = useState(true);
+  const [forceFillMissingCourses, setForceFillMissingCourses] = useState(false);
   const [preferences, setPreferences] = useState<
     Record<keyof WeekPreferences, DayState>
   >({
@@ -153,46 +155,135 @@ export function AlgorithmDialog({
       weekPreferences,
       availableCourses,
       baseOnRating,
+      includeLectures,
     );
     setScheduleResult(result);
     setIsGenerating(false);
   };
 
   const handleAddToUserPlan = () => {
-    if (scheduleResult?.schedule !== undefined) {
-      // najpierw odznacz wszystkie grupy
-      const updatedPlan = {
-        ...plan,
-        courses: plan.courses.map((course) => ({
-          ...course,
-          groups: course.groups.map((group) => ({
-            ...group,
-            isChecked: false,
-          })),
-        })),
-        synced: false,
-      };
-
-      // następnie zaznacz grupy z wygenerowanego planu
-      const finalPlan = {
-        ...updatedPlan,
-        courses: updatedPlan.courses.map((course) => ({
-          ...course,
-          groups: course.groups.map((group) => {
-            const isInSchedule =
-              scheduleResult.schedule?.some(
-                (scheduleGroup) => scheduleGroup.groupId === group.groupId,
-              ) ?? false;
-            return isInSchedule ? { ...group, isChecked: true } : group;
-          }),
-        })),
-      };
-
-      plan.setPlan(finalPlan);
-
-      setDialogOpen(false);
-      toast.success("Plan został ustawiony poprawnie.");
+    if (scheduleResult?.schedule == null) {
+      return;
     }
+
+    // Build set of selected groupIds from generated schedule
+    const selectedGroupIds = new Set(
+      scheduleResult.schedule.map((g) => g.groupId),
+    );
+
+    // Optionally force fill remaining courses (choose one group even if outside preferences)
+    if (forceFillMissingCourses) {
+      // Helper to convert HH:MM into minutes
+      const toMinutes = (t: string) => {
+        const [h, m] = t.split(":").map(Number);
+        return h * 60 + m;
+      };
+      // Map of all groups by id for quick lookup (use availableCourses as source)
+      const groupById = new Map<string, ExtendedGroup>();
+      for (const c of availableCourses) {
+        for (const g of c.groups) {
+          groupById.set(g.groupId, g);
+        }
+      }
+      // Currently selected group objects (from schedule and any newly added)
+      const selectedGroupObjects: ExtendedGroup[] = scheduleResult.schedule.map(
+        (g) => g,
+      );
+      const hasConflict = (candidate: ExtendedGroup) => {
+        return selectedGroupObjects.some((existing) => {
+          if (existing.day !== candidate.day) {
+            return false;
+          }
+          const s1 = toMinutes(existing.startTime);
+          const end1 = toMinutes(existing.endTime);
+          const s2 = toMinutes(candidate.startTime);
+          const end2 = toMinutes(candidate.endTime);
+          return !(end1 <= s2 || end2 <= s1);
+        });
+      };
+
+      for (const course of availableCourses) {
+        // Gather selected types for this course
+        const selectedTypesForCourse = new Set(
+          course.groups
+            .filter((g) => selectedGroupIds.has(g.groupId))
+            .map((g) => g.courseType),
+        );
+        // All types available for this course (respect includeLectures)
+        const allTypesForCourse = [
+          ...new Set(
+            course.groups
+              .filter((g) => (includeLectures ? true : g.courseType !== "W"))
+              .map((g) => g.courseType),
+          ),
+        ];
+        // For each missing type, try to pick a group.
+        for (const type of allTypesForCourse) {
+          if (selectedTypesForCourse.has(type)) {
+            continue;
+          }
+
+          const candidates = course.groups
+            .filter((g) => g.courseType === type)
+            .filter((g) => (includeLectures ? true : g.courseType !== "W"));
+          if (candidates.length === 0) {
+            continue;
+          }
+
+          // Sort candidates: rating desc, then earlier start time
+          const sorted = [...candidates].sort((a, b) => {
+            const ratingA =
+              typeof a.averageRating === "string"
+                ? Number.parseFloat(a.averageRating)
+                : a.averageRating;
+            const ratingB =
+              typeof b.averageRating === "string"
+                ? Number.parseFloat(b.averageRating)
+                : b.averageRating;
+            if (ratingB !== ratingA) {
+              return ratingB - ratingA;
+            }
+            return a.startTime.localeCompare(b.startTime);
+          });
+
+          let chosen: ExtendedGroup | null = null;
+          for (const cand of sorted) {
+            if (!hasConflict(cand)) {
+              chosen = cand;
+              break;
+            }
+          }
+          // If all conflict, just take the highest rated (first) to ensure coverage.
+          if (chosen == null) {
+            chosen = sorted[0];
+          }
+          selectedGroupIds.add(chosen.groupId);
+          selectedGroupObjects.push(chosen);
+          selectedTypesForCourse.add(type);
+        }
+      }
+    }
+
+    // Uncheck all, then check selected ones
+    const finalPlan = {
+      ...plan,
+      courses: plan.courses.map((course) => ({
+        ...course,
+        groups: course.groups.map((group) => ({
+          ...group,
+          isChecked: selectedGroupIds.has(group.groupId),
+        })),
+      })),
+      synced: false,
+    };
+
+    plan.setPlan(finalPlan);
+    setDialogOpen(false);
+    toast.success(
+      forceFillMissingCourses
+        ? "Plan ustawiony (uzupełniono brakujące kursy)."
+        : "Plan został ustawiony poprawnie.",
+    );
   };
 
   return (
@@ -304,12 +395,21 @@ export function AlgorithmDialog({
           <div className="flex flex-col space-y-4 pt-4">
             {scheduleResult === null ? (
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Switch
-                    checked={baseOnRating}
-                    onCheckedChange={setBaseOnRating}
-                  />
-                  <p>Dopasuj na podstawie ocen</p>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <Switch
+                      checked={baseOnRating}
+                      onCheckedChange={setBaseOnRating}
+                    />
+                    <p>Dopasuj na podstawie ocen</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Switch
+                      checked={includeLectures}
+                      onCheckedChange={setIncludeLectures}
+                    />
+                    <p>Uwzględnij wykłady</p>
+                  </div>
                 </div>
                 <Button
                   onClick={generateSchedule}
@@ -383,10 +483,21 @@ export function AlgorithmDialog({
             )}
 
             {scheduleResult === null ? null : (
-              <Button onClick={handleAddToUserPlan}>
-                <FolderInput />
-                Wstaw do swojego planu
-              </Button>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 text-xs">
+                  <Switch
+                    checked={forceFillMissingCourses}
+                    onCheckedChange={setForceFillMissingCourses}
+                  />
+                  <p>
+                    Uzupełnij brakujące kursy (dodaj grupy spoza preferencji)
+                  </p>
+                </div>
+                <Button onClick={handleAddToUserPlan}>
+                  <FolderInput />
+                  Wstaw do mojego planu
+                </Button>
+              </div>
             )}
           </div>
         </div>

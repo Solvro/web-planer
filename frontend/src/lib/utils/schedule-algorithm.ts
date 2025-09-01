@@ -231,17 +231,27 @@ export const createScheduleBasedOnCoursesAndPreferences = (
   userPreferences: WeekPreferences,
   availableCourses: ExtendedCourse[],
   basedOnRating = false,
+  includeLectures = true,
 ) => {
-  const coursesWithGroups = availableCourses.filter(
+  // Optionally filter out lecture groups (courseType === 'W') if user chose to exclude lectures.
+  const prefilteredCourses = includeLectures
+    ? availableCourses
+    : availableCourses.map((course) => ({
+        ...course,
+        groups: course.groups.filter((g) => g.courseType !== "W"),
+      }));
+
+  // Only consider courses that still have at least one group after filtering.
+  const coursesWithGroups = prefilteredCourses.filter(
     (course) => course.groups.length > 0,
   );
-
   if (coursesWithGroups.length === 0) {
     return {
       success: false,
       message: "Brak dostępnych kursów z grupami",
       userPreferences,
-      availableCourses,
+      availableCourses, // keep original list for reference
+      includeLectures,
     };
   }
 
@@ -259,11 +269,14 @@ export const createScheduleBasedOnCoursesAndPreferences = (
       message: "Nie udało się wygenerować planu - sprawdź dostępność grup",
       userPreferences,
       availableCourses,
+      includeLectures,
     };
   }
 
+  // Coverage score is based on courses actually considered (after optional lecture filtering)
+  const consideredCoursesCount = coursesWithGroups.length;
   const score = Math.round(
-    (bestSchedule.groups.length / availableCourses.length) * 100,
+    (bestSchedule.groups.length / (consideredCoursesCount || 1)) * 100,
   );
   bestSchedule.score = score;
 
@@ -279,5 +292,6 @@ export const createScheduleBasedOnCoursesAndPreferences = (
     message,
     userPreferences,
     availableCourses,
+    includeLectures,
   };
 };
