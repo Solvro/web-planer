@@ -50,6 +50,7 @@
     "@adonisjs/session": "^7.5.0",
     "@adonisjs/shield": "^8.1.2",
     "@maximemrf/adonisjs-jwt": "^0.2.2",
+    "@solvro/utils": "^1.1.2",
     "@vinejs/vine": "^2.1.0",
     "adonis-autoswagger": "^3.64.0",
     "adonisjs-scheduler": "^1.0.5",

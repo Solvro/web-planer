@@ -1,4 +1,6 @@
 import { TaskCallback } from "@poppinss/cliui/types";
+import { chunkArray, zip } from "@solvro/utils/arrays";
+import { Semaphore } from "@solvro/utils/semaphore";
 import { DateTime } from "luxon";
 import assert from "node:assert";
 
@@ -11,8 +13,6 @@ import Department from "#models/department";
 import Group from "#models/group";
 import Lecturer from "#models/lecturer";
 import Registration from "#models/registration";
-import { chunkArray, zip } from "#utils/arrays";
-import { Semaphore } from "#utils/semaphore";
 
 import {
   ScrapedDepartment,
