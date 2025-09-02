@@ -235,7 +235,7 @@ export function AppSidebar({
                         const extendedCourses = serverToLocalPlan(
                           data,
                           true,
-                          false,
+                          (_course, _group, _meeting) => false,
                         );
                         plan.addRegistration(
                           selectedRegistration,

@@ -68,7 +68,7 @@ export function ClassBlock({
   groupNumber: string;
   courseName: string;
   lecturer: string;
-  week: "" | "TN" | "TP";
+  week: "" | "TN" | "TP" | "!";
   courseType: "C" | "L" | "P" | "S" | "W";
   isChecked: boolean;
   isDisabled: boolean;
