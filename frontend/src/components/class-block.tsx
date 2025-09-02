@@ -157,9 +157,12 @@ export function ClassBlock({
       {disableTooltip === false && (
         <TooltipContent>
           <p>
-            {courseName} - {lecturer}
-            {" "}
-            {week === "" ? "" : week === "!" ? "| zajęcia niestandardowe (sprawdź usos)" : `| ${week}`}
+            {courseName} - {lecturer}{" "}
+            {week === ""
+              ? ""
+              : week === "!"
+                ? "| zajęcia niestandardowe (sprawdź usos)"
+                : `| ${week}`}
           </p>
         </TooltipContent>
       )}
