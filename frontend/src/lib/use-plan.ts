@@ -18,15 +18,15 @@ export const usePlan = ({ planId }: { planId: string }) => {
     },
     selectGroup: (groupId: string, isChecked?: boolean) => {
       void window.umami?.track("Change group");
-      
+
       const clickedGroup = plan.courses
         .flatMap((c) => c.groups)
         .find((group) => group.groupId === groupId);
-      
+
       if (clickedGroup == null) {
         return;
       }
-      
+
       setPlan({
         ...plan,
         courses: plan.courses.map((course) => ({

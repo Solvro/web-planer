@@ -32,16 +32,15 @@ export const updateSpotsOccupied = async ({
       const extendedCourses: ExtendedCourse[] = courses
         .map((c) => {
           const groups: (ExtendedGroup | null)[] = c.groups.flatMap((g) => {
-            const matchingGroups = plan.courses
-              .find((course) => course.id === c.id)
-              ?.groups.filter(
-                (group) => group.groupOnlineId === g.id,
-              ) ?? [];
-            
+            const matchingGroups =
+              plan.courses
+                .find((course) => course.id === c.id)
+                ?.groups.filter((group) => group.groupOnlineId === g.id) ?? [];
+
             if (matchingGroups.length === 0) {
               return [null];
             }
-            
+
             return matchingGroups.map((currentGroup) => {
               if (currentGroup.spotsOccupied === g.spotsOccupied) {
                 return currentGroup;

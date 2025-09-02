@@ -179,7 +179,8 @@ export function AlgorithmDialog({
           groups: course.groups.map((group) => {
             const isInSchedule =
               scheduleResult.schedule?.some(
-                (scheduleGroup) => scheduleGroup.groupOnlineId === group.groupOnlineId,
+                (scheduleGroup) =>
+                  scheduleGroup.groupOnlineId === group.groupOnlineId,
               ) ?? false;
             return isInSchedule ? { ...group, isChecked: true } : group;
           }),
