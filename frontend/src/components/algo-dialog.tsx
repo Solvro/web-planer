@@ -160,7 +160,6 @@ export function AlgorithmDialog({
 
   const handleAddToUserPlan = () => {
     if (scheduleResult?.schedule !== undefined) {
-      // najpierw odznacz wszystkie grupy
       const updatedPlan = {
         ...plan,
         courses: plan.courses.map((course) => ({
@@ -173,7 +172,6 @@ export function AlgorithmDialog({
         synced: false,
       };
 
-      // następnie zaznacz grupy z wygenerowanego planu
       const finalPlan = {
         ...updatedPlan,
         courses: updatedPlan.courses.map((course) => ({
@@ -181,7 +179,8 @@ export function AlgorithmDialog({
           groups: course.groups.map((group) => {
             const isInSchedule =
               scheduleResult.schedule?.some(
-                (scheduleGroup) => scheduleGroup.groupId === group.groupId,
+                (scheduleGroup) =>
+                  scheduleGroup.groupOnlineId === group.groupOnlineId,
               ) ?? false;
             return isInSchedule ? { ...group, isChecked: true } : group;
           }),

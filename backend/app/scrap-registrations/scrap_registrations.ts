@@ -1,5 +1,7 @@
 import * as cheerio from "cheerio";
 
+import logger from "@adonisjs/core/services/logger";
+
 export interface ScrapedGroupSummary {
   name: string;
   type: string;
@@ -231,13 +233,18 @@ export async function scrapGroupsUrls(groupUrl: string): Promise<string[]> {
   return groupsUrls;
 }
 
+export interface ScrapedGroupMeeting {
+  startTime: string;
+  endTime: string;
+  week: "TP" | "TN" | "-" | "!";
+  day: string;
+}
+
 export interface ScrapedGroupDetails {
   name: string;
   type: string;
   group: string;
-  week: string;
-  days: string[];
-  startTimeEndTimes: { startTime: string; endTime: string }[];
+  meetings: ScrapedGroupMeeting[];
   lecturer: string;
   spotsOccupied: number;
   spotsTotal: number;
@@ -262,31 +269,45 @@ export async function scrapGroupDetails(
   const type = giveGroupType(mainContent.find("h1").text().trim());
   const group = getGroupNumber(mainContent.find("h1").text());
 
-  const days = [] as string[];
-  const startTimeEndTimes = [] as { startTime: string; endTime: string }[];
+  const meetings: ScrapedGroupMeeting[] = [];
+  const meetingsDedup = new Set<string>();
 
-  const dayWeek = mainContent
+  mainContent
     .find("table")
     .find("tbody")
     .find("tr")
     .eq(2)
     .find("td")
-    .eq(1);
-  dayWeek.children("div").each((_, element) => {
-    const day = checkDay($(element).text().trim());
-    const { startTime, endTime } = getStartEndTime($(element).text().trim());
-    if (
-      day !== "unknown" &&
-      startTime !== "error" &&
-      endTime !== "error" &&
-      startTime !== "00:00" &&
-      endTime !== "00:00"
-    ) {
-      days.push(day);
-      startTimeEndTimes.push({ startTime, endTime });
-    }
-  });
-  const week = checkWeek(dayWeek.text());
+    .eq(1)
+    .children("div")
+    .each((_, element) => {
+      const query = $(element).children();
+      if (
+        query.length === 1 &&
+        query.get(0)?.name === "span" &&
+        query.attr("class") === "note"
+      ) {
+        // useless usos note, can skip
+        return;
+      }
+
+      try {
+        const meeting = parseMeeting($(element).text().trim());
+        const meetingJson = JSON.stringify(meeting);
+        if (meetingsDedup.has(meetingJson)) {
+          logger.info(
+            `Duplicate meeting spec detected for course '${name}' (${type}), group ${group}: ${meetingJson}`,
+          );
+          return;
+        }
+        meetingsDedup.add(meetingJson);
+        meetings.push(meeting);
+      } catch (e) {
+        logger.warn(
+          `Failed to parse meeting data for course '${name}' (${type}), group ${group}: ${e}`,
+        );
+      }
+    });
   const lecturer = mainContent
     .find("table")
     .find("tbody")
@@ -326,33 +347,30 @@ export async function scrapGroupDetails(
     name,
     type,
     group,
-    week,
-    days,
-    startTimeEndTimes,
+    meetings,
     lecturer,
     spotsOccupied: Number.isNaN(spotsOccupiedNumber) ? 0 : spotsOccupiedNumber,
     spotsTotal: Number.isNaN(spotsTotalNumber) ? 0 : spotsTotalNumber,
   };
 }
 
-const getStartEndTime = (time: string) => {
-  if (time.includes("brak danych")) {
-    return { startTime: "00:00", endTime: "00:00" };
+function parseMeeting(meetingString: string): ScrapedGroupMeeting {
+  if (meetingString.includes("brak danych")) {
+    throw new Error("No data!");
   }
-  try {
-    const regex = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/;
-    const match = regex.exec(time);
+  const regex = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/;
+  const match = regex.exec(meetingString);
 
-    if (match !== null) {
-      const startTime = match[1];
-      const endTime = match[2];
-      return { startTime, endTime };
-    }
-    return { startTime: "00:00", endTime: "00:00" };
-  } catch {
-    return { startTime: "error", endTime: "error" };
+  if (match === null) {
+    throw new Error("Failed to parse time range!");
   }
-};
+  return {
+    startTime: match[1],
+    endTime: match[2],
+    day: parseDay(meetingString),
+    week: checkWeek(meetingString),
+  };
+}
 
 const giveGroupType = (groupType: string) => {
   if (groupType.includes("Ćwiczenia")) {
@@ -375,16 +393,26 @@ const getGroupNumber = (groupInfo: string) => {
   return match !== null ? match[1] : "1";
 };
 
-const checkWeek = (week: string): "TN" | "TP" | "-" => {
+const checkWeek = (week: string): "TN" | "TP" | "-" | "!" => {
   if (week.includes("(nieparzyste),")) {
     return "TN";
-  } else if (week.includes("(parzyste),")) {
+  }
+  if (week.includes("(parzyste),")) {
     return "TP";
   }
-  return "-";
+  if (
+    week.includes("jednokrotnie,") ||
+    week.includes("(niestandardowa częstotliwość),")
+  ) {
+    return "!";
+  }
+  if (week.includes("każd")) {
+    return "-";
+  }
+  throw new Error("Failed to extract meeting frequency");
 };
 
-const checkDay = (day: string) => {
+function parseDay(day: string): string {
   if (day.includes("poniedziałek")) {
     return "poniedziałek";
   } else if (day.includes("wtorek")) {
@@ -400,5 +428,5 @@ const checkDay = (day: string) => {
   } else if (day.includes("niedziela")) {
     return "niedziela";
   }
-  return "unknown";
-};
+  throw new Error("Failed to extract meeting day");
+}

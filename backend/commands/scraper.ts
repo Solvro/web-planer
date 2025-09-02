@@ -212,15 +212,11 @@ export default class Scraper extends BaseCommand {
       BEGIN;
 
       -- Update the groups table
-      INSERT INTO "groups_archive" ("id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active")
-      SELECT "id", "name", "start_time", "end_time", "group", "week", "day", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active" FROM "groups"
+      INSERT INTO "groups_archive" ("id", "name", "group", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active")
+      SELECT "id", "name", "group", "type", "url", "course_id", "created_at", "updated_at", "spots_occupied", "spots_total", "is_active" FROM "groups"
       ON CONFLICT ("id") DO UPDATE SET
       "name" = EXCLUDED."name",
-      "start_time" = EXCLUDED."start_time",
-      "end_time" = EXCLUDED."end_time",
       "group" = EXCLUDED."group",
-      "week" = EXCLUDED."week",
-      "day" = EXCLUDED."day",
       "type" = EXCLUDED."type",
       "url" = EXCLUDED."url",
       "course_id" = EXCLUDED."course_id",
@@ -229,7 +225,7 @@ export default class Scraper extends BaseCommand {
       "spots_total" = EXCLUDED."spots_total",
       "is_active" = EXCLUDED."is_active";
 
-      -- Update the pivot table
+      -- Update the lecturers table
       MERGE INTO "group_archive_lecturers" AS "archive"
       USING "group_lecturers" AS "current"
       ON "archive"."group_id" = "current"."group_id" AND "archive"."lecturer_id" = "current"."lecturer_id"
@@ -237,12 +233,31 @@ export default class Scraper extends BaseCommand {
       WHEN MATCHED THEN DO NOTHING
       -- when the row doesnt exist in the current table
       WHEN NOT MATCHED BY SOURCE
-      AND EXISTS (SELECT 1 FROM "groups" WHERE "id" = "archive"."group_id")
-      THEN DELETE
+        AND EXISTS (SELECT 1 FROM "groups" WHERE "id" = "archive"."group_id")
+        THEN DELETE
       -- when the row doesnt exist in the archive table
       WHEN NOT MATCHED BY TARGET
-      THEN INSERT ("group_id", "lecturer_id", "updated_at", "created_at")
-      VALUES ("current"."group_id", "current"."lecturer_id", "current"."updated_at", "current"."created_at");
+        THEN INSERT ("group_id", "lecturer_id", "updated_at", "created_at")
+        VALUES ("current"."group_id", "current"."lecturer_id", "current"."updated_at", "current"."created_at");
+
+      -- Update the meetings table
+      MERGE INTO "group_archive_meetings" AS "archive"
+      USING "group_meetings" AS "current"
+        ON "current"."group_id" = "archive"."group_id"
+        AND "current"."start_time" = "archive"."start_time"
+        AND "current"."end_time" = "archive"."end_time"
+        AND "current"."week" = "archive"."week"
+        AND "current"."day" = "archive"."day"
+      -- when the row exists in both tables
+      WHEN MATCHED THEN DO NOTHING
+      -- when the row doesnt exist in the current table
+      WHEN NOT MATCHED BY SOURCE
+        AND EXISTS (SELECT 1 FROM "groups" WHERE "id" = "archive"."group_id")
+        THEN DELETE
+      -- when the row doesnt exist in the archive table
+      WHEN NOT MATCHED BY TARGET
+        THEN INSERT ("group_id", "start_time", "end_time", "week", "day", "created_at", "updated_at")
+        VALUES ("current"."group_id", "current"."start_time", "current"."end_time", "current"."week", "current"."day", "current"."created_at", "current"."updated_at");
 
       COMMIT;
     `);
@@ -333,70 +348,44 @@ export default class Scraper extends BaseCommand {
     // set all groups to inactive, query below will activate scraped ones
     await Group.query().update({ isActive: false });
     const preparedGroups = fetchedDetails.flatMap(
-      ({ url, registration, course, details, lecturers }) =>
-        details.days.map((day) => ({
-          row: {
-            name: details.name.slice(0, 255),
-            start_time: details.startTimeEndTimes[
-              details.days.indexOf(day)
-            ].startTime.slice(0, 255),
-            end_time: details.startTimeEndTimes[
-              details.days.indexOf(day)
-            ].endTime.slice(0, 255),
-            group: details.group.slice(0, 255),
-            week: details.week as "-" | "TP" | "TN",
-            day: day.slice(0, 255),
-            type: details.type.slice(0, 255),
-            course_id:
-              course.courseCode.slice(0, 255) +
-              (extractLastStringInBrackets(registration.name) ??
-                registration.name),
-            spots_occupied: details.spotsOccupied,
-            spots_total: details.spotsTotal,
-            url: url.slice(0, 255),
-            is_active: true,
-            created_at: currentDate,
-            updated_at: currentDate,
-          },
-          lecturers,
-        })),
+      ({ url, registration, course, details, lecturers }) => ({
+        row: {
+          name: details.name.slice(0, 255),
+          group: details.group.slice(0, 255),
+          type: details.type.slice(0, 255),
+          course_id:
+            course.courseCode.slice(0, 255) +
+            (extractLastStringInBrackets(registration.name) ??
+              registration.name),
+          spots_occupied: details.spotsOccupied,
+          spots_total: details.spotsTotal,
+          url: url.slice(0, 255),
+          is_active: true,
+          created_at: currentDate,
+          updated_at: currentDate,
+        },
+        lecturers,
+        meetings: details.meetings,
+      }),
     );
 
     const uniqueRows = Array.from(
       new Map(
-        preparedGroups.map(({ row, lecturers }) => [
-          JSON.stringify([
-            row.name,
-            row.start_time,
-            row.end_time,
-            row.group,
-            row.week,
-            row.day,
-            row.type,
-            row.course_id,
-          ]),
-          { row, lecturers },
+        preparedGroups.map(({ row, lecturers, meetings }) => [
+          JSON.stringify([row.group, row.type, row.course_id]),
+          { row, lecturers, meetings },
         ]),
       ).values(),
     );
     const mergedProps = Array.from(
       new Set(Object.keys(uniqueRows[0].row)).difference(
-        new Set([
-          "created_at",
-          "name",
-          "start_time",
-          "end_time",
-          "group",
-          "week",
-          "day",
-          "type",
-          "course_id",
-        ]),
+        new Set(["created_at", "name", "group", "type", "course_id"]),
       ),
     );
-    const groups = await Promise.all(
+    await Promise.all(
       chunkArray(uniqueRows, QUERY_CHUNK_SIZE).map((chunk) =>
         this.dbSemaphore.runTask(async () => {
+          // update the main entries
           const ids = (await db
             .knexQuery()
             .insert(chunk.map((el) => el.row))
@@ -406,35 +395,85 @@ export default class Scraper extends BaseCommand {
             )
             .merge(mergedProps)
             .returning("id")) as { id: number }[];
-          // thanks adonis for returning objects in an arbitrary order
-          const updatedGroups = new Map(
-            await Group.findMany(ids.map((i) => i.id)).then((l) =>
-              l.map((group) => [group.id, group]),
-            ),
+          const zipped = zip(ids, chunk).map(
+            ([{ id }, { lecturers, meetings }]) => ({
+              id,
+              lecturers,
+              meetings,
+            }),
           );
-          const reorderedGroups = ids.map(({ id }) => {
-            const group = updatedGroups.get(id);
-            assert(group !== undefined);
-            return group;
-          });
-          return zip(reorderedGroups, chunk).map(([group, { lecturers }]) => ({
-            group,
-            lecturers,
-          }));
-        }),
-      ),
-    ).then((a) => a.flat());
 
-    task.update("Updating group lecturers");
-    await Promise.all(
-      groups.map(({ group, lecturers }) =>
-        this.dbSemaphore.runTask(async () => {
-          const ids = lecturers.map((lecturer) => {
-            const id = lecturerMap.get(lecturer);
-            assert(id !== undefined);
-            return id;
+          // update meetings
+          const meetingData = zipped.flatMap(({ id, meetings }) =>
+            meetings.map((m) => ({
+              group_id: id,
+              start_time: m.startTime,
+              end_time: m.endTime,
+              week: m.week,
+              day: m.day,
+            })),
+          );
+          await db.transaction(async (trx) => {
+            await trx.knexRawQuery(`
+              CREATE TEMPORARY TABLE "data" (
+                "group_id" INTEGER NOT NULL,
+                "start_time" TIME NOT NULL,
+                "end_time" TIME NOT NULL,
+                "week" VARCHAR(255) NOT NULL,
+                "day" VARCHAR(255) NOT NULL
+              )
+              ON COMMIT DROP;
+            `);
+            await trx.knexQuery().insert(meetingData).into("data");
+            // await db.knexRawQuery(
+            //   `
+            //   INSERT INTO "data" ("group_id", "start_time", "end_time", "week", "day")
+            //   VALUES ${Array(meetingsTotal).fill("(?,?,?,?,?)").join(",")};
+            // `,
+            //   meetingParams,
+            // );
+            await trx.knexRawQuery(`
+              MERGE INTO "group_meetings" AS "gm"
+              USING "data" ON "gm"."group_id" = "data"."group_id"
+                          AND "gm"."start_time" = "data"."start_time"
+                          AND "gm"."end_time" = "data"."end_time"
+                          AND "gm"."week" = "data"."week"
+                          AND "gm"."day" = "data"."day"
+              WHEN NOT MATCHED BY TARGET
+                THEN INSERT ("group_id", "start_time", "end_time", "week", "day", "created_at", "updated_at")
+                VALUES ("data"."group_id", "data"."start_time", "data"."end_time", "data"."week", "data"."day", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+              WHEN NOT MATCHED BY SOURCE AND EXISTS (SELECT 1 FROM "data" as "d2" WHERE "d2"."group_id" = "gm"."group_id")
+                THEN DELETE;
+            `);
           });
-          await group.related("lecturers").sync(ids);
+
+          // update lecturers
+          const lecturerData = zipped.flatMap(({ id, lecturers }) =>
+            lecturers.map((l) => ({
+              group_id: id,
+              lecturer_id: lecturerMap.get(l),
+            })),
+          );
+          await db.transaction(async (trx) => {
+            await trx.knexRawQuery(`
+              CREATE TEMPORARY TABLE "data" (
+                "group_id" INTEGER NOT NULL,
+                "lecturer_id" INTEGER NOT NULL
+              )
+              ON COMMIT DROP;
+            `);
+            await trx.knexQuery().insert(lecturerData).into("data");
+            await trx.knexRawQuery(`
+              MERGE INTO "group_lecturers" AS "gl"
+              USING "data" ON "gl"."group_id" = "data"."group_id"
+                          AND "gl"."lecturer_id" = "data"."lecturer_id"
+              WHEN NOT MATCHED BY TARGET
+                THEN INSERT ("group_id", "lecturer_id", "created_at", "updated_at")
+                VALUES ("data"."group_id", "data"."lecturer_id", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+              WHEN NOT MATCHED BY SOURCE AND EXISTS (SELECT 1 FROM "data" as "d2" WHERE "d2"."group_id" = "gl"."group_id")
+                THEN DELETE;
+            `);
+          });
         }),
       ),
     );
@@ -447,9 +486,11 @@ export default class Scraper extends BaseCommand {
       "courses",
       "groups_archive",
       "group_archive_lecturers",
+      "group_archive_meetings",
       "lecturers",
       "groups",
       "group_lecturers",
+      "group_meetings",
     ];
 
     for (const table of tables) {

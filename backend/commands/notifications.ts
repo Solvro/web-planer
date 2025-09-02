@@ -2,6 +2,11 @@ import { BaseCommand } from "@adonisjs/core/ace";
 import type { CommandOptions } from "@adonisjs/core/types/ace";
 import mail from "@adonisjs/mail/services/main";
 
+import Group from "#models/group";
+import GroupArchive from "#models/group_archive";
+import GroupMeeting from "#models/group_meeting";
+import Schedule from "#models/schedule";
+
 async function sendEmail(userNotifications: Map<string, string[]>) {
   for (const studentNumber of userNotifications.keys()) {
     const notificationsList = userNotifications.get(studentNumber);
@@ -16,7 +21,7 @@ async function sendEmail(userNotifications: Map<string, string[]>) {
         Dokonaj zmian w swoim kreatorze!
       </a>
       <br>
-      <img src="https://planer.solvro.pl/og_image.png" 
+      <img src="https://planer.solvro.pl/og_image.png"
            alt="Logo Planer" style="margin-top: 10px; width: 350px; height: auto;">
       <br>
       <p style="color: #333; font-weight: bold;">Zespół Planera</p>
@@ -35,6 +40,19 @@ async function sendEmail(userNotifications: Map<string, string[]>) {
   }
 }
 
+function renderMeeting(meeting: GroupMeeting): string {
+  switch (meeting.week) {
+    case "-":
+      return `w każdy ${meeting.day} od ${meeting.startTime} do ${meeting.endTime}`;
+    case "TP":
+      return `w parzysty ${meeting.day} od ${meeting.startTime} do ${meeting.endTime}`;
+    case "TN":
+      return `w nieparzysty ${meeting.day} od ${meeting.startTime} do ${meeting.endTime}`;
+    case "!":
+      return `jednorazowo w ${meeting.day} od ${meeting.startTime} do ${meeting.endTime}`;
+  }
+}
+
 export default class Notifications extends BaseCommand {
   static commandName = "notifications";
   static description = "";
@@ -46,19 +64,14 @@ export default class Notifications extends BaseCommand {
   };
 
   async run() {
-    const GroupArchiveModule = await import("#models/group_archive");
-    const GroupArchive = GroupArchiveModule.default;
-    const GroupModule = await import("#models/group");
-    const Group = GroupModule.default;
-    const ScheduleModule = await import("#models/schedule");
-    const Schedule = ScheduleModule.default;
-    const UserModule = await import("#models/user");
-    const User = UserModule.default;
+    const schedules = await Schedule.query().preload("user");
 
-    const schedules = await Schedule.query().preload("groups");
-
-    const currentGroups = await Group.query().preload("lecturers");
-    const archivedGroups = await GroupArchive.query().preload("lecturers");
+    const currentGroups = await Group.query()
+      .preload("lecturers")
+      .preload("meetings");
+    const archivedGroups = await GroupArchive.query()
+      .preload("lecturers")
+      .preload("meetings");
 
     const currentGroupsMap = new Map(
       currentGroups.map((group) => [group.id, group]),
@@ -70,47 +83,52 @@ export default class Notifications extends BaseCommand {
     const userNotifications = new Map<string, string[]>();
 
     for (const schedule of schedules) {
+      const user = schedule.user;
+      if (!user.allowNotifications) {
+        continue;
+      }
+
       for (const group of schedule.groups) {
         const currentGroup = currentGroupsMap.get(group.id);
         const archivedGroup = archivedGroupsMap.get(group.id);
 
-        try {
-          const user = await User.findOrFail(schedule.userId);
-          if (!user.allowNotifications) {
-            break;
-          }
+        if (currentGroup === undefined || archivedGroup === undefined) {
+          continue;
+        }
 
-          if (archivedGroup !== undefined) {
-            const notifications =
-              userNotifications.get(user.studentNumber) ?? [];
+        const notifications = userNotifications.get(user.studentNumber) ?? [];
 
-            if (currentGroup?.startTime !== archivedGroup.startTime) {
-              notifications.push(
-                `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana godzin zajęć z ${archivedGroup.startTime.slice(0, -3)}-${archivedGroup.endTime.slice(0, -3)} na ${currentGroup?.startTime.slice(0, -3)}-${currentGroup?.endTime.slice(0, -3)}.`,
-              );
-            }
-            const currentLecturers = currentGroup?.lecturers
-              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
-              .join(", ");
-
-            const archivedLecturers = archivedGroup.lecturers
-              .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
-              .join(", ");
-
-            if (currentLecturers !== archivedLecturers) {
-              notifications.push(
-                `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana prowadzących z ${archivedLecturers} na ${currentLecturers}.`,
-              );
-            }
-
-            if (notifications.length > 0) {
-              userNotifications.set(user.studentNumber, notifications);
-            }
-          }
-        } catch (error) {
-          this.logger.error(
-            `Error while searching for a user ${schedule.userId}: ${error}`,
+        // scraper implementation detail: the scraper will never update a meetings row, and will create a new entry instead
+        // therefore if ids match, nothing has changed
+        const currentIds = currentGroup.meetings.map((m) => m.id);
+        const archivedIds = archivedGroup.meetings.map((m) => m.id);
+        if (
+          currentIds.length !== archivedIds.length ||
+          !currentIds.every((i) => archivedIds.includes(i))
+        ) {
+          const before = archivedGroup.meetings.map(renderMeeting).join(", ");
+          const after = currentGroup.meetings.map(renderMeeting).join(", ");
+          notifications.push(
+            `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana terminów zajęć z ${before} na ${after}`,
           );
+        }
+
+        const currentLecturers = currentGroup.lecturers
+          .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+          .join(", ");
+
+        const archivedLecturers = archivedGroup.lecturers
+          .map((lecturer) => `${lecturer.name} ${lecturer.surname}`)
+          .join(", ");
+
+        if (currentLecturers !== archivedLecturers) {
+          notifications.push(
+            `Plan o nazwie ${schedule.name}: ${group.name}: Nastąpiła zmiana prowadzących z ${archivedLecturers} na ${currentLecturers}.`,
+          );
+        }
+
+        if (notifications.length > 0) {
+          userNotifications.set(user.studentNumber, notifications);
         }
       }
     }

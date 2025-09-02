@@ -30,7 +30,7 @@ export interface ClassBlockProps {
   courseName: string;
   lecturer: string;
   day: Day;
-  week: "" | "TN" | "TP";
+  week: "" | "TN" | "TP" | "!";
   courseType: "C" | "L" | "P" | "S" | "W";
   registrationId: string;
   spotsOccupied: number;
@@ -124,24 +124,44 @@ export interface DeletePlanResponseType {
   message: string;
 }
 
+export interface GroupMeeting {
+  id: number;
+  groupId: number;
+  startTime: string;
+  endTime: string;
+  week: "-" | "TN" | "TP" | "!";
+  day: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GroupLecturer {
+  id: number;
+  name: string;
+  surname: string;
+  createdAt: string;
+  updatedAt: string;
+  averageRating: string;
+  opinionsCount: string;
+}
+
 export interface SingleGroup {
   id: number;
   name: string;
-  startTime: string;
-  endTime: string;
-  group: string;
   lecturer: string;
-  week: "-" | "TN" | "TP";
-  day: Day;
+  averageRating: string;
+  opinionsCount: number;
+  group: string;
   type: "C" | "L" | "P" | "S" | "W";
   url: string;
   courseId: string;
-  spotsOccupied: number;
-  spotsTotal: number;
-  averageRating: number;
   createdAt: string;
   updatedAt: string;
-  opinionsCount: number;
+  spotsOccupied: number;
+  spotsTotal: number;
+  isActive: boolean;
+  lecturers: GroupLecturer[];
+  meetings: GroupMeeting[];
 }
 
 export interface SingleCourse {

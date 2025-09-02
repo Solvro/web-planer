@@ -1,6 +1,8 @@
 import type { ExtendedCourse, ExtendedGroup } from "@/atoms/plan-family";
 import type {
   CourseType,
+  Day,
+  GroupMeeting,
   LessonType,
   SingleCourse,
   SingleGroup,
@@ -10,7 +12,11 @@ export const serverToLocalPlan = (
   courses: CourseType,
   shouldCourseBeChecked: ((course: SingleCourse) => boolean) | boolean,
   shouldGroupBeChecked:
-    | ((course: SingleCourse, group: SingleGroup) => boolean)
+    | ((
+        course: SingleCourse,
+        group: SingleGroup,
+        meeting: GroupMeeting,
+      ) => boolean)
     | boolean,
 ) => {
   const extendedCourses: ExtendedCourse[] = courses
@@ -23,10 +29,10 @@ export const serverToLocalPlan = (
           : shouldCourseBeChecked(c),
       registrationId: c.registrationId,
       type: c.groups.at(0)?.type ?? ("" as LessonType),
-      groups: c.groups.map(
+      groups: c.groups.flatMap(
         (g) =>
-          ({
-            groupId: g.group + c.id + g.type,
+          g.meetings.map((meeting) => ({
+            groupId: g.group + c.id + g.type + meeting.id.toString(),
             groupNumber: g.group,
             groupOnlineId: g.id,
             courseId: c.id,
@@ -34,19 +40,22 @@ export const serverToLocalPlan = (
             isChecked:
               typeof shouldGroupBeChecked === "boolean"
                 ? shouldGroupBeChecked
-                : shouldGroupBeChecked(c, g),
+                : shouldGroupBeChecked(c, g, meeting),
             courseType: g.type,
-            day: g.day,
+            day: meeting.day as Day,
             lecturer: g.lecturer,
             registrationId: c.registrationId,
-            week: g.week.replace("-", "") as "" | "TN" | "TP",
-            endTime: g.endTime.split(":").slice(0, 2).join(":"),
-            startTime: g.startTime.split(":").slice(0, 2).join(":"),
+            week:
+              meeting.week === "-"
+                ? ""
+                : (meeting.week as "" | "TN" | "TP" | "!"),
+            endTime: meeting.endTime.split(":").slice(0, 2).join(":"),
+            startTime: meeting.startTime.split(":").slice(0, 2).join(":"),
             spotsOccupied: g.spotsOccupied,
             spotsTotal: g.spotsTotal,
-            averageRating: g.averageRating,
+            averageRating: Number.parseFloat(g.averageRating),
             opinionsCount: g.opinionsCount,
-          }) satisfies ExtendedGroup,
+          })) satisfies ExtendedGroup[],
       ),
     }))
     .sort((a, b) => {

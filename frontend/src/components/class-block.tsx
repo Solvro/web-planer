@@ -68,7 +68,7 @@ export function ClassBlock({
   groupNumber: string;
   courseName: string;
   lecturer: string;
-  week: "" | "TN" | "TP";
+  week: "" | "TN" | "TP" | "!";
   courseType: "C" | "L" | "P" | "S" | "W";
   isChecked: boolean;
   isDisabled: boolean;
@@ -157,7 +157,12 @@ export function ClassBlock({
       {disableTooltip === false && (
         <TooltipContent>
           <p>
-            {courseName} - {lecturer}
+            {courseName} - {lecturer}{" "}
+            {week === ""
+              ? ""
+              : week === "!"
+                ? "| zajęcia niestandardowe (sprawdź usos)"
+                : `| ${week}`}
           </p>
         </TooltipContent>
       )}

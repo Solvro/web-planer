@@ -3,6 +3,7 @@ import type { UseMutationResult } from "@tanstack/react-query";
 import type { ExtendedCourse } from "@/atoms/plan-family";
 import type {
   CourseType,
+  GroupMeeting,
   PlanResponseType,
   Registration,
   SingleCourse,
@@ -49,7 +50,7 @@ export const updateLocalPlan = async (
         (course: SingleCourse) => {
           return onlinePlan.courses.some((oc) => oc.id === course.id);
         },
-        (course: SingleCourse, group: SingleGroup) => {
+        (course: SingleCourse, group: SingleGroup, _meeting: GroupMeeting) => {
           return (
             onlinePlan.courses
               .find((oc) => oc.id === course.id)
@@ -58,13 +59,11 @@ export const updateLocalPlan = async (
         },
       );
 
-      // Add unique registrations to the updatedRegistrations array
       updatedRegistrations = [...updatedRegistrations, registration].filter(
         (regist, index, array) =>
           array.findIndex((t) => t.id === regist.id) === index,
       );
 
-      // Add unique courses to the updatedCourses array
       updatedCourses = [...updatedCourses, ...extendedCourses].filter(
         (course, index, array) =>
           array.findIndex((t) => t.id === course.id) === index,

@@ -31,23 +31,27 @@ export const updateSpotsOccupied = async ({
       const courses = await coursesFunction.mutateAsync(registration.id);
       const extendedCourses: ExtendedCourse[] = courses
         .map((c) => {
-          const groups: (ExtendedGroup | null)[] = c.groups.map((g) => {
-            const currentGroup = plan.courses
-              .find((course) => course.id === c.id)
-              ?.groups.find(
-                (group) => group.groupId === g.group + c.id + g.type,
-              );
-            if (currentGroup === undefined) {
-              return null;
-            } else if (currentGroup.spotsOccupied === g.spotsOccupied) {
-              return currentGroup;
+          const groups: (ExtendedGroup | null)[] = c.groups.flatMap((g) => {
+            const matchingGroups =
+              plan.courses
+                .find((course) => course.id === c.id)
+                ?.groups.filter((group) => group.groupOnlineId === g.id) ?? [];
+
+            if (matchingGroups.length === 0) {
+              return [null];
             }
-            isChanged = true;
-            return {
-              ...currentGroup,
-              spotsOccupied: g.spotsOccupied,
-              spotsTotal: g.spotsTotal,
-            };
+
+            return matchingGroups.map((currentGroup) => {
+              if (currentGroup.spotsOccupied === g.spotsOccupied) {
+                return currentGroup;
+              }
+              isChanged = true;
+              return {
+                ...currentGroup,
+                spotsOccupied: g.spotsOccupied,
+                spotsTotal: g.spotsTotal,
+              };
+            });
           });
           return {
             id: c.id,
@@ -60,7 +64,6 @@ export const updateSpotsOccupied = async ({
         })
         .sort((a, b) => a.name.localeCompare(b.name));
 
-      // Add unique courses to the updatedCourses array
       updatedCourses = [...updatedCourses, ...extendedCourses].filter(
         (course, index, array) =>
           array.findIndex((t) => t.id === course.id) === index,
