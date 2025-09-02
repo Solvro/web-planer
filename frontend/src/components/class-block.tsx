@@ -124,7 +124,7 @@ export function ClassBlock({
           ></div>
           <div className="flex w-full justify-between">
             <div className="flex gap-1">
-              <p>{`${courseType} ${week === "" ? "" : week === "!" ? "|jednorazowo" : `|${week}`}`}</p>
+              <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
             </div>
             <p>{`Grupa ${groupNumber}`}</p>
           </div>
@@ -158,6 +158,8 @@ export function ClassBlock({
         <TooltipContent>
           <p>
             {courseName} - {lecturer}
+            {" "}
+            {week === "" ? "" : week === "!" ? "| zajęcia niestandardowe (sprawdź usos)" : `| ${week}`}
           </p>
         </TooltipContent>
       )}
