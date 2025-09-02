@@ -54,16 +54,18 @@ export default class extends BaseSchema {
     // Create schedule entries for each old group
     this.schema.raw(`
       INSERT INTO "group_meetings" ("group_id", "start_time", "end_time", "week", "day", "created_at", "updated_at")
-      SELECT "id", "start_time", "end_time", "week", "day", "created_at", "updated_at" FROM "groups";
+        SELECT "id", "start_time", "end_time", "week", "day", "created_at", "updated_at" FROM "groups"
+        WHERE "start_time" IS NOT NULL AND "end_time" IS NOT NULL AND "week" IS NOT NULL AND "day" IS NOT NULL;
       INSERT INTO "group_archive_meetings" ("group_id", "start_time", "end_time", "week", "day", "created_at", "updated_at")
-      SELECT "id", "start_time", "end_time", "week", "day", "created_at", "updated_at" FROM "groups_archive";
+        SELECT "id", "start_time", "end_time", "week", "day", "created_at", "updated_at" FROM "groups_archive"
+        WHERE "start_time" IS NOT NULL AND "end_time" IS NOT NULL AND "week" IS NOT NULL AND "day" IS NOT NULL;
     `);
 
     // Deduplicate group entries
     this.schema.raw(`
       -- create temp tables
       CREATE TEMPORARY TABLE "group_swaps" (
-      "from_id" INTEGER NOT NULL,
+      "from_id" INTEGER PRIMARY KEY,
       "to_id" INTEGER NOT NULL
       )
       ON COMMIT DROP;
@@ -165,7 +167,7 @@ export default class extends BaseSchema {
     this.schema.raw(`
       -- temp tables
       CREATE TEMPORARY TABLE "first_groups" (
-        "first_id" INTEGER NOT NULL
+        "first_id" INTEGER PRIMARY KEY
       )
       ON COMMIT DROP;
 
@@ -178,29 +180,31 @@ export default class extends BaseSchema {
       UPDATE "groups"
       SET "start_time" = "gm"."start_time",
           "end_time" = "gm"."end_time",
-          "week" = "gm"."week",
+          "week" = (CASE WHEN "gm"."week" = '!' THEN '-' ELSE "gm"."week" END),
           "day" = "gm"."day"
-      FROM "group_meetings" AS "gm", "first_groups"
-      WHERE "gm"."id" = "first_groups"."first_id"
+      FROM "group_meetings" AS "gm"
+      WHERE EXISTS (SELECT 1 FROM "first_groups" WHERE "gm"."id" = "first_groups"."first_id")
         AND "groups"."id" = "gm"."group_id";
 
       -- reduplicate deduplicated groups
       INSERT INTO "groups" (
         "name", "start_time", "end_time",
-        "group", "week", "day",
+        "group", "day",
+        "week",
         "type", "url", "course_id",
         "created_at", "updated_at", "spots_occupied",
         "spots_total", "is_active"
       )
       SELECT
         "g"."name", "gm"."start_time", "gm"."end_time",
-        "g"."group", "gm"."week", "gm"."day",
+        "g"."group", "gm"."day",
+        (CASE WHEN "gm"."week" = '!' THEN '-' ELSE "gm"."week" END),
         "g"."type", "g"."url", "g"."course_id",
         "gm"."created_at", "gm"."updated_at", "g"."spots_occupied",
         "g"."spots_total", "g"."is_active"
       FROM
         "group_meetings" AS "gm" INNER JOIN "groups" AS "g" ON "gm"."group_id" = "g"."id"
-      WHERE "gm"."id" NOT IN (SELECT "first_id" FROM "first_groups");
+      WHERE NOT EXISTS (SELECT 1 FROM "first_groups" WHERE "gm"."id" = "first_groups"."first_id");
 
       -- truncate and repeat for archive
       TRUNCATE "first_groups";
@@ -214,29 +218,31 @@ export default class extends BaseSchema {
       UPDATE "groups_archive"
       SET "start_time" = "gm"."start_time",
           "end_time" = "gm"."end_time",
-        "week" = "gm"."week",
-        "day" = "gm"."day"
-      FROM "group_archive_meetings" AS "gm", "first_groups"
-      WHERE "gm"."id" = "first_groups"."first_id"
+          "week" = (CASE WHEN "gm"."week" = '!' THEN '-' ELSE "gm"."week" END),
+          "day" = "gm"."day"
+      FROM "group_archive_meetings" AS "gm"
+      WHERE EXISTS (SELECT 1 FROM "first_groups" WHERE "gm"."id" = "first_groups"."first_id")
         AND "groups_archive"."id" = "gm"."group_id";
 
       -- reduplicate deduplicated groups
       INSERT INTO "groups_archive" (
         "name", "start_time", "end_time",
-        "group", "week", "day",
+        "group", "day",
+        "week",
         "type", "url", "course_id",
         "created_at", "updated_at", "spots_occupied",
         "spots_total", "is_active"
       )
       SELECT
         "g"."name", "gm"."start_time", "gm"."end_time",
-        "g"."group", "gm"."week", "gm"."day",
+        "g"."group", "gm"."day",
+        (CASE WHEN "gm"."week" = '!' THEN '-' ELSE "gm"."week" END),
         "g"."type", "g"."url", "g"."course_id",
         "gm"."created_at", "gm"."updated_at", "g"."spots_occupied",
         "g"."spots_total", "g"."is_active"
       FROM
         "group_archive_meetings" AS "gm" INNER JOIN "groups_archive" AS "g" ON "gm"."group_id" = "g"."id"
-      WHERE "gm"."id" NOT IN (SELECT "first_id" FROM "first_groups");
+      WHERE NOT EXISTS (SELECT 1 FROM "first_groups" WHERE "gm"."id" = "first_groups"."first_id");
     `);
 
     this.schema.dropTable("group_meetings");
