@@ -124,7 +124,7 @@ export function ClassBlock({
           ></div>
           <div className="flex w-full justify-between">
             <div className="flex gap-1">
-              <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
+              <p>{`${courseType} ${week === "" ? "" : week === "!" ? "|jednorazowo" : `|${week}`}`}</p>
             </div>
             <p>{`Grupa ${groupNumber}`}</p>
           </div>

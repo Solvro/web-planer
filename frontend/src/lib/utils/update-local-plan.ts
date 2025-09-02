@@ -59,13 +59,11 @@ export const updateLocalPlan = async (
         },
       );
 
-      // Add unique registrations to the updatedRegistrations array
       updatedRegistrations = [...updatedRegistrations, registration].filter(
         (regist, index, array) =>
           array.findIndex((t) => t.id === regist.id) === index,
       );
 
-      // Add unique courses to the updatedCourses array
       updatedCourses = [...updatedCourses, ...extendedCourses].filter(
         (course, index, array) =>
           array.findIndex((t) => t.id === course.id) === index,
