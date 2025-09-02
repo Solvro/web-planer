@@ -4,6 +4,7 @@ import React from "react";
 
 import { StarsRating } from "@/components/class-block-stars";
 import { usePlanOrientation } from "@/hooks/use-plan-orientation";
+import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 
 import { findMatchingScheduleTime } from "./class-schedule";
@@ -84,6 +85,9 @@ export function ClassBlock({
   const { isHorizontal } = usePlanOrientation();
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
+  const { user } = useSession();
+  const isLoggedIn = user !== null;
+
   return (
     <Tooltip delayDuration={500}>
       <TooltipTrigger asChild={true}>
@@ -143,15 +147,17 @@ export function ClassBlock({
               {spotsOccupied}/{spotsTotal}
             </span>
           </p>
-          <div className={"flex w-full justify-between truncate"}>
-            <StarsRating
-              rating={averageRating > 0 ? averageRating : 1}
-              hideStars={durationSpan < 10}
-            />
-            <p className="font-bold">
-              {averageRating} ({opinionsCount})
-            </p>
-          </div>
+          {isLoggedIn ? (
+            <div className={"flex w-full justify-between truncate"}>
+              <StarsRating
+                rating={averageRating > 0 ? averageRating : 1}
+                hideStars={durationSpan < 10}
+              />
+              <p className="font-bold">
+                {averageRating} ({opinionsCount})
+              </p>
+            </div>
+          ) : null}
         </button>
       </TooltipTrigger>
       {disableTooltip === false && (
