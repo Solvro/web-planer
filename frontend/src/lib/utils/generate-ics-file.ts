@@ -194,7 +194,7 @@ export const generateICSFile = (
       ) {
         continue;
       }
-      
+
       // For one-time classes marked with "!", skip week filtering
       if (group.week === "!") {
         // One-time classes appear regardless of week parity
