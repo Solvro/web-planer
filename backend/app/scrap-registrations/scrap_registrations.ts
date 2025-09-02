@@ -270,6 +270,7 @@ export async function scrapGroupDetails(
   const group = getGroupNumber(mainContent.find("h1").text());
 
   const meetings: ScrapedGroupMeeting[] = [];
+  const meetingsDedup = new Set<string>();
 
   mainContent
     .find("table")
@@ -291,7 +292,16 @@ export async function scrapGroupDetails(
       }
 
       try {
-        meetings.push(parseMeeting($(element).text().trim()));
+        const meeting = parseMeeting($(element).text().trim());
+        const meetingJson = JSON.stringify(meeting);
+        if (meetingsDedup.has(meetingJson)) {
+          logger.info(
+            `Duplicate meeting spec detected for course '${name}' (${type}), group ${group}: ${meetingJson}`,
+          );
+          return;
+        }
+        meetingsDedup.add(meetingJson);
+        meetings.push(meeting);
       } catch (e) {
         logger.warn(
           `Failed to parse meeting data for course '${name}' (${type}), group ${group}: ${e}`,
@@ -390,10 +400,16 @@ const checkWeek = (week: string): "TN" | "TP" | "-" | "!" => {
   if (week.includes("(parzyste),")) {
     return "TP";
   }
-  if (week.includes("jednokrotnie,")) {
+  if (
+    week.includes("jednokrotnie,") ||
+    week.includes("(niestandardowa częstotliwość),")
+  ) {
     return "!";
   }
-  return "-";
+  if (week.includes("każd")) {
+    return "-";
+  }
+  throw new Error("Failed to extract meeting frequency");
 };
 
 function parseDay(day: string): string {
