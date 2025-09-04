@@ -116,7 +116,7 @@ export function ClassBlock({
                 ? "opacity-20 dark:opacity-10"
                 : "cursor-pointer opacity-60 dark:opacity-40",
             isReadonly ? "cursor-default" : null,
-            isHorizontal ? "w-48" : null,
+            isHorizontal ? "w-40" : null,
             className,
           )}
         >

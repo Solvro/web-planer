@@ -19,11 +19,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SidebarInset } from "@/components/ui/sidebar";
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { useSavePlan } from "@/hooks/use-save-plan";
 import { useSession } from "@/hooks/use-session";
 import { useShare } from "@/hooks/use-share";
 import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
+import { cn } from "@/lib/utils";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
 import type { CourseType } from "@/types";
@@ -49,6 +51,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
 
   const router = useRouter();
   const plan = usePlan({ planId });
+  const { isHorizontal } = usePlanOrientation();
 
   const {
     data: onlinePlan,
@@ -152,7 +155,12 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       />
       <SidebarInset className="mr-1 w-full overflow-x-auto overflow-y-auto bg-transparent pt-[72px]">
         <div className="ml-2 flex h-full w-full flex-1 flex-grow flex-col items-start md:ml-0 md:w-auto">
-          <div className="flex h-0 flex-auto flex-col gap-3">
+          <div
+            className={cn(
+              "flex flex-auto gap-3",
+              isHorizontal ? "flex-row" : "h-0 flex-col",
+            )}
+          >
             {[
               { day: Day.MONDAY, label: "Poniedziałek" },
               { day: Day.TUESDAY, label: "Wtorek" },
@@ -205,7 +213,10 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
             <HideDaysSettings hideDays={hideDays} setHideDays={setHideDays} />
             <div
               ref={captureRef}
-              className="relative flex flex-col gap-2 bg-background p-1"
+              className={cn(
+                "relative flex gap-2 bg-background p-1",
+                isHorizontal ? "flex-row" : "flex-col",
+              )}
             >
               {[
                 { day: Day.MONDAY, label: "Poniedziałek" },

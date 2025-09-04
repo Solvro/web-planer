@@ -65,6 +65,19 @@ const findMatchingScheduleTime = (inputTime: string): string | null => {
   return null;
 };
 
+function getMaxGroupsAtHourForDay(groups: ExtendedGroup[]) {
+  const hourMap: Record<string, number> = {};
+  for (const group of groups) {
+    hourMap[group.startTime] = (hourMap[group.startTime] || 0) + 1;
+  }
+  const maxValue = Object.values(hourMap).reduce(
+    (max, current) => Math.max(max, current),
+    0,
+  );
+
+  return (maxValue * 190).toString();
+}
+
 const upperHours = upperHoursBase;
 const bottomHours = bottomHoursBase;
 
@@ -83,12 +96,17 @@ function ClassSchedule({
 }) {
   const { isHorizontal } = usePlanOrientation();
   const isMobile = useIsMobile();
+  const widthPx = getMaxGroupsAtHourForDay(groups);
 
   return (
     <div
-      className={cn("flex min-w-fit flex-col border-y p-3", {
-        "rounded-lg border-x": isReadonly || isMobile,
-      })}
+      className={cn(
+        "flex min-w-fit flex-col border-y p-3",
+        {
+          "rounded-lg border-x": isReadonly || isMobile,
+        },
+        isHorizontal ? "border-x" : "border-y",
+      )}
     >
       <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
         {day}
@@ -96,7 +114,7 @@ function ClassSchedule({
       <div
         className={cn(
           isHorizontal
-            ? "flex min-w-[1500px] flex-1 flex-row overflow-auto overflow-y-hidden p-2 text-[9px]"
+            ? "flex min-w-[200px] max-w-[1000px] flex-1 flex-row overflow-x-auto text-[9px]"
             : "flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]",
         )}
       >
@@ -108,10 +126,10 @@ function ClassSchedule({
           )}
         >
           {upperHours.map((hour) => (
-            <Hour hour={hour} key={hour} />
+            <Hour hour={hour} key={hour} widthPx={widthPx} />
           ))}
           {bottomHours.map((hour) => (
-            <Hour hour={hour} key={hour} />
+            <Hour hour={hour} key={hour} widthPx={widthPx} />
           ))}
         </div>
         <div

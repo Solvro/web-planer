@@ -11,6 +11,8 @@ import { plansIds } from "@/atoms/plans-ids";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { usePlanOrientation } from "@/hooks/use-plan-orientation";
+import { cn } from "@/lib/utils";
 import type { SharedPlan } from "@/types";
 import { Day } from "@/types";
 
@@ -18,6 +20,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const uuid = useMemo(() => uuidv4(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
+  const { isHorizontal } = usePlanOrientation();
 
   const router = useRouter();
   const captureRef = useRef<HTMLDivElement>(null);
@@ -58,7 +61,10 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
 
       <div
         ref={captureRef}
-        className="flex flex-col gap-2 overflow-auto bg-background p-1 scrollbar-thin"
+        className={cn(
+          "flex gap-2 bg-background p-1 scrollbar-thin",
+          isHorizontal ? "flex-row justify-center" : "flex-col overflow-auto",
+        )}
       >
         {[
           { day: Day.MONDAY, label: "Poniedziałek" },
