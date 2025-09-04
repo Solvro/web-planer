@@ -31,7 +31,7 @@ export function HideDaysSettings({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="flex items-center justify-between gap-4 p-4">
+    <div className="flex items-center gap-4 p-4">
       <h3>Ukryj dni bez zajęć</h3>
       <Switch checked={hideDays} onCheckedChange={handleChange} />
     </div>
