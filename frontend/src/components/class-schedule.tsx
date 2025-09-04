@@ -114,7 +114,7 @@ function ClassSchedule({
       <div
         className={cn(
           isHorizontal
-            ? "flex min-w-[200px] max-w-[1000px] flex-1 flex-row overflow-x-auto text-[9px]"
+            ? "flex min-w-[200px] flex-1 flex-row text-[9px]"
             : "flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]",
         )}
       >
