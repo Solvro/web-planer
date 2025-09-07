@@ -66,16 +66,30 @@ const findMatchingScheduleTime = (inputTime: string): string | null => {
 };
 
 function getMaxGroupsAtHourForDay(groups: ExtendedGroup[]) {
-  const hourMap: Record<string, number> = {};
-  for (const group of groups) {
-    hourMap[group.startTime] = (hourMap[group.startTime] || 0) + 1;
-  }
-  const maxValue = Object.values(hourMap).reduce(
-    (max, current) => Math.max(max, current),
-    0,
-  );
+  const intervals = groups.map((g) => ({
+    start:
+      Number(g.startTime.split(":")[0]) * 60 +
+      Number(g.startTime.split(":")[1]),
+    end: Number(g.endTime.split(":")[0]) * 60 + Number(g.endTime.split(":")[1]),
+  }));
 
-  return (maxValue * 190).toString();
+  let maxOverlap = 0;
+
+  const times: number[] = [];
+  for (const { start, end } of intervals) {
+    times.push(start, end);
+  }
+
+  for (const time of times) {
+    const overlap = intervals.filter(
+      ({ start, end }) => start <= time && end > time,
+    ).length;
+    if (overlap > maxOverlap) {
+      maxOverlap = overlap;
+    }
+  }
+
+  return (maxOverlap * 190).toString();
 }
 
 const upperHours = upperHoursBase;
@@ -114,7 +128,7 @@ function ClassSchedule({
       <div
         className={cn(
           isHorizontal
-            ? "flex min-w-[200px] flex-1 flex-row text-[9px]"
+            ? "flex min-w-[200px] flex-1 flex-row overflow-x-hidden text-[9px]"
             : "flex-1 overflow-auto overflow-y-hidden p-2 text-[9px]",
         )}
       >
