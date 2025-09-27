@@ -66,6 +66,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.1",
     "@solvro/config": "^1.13.4",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.17.10",
