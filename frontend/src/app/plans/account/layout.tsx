@@ -25,11 +25,6 @@ const sidebarNavItems = [
     icon: <Icons.Palette className="size-4" />,
   },
   {
-    title: "Powiadomienia",
-    href: "/plans/account/notifications",
-    icon: <Icons.Bell className="size-4" />,
-  },
-  {
     title: "Dodawanie do kalendarza",
     href: "/plans/account/calendar",
     icon: <Icons.AddCalendar className="size-4" />,
