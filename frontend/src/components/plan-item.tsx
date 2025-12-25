@@ -163,8 +163,8 @@ export function PlanItem({
       className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md"
       ref={ref}
     >
-      <CardHeader className="space-y-1 p-4">
-        <CardTitle className="w-5/6 text-balance text-lg leading-4">
+      <CardHeader className="space-y-1 p-2 min-[520px]:p-4">
+        <CardTitle className="leading-2 w-5/6 text-balance text-sm min-[520px]:text-lg min-[520px]:leading-4">
           {name}
         </CardTitle>
         <CardDescription>
@@ -176,8 +176,8 @@ export function PlanItem({
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 p-4 pt-0">
-        <p className="text-sm">
+      <CardContent className="flex-1 p-2 pt-0 text-xs min-[520px]:p-4 min-[520px]:text-sm">
+        <p>
           {registrationsCount || registrationsLength}{" "}
           {pluralize(
             registrationsCount || registrationsLength,
@@ -186,11 +186,11 @@ export function PlanItem({
             "rejestracji",
           )}
         </p>
-        <p className="text-sm">
+        <p>
           {coursesCount || coursesLength}{" "}
           {pluralize(coursesCount || coursesLength, "kurs", "kursy", "kursów")}
         </p>
-        <p className="text-sm">
+        <p className="hidden min-[380px]:block">
           {groupsCount || groupCountLocal}{" "}
           {pluralize(
             groupsCount || groupCountLocal,
@@ -200,10 +200,13 @@ export function PlanItem({
           )}
         </p>
       </CardContent>
-      <CardFooter className="justify-between gap-2 border-t p-3">
+      <CardFooter className="justify-between gap-2 border-t p-2 min-[520px]:p-3">
         <DropdownMenu open={dropdownOpened} onOpenChange={setDropdownOpened}>
           <DropdownMenuTrigger asChild={true}>
-            <Button variant="secondary" size="iconSm">
+            <Button
+              variant="secondary"
+              className="h-7 w-7 px-0 min-[520px]:h-9 min-[520px]:w-9"
+            >
               <Icons.EllipsisVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -234,12 +237,18 @@ export function PlanItem({
           </DropdownMenuContent>
         </DropdownMenu>
         {onlineOnly ? (
-          <Button size="sm" onClick={createFromOnlinePlan}>
+          <Button
+            className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
+            onClick={createFromOnlinePlan}
+          >
             <Icons.Pencil className="h-4 w-4" />
-            Edytuj
+            <p className="hidden min-[380px]:block">Edytuj</p>
           </Button>
         ) : (
-          <Button size="sm" asChild={true}>
+          <Button
+            className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
+            asChild={true}
+          >
             <Link href={`/plans/edit/${id}`}>
               <Icons.Pencil className="h-4 w-4" />
               Edytuj
@@ -251,10 +260,7 @@ export function PlanItem({
       <StatusIcon synced={synced} onlineId={onlineId} />
 
       <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
-        <DialogContent
-          className="sm:max-w-[425px]"
-          aria-describedby={undefined}
-        >
+        <DialogContent className="max-w-[425px]" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Czy na pewno chcesz usunąć plan?</DialogTitle>
             <DialogDescription>Tej akcji nie da się cofnąć!</DialogDescription>
