@@ -43,7 +43,7 @@ export default function LoginPage() {
   const [step, setStep] = React.useState<"email" | "otp" | "onboard">("email");
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center">
+    <div className="relative flex min-h-screen items-center justify-center px-4 pb-20 pt-20 sm:items-center sm:px-6 sm:pb-0 sm:pt-0">
       <Image
         src={BgImage}
         alt="bg img"
@@ -74,7 +74,7 @@ export default function LoginPage() {
           />
           {step !== "onboard" && (
             <>
-              <h1 className="mt-5 text-3xl font-bold">
+              <h1 className="mt-5 text-center text-3xl font-bold">
                 Zaloguj się do planera
               </h1>
               <p className="text-balance text-center text-sm text-muted-foreground">
@@ -130,7 +130,7 @@ function EmailStep({
     }
   }
   return (
-    <div className="mt-5 flex w-full max-w-xs flex-col gap-4">
+    <div className="mt-5 flex w-full max-w-xs flex-col gap-4 text-center">
       <Button variant="outline" className="w-full" asChild>
         <Link href="/api/login" prefetch={false}>
           Zaloguj się przez USOS
