@@ -109,7 +109,7 @@ export function ClassBlock({
           className={cn(
             position,
             typeBgColors[courseType],
-            `border-l-3 relative flex flex-col justify-between overflow-hidden truncate rounded-md p-2 shadow-md`,
+            `border-l-3 relative flex flex-col justify-between overflow-hidden truncate rounded-md p-2 text-left shadow-md`,
             isChecked
               ? "cursor-pointer"
               : isDisabled
