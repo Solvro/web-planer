@@ -211,15 +211,12 @@ export async function scrapCourseNameGroupsUrls(
         .first()
         .attr("href");
 
-      if (linkToPlanRaw === undefined) {
-        continue;
-      }
-
-      const linkToPlan = linkToPlanRaw.replace(/&amp;/g, "&");
-
-      const planUrls = await scrapGroupsFromPlan(linkToPlan);
-      for (const u of planUrls) {
-        urls.add(u);
+      if (linkToPlanRaw !== undefined) {
+        const linkToPlan = linkToPlanRaw.replace(/&amp;/g, "&");
+        const planUrls = await scrapGroupsFromPlan(linkToPlan);
+        for (const u of planUrls) {
+          urls.add(u);
+        }
       }
     }
   }
