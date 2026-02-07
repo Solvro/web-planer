@@ -168,8 +168,10 @@ export async function scrapCourseNameGroupsUrls(
   courseUrl: string,
 ): Promise<ScrapedCourseDetails> {
   let courseName = "";
-  const urls: string[] = [];
   let courseCode = "";
+
+  const urls = new Set<string>();
+
   const response = await fetchData(courseUrl);
   if (!response.ok) {
     throw new Error(
@@ -179,58 +181,77 @@ export async function scrapCourseNameGroupsUrls(
 
   const body = await response.text();
   const $ = cheerio.load(body);
-  courseName = $("main-panel#main").find("h1").text();
+
+  courseName = $("main-panel#main").find("h1").text().trim();
 
   courseCode = $("div#layout-c22")
     .find("div.usos-ui")
     .find("usos-frame")
-    .find("table")
-    .find("tbody")
-    .find("tr")
+    .find("table tbody tr")
     .eq(0)
     .find("td")
     .eq(1)
     .text()
     .trim();
-  const groups = $("div#layout-c22").find("div.usos-ui").children("usos-frame");
-  groups.each((_, element) => {
-    const title = $(element).find("h2");
+
+  const groups = $("div#layout-c22")
+    .find("div.usos-ui")
+    .children("usos-frame")
+    .toArray();
+
+  for (const element of groups) {
+    const title = $(element).find("h2").text();
+
     if (
-      title.text().includes("(jeszcze nie rozpoczęty)") ||
-      title.text().includes("(w trakcie)")
+      title.includes("(jeszcze nie rozpoczęty)") ||
+      title.includes("(w trakcie)")
     ) {
-      const linksToSubCourses = $(element).find("usos-link").children("a");
-      linksToSubCourses.each((__, el) => {
-        const url = $(el).attr("href");
-        if (url !== undefined) {
-          urls.push(url);
-        }
-      });
+      const linkToPlanRaw = $(element)
+        .find('a[href*="pokazPlanZajecPrzedmiotu"]')
+        .first()
+        .attr("href");
+
+      if (!linkToPlanRaw) continue;
+
+      const linkToPlan = linkToPlanRaw.replace(/&amp;/g, "&");
+
+      const planUrls = await scrapGroupsFromPlan(linkToPlan);
+      for (const u of planUrls) urls.add(u);
     }
-  });
-  return { courseName, urls, courseCode };
+  }
+
+  return { courseName, urls: [...urls], courseCode };
 }
 
-export async function scrapGroupsUrls(groupUrl: string): Promise<string[]> {
-  const groupsUrls: string[] = [];
-  const response = await fetchData(groupUrl);
+export async function scrapGroupsFromPlan(planUrl: string): Promise<string[]> {
+  const response = await fetchData(planUrl);
   if (!response.ok) {
     throw new Error(
-      `Got response code ${response.status} ${response.statusText} while fetching group URLs`,
+      `Got response code ${response.status} ${response.statusText} while fetching plan details`,
     );
   }
 
   const body = await response.text();
   const $ = cheerio.load(body);
 
-  const groups = $("div#layout-c22").find("table").find("tbody").children("tr");
-  groups.each((_, element) => {
-    const link = $(element).find("usos-link").find("a").attr("href");
-    if (link !== undefined) {
-      groupsUrls.push(link);
-    }
-  });
-  return groupsUrls;
+  const urls = new Set<string>();
+
+  $("div#layout-c22")
+    .find("div.usos-ui")
+    .find("div.timetable-wrapper")
+    .find("usos-timetable")
+    .find("timetable-day")
+    .find("timetable-entry")
+    .find('span[slot="dialog-info"] a[href*="pokazZajecia"]')
+    .each((_, a) => {
+      const hrefRaw = $(a).attr("href");
+      if (!hrefRaw) return;
+
+      const href = hrefRaw.replace(/&amp;/g, "&");
+      urls.add(new URL(href).toString());
+    });
+
+  return [...urls];
 }
 
 export interface ScrapedGroupMeeting {

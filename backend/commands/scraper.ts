@@ -20,7 +20,6 @@ import {
   scrapCourses,
   scrapDepartments,
   scrapGroupDetails,
-  scrapGroupsUrls,
   scrapRegistrations,
 } from "../app/scrap-registrations/scrap_registrations.js";
 
@@ -271,43 +270,29 @@ export default class Scraper extends BaseCommand {
         department.registrations.flatMap((registration) =>
           registration.courses.flatMap((course) =>
             course.groups.map(async (group) => {
-              let urls;
+              const url = group.url;
+              if (!url) return;
+
+              let details;
               try {
-                urls = await this.scrapingSemaphore.runTask(() =>
-                  scrapGroupsUrls(group.url),
+                details = await this.scrapingSemaphore.runTask(() =>
+                  scrapGroupDetails(url),
                 );
               } catch (e) {
                 assert(e instanceof Error);
                 this.logger.warning(
-                  `Failed to fetch group detail URLs from '${group.url}': ${e.message}\n${e.stack}`,
+                  `Failed to fetch group details from '${url}': ${e.message}\n${e.stack}`,
                 );
                 return;
               }
 
-              return await Promise.all(
-                urls.map(async (url) => {
-                  let details;
-                  try {
-                    details = await this.scrapingSemaphore.runTask(() =>
-                      scrapGroupDetails(url),
-                    );
-                  } catch (e) {
-                    assert(e instanceof Error);
-                    this.logger.warning(
-                      `Failed to fetch group details from '${url}': ${e.message}\n${e.stack}`,
-                    );
-                    return;
-                  }
+              const lecturers = details.lecturer
+                .trim()
+                .replace(/\s+/g, " ")
+                .slice(0, 255)
+                .split(", ");
 
-                  const lecturers = details.lecturer
-                    .trim()
-                    .replace(/\s+/g, " ")
-                    .slice(0, 255)
-                    .split(", ");
-
-                  return { url, registration, course, details, lecturers };
-                }),
-              );
+              return { url, registration, course, details, lecturers };
             }),
           ),
         ),
