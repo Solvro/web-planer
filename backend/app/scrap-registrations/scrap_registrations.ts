@@ -192,22 +192,68 @@ export async function scrapCourseNameGroupsUrls(
     .eq(1)
     .text()
     .trim();
-  const groups = $("div#layout-c22").find("div.usos-ui").children("usos-frame");
-  groups.each((_, element) => {
-    const title = $(element).find("h2");
-    if (
-      title.text().includes("(jeszcze nie rozpoczęty)") ||
-      title.text().includes("(w trakcie)")
-    ) {
-      const linksToSubCourses = $(element).find("usos-link").children("a");
-      linksToSubCourses.each((__, el) => {
-        const url = $(el).attr("href");
-        if (url !== undefined) {
-          urls.push(url);
+  const cycle = $("div#layout-c22")
+    .find("div.usos-ui")
+    .children("usos-frame.zajecia")
+    .filter((_, element) => {
+      const title = $(element).find("h2");
+      return (
+        title.text().includes("(jeszcze nie rozpoczęty)") ||
+        title.text().includes("(w trakcie)")
+      );
+    })
+    .first();
+  if (cycle.length > 0) {
+    // const linksToSubCourses = $(cycle).find("usos-link").children("a");
+    // linksToSubCourses.each((__, el) => {
+    //   const url = $(el).attr("href");
+    //   if (url !== undefined) {
+    //     urls.push(url);
+    //   }
+    // });
+
+    // they broke the group display in the course view - workaround
+    const linkToCalendar = $(cycle)
+      .find("usos-timetable")
+      .closest("a")
+      .attr("href");
+
+    if (linkToCalendar !== undefined) {
+      const calendarResponse = await fetchData(linkToCalendar);
+      if (!calendarResponse.ok) {
+        throw new Error(
+          `Got response code ${calendarResponse.status} ${calendarResponse.statusText} while fetching course calendar`,
+        );
+      }
+
+      const $$ = cheerio.load(await calendarResponse.text());
+
+      const courseIds = new Set<string>();
+      const links = $$("usos-timetable span[slot=dialog-info] a");
+      for (const link of links) {
+        const href = $$(link).attr("href");
+        if (href === undefined) {
+          continue;
         }
-      });
+        const courseId = new URL(href).searchParams.get("zaj_cyk_id");
+        if (courseId === null) {
+          continue;
+        }
+        courseIds.add(courseId);
+      }
+
+      const baseUrl = new URL(courseUrl);
+      baseUrl.search = "";
+      baseUrl.searchParams.set(
+        "_action",
+        "katalog2/przedmioty/pokazGrupyZajec",
+      );
+      for (const id of courseIds) {
+        baseUrl.searchParams.set("zaj_cyk_id", id);
+        urls.push(baseUrl.href);
+      }
     }
-  });
+  }
   return { courseName, urls, courseCode };
 }
 
