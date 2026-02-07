@@ -13,9 +13,8 @@ export default class RegistrationsController {
     const departmentId = params.department_id as unknown;
 
     if (typeof departmentId === "string") {
-      const tmpDepId = decodeURIComponent(departmentId);
       return Registration.query()
-        .where("departmentId", tmpDepId)
+        .where("departmentId", departmentId)
         .andWhere("isActive", true)
         .orWhereNull("isActive");
     }
@@ -39,8 +38,8 @@ export default class RegistrationsController {
     assert(typeof params.department_id === "string");
     assert(typeof params.id === "string");
 
-    const departmentId = decodeURIComponent(params.department_id);
-    const registrationId = decodeURIComponent(params.id);
+    const departmentId = params.department_id;
+    const registrationId = params.id;
 
     if (departmentId && registrationId) {
       return await Registration.query()
@@ -60,8 +59,8 @@ export default class RegistrationsController {
     assert(typeof params.department_id === "string");
     assert(typeof params.id === "string");
 
-    const departmentId = decodeURIComponent(params.department_id);
-    const registrationId = decodeURIComponent(params.id);
+    const departmentId = params.department_id;
+    const registrationId = params.id;
 
     const payload = await request.validateUsing(createRegistrationValidator);
 
@@ -83,8 +82,8 @@ export default class RegistrationsController {
     assert(typeof params.department_id === "string");
     assert(typeof params.id === "string");
 
-    const departmentId = decodeURIComponent(params.department_id);
-    const registrationId = decodeURIComponent(params.id);
+    const departmentId = params.department_id;
+    const registrationId = params.id;
 
     const registration = await Registration.query()
       .where("departmentId", departmentId)

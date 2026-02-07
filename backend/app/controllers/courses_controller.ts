@@ -12,7 +12,7 @@ export default class CoursesController {
   async index({ params }: HttpContext) {
     assert(typeof params.registration_id === "string");
 
-    const registrationId = decodeURIComponent(params.registration_id);
+    const registrationId = params.registration_id;
     if (!registrationId) {
       return [];
     }
@@ -73,7 +73,7 @@ export default class CoursesController {
   async store({ request, params }: HttpContext) {
     assert(typeof params.registration_id === "string");
 
-    const registrationId = decodeURIComponent(params.registration_id);
+    const registrationId = params.registration_id;
     const payload = await request.validateUsing(createCourseValidator);
     const course = await Course.create({ ...payload, registrationId });
     return { message: "Course created.", course };
@@ -85,7 +85,7 @@ export default class CoursesController {
   async show({ params }: HttpContext) {
     assert(typeof params.registration_id === "string");
     assert(typeof params.id === "string");
-    const registrationId = decodeURIComponent(params.registration_id);
+    const registrationId = params.registration_id;
 
     if (!registrationId) {
       return [];
@@ -143,7 +143,7 @@ export default class CoursesController {
     assert(typeof params.registration_id === "string");
     assert(typeof params.id === "string");
 
-    const registrationId = decodeURIComponent(params.registration_id);
+    const registrationId = params.registration_id;
     const payload = await request.validateUsing(createCourseValidator);
 
     const course = await Course.query()
