@@ -211,12 +211,16 @@ export async function scrapCourseNameGroupsUrls(
         .first()
         .attr("href");
 
-      if (!linkToPlanRaw) continue;
+      if (!linkToPlanRaw) {
+        continue;
+      }
 
       const linkToPlan = linkToPlanRaw.replace(/&amp;/g, "&");
 
       const planUrls = await scrapGroupsFromPlan(linkToPlan);
-      for (const u of planUrls) urls.add(u);
+      for (const u of planUrls) {
+        urls.add(u);
+      }
     }
   }
 
@@ -245,10 +249,10 @@ export async function scrapGroupsFromPlan(planUrl: string): Promise<string[]> {
     .find('span[slot="dialog-info"] a[href*="pokazZajecia"]')
     .each((_, a) => {
       const hrefRaw = $(a).attr("href");
-      if (!hrefRaw) return;
-
-      const href = hrefRaw.replace(/&amp;/g, "&");
-      urls.add(new URL(href).toString());
+      if (!hrefRaw) {
+        return;
+      }
+      urls.add(hrefRaw);
     });
 
   return [...urls];

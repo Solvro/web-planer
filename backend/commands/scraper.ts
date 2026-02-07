@@ -271,7 +271,6 @@ export default class Scraper extends BaseCommand {
           registration.courses.flatMap((course) =>
             course.groups.map(async (group) => {
               const url = group.url;
-              if (!url) return;
 
               let details;
               try {
