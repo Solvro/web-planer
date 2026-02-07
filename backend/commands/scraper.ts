@@ -503,8 +503,9 @@ export default class Scraper extends BaseCommand {
     this.scrapingSemaphore = new Semaphore(this.maxUsosRequests);
     this.dbSemaphore = new Semaphore(this.maxDbRequests);
 
-    await this.ui
-      .tasks({ verbose: true })
+    const tasks = this.ui.tasks({ verbose: true });
+
+    await tasks
       .add("Scrape departments", async (task) => {
         await this.departmentScrapeTask(task);
         return "Done";
@@ -534,5 +535,7 @@ export default class Scraper extends BaseCommand {
         return "Done";
       })
       .run();
+
+    this.exitCode = tasks.getState() === "succeeded" ? 0 : 1;
   }
 }
