@@ -211,7 +211,7 @@ export async function scrapCourseNameGroupsUrls(
         .first()
         .attr("href");
 
-      if (!linkToPlanRaw) {
+      if (linkToPlanRaw === undefined) {
         continue;
       }
 
@@ -249,10 +249,9 @@ export async function scrapGroupsFromPlan(planUrl: string): Promise<string[]> {
     .find('span[slot="dialog-info"] a[href*="pokazZajecia"]')
     .each((_, a) => {
       const hrefRaw = $(a).attr("href");
-      if (!hrefRaw) {
-        return;
+      if (hrefRaw !== undefined) {
+        urls.add(hrefRaw);
       }
-      urls.add(hrefRaw);
     });
 
   return [...urls];
