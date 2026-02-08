@@ -22,6 +22,7 @@ server.errorHandler(() => import("#exceptions/handler"));
  * the request URL.
  */
 server.use([
+  () => import("@solvro/solvronis-metrics"),
   () => import("#middleware/container_bindings_middleware"),
   () => import("#middleware/force_json_response_middleware"),
   () => import("@adonisjs/cors/cors_middleware"),

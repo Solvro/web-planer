@@ -25,6 +25,9 @@ const RegistrationsController = () =>
 const CoursesController = () => import("#controllers/courses_controller");
 const GroupsController = () => import("#controllers/groups_controller");
 const UsersController = () => import("#controllers/users_controller");
+const MetricsMiddleware = () => import("@solvro/solvronis-metrics");
+
+router.get("/metrics", [MetricsMiddleware, "emitMetrics"]);
 
 router.get("/swagger", async () => {
   return AutoSwagger.default.docs(router.toJSON(), swagger);
