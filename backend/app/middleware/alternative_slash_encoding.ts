@@ -2,14 +2,15 @@ import type { HttpContext } from "@adonisjs/core/http";
 import { NextFn } from "@adonisjs/core/types/http";
 
 /**
- * Replaces all / in id fields with |.
+ * Applies a transformation function to any ID field in the input object.
  *
  * A field is considered to be an "id field" if it's name is "id" or ends with "Id".
  * The object passed in is traversed recursively and modified in-place.
  *
  * @param input the object to transform
+ * @param transform a string transformation function to apply to ID fields
  */
-function replaceSlashesInIds(input: unknown) {
+function transformIdFields(input: unknown, transform: (id: string) => string) {
   // not an object/array - don't care
   if (typeof input !== "object" || input === null) {
     return;
@@ -17,7 +18,7 @@ function replaceSlashesInIds(input: unknown) {
   // array - iterate over items and recurse
   if (Array.isArray(input)) {
     for (const item of input) {
-      replaceSlashesInIds(item);
+      transformIdFields(item, transform);
     }
     return;
   }
@@ -28,9 +29,9 @@ function replaceSlashesInIds(input: unknown) {
       (prop === "id" || prop.endsWith("Id")) &&
       typeof obj[prop] === "string"
     ) {
-      obj[prop] = obj[prop].replaceAll("/", "|");
+      obj[prop] = transform(obj[prop]);
     } else if (typeof obj[prop] === "object") {
-      replaceSlashesInIds(obj[prop]);
+      transformIdFields(obj[prop], transform);
     }
   }
 }
@@ -53,10 +54,23 @@ export default class AlternativeSlashEncodingMiddleware {
       }),
     );
 
+    // same for body & query params
+    const transformedBody = structuredClone(ctx.request.body());
+    const transformedQs = structuredClone(ctx.request.qs());
+
+    transformIdFields(transformedBody, (id) => id.replaceAll("|", "/"));
+    transformIdFields(transformedQs, (id) => id.replaceAll("|", "/"));
+
+    ctx.request.updateBody(transformedBody);
+    ctx.request.updateQs(transformedQs);
+
+    // handle the request
     await next();
     // edit the response
     if (ctx.response.hasContent) {
-      replaceSlashesInIds(ctx.response.content?.[0]);
+      transformIdFields(ctx.response.content?.[0], (id) =>
+        id.replaceAll("/", "|"),
+      );
     }
   }
 }
