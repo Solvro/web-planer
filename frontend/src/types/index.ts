@@ -42,6 +42,7 @@ export interface ClassBlockProps {
 export interface Registration {
   id: string;
   name: string;
+  departmentId: string;
 }
 
 export interface Course {
@@ -116,6 +117,7 @@ export interface PlanResponseType {
   registrations: {
     id: string;
     name: string;
+    departmentId: string;
   }[];
 }
 
