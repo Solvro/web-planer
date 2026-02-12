@@ -33,6 +33,7 @@ interface PlanResponseType {
   registrations: {
     id: string;
     name: string;
+    departmentId: string;
   }[];
 }
 

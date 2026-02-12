@@ -206,6 +206,7 @@ export const auth = async ({ payload, noThrow = false, type }: AuthType) => {
     if (payload !== undefined) {
       return null;
     }
+    return null;
     throw new Error("Failed to authenticate");
   }
 };

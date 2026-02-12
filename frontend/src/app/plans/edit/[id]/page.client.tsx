@@ -74,12 +74,14 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       return response;
     },
   });
-
   const coursesFunction = useMutation({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
+      const onlindeFacultyId =
+        onlinePlan?.registrations[0]?.departmentId ??
+        plan.registrations[0]?.departmentId;
       const response = await fetchClient({
-        url: `/departments/${encodeURIComponent(faculty ?? "")}/registrations/${encodeURIComponent(registrationId)}/courses`,
+        url: `/departments/${encodeURIComponent(onlindeFacultyId)}/registrations/${encodeURIComponent(registrationId)}/courses`,
         method: "GET",
       });
 
@@ -138,6 +140,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       </div>
     );
   }
+
   return (
     <>
       <AppSidebar
