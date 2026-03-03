@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function FAQCalendarPage() {
   return (
-    <div className="w-full space-y-6">
+    <div className="mb-8 w-full space-y-6">
       <div>
         <h3 className="text-lg font-medium">Jak dodać do kalendarza</h3>
         <p className="text-sm text-muted-foreground">
@@ -20,8 +20,10 @@ export default function FAQCalendarPage() {
           Kliknij przycisk &quot;Dodaj do kalendarza (.ics)&quot;
         </p>
         <Image
-          src={"/assets/tutorial/tutorial-1.jpg"}
+          src={"/assets/tutorial/tutorial-1.png"}
           alt="Strona z planami, przycisk dodaj do kalendarza"
+          width={800}
+          height={450}
           unoptimized
           className="w-full"
         />
@@ -38,12 +40,16 @@ export default function FAQCalendarPage() {
         <Image
           src={"/assets/tutorial/tutorial-2.jpg"}
           alt="Strona główna kalendarza google z zaznaczonym na czerwono przyciskiem dodaj"
+          width={800}
+          height={450}
           unoptimized
           className="w-full"
         />
         <Image
           src={"/assets/tutorial/tutorial-3.jpg"}
           alt="Strona kalendarza google z zaznaczonym na czerwono przyciskiem importuj"
+          width={800}
+          height={450}
           unoptimized
           className="w-full"
         />
@@ -57,6 +63,8 @@ export default function FAQCalendarPage() {
         <Image
           src={"/assets/tutorial/tutorial-4.jpg"}
           alt="Strona importu pliku do kalendarza google"
+          width={800}
+          height={450}
           unoptimized
           className="w-full"
         />
