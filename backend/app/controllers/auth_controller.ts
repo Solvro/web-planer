@@ -51,7 +51,7 @@ export default class AuthController {
     let user = await User.findBy("studentNumber", studentNumber);
     if (user === null) {
       user = await User.create({
-        usos_id: "",
+        usosId: "",
         studentNumber,
         firstName: "",
         lastName: "",
