@@ -46,7 +46,6 @@ function AnimationLogo() {
             className="animate-waving-hand cursor-pointer rounded-md pb-10 duration-5000"
             quality={100}
             priority={true}
-            placeholder="blur"
           />
         </Link>
 
