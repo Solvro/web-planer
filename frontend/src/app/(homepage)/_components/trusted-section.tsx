@@ -61,7 +61,7 @@ export function TrustedSection() {
               <motion.li variants={childVariants}>
                 <img
                   alt="WiT"
-                  src="https://wit.pwr.edu.pl/thumb/oUg5KFBRVEAZtCSs0BwRePEMbBxc8HxcHEzcOUhwOCTkGGQolAw,190/pl/news/189/115/11/FABoNM1cPfU9nAkY,logo_wit_przezroczyste.png"
+                  src="/assets/logo/wit_logo.svg"
                   className="h-14 w-auto px-2 dark:brightness-0 dark:invert"
                 />
               </motion.li>
