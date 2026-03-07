@@ -1,18 +1,10 @@
-name: Frontend - CI
+name: CI
 
 on:
   push:
     branches: ["main"]
-    paths:
-      - ".github/workflows/frontend_ci.yaml"
-      - "*"
-      - "frontend/**"
   pull_request:
     branches: ["main"]
-    paths:
-      - ".github/workflows/frontend_ci.yaml"
-      - "*"
-      - "frontend/**"
 
 jobs:
   commitlint:
@@ -29,13 +21,10 @@ jobs:
         uses: ./.github/composite-actions/install
 
       - name: Run commitlint check
-        run: npx commitlint --from ${{ github.event.pull_request.base.sha }}
+        run: pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }}
 
   lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,18 +33,15 @@ jobs:
         uses: ./.github/composite-actions/install
 
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint:style
 
       - name: Type check
-        run: npm run typecheck
+        run: pnpm run lint:typecheck
         if: always()
 
   prettier:
     name: Format
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -64,14 +50,11 @@ jobs:
         uses: ./.github/composite-actions/install
 
       - name: Format check
-        run: npm run format:check
+        run: pnpm run format:check
 
   deadcode:
     name: Find deadcode
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,14 +63,11 @@ jobs:
         uses: ./.github/composite-actions/install
 
       - name: Find deadcode
-        run: npm run knip
+        run: pnpm run knip
 
   build:
     name: Test build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -96,7 +76,7 @@ jobs:
         uses: ./.github/composite-actions/install
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
         env:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello

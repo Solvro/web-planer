@@ -12,32 +12,9 @@ services:
       interval: 5s
       timeout: 20s
       retries: 10
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    environment:
-      - SERVICE_FQDN_BACKEND_3333
-      - PORT=3333
-      - HOST=0.0.0.0
-      - LOG_LEVEL=debug
-      - APP_KEY=${SERVICE_PASSWORD_64_BACKEND}
-      - DB_USER=$SERVICE_USER_POSTGRES
-      - DB_PASSWORD=$SERVICE_PASSWORD_POSTGRES
-      - DB_DATABASE=${POSTGRES_DB:-planer}
-      - SESSION_DRIVER=cookie
-      - DB_HOST=postgresql
-      - DB_PORT=5432
-    depends_on:
-      - postgresql
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3333/healthcheck || exit 1"]
-      interval: 5s
-      timeout: 20s
-      retries: 10
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
     environment:
       - SERVICE_FQDN_FRONTEND_3000
