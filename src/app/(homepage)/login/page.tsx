@@ -132,7 +132,7 @@ function EmailStep({
   return (
     <div className="mt-5 flex w-full max-w-xs flex-col gap-4 text-center">
       <Button variant="outline" className="w-full" asChild>
-        <Link href="/api/login" prefetch={false}>
+        <Link href="/api/auth/usos/login" prefetch={false}>
           Zaloguj się przez USOS
         </Link>
       </Button>

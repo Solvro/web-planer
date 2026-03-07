@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
-import { fetchToAdonis } from "@/lib/auth";
+import { env } from "@/env.mjs";
 import type { SharedPlan } from "@/types";
 
 import { SharePlanPage } from "./page.client";
@@ -21,10 +21,14 @@ export default async function SharePlan({ params }: PageProps) {
     return notFound();
   }
 
-  const result = await fetchToAdonis<{ success: boolean; plan: SharedPlan }>({
-    url: `/shared/${id}`,
+  const result = await fetch(`${env.SITE_URL}/api/v2/shared/${id}`, {
     method: "GET",
-  });
+  })
+    .then(
+      (res) =>
+        res.json() as Promise<{ success: boolean; plan: SharedPlan } | null>,
+    )
+    .catch(() => null);
 
   if (result?.success === false || result === null) {
     return notFound();

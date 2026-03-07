@@ -1,6 +1,5 @@
 "use server";
 
-import { cookies as cookiesPromise } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { env } from "@/env.mjs";
@@ -8,18 +7,12 @@ import { env } from "@/env.mjs";
 import { extractNumber } from "../lib/utils";
 
 export const getFaculties = async () => {
-  const cookies = await cookiesPromise();
-  const csrfToken = cookies.get("XSRF-TOKEN")?.value;
-  const facultiesResponse = await fetch(
-    `${env.NEXT_PUBLIC_API_URL}/departments`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-XSRF-TOKEN": csrfToken ?? "",
-      },
+  const facultiesResponse = await fetch(`${env.SITE_URL}/api/v2/departments`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
-  ).then(async (r) => {
+  }).then(async (r) => {
     if (!r.ok) {
       throw new Error(
         `Failed to fetch faculties: ${r.status.toString()} ${r.statusText}`,

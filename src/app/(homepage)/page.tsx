@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -58,7 +59,10 @@ function AnimationLogo() {
 }
 
 async function JoinUsBlock() {
-  const user = await auth({ type: "adonis", noThrow: true });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const user = session?.user ?? null;
 
   if (user === null) {
     return (

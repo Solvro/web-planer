@@ -41,8 +41,10 @@ export function UserButton({ profile }: { profile: User }) {
                 </p>
               </div>
 
-              <Badge variant={profile.verified ? "secondary" : "destructive"}>
-                {profile.verified ? "Zweryfikowany" : "Niezweryfikowany"}
+              <Badge
+                variant={profile.emailVerified ? "secondary" : "destructive"}
+              >
+                {profile.emailVerified ? "Zweryfikowany" : "Niezweryfikowany"}
               </Badge>
             </div>
           </div>
@@ -95,23 +97,23 @@ export function UserButton({ profile }: { profile: User }) {
 }
 
 export function UserAvatar({ profile }: { profile: User }) {
-  const isFirstNameEmpty = profile.firstName === "";
-  const isLastNameEmpty = profile.lastName === "";
+  const isFirstNameEmpty = !profile.firstName || profile.firstName === "";
+  const isLastNameEmpty = !profile.lastName || profile.lastName === "";
 
   const fallback = useMemo(() => {
     if (isFirstNameEmpty && isLastNameEmpty) {
-      return profile.studentNumber.toString().slice(0, 2);
+      return profile.studentNumber?.toString().slice(0, 2) ?? "??";
     }
 
     if (isFirstNameEmpty) {
-      return profile.lastName.slice(0, 1);
+      return profile.lastName?.slice(0, 1) ?? "?";
     }
 
     if (isLastNameEmpty) {
-      return profile.firstName.slice(0, 1);
+      return profile.firstName?.slice(0, 1) ?? "?";
     }
 
-    return `${profile.firstName.slice(0, 1)}${profile.lastName.slice(0, 1)}`;
+    return `${profile.firstName?.slice(0, 1) ?? ""}${profile.lastName?.slice(0, 1) ?? ""}`;
   }, [
     isFirstNameEmpty,
     isLastNameEmpty,
@@ -122,7 +124,7 @@ export function UserAvatar({ profile }: { profile: User }) {
 
   return (
     <Avatar>
-      <AvatarImage src={profile.avatar ?? "/assets/avatar_placeholder.png"} />
+      <AvatarImage src={profile.image ?? "/assets/avatar_placeholder.png"} />
       <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
   );

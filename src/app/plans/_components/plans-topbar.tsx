@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
@@ -57,14 +58,16 @@ export function PlansTopbar() {
 }
 
 async function UserProfile() {
-  const profile = await auth({ type: "adonis", noThrow: true });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (profile == null) {
+  if (!session) {
     return (
       <Button variant="default" size="sm" asChild={true}>
         <Link href="/login">Zaloguj się</Link>
       </Button>
     );
   }
-  return <UserButton profile={profile} />;
+  return <UserButton profile={session.user} />;
 }

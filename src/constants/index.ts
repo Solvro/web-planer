@@ -1,5 +1,3 @@
-export const ADONIS_COOKIES = new Set(["token", "adonis-session"]);
-
 export const parentVariants = {
   hidden: {
     opacity: 0,

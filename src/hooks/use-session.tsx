@@ -1,33 +1,9 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { authClient } from "@/lib/auth-client";
 
-import type { User } from "@/types";
+export const useSession = authClient.useSession;
 
-interface SessionContextType {
-  user: User | null;
+export function SessionProvider({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
-
-const SessionContext = createContext<SessionContextType | undefined>(undefined);
-
-export function SessionProvider({
-  children,
-  user,
-}: {
-  children: React.ReactNode;
-  user: User | null;
-}) {
-  return (
-    <SessionContext.Provider value={{ user }}>
-      {children}
-    </SessionContext.Provider>
-  );
-}
-
-export const useSession = () => {
-  const context = useContext(SessionContext);
-  if (context === undefined) {
-    throw new Error("useSession must be used within a SessionProvider");
-  }
-  return context;
-};
