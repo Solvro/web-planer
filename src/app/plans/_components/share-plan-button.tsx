@@ -18,7 +18,7 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
 
   const handleCopyLink = async (id: string) => {
     await navigator.clipboard.writeText(
-      `${env.NEXT_PUBLIC_API_URL.includes("localhost") ? "http://localhost:3000" : "https://planer.solvro.pl"}/plans/preview/${id}`,
+      `${env.NEXT_PUBLIC_SITE_URL}/plans/preview/${id}`,
     );
     toast.success("Skopiowano link do schowka");
   };
@@ -61,10 +61,7 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
   return (
     <div className="flex items-center gap-2 rounded-full border bg-background/50 p-1">
       <p className="hidden truncate pl-2 md:block">
-        {env.NEXT_PUBLIC_API_URL.includes("localhost")
-          ? "http://localhost:3000"
-          : "https://planer.solvro.pl"}
-        /plans/preview/{currentSharedPlanId ?? "..."}
+        {env.NEXT_PUBLIC_SITE_URL}/plans/preview/{currentSharedPlanId ?? "..."}
       </p>
       {currentSharedPlanId === null || currentSharedPlanId === undefined ? (
         <Button

@@ -1,13 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 
-import { auth, fetchToAdonis } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import type {
   CreatePlanResponseType,
   DeletePlanResponseType,
   PlanResponseType,
 } from "@/types";
+
+const getSession = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  return session;
+};
 
 export const createNewPlan = async ({
   name,
@@ -19,23 +27,21 @@ export const createNewPlan = async ({
   courses: { id: string }[];
   registrations: { id: string }[];
   groups: { id: number }[];
-}) => {
-  try {
-    await auth({ type: "adonis" });
-
-    const data = await fetchToAdonis<CreatePlanResponseType>({
-      url: "/user/schedules",
-      method: "POST",
-      body: JSON.stringify({ name, courses, registrations, groups }),
-    });
-    if (data === null) {
-      return null;
-    }
-    revalidatePath("/plans");
-    return data;
-  } catch {
+}): Promise<CreatePlanResponseType | null> => {
+  const session = await getSession();
+  if (!session) {
     return null;
   }
+
+  console.log("TODO: Implement createNewPlan in API v2", {
+    name,
+    courses,
+    registrations,
+    groups,
+  });
+
+  revalidatePath("/plans");
+  return null;
 };
 
 export const updatePlan = async ({
@@ -52,61 +58,61 @@ export const updatePlan = async ({
   courses: { id: string }[];
   registrations: { id: string }[];
   groups: { id: number }[];
-}) => {
-  await auth({ type: "adonis" });
+}): Promise<CreatePlanResponseType> => {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Not logged in");
+  }
 
-  const data = await fetchToAdonis<CreatePlanResponseType>({
-    url: `/user/schedules/${id.toString()}`,
-    method: "PATCH",
-    body: JSON.stringify({ name, sharedId, courses, registrations, groups }),
+  console.log("TODO: Implement updatePlan in API v2", {
+    id,
+    name,
+    sharedId,
+    courses,
+    registrations,
+    groups,
   });
 
-  if (data === null) {
-    throw new Error("Failed to update plan");
-  }
-  return data;
+  throw new Error("Not implemented");
 };
 
-export const deletePlan = async ({ id }: { id: number }) => {
-  try {
-    await auth({ type: "adonis" });
-    const data = await fetchToAdonis<DeletePlanResponseType>({
-      url: `/user/schedules/${id.toString()}`,
-      method: "DELETE",
-    });
-    if (data === null) {
-      return {
-        success: false,
-        message: "Nie udało się usunąć planu",
-      };
-    }
-    revalidatePath("/plans");
-    return data;
-  } catch {
+export const deletePlan = async ({
+  id,
+}: {
+  id: number;
+}): Promise<DeletePlanResponseType> => {
+  const session = await getSession();
+  if (!session) {
     return {
       success: false,
       message: "Nie udało się usunąć planu, użytkownik niezalogowany",
     };
   }
+
+  console.log("TODO: Implement deletePlan in API v2", { id });
+
+  revalidatePath("/plans");
+  return {
+    success: false,
+    message: "Not implemented",
+  };
 };
 
-export const getPlan = async ({ id }: { id: number | string }) => {
+export const getPlan = async ({
+  id,
+}: {
+  id: number | string;
+}): Promise<PlanResponseType | null> => {
   if (typeof id === "string") {
     id = Number.parseInt(id);
   }
-  try {
-    await auth({ type: "adonis" });
-    const data = await fetchToAdonis<
-      PlanResponseType | { error: string; message: string }
-    >({
-      url: `/user/schedules/${id.toString()}`,
-      method: "GET",
-    });
-    if (data !== null && "error" in data) {
-      return null;
-    }
-    return data;
-  } catch {
+
+  const session = await getSession();
+  if (!session) {
     return null;
   }
+
+  console.log("TODO: Implement getPlan in API v2", { id });
+
+  return null;
 };

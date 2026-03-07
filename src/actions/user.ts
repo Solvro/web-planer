@@ -1,38 +1,34 @@
 "use server";
 
-import { auth, fetchToAdonis } from "@/lib/auth";
-import type { UserSettingsPayload } from "@/types";
+import { headers } from "next/headers";
+
+import { auth } from "@/lib/auth";
 
 export const getCurrentUser = async () => {
-  const user = await auth({ type: "adonis" });
-  if (user == null) {
-    throw new Error("Not logged in");
-  }
-  return user;
-};
-
-interface UpdateUserSettingsResponse {
-  message: string;
-  user: number;
-  success: boolean;
-}
-
-export const updateUser = async (payload: UserSettingsPayload) => {
-  const user = await auth({ type: "adonis" });
-  if (user == null) {
-    throw new Error("Not logged in");
-  }
-
-  // Update user
-  const data = await fetchToAdonis<UpdateUserSettingsResponse>({
-    url: "/user",
-    method: "POST",
-    body: JSON.stringify(payload),
+  const session = await auth.api.getSession({
+    headers: await headers(),
   });
 
-  if (data === null) {
-    throw new Error("Failed to update user");
+  if (!session) {
+    throw new Error("Not logged in");
   }
+
+  return session.user;
+};
+
+export const updateUser = async (payload: { allowNotifications: boolean }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    throw new Error("Not logged in");
+  }
+
+  const ctx = await auth.$context;
+  await ctx.internalAdapter.updateUser(session.user.id, {
+    allowNotifications: payload.allowNotifications,
+  });
 
   return { success: true };
 };

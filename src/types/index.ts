@@ -63,16 +63,19 @@ export interface SharedPlan {
 }
 
 export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  studentNumber: number;
-  usosId: string;
-  avatar?: string | null | undefined;
-  verified: boolean;
-  createdAt: string;
-  updatedAt: string;
-  allowNotifications: boolean;
+  id: string;
+  email: string;
+  name: string;
+  image?: string | null;
+  emailVerified: boolean;
+  firstName?: string | null;
+  lastName?: string | null;
+  studentNumber?: number | null;
+  usosId?: string | null;
+  allowNotifications?: boolean | null;
+  onboardingCompleted?: boolean | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface UserSettingsPayload {

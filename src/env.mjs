@@ -3,11 +3,13 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
+    BETTER_AUTH_SECRET: z.string().min(32),
+    BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
+    DATABASE_URL: z.string().url(),
     USOS_CONSUMER_KEY: z.string().min(1),
     USOS_CONSUMER_SECRET: z.string().min(1),
     USOS_APPS_URL: z.string().url().default("https://apps.usos.pwr.edu.pl"),
     SITE_URL: z.string().url().default("http://localhost:3000"),
-    NEXT_PUBLIC_API_URL: z.string().url().default("http://localhost:3000/api"),
     FORMS_LINK: z.string().url().default("https://forms.gle/"),
     FORMS_FIELD_EMAIL: z.string().default("entry.1234567890"),
     FORMS_FIELD_TITLE: z.string().default("entry.1234567890"),
@@ -15,11 +17,14 @@ export const env = createEnv({
     GITHUB_TOKEN: z.string().optional(),
   },
   client: {
-    NEXT_PUBLIC_API_URL: z.string().url(),
+    NEXT_PUBLIC_SITE_URL: z.string().url(),
   },
   runtimeEnv: {
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    DATABASE_URL: process.env.DATABASE_URL,
     SITE_URL: process.env.SITE_URL,
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     USOS_APPS_URL: process.env.USOS_APPS_URL,
     USOS_CONSUMER_KEY: process.env.USOS_CONSUMER_KEY,
     USOS_CONSUMER_SECRET: process.env.USOS_CONSUMER_SECRET,

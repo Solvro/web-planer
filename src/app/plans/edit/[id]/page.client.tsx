@@ -38,8 +38,8 @@ import { SaveOfflineFunction } from "./_components/save-offline";
 import { SaveOnlineFunction } from "./_components/save-online";
 
 export function CreateNewPlanPage({ planId }: { planId: string }) {
-  const { user } = useSession();
-  const isLoggedIn = user !== null;
+  const session = useSession();
+  const isLoggedIn = session.data !== null;
   const [offlineAlert, setOfflineAlert] = useState(false);
   const [faculty, setFaculty] = useState<string | null>(null);
   const { isDialogOpen, setIsDialogOpen } = useShare();
@@ -308,12 +308,12 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
         </DialogContent>
       </Dialog>
 
-      {isLoggedIn ? (
+      {isLoggedIn && session.data ? (
         <SaveOnlineFunction
           plan={plan}
           setOfflineAlert={setOfflineAlert}
           handleCreateOnlinePlan={handleCreateOnlinePlan}
-          user={user}
+          user={session.data.user}
           offlineAlert={offlineAlert}
           handleSyncPlan={handleSyncPlan}
         />

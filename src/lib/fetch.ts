@@ -29,6 +29,6 @@ export const fetchClient = async ({
     fetchOptions.body = body;
   }
 
-  const response = fetch(`${env.NEXT_PUBLIC_API_URL}${url}`, fetchOptions);
+  const response = fetch(`${env.NEXT_PUBLIC_SITE_URL}${url}`, fetchOptions);
   return await response;
 };

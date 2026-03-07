@@ -47,7 +47,7 @@ export function NotificationsForm({ defaultUser }: { defaultUser: User }) {
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(notificationsFormSchema),
     defaultValues: {
-      allow_notifications: user.allowNotifications,
+      allow_notifications: user.allowNotifications ?? false,
       security_emails: true,
     },
   });
