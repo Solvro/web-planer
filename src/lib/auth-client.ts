@@ -1,3 +1,4 @@
+import { usosAuthClient } from "better-auth-usos/client";
 import {
   emailOTPClient,
   inferAdditionalFields,
@@ -7,7 +8,6 @@ import { createAuthClient } from "better-auth/react";
 import { env } from "@/env.mjs";
 
 import type { auth } from "./auth";
-import { usosAuthClient } from "./auth/plugins/usos-auth-client";
 
 export const authClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_SITE_URL,
