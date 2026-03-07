@@ -41,6 +41,7 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/uuid": "^10.0.0",
     "better-auth": "^1.5.4",
+    "better-auth-usos": "^1.0.2",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

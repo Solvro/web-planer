@@ -1,11 +1,10 @@
 import { betterAuth } from "better-auth";
+import { usosAuth } from "better-auth-usos";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { emailOTP } from "better-auth/plugins";
 
 import { db } from "@/db";
 import * as schema from "@/db/schema";
-
-import { usosAuth } from "./auth/plugins/usos-auth";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
@@ -45,7 +44,16 @@ export const auth = betterAuth({
       expiresIn: 300,
       sendVerificationOnSignUp: false,
     }),
-    usosAuth(),
+    usosAuth({
+      usosBaseUrl: process.env.USOS_APPS_URL!,
+      consumerKey: process.env.USOS_CONSUMER_KEY!,
+      consumerSecret: process.env.USOS_CONSUMER_SECRET!,
+      scopes: "studies|offline_access",
+      emailDomain: "@student.pwr.edu.pl",
+      onSuccess: async () => {
+        return "/plans";
+      },
+    }),
   ],
   session: {
     expiresIn: 60 * 60 * 24 * 7,
