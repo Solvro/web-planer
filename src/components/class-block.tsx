@@ -85,8 +85,8 @@ export function ClassBlock({
   const { isHorizontal } = usePlanOrientation();
   const position = calculatePosition(startTime, endTime);
   const [startGrid, durationSpan] = position;
-  const { user } = useSession();
-  const isLoggedIn = user !== null;
+  const session = useSession();
+  const isLoggedIn = session.data !== null;
 
   return (
     <Tooltip delayDuration={500}>
