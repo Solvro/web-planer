@@ -1,10 +1,12 @@
 import { betterAuth } from "better-auth";
 import { usosAuth } from "better-auth-usos";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { nextCookies } from "better-auth/next-js";
 import { emailOTP } from "better-auth/plugins";
 
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { env } from "@/env.mjs";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
@@ -45,15 +47,27 @@ export const auth = betterAuth({
       sendVerificationOnSignUp: false,
     }),
     usosAuth({
-      usosBaseUrl: process.env.USOS_APPS_URL!,
-      consumerKey: process.env.USOS_CONSUMER_KEY!,
-      consumerSecret: process.env.USOS_CONSUMER_SECRET!,
+      usosBaseUrl: env.USOS_APPS_URL,
+      consumerKey: env.USOS_CONSUMER_KEY,
+      consumerSecret: env.USOS_CONSUMER_SECRET,
       scopes: "studies|offline_access",
-      emailDomain: "@student.pwr.edu.pl",
-      onSuccess: async () => {
+      emailDomain: "student.pwr.edu.pl",
+      userFields: (usosProfile) => ({
+        studentNumber: usosProfile.student_number
+          ? Number.parseInt(usosProfile.student_number)
+          : null,
+        usosId: usosProfile.id,
+        firstName: usosProfile.first_name,
+        lastName: usosProfile.last_name,
+      }),
+      onSuccess: async (user) => {
+        console.log(
+          `[USOS AUTH] User logged in: ${user.firstName} ${user.lastName} (${user.studentNumber})`,
+        );
         return "/plans";
       },
     }),
+    nextCookies(),
   ],
   session: {
     expiresIn: 60 * 60 * 24 * 7,

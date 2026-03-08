@@ -30,6 +30,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { authClient } from "@/lib/auth-client";
 import { fetchClient } from "@/lib/fetch";
 import type { VerifyOtpReponseType } from "@/types";
 import {
@@ -129,12 +130,26 @@ function EmailStep({
       toast.error("Wystąpił błąd podczas wysyłania kodu");
     }
   }
+  async function handleUsosLogin() {
+    try {
+      await authClient.signIn.usos({
+        callbackURL: "/plans",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Wystąpił błąd podczas logowania przez USOS");
+    }
+  }
+
   return (
     <div className="mt-5 flex w-full max-w-xs flex-col gap-4 text-center">
-      <Button variant="outline" className="w-full" asChild>
-        <Link href="/api/auth/usos/login" prefetch={false}>
-          Zaloguj się przez USOS
-        </Link>
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={handleUsosLogin}
+        type="button"
+      >
+        Zaloguj się przez USOS
       </Button>
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
         <span className="relative z-10 bg-background px-2 text-muted-foreground">
