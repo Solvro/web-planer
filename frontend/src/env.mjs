@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
@@ -13,6 +14,65 @@ export const env = createEnv({
     FORMS_FIELD_TITLE: z.string().default("entry.1234567890"),
     FORMS_FIELD_DESCRIPTION: z.string().default("entry.1234567890"),
     GITHUB_TOKEN: z.string().optional(),
+    SEMESTER_START: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    SEMESTER_END: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    HOLIDAY_START: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    HOLIDAY_END: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    REFERENCE_WEEK_DATE: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    REFERENCE_WEEK_DATE_IS_EVEN: z
+      .enum(["true", "false"])
+      .transform((v) => v === "true"),
+
+    FREE_DAYS_JSON: z
+      .string()
+      .transform((string_, context) => {
+        try {
+          return JSON.parse(string_);
+        } catch {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid JSON in FREE_DAYS_JSON",
+          });
+          return z.NEVER;
+        }
+      })
+      .pipe(
+        z.array(
+          z.object({
+            date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+            description: z.string(),
+          }),
+        ),
+      ),
+
+    OVERRIDES_JSON: z
+      .string()
+      .transform((string_, context) => {
+        try {
+          return JSON.parse(string_);
+        } catch {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid JSON in OVERRIDES_JSON",
+          });
+          return z.NEVER;
+        }
+      })
+      .pipe(
+        z.array(
+          z.object({
+            date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+            day: z.enum([
+              "poniedziałek",
+              "wtorek",
+              "środa",
+              "czwartek",
+              "piątek",
+            ]),
+            week: z.enum(["odd", "even"]),
+          }),
+        ),
+      ),
   },
   client: {
     NEXT_PUBLIC_API_URL: z.string().url(),
@@ -28,6 +88,14 @@ export const env = createEnv({
     FORMS_FIELD_TITLE: process.env.FORMS_FIELD_TITLE,
     FORMS_FIELD_DESCRIPTION: process.env.FORMS_FIELD_DESCRIPTION,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    SEMESTER_START: process.env.SEMESTER_START,
+    SEMESTER_END: process.env.SEMESTER_END,
+    HOLIDAY_START: process.env.HOLIDAY_START,
+    HOLIDAY_END: process.env.HOLIDAY_END,
+    REFERENCE_WEEK_DATE: process.env.REFERENCE_WEEK_DATE,
+    REFERENCE_WEEK_DATE_IS_EVEN: process.env.REFERENCE_WEEK_DATE_IS_EVEN,
+    FREE_DAYS_JSON: process.env.FREE_DAYS_JSON,
+    OVERRIDES_JSON: process.env.OVERRIDES_JSON,
   },
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });

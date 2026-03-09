@@ -101,3 +101,11 @@ jobs:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello
           NEXT_PUBLIC_API_URL: http://localhost:3333
+          SEMESTER_START: "2024-10-01"
+          SEMESTER_END: "2025-02-05"
+          HOLIDAY_START: "2024-12-23"
+          HOLIDAY_END: "2025-01-06"
+          REFERENCE_WEEK_DATE: "2024-09-30"
+          REFERENCE_WEEK_DATE_IS_EVEN: "true"
+          FREE_DAYS_JSON: "[]"
+          OVERRIDES_JSON: "[]"
