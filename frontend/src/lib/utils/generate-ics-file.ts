@@ -1,4 +1,5 @@
 import type { ExtendedGroup } from "@/atoms/plan-family";
+import { env } from "@/env.mjs";
 
 const polishToEnglishDays: Record<string, string> = {
   poniedziałek: "MO",
@@ -25,80 +26,12 @@ interface Override {
   week: "odd" | "even";
 }
 
-const overrides: Override[] = [
-  {
-    date: "2024-10-07",
-    day: "poniedziałek",
-    week: "even",
-  },
-  {
-    date: "2024-10-08",
-    day: "wtorek",
-    week: "even",
-  },
-  {
-    date: "2024-11-08",
-    day: "piątek",
-    week: "even",
-  },
-  {
-    date: "2024-12-10",
-    day: "wtorek",
-    week: "odd",
-  },
-  {
-    date: "2024-12-11",
-    day: "piątek",
-    week: "odd",
-  },
-  {
-    date: "2025-01-28",
-    day: "wtorek",
-    week: "even",
-  },
-  {
-    date: "2025-01-29",
-    day: "środa",
-    week: "even",
-  },
-  {
-    date: "2025-01-30",
-    day: "czwartek",
-    week: "even",
-  },
-  {
-    date: "2025-01-31",
-    day: "poniedziałek",
-    week: "even",
-  },
-  {
-    date: "2025-02-03",
-    day: "piątek",
-    week: "even",
-  },
-  {
-    date: "2025-02-04",
-    day: "poniedziałek",
-    week: "even",
-  },
-];
+const overrides: Override[] = env.OVERRIDES_JSON;
 
-const freeDays: { date: string; description: string }[] = [
-  {
-    date: "2024-10-01",
-    description: "Inauguracja Roku Akademickiego - dzień wolny od zajęć",
-  },
-  { date: "2024-10-31", description: "Dzień wolny od zajęć" },
-  { date: "2024-11-01", description: "Święto Wszystkich Świętych" },
-  { date: "2024-11-11", description: "Święto Niepodległości" },
-  {
-    date: "2024-11-15",
-    description: "Święto Politechniki Wrocławskiej - dzień wolny od zajęć",
-  },
-];
+const freeDays: { date: string; description: string }[] = env.FREE_DAYS_JSON;
 
-const holidayStart = new Date("2024-12-23");
-const holidayEnd = new Date("2025-01-06");
+const holidayStart = new Date(env.HOLIDAY_START);
+const holidayEnd = new Date(env.HOLIDAY_END);
 
 for (
   let currentDate = new Date(holidayStart);
@@ -114,8 +47,8 @@ for (
 
 const isEvenOrOddWeek = (
   targetDate: Date,
-  referenceDate = new Date("2024-09-30"),
-  referenceIsEven = true,
+  referenceDate = new Date(env.REFERENCE_WEEK_DATE),
+  referenceIsEven: boolean = env.REFERENCE_WEEK_DATE_IS_EVEN,
 ): "even" | "odd" => {
   const msPerWeek = 7 * 24 * 60 * 60 * 1000;
 
@@ -143,18 +76,19 @@ const extractStartTimeUTCEndTimeUTC = (
 export const generateICSFile = (
   groups: ExtendedGroup[],
   name: string,
-  startDate = new Date("2024-10-01"),
-  endDate = new Date("2025-02-05"),
+  semesterStartDate = new Date(env.SEMESTER_START),
+  semesterEndDate = new Date(env.SEMESTER_END),
 ) => {
   const checkedGroups = groups.filter((group) => group.isChecked);
   let icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Planer Solvro//NONSGML v1.0//EN\n`;
+  const year = semesterStartDate.getFullYear().toString();
 
-  icsContent += `BEGIN:VTIMEZONE\nTZID:Europe/Warsaw\nX-LIC-LOCATION:Europe/Warsaw\nBEGIN:DAYLIGHT\nTZOFFSETFROM:+0100\nTZOFFSETTO:+0200\nTZNAME:CEST\nDTSTART:20240331T020000\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZOFFSETFROM:+0200\nTZOFFSETTO:+0100\nTZNAME:CET\nDTSTART:20241027T030000\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\nEND:STANDARD\nEND:VTIMEZONE\n`;
+  icsContent += `BEGIN:VTIMEZONE\nTZID:Europe/Warsaw\nX-LIC-LOCATION:Europe/Warsaw\nBEGIN:DAYLIGHT\nTZOFFSETFROM:+0100\nTZOFFSETTO:+0200\nTZNAME:CEST\nDTSTART:${year}0331T020000\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZOFFSETFROM:+0200\nTZOFFSETTO:+0100\nTZNAME:CET\nDTSTART:${year}1027T030000\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\nEND:STANDARD\nEND:VTIMEZONE\n`;
 
   for (
-    let currentDate = new Date(startDate);
+    let currentDate = new Date(semesterStartDate);
     // eslint-disable-next-line no-unmodified-loop-condition
-    currentDate <= endDate;
+    currentDate <= semesterEndDate;
     currentDate.setDate(currentDate.getDate() + 1)
   ) {
     const freeDay = freeDays.find(
