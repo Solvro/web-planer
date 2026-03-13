@@ -362,9 +362,9 @@ export default class Scraper extends BaseCommand {
       ).values(),
     );
     const mergedProps = Array.from(
-      new Set(Object.keys(uniqueRows[0].row)).difference(
-        new Set(["created_at", "name", "group", "type", "course_id"]),
-      ),
+      new Set(Object.keys(uniqueRows[0].row)),
+    ).filter(
+      (k) => !["created_at", "name", "group", "type", "course_id"].includes(k),
     );
     await Promise.all(
       chunkArray(uniqueRows, QUERY_CHUNK_SIZE).map((chunk) =>

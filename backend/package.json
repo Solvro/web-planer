@@ -30,7 +30,9 @@
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings=0",
     "start": "node bin/server.js",
-    "test": "node ace test",
+    "test": "cross-env DB_DATABASE=web_planer_test node ace test",
+    "test:prepare": "psql -U postgres -c \"CREATE DATABASE web_planer_test\" || true && cross-env DB_DATABASE=web_planer_test node ace migration:run --force",
+    "test:watch": "cross-env DB_DATABASE=web_planer_test node ace test --watch",
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
@@ -74,6 +76,7 @@
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.5.1",
     "@types/proxy-addr": "^2.0.3",
+    "cross-env": "^10.1.0",
     "eslint": "^9.17.0",
     "hot-hook": "^0.2.6",
     "pino-pretty": "^11.2.2",

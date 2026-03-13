@@ -220,14 +220,14 @@ export default class SchedulesController {
    * Allows updating the schedule and modifying its groups
    */
   async update({ params, request, auth }: HttpContext) {
+    const userId = auth.user?.id;
+    if (userId === undefined) {
+      return { message: "User not authenticated." };
+    }
+
+    const payload = await request.validateUsing(updateScheduleValidator);
+
     try {
-      const userId = auth.user?.id;
-      if (userId === undefined) {
-        return { message: "User not authenticated." };
-      }
-
-      const payload = await request.validateUsing(updateScheduleValidator);
-
       const currSchedule = await Schedule.query()
         .where("id", params.schedule_id as string)
         .andWhere("userId", userId)
