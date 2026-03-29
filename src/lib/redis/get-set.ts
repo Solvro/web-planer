@@ -1,18 +1,7 @@
-type RedisLike = {
-  get(key: string): Promise<string | null>;
-  set(
-    key: string,
-    value: string,
-    options?: {
-      ex?: number;
-      nx?: boolean;
-    },
-  ): Promise<unknown>;
-  del(key: string): Promise<unknown>;
-};
+import { type Redis } from "ioredis";
 
 type GetOrSetRedisOptions<T> = {
-  redis: RedisLike;
+  redis: Redis;
   key: string;
   ttlSeconds: number;
   fetcher: () => Promise<T>;
@@ -44,18 +33,19 @@ export async function getOrSetRedis<T>({
       return deserialize(cached);
     }
 
-    const lockAcquired = await redis.set(lockKey, "1", {
-      nx: true,
-      ex: lockTimeoutSeconds,
-    });
+    const lockAcquired = await redis.set(
+      lockKey,
+      "1",
+      "EX",
+      lockTimeoutSeconds,
+      "NX",
+    );
 
     if (lockAcquired) {
       try {
         const fresh = await fetcher();
 
-        await redis.set(key, serialize(fresh), {
-          ex: ttlSeconds,
-        });
+        await redis.set(key, serialize(fresh), "EX", ttlSeconds);
 
         return fresh;
       } finally {
