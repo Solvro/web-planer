@@ -42,12 +42,12 @@ export default async function ProfilePage() {
               <p>Adres e-mail:</p>
               <h3 className="font-medium">{profile.email}</h3>
             </div>
-            {profile.studentNumber && (
+            {profile.studentNumber ? (
               <div className="flex w-full items-center justify-between">
                 <p>Numer indeksu:</p>
                 <h3 className="font-medium">{profile.studentNumber}</h3>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

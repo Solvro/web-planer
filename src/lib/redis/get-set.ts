@@ -1,6 +1,6 @@
-import { type Redis } from "ioredis";
+import type { Redis } from "ioredis";
 
-type GetOrSetRedisOptions<T> = {
+interface GetOrSetRedisOptions<T> {
   redis: Redis;
   key: string;
   ttlSeconds: number;
@@ -10,9 +10,10 @@ type GetOrSetRedisOptions<T> = {
   lockTimeoutSeconds?: number;
   waitForLockMs?: number;
   waitPollIntervalMs?: number;
-};
+}
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = async (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function getOrSetRedis<T>({
   redis,
@@ -49,7 +50,7 @@ export async function getOrSetRedis<T>({
 
         return fresh;
       } finally {
-        await redis.del(lockKey).catch(() => undefined);
+        await redis.del(lockKey).catch(() => {});
       }
     }
 

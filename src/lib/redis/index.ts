@@ -16,7 +16,9 @@ export const redis =
   new Redis(getRedisUrl(), {
     maxRetriesPerRequest: 3,
     retryStrategy: (times) => {
-      if (times > 3) return null;
+      if (times > 3) {
+        return null;
+      }
       return Math.min(times * 100, 3000);
     },
   });

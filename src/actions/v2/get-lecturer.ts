@@ -2,7 +2,7 @@ import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
 
-type UsosLecturer = {
+interface UsosLecturer {
   id: string;
   first_name: string;
   last_name: string;
@@ -15,9 +15,9 @@ type UsosLecturer = {
   };
   homepage_url?: string | null;
   profile_url?: string;
-};
+}
 
-export type LecturerDTO = {
+export interface LecturerDTO {
   id: string;
   firstName: string;
   lastName: string;
@@ -26,7 +26,7 @@ export type LecturerDTO = {
   photoUrl?: string | null;
   homepageUrl?: string | null;
   profileUrl?: string | null;
-};
+}
 
 function normalizeLecturer(data: UsosLecturer): LecturerDTO {
   return {

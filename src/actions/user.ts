@@ -25,8 +25,8 @@ export const updateUser = async (payload: { allowNotifications: boolean }) => {
     throw new Error("Not logged in");
   }
 
-  const ctx = await auth.$context;
-  await ctx.internalAdapter.updateUser(session.user.id, {
+  const context = await auth.$context;
+  await context.internalAdapter.updateUser(session.user.id, {
     allowNotifications: payload.allowNotifications,
   });
 

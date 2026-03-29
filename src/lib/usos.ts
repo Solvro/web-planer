@@ -21,7 +21,7 @@ const oauth = new OAuth({
 
 export async function fetchUsosApi<T>(
   endpoint: string,
-  params?: Record<string, any>,
+  parameters_?: Record<string, any>,
   method: "GET" | "POST" = "GET",
 ): Promise<T> {
   const url = `${USOS_APPS_URL}/services/${endpoint}`;
@@ -29,7 +29,7 @@ export async function fetchUsosApi<T>(
   const requestData = {
     url,
     method,
-    data: params ?? {},
+    data: parameters_ ?? {},
   };
 
   const authData = oauth.authorize(requestData);
@@ -40,8 +40,8 @@ export async function fetchUsosApi<T>(
     parameters.append(key, String(value));
   }
 
-  if (params) {
-    for (const [key, value] of Object.entries(params)) {
+  if (parameters_) {
+    for (const [key, value] of Object.entries(parameters_)) {
       parameters.append(key, String(value));
     }
   }

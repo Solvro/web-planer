@@ -76,7 +76,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@solvro/config": "^2.0.7",
+    "@solvro/config": "^2.3.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.17.10",
