@@ -20,6 +20,6 @@ export interface ErrorResponse {
   error: string;
 }
 
-export default async function Plans() {
+export default function Plans() {
   return <PlansPage plans={[]} />;
 }

@@ -25,8 +25,11 @@ export default async function SharePlan({ params }: PageProps) {
     method: "GET",
   })
     .then(
-      async (res) =>
-        res.json() as Promise<{ success: boolean; plan: SharedPlan } | null>,
+      async (response) =>
+        response.json() as Promise<{
+          success: boolean;
+          plan: SharedPlan;
+        } | null>,
     )
     .catch(() => null);
 
