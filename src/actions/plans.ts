@@ -29,7 +29,7 @@ export const createNewPlan = async ({
   groups: { id: number }[];
 }): Promise<CreatePlanResponseType | null> => {
   const session = await getSession();
-  if (!session) {
+  if (session == null) {
     return null;
   }
 
@@ -60,7 +60,7 @@ export const updatePlan = async ({
   groups: { id: number }[];
 }): Promise<CreatePlanResponseType> => {
   const session = await getSession();
-  if (!session) {
+  if (session == null) {
     throw new Error("Not logged in");
   }
 
@@ -82,7 +82,7 @@ export const deletePlan = async ({
   id: number;
 }): Promise<DeletePlanResponseType> => {
   const session = await getSession();
-  if (!session) {
+  if (session == null) {
     return {
       success: false,
       message: "Nie udało się usunąć planu, użytkownik niezalogowany",
@@ -108,7 +108,7 @@ export const getPlan = async ({
   }
 
   const session = await getSession();
-  if (!session) {
+  if (session == null) {
     return null;
   }
 
