@@ -53,9 +53,10 @@ export const auth = betterAuth({
       scopes: "studies|offline_access",
       emailDomain: "student.pwr.edu.pl",
       userFields: (usosProfile) => ({
-        studentNumber: usosProfile.student_number
-          ? Number.parseInt(usosProfile.student_number)
-          : null,
+        studentNumber:
+          usosProfile.student_number == null
+            ? null
+            : Number.parseInt(usosProfile.student_number),
         usosId: usosProfile.id,
         firstName: usosProfile.first_name,
         lastName: usosProfile.last_name,

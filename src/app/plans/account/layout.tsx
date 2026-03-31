@@ -40,7 +40,7 @@ export default async function SettingsLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session) {
+  if (session == null) {
     return notFound();
   }
 

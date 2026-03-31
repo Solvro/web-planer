@@ -308,7 +308,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
         </DialogContent>
       </Dialog>
 
-      {isLoggedIn && session.data ? (
+      {isLoggedIn && session.data != null ? (
         <SaveOnlineFunction
           plan={plan}
           setOfflineAlert={setOfflineAlert}

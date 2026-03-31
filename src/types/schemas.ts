@@ -1,19 +1,16 @@
 import { z } from "zod";
 
 export const feedbackFormSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   title: z.string(),
   description: z.string(),
 });
 
 const emailWithDomainRegex = /^[a-zA-Z0-9._%+-]+@(student\.)?pwr\.edu\.pl$/;
 export const loginOtpEmailSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Niepoprawny email" })
-    .regex(emailWithDomainRegex, {
-      message: "Email musi być z domeny Politechniki Wrocławskiej",
-    }),
+  email: z.email({ message: "Niepoprawny email" }).regex(emailWithDomainRegex, {
+    message: "Email musi być z domeny Politechniki Wrocławskiej",
+  }),
 });
 
 export const otpPinSchema = z.object({
