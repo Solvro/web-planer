@@ -1,3 +1,8 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { useMemo } from "react";
@@ -199,7 +204,7 @@ function FieldError({
       return null;
     }
 
-    if (errors?.length === 1 && errors[0]?.message) {
+    if (errors.length === 1 && errors[0]?.message) {
       return errors[0].message;
     }
 

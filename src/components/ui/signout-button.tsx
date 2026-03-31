@@ -19,9 +19,8 @@ const signOut = async () => {
       continue;
     }
     const storedItem = localStorage.getItem(key);
-    console.log("Checking item with key:", key, "and value:", storedItem);
     const item =
-      storedItem && storedItem?.startsWith("{")
+      (storedItem ?? "") && storedItem?.startsWith("{") === true
         ? (JSON.parse(storedItem) as PlanState | null)
         : null;
     if (item === null) {

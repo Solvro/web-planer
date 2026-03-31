@@ -50,7 +50,9 @@ export async function getOrSetRedis<T>({
 
         return fresh;
       } finally {
-        await redis.del(lockKey).catch(() => {});
+        await redis.del(lockKey).catch(() => {
+          /* empty */
+        });
       }
     }
 

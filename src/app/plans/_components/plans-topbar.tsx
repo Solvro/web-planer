@@ -62,7 +62,7 @@ async function UserProfile() {
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session == null) {
     return (
       <Button variant="default" size="sm" asChild={true}>
         <Link href="/login">Zaloguj się</Link>
