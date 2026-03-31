@@ -130,16 +130,6 @@ function EmailStep({
       toast.error("Wystąpił błąd podczas wysyłania kodu");
     }
   }
-  async function handleUsosLogin() {
-    try {
-      await authClient.signIn.usos({
-        callbackURL: "/plans",
-      });
-    } catch (error) {
-      console.error(error);
-      toast.error("Wystąpił błąd podczas logowania przez USOS");
-    }
-  }
 
   return (
     <div className="mt-5 flex w-full max-w-xs flex-col gap-4 text-center">
@@ -394,4 +384,15 @@ function OnboardStep() {
       </div>
     </div>
   );
+}
+
+async function handleUsosLogin() {
+  try {
+    await authClient.signIn.usos({
+      callbackURL: "/plans",
+    });
+  } catch (error) {
+    console.error(error);
+    toast.error("Wystąpił błąd podczas logowania przez USOS");
+  }
 }

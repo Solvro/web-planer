@@ -20,9 +20,7 @@ export async function proxy(request: NextRequest) {
 
   const session = await auth.api.getSession({ headers: await headers() });
 
-  console.log("Session:", session);
-
-  if (!session) {
+  if (session == null) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

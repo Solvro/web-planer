@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import React from "react";
 
 import { Separator } from "@/components/ui/separator";
 import { UserAvatar } from "@/components/user-button";
@@ -10,7 +9,7 @@ export default async function ProfilePage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session) {
+  if (session == null) {
     return notFound();
   }
 
@@ -27,7 +26,7 @@ export default async function ProfilePage() {
         <UserAvatar profile={profile} />
         <div className="flex w-full flex-col">
           <h1 className="text-lg font-semibold">
-            {!profile.firstName && !profile.lastName ? (
+            {profile.firstName == null || profile.lastName == null ? (
               <span className="font-medium italic text-muted-foreground">
                 Nie podano imienia i nazwiska
               </span>
@@ -42,7 +41,7 @@ export default async function ProfilePage() {
               <p>Adres e-mail:</p>
               <h3 className="font-medium">{profile.email}</h3>
             </div>
-            {profile.studentNumber && (
+            {profile.studentNumber == null ? null : (
               <div className="flex w-full items-center justify-between">
                 <p>Numer indeksu:</p>
                 <h3 className="font-medium">{profile.studentNumber}</h3>

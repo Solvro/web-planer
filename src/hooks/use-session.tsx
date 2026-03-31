@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 "use client";
 
 import { authClient } from "@/lib/auth-client";

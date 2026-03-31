@@ -97,8 +97,9 @@ export function UserButton({ profile }: { profile: User }) {
 }
 
 export function UserAvatar({ profile }: { profile: User }) {
-  const isFirstNameEmpty = !profile.firstName || profile.firstName === "";
-  const isLastNameEmpty = !profile.lastName || profile.lastName === "";
+  const isFirstNameEmpty =
+    profile.firstName == null || profile.firstName === "";
+  const isLastNameEmpty = profile.lastName == null || profile.lastName === "";
 
   const fallback = useMemo(() => {
     if (isFirstNameEmpty && isLastNameEmpty) {
