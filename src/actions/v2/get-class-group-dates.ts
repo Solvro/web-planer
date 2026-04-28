@@ -22,16 +22,20 @@ export interface ClassgroupDateDTO {
 }
 
 function getWeekday(dateString: string | null): number | null {
-  if (!dateString) return null;
+  if (dateString == null || dateString === "") {
+    return null;
+  }
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return null;
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
   return date.getDay();
 }
 
 function normalizeClassgroupDates(
   data: UsosClassgroupDate[],
 ): ClassgroupDateDTO[] {
-  return (data ?? []).map((item) => ({
+  return data.map((item) => ({
     startTime: item.start_time ?? null,
     endTime: item.end_time ?? null,
     name: item.name ?? null,
@@ -61,13 +65,12 @@ export async function getClassgroupDatesAction(
         },
       );
 
-      const normalized = normalizeClassgroupDates(data ?? []);
+      const normalized = normalizeClassgroupDates(data);
 
       return normalized.sort((a, b) => {
         if (!a.startTime && !b.startTime) return 0;
         if (!a.startTime) return 1;
         if (!b.startTime) return -1;
-
         return (
           new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
         );
