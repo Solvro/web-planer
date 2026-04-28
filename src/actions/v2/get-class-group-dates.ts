@@ -67,10 +67,16 @@ export async function getClassgroupDatesAction(
 
       const normalized = normalizeClassgroupDates(data);
 
-      return normalized.sort((a, b) => {
-        if (!a.startTime && !b.startTime) return 0;
-        if (!a.startTime) return 1;
-        if (!b.startTime) return -1;
+      return normalized.toSorted((a, b) => {
+        if (a.startTime === null && b.startTime === null) {
+          return 0;
+        }
+        if (a.startTime === null) {
+          return 1;
+        }
+        if (b.startTime === null) {
+          return -1;
+        }
         return (
           new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
         );
