@@ -45,7 +45,7 @@ function normalizeRoundCourse(data: UsosRoundCourse): RoundCourseDTO {
 }
 
 export async function getRegistrationRoundCoursesAction(
-  roundId: string
+  roundId: string,
 ): Promise<RoundCourseDTO[]> {
   return getOrSetRedis({
     redis,
@@ -58,7 +58,7 @@ export async function getRegistrationRoundCoursesAction(
           registration_round_id: roundId,
           fields:
             "course|term_id|status|limits|is_linkage_required|registrations_count",
-        }
+        },
       );
 
       if (data == null) {

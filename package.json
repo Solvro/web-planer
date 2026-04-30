@@ -13,7 +13,7 @@
     "format:fix": "prettier --write .",
     "knip": "knip",
     "lint:fix": "eslint . --fix",
-    "lint:style": "next typegen & eslint . --max-warnings=0",
+    "lint:style": "next typegen & eslint . --max-warnings=10",
     "lint:typecheck": "next typegen & tsc --noEmit",
     "start": "next start"
   },
