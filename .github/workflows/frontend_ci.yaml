@@ -65,3 +65,6 @@ jobs:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello
           NEXT_PUBLIC_API_URL: http://localhost:3333
+          BETTER_AUTH_SECRET: supersecret
+          DATABASE_URL: ""
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
