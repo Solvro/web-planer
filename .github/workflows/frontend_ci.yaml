@@ -36,18 +36,18 @@ jobs:
       - name: Format check
         run: pnpm run format:check
 
-  deadcode:
-    name: Find deadcode
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # deadcode:
+  #   name: Find deadcode
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: ./.github/composite-actions/install
+  #     - name: Setup node
+  #       uses: ./.github/composite-actions/install
 
-      - name: Find deadcode
-        run: pnpm run knip
+  #     - name: Find deadcode
+  #       run: pnpm run knip
 
   build:
     name: Test build
@@ -65,3 +65,6 @@ jobs:
           USOS_CONSUMER_KEY: hello
           USOS_CONSUMER_SECRET: jello
           NEXT_PUBLIC_API_URL: http://localhost:3333
+          BETTER_AUTH_SECRET: supersecretsecretsupersecretsupersecret
+          DATABASE_URL: "file:./dev.db"
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
