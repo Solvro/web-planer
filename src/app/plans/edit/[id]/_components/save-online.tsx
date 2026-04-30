@@ -21,7 +21,6 @@ export function SaveOnlineFunction({
   offlineAlert: boolean;
   handleSyncPlan: () => Promise<void>;
 }) {
-  // eslint-disable-next-line react-you-might-not-need-an-effect/no-manage-parent
   useEffect(() => {
     if (plan.onlineId === null) {
       void handleCreateOnlinePlan(setOfflineAlert);

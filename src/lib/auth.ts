@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { betterAuth } from "better-auth";
 import { usosAuth } from "better-auth-usos";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -36,6 +37,7 @@ export const auth = betterAuth({
   },
   plugins: [
     emailOTP({
+      // eslint-disable-next-line @typescript-eslint/require-await
       async sendVerificationOTP({ email, otp, type }) {
         console.log("===========================================");
         console.log(`[EMAIL OTP] Sending ${type} OTP to ${email}`);
@@ -61,9 +63,10 @@ export const auth = betterAuth({
         firstName: usosProfile.first_name,
         lastName: usosProfile.last_name,
       }),
+      // eslint-disable-next-line @typescript-eslint/require-await
       onSuccess: async (user) => {
         console.log(
-          `[USOS AUTH] User logged in: ${user.firstName} ${user.lastName} (${user.studentNumber})`,
+          `[USOS AUTH] User logged in: ${user.firstName} ${user.lastName} (${user.studentNumber?.toString() ?? "N/A"})`,
         );
         return "/plans";
       },
