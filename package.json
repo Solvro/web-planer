@@ -54,6 +54,7 @@
     "html-to-image": "^1.11.11",
     "input-otp": "^1.4.2",
     "ioredis": "^5.10.1",
+    "isomorphic-dompurify": "^3.11.0",
     "jotai": "^2.9.3",
     "jotai-family": "^1.0.1",
     "lucide-react": "^0.426.0",

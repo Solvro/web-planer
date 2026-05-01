@@ -18,6 +18,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url(),
+    NEXT_PUBLIC_ALERTS_APP_CODE: z.string().min(1).default("planer"),
   },
   runtimeEnv: {
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
@@ -25,6 +26,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     SITE_URL: process.env.SITE_URL,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_ALERTS_APP_CODE: process.env.NEXT_PUBLIC_ALERTS_APP_CODE,
     USOS_APPS_URL: process.env.USOS_APPS_URL,
     USOS_CONSUMER_KEY: process.env.USOS_CONSUMER_KEY,
     USOS_CONSUMER_SECRET: process.env.USOS_CONSUMER_SECRET,

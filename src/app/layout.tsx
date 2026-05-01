@@ -4,6 +4,7 @@ import Script from "next/script";
 import type React from "react";
 
 import { ClientProviders } from "@/components/providers";
+import { Alerts } from "@/components/solvro-alerts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
@@ -105,6 +106,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Alerts />
             {children}
           </ThemeProvider>
           <Script

@@ -67,6 +67,8 @@ SITE_URL=http://localhost:3000
 USOS_CONSUMER_KEY=<your-key>
 USOS_CONSUMER_SECRET=<your-key>
 USOS_BASE_URL=<your-key-default-for-pwr:usos.pwr.edu.pl>
+# Optional — slug registered with the Solvro Alerts service (defaults to "planer")
+NEXT_PUBLIC_ALERTS_APP_CODE=planer
 ```
 
 ### 4. Run the Project
