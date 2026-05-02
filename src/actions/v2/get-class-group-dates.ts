@@ -5,9 +5,15 @@ import { fetchUsosApi } from "@/lib/usos";
 interface UsosClassgroupDate {
   start_time?: string | null;
   end_time?: string | null;
-  name?: string | null;
+  name?: {
+    pl: string;
+    en: string;
+  } | null;
   room_number?: string | null;
-  building_name?: string | null;
+  building_name?: {
+    pl: string;
+    en: string;
+  } | null;
   classtype_id?: string | number | null;
 }
 
@@ -38,9 +44,9 @@ function normalizeClassgroupDates(
   return data.map((item) => ({
     startTime: item.start_time ?? null,
     endTime: item.end_time ?? null,
-    name: item.name ?? null,
+    name: item.name?.pl ?? null,
     roomNumber: item.room_number ?? null,
-    buildingName: item.building_name ?? null,
+    buildingName: item.building_name?.pl ?? null,
     classtypeId: item.classtype_id ?? null,
     weekday: getWeekday(item.start_time ?? null),
   }));
