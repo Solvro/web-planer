@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import SolvroLogo from "@/../public/assets/logo/logo_solvro_color.png";
+import { Alerts } from "@/components/alerts";
 import { Icons } from "@/components/icons";
 import { AnimatedGradientText } from "@/components/magicui/animated-text";
 import { BorderBeam } from "@/components/magicui/border-beam";
@@ -111,8 +112,11 @@ export default function Home() {
     <main className="mx-auto flex-1 overflow-hidden">
       <section
         id="hero"
-        className="relative mx-auto mt-28 max-w-[80rem] px-2 text-center md:mt-44 md:px-8"
+        className="relative mx-auto max-w-[80rem] px-2 text-center md:px-8"
       >
+        <div className="mb-2 mt-[5.5rem] min-h-4 text-start md:min-h-20">
+          <Alerts className="animate-in fade-in slide-in-from-top" />
+        </div>
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
           <Link href="#topwr">
             <AnimatedGradientText>

@@ -1,12 +1,13 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import type { UseMutationResult } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
 import React from "react";
 
 import { getFaculties } from "@/actions/get-faculties";
+import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
 import { PlanDisplayLink } from "@/components/plan-display-link";
@@ -277,6 +278,7 @@ export function AppSidebar({
           </div>
         </div>
       </SidebarContent>
+      <Alerts className="mt-4 py-3 animate-in fade-in slide-in-from-left" />
     </Sidebar>
   );
 }
