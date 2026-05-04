@@ -15,6 +15,10 @@ export const env = createEnv({
     FORMS_FIELD_TITLE: z.string().default("entry.1234567890"),
     FORMS_FIELD_DESCRIPTION: z.string().default("entry.1234567890"),
     GITHUB_TOKEN: z.string().optional(),
+    SMTP_HOST: z.string().default("mail.solvro.pl"),
+    SMTP_PORT: z.coerce.number().default(465),
+    SMTP_USERNAME: z.string().default("planer@solvro.pl"),
+    SMTP_PASSWORD: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url(),
@@ -33,6 +37,10 @@ export const env = createEnv({
     FORMS_FIELD_TITLE: process.env.FORMS_FIELD_TITLE,
     FORMS_FIELD_DESCRIPTION: process.env.FORMS_FIELD_DESCRIPTION,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_USERNAME: process.env.SMTP_USERNAME,
+    SMTP_PASSWORD: process.env.SMTP_PASSWORD,
   },
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });
