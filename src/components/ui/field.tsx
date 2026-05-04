@@ -1,6 +1,4 @@
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { cva } from "class-variance-authority";
@@ -195,7 +193,8 @@ function FieldError({
 }: React.ComponentProps<"div"> & {
   errors?: ({ message?: string } | undefined)[];
 }) {
-  const content = useMemo(async () => {
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  const content = useMemo(() => {
     if (children) {
       return children;
     }

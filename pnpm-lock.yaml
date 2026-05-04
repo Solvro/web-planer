@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       "@hookform/resolvers":
-        specifier: ^3.9.1
-        version: 3.10.0(react-hook-form@7.71.2(react@19.2.4))
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.71.2(react@19.2.4))
       "@radix-ui/react-accordion":
         specifier: ^1.2.0
         version: 1.2.12(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -125,6 +125,9 @@ importers:
       next-themes:
         specifier: ^0.4.3
         version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      nodemailer:
+        specifier: ^8.0.7
+        version: 8.0.7
       oauth-1.0a:
         specifier: ^2.2.6
         version: 2.2.6
@@ -180,6 +183,9 @@ importers:
       "@types/node":
         specifier: ^20.17.10
         version: 20.19.37
+      "@types/nodemailer":
+        specifier: ^8.0.0
+        version: 8.0.0
       "@types/pg":
         specifier: ^8.18.0
         version: 8.18.0
@@ -1392,13 +1398,13 @@ packages:
     peerDependencies:
       hono: ^4
 
-  "@hookform/resolvers@3.10.0":
+  "@hookform/resolvers@5.2.2":
     resolution:
       {
-        integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==,
+        integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==,
       }
     peerDependencies:
-      react-hook-form: ^7.0.0
+      react-hook-form: ^7.55.0
 
   "@humanfs/core@0.19.1":
     resolution:
@@ -2905,6 +2911,12 @@ packages:
         integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==,
       }
 
+  "@standard-schema/utils@0.3.0":
+    resolution:
+      {
+        integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==,
+      }
+
   "@stylistic/eslint-plugin@5.10.0":
     resolution:
       {
@@ -3038,6 +3050,12 @@ packages:
     resolution:
       {
         integrity: sha512-8kzdPJ3FsNsVIurqBs7oodNnCEVbni9yUEkaHbgptDACOPW04jimGagZ51E6+lXUwJjgnBw+hyko/lkFWCldqw==,
+      }
+
+  "@types/nodemailer@8.0.0":
+    resolution:
+      {
+        integrity: sha512-fyf8jWULsCo0d0BuoQ75i6IeoHs47qcqxWc7yUdUcV0pOZGjUTTOvwdG1PRXUDqN/8A64yQdQdnA2pZgcdi+cA==,
       }
 
   "@types/normalize-package-data@2.4.4":
@@ -5892,6 +5910,13 @@ packages:
         integrity: sha512-TdC8FSgHz8Mwtw9g5L4gR/Sh9XhSP/0DEkQxfEFXOpiul5IiHgHan2VhYYb6agDSfp4KuvltmGApc8HMgUrIkA==,
       }
 
+  nodemailer@8.0.7:
+    resolution:
+      {
+        integrity: sha512-pkjE4mkBzQjdJT4/UmlKl3pX0rC9fZmjh7c6C9o7lv66Ac6w9WCnzPzhbPNxwZAzlF4mdq4CSWB5+FbK6FWCow==,
+      }
+    engines: { node: ">=6.0.0" }
+
   normalize-package-data@8.0.0:
     resolution:
       {
@@ -8292,8 +8317,9 @@ snapshots:
     dependencies:
       hono: 4.11.4
 
-  "@hookform/resolvers@3.10.0(react-hook-form@7.71.2(react@19.2.4))":
+  "@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.4))":
     dependencies:
+      "@standard-schema/utils": 0.3.0
       react-hook-form: 7.71.2(react@19.2.4)
 
   "@humanfs/core@0.19.1": {}
@@ -9264,6 +9290,8 @@ snapshots:
 
   "@standard-schema/spec@1.1.0": {}
 
+  "@standard-schema/utils@0.3.0": {}
+
   "@stylistic/eslint-plugin@5.10.0(eslint@9.39.4(jiti@1.21.7))":
     dependencies:
       "@eslint-community/eslint-utils": 4.9.1(eslint@9.39.4(jiti@1.21.7))
@@ -9341,6 +9369,10 @@ snapshots:
   "@types/node@20.19.37":
     dependencies:
       undici-types: 6.21.0
+
+  "@types/nodemailer@8.0.0":
+    dependencies:
+      "@types/node": 20.19.37
 
   "@types/normalize-package-data@2.4.4": {}
 
@@ -11188,6 +11220,8 @@ snapshots:
   node-fetch-native@1.6.7: {}
 
   node-releases@2.0.36: {}
+
+  nodemailer@8.0.7: {}
 
   normalize-package-data@8.0.0:
     dependencies:
