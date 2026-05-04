@@ -18,7 +18,7 @@ interface UsosRegistrationRound {
   end_date: Date;
 }
 
-function sortByStartDateFn(
+function sortByStartDateFunction(
   a: UsosRegistrationRound,
   b: UsosRegistrationRound,
 ): number {
@@ -41,7 +41,7 @@ export async function getRegistrationRoundsAction(
         },
       );
 
-      return data.sort(sortByStartDateFn);
+      return data.toSorted(sortByStartDateFunction);
     },
   });
 }
