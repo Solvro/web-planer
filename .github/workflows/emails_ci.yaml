@@ -1,0 +1,25 @@
+name: Emails CI
+
+on:
+  push:
+    branches: ["main", "beta"]
+    paths:
+      - "emails/**"
+  pull_request:
+    branches: ["main", "beta"]
+    paths:
+      - "emails/**"
+
+jobs:
+  export:
+    name: Export emails
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: ./.github/composite-actions/install
+
+      - name: Export emails
+        run: pnpm email:export
