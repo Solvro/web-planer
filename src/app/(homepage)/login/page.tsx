@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 
@@ -16,23 +16,20 @@ import { handleTriggerConfetti } from "@/components/confetti";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   InputOTP,
   InputOTPGroup,
+  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { authClient } from "@/lib/auth-client";
-import { fetchClient } from "@/lib/fetch";
-import type { VerifyOtpReponseType } from "@/types";
 import {
   loginOtpEmailSchema,
   otpPinSchema,
@@ -89,7 +86,7 @@ export default function LoginPage() {
             <EmailStep setStep={setStep} setEmail={setEmail} />
           )}
           {step === "otp" && <OtpStep setStep={setStep} email={email} />}
-          {step === "onboard" && <OnboardStep />}
+          {step === "onboard" && <OnboardStep email={email} />}
         </div>
       </div>
     </div>
@@ -105,30 +102,22 @@ function EmailStep({
 }) {
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
     resolver: zodResolver(loginOtpEmailSchema),
-    defaultValues: {
-      email: "",
-    },
+    defaultValues: { email: "" },
   });
 
   const isLoading = form.formState.isSubmitting;
 
   async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
-    try {
-      const result = await fetchClient({
-        url: `/user/otp/get`,
-        method: "POST",
-        body: JSON.stringify(values),
-      });
-      if (!result.ok) {
-        toast.error("Wystąpił błąd podczas wysyłania kodu");
-        return;
-      }
-      setEmail(values.email);
-      setStep("otp");
-    } catch (error) {
-      console.error(error);
+    const { error } = await authClient.emailOtp.sendVerificationOtp({
+      email: values.email,
+      type: "sign-in",
+    });
+    if (error !== null) {
       toast.error("Wystąpił błąd podczas wysyłania kodu");
+      return;
     }
+    setEmail(values.email);
+    setStep("otp");
   }
 
   return (
@@ -146,38 +135,33 @@ function EmailStep({
           Lub kontynuuj poprzez
         </span>
       </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-5"
-        >
-          <FormField
-            control={form.control}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-5">
+        <FieldGroup>
+          <Controller
             name="email"
-            disabled={isLoading}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Adres e-mail</FormLabel>
-                <FormControl>
-                  <Input placeholder="123456@student.pwr.edu.pl" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="login-email">Adres e-mail</FieldLabel>
+                <Input
+                  {...field}
+                  id="login-email"
+                  aria-invalid={fieldState.invalid}
+                  disabled={isLoading}
+                  placeholder="123456@student.pwr.edu.pl"
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
             )}
           />
-          <Button
-            type="submit"
-            size="sm"
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <Icons.Loader className="size-4 animate-spin" />
-            ) : null}
-            Wyślij kod
-          </Button>
-        </form>
-      </Form>
+        </FieldGroup>
+        <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
+          {isLoading ? <Icons.Loader className="size-4 animate-spin" /> : null}
+          Wyślij kod
+        </Button>
+      </form>
     </div>
   );
 }
@@ -191,127 +175,96 @@ function OtpStep({
 }) {
   const router = useRouter();
 
-  const formOtp = useForm<z.infer<typeof otpPinSchema>>({
+  const form = useForm<z.infer<typeof otpPinSchema>>({
     resolver: zodResolver(otpPinSchema),
-    defaultValues: {
-      otp: "",
-    },
+    defaultValues: { otp: "" },
   });
 
-  const isLoading = formOtp.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting;
 
-  async function onSubmitOtp(data: z.infer<typeof otpPinSchema>) {
-    try {
-      const result = await fetchClient({
-        url: `/user/otp/verify`,
-        method: "POST",
-        body: JSON.stringify({ email, ...data }),
-      });
-      if (!result.ok) {
-        try {
-          const response = (await result.json()) as { message: string };
-          toast.error(response.message);
-        } catch {
-          toast.error("Wystąpił nieoczekiwany błąd");
-        }
-        return;
-      }
-      const response = (await result.json()) as VerifyOtpReponseType;
-      if (response.success) {
-        if (response.isNewAccount) {
-          handleTriggerConfetti();
-          setStep("onboard");
-        } else {
-          toast.success("Zalogowano pomyślnie");
-          router.push("/plans");
-        }
-      } else {
-        toast.error("Nieprawidłowy kod");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Wystąpił błąd podczas weryfikacji kodu");
+  async function onSubmit(values: z.infer<typeof otpPinSchema>) {
+    const { data, error } = await authClient.signIn.emailOtp({
+      email,
+      otp: values.otp,
+    });
+    if (error !== null) {
+      toast.error(error.message ?? "Nieprawidłowy kod");
+      return;
+    }
+    if (data.user.onboardingCompleted === true) {
+      toast.success("Zalogowano pomyślnie");
+      router.push("/plans");
+    } else {
+      handleTriggerConfetti();
+      setStep("onboard");
     }
   }
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <Form {...formOtp}>
-        <form
-          onSubmit={formOtp.handleSubmit(onSubmitOtp)}
-          className="mt-5 max-w-xs space-y-6"
-        >
-          <FormField
-            control={formOtp.control}
-            name="otp"
-            disabled={isLoading}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Hasło jednorazowe</FormLabel>
-                <FormControl>
-                  <InputOTP maxLength={6} {...field}>
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                      <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
-                </FormControl>
-                <FormDescription>
-                  Wpisz kod, który wylądował właśnie na Twoim adresie email
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button
-            type="submit"
-            size="sm"
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <Icons.Loader className="size-4 animate-spin" />
-            ) : null}
-            Zaloguj się
-          </Button>
-        </form>
-      </Form>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-5 max-w-xs space-y-6"
+      >
+        <Controller
+          name="otp"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Hasło jednorazowe</FieldLabel>
+              <InputOTP {...field} maxLength={6} id="otp-verification" required>
+                <InputOTPGroup className="[&>*[data-slot=input-otp-slot]]:h-12 [&>*[data-slot=input-otp-slot]]:w-11 [&>*[data-slot=input-otp-slot]]:text-xl">
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                </InputOTPGroup>
+                <InputOTPSeparator className="mx-2" />
+                <InputOTPGroup className="[&>*[data-slot=input-otp-slot]]:h-12 [&>*[data-slot=input-otp-slot]]:w-11 [&>*[data-slot=input-otp-slot]]:text-xl">
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+              <FieldDescription>
+                Wpisz kod, który wylądował właśnie na Twoim adresie email
+              </FieldDescription>
+              {fieldState.invalid ? (
+                <FieldError errors={[fieldState.error]} />
+              ) : null}
+            </Field>
+          )}
+        />
+        <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
+          {isLoading ? <Icons.Loader className="size-4 animate-spin" /> : null}
+          Zaloguj się
+        </Button>
+      </form>
     </div>
   );
 }
 
-function OnboardStep() {
+function OnboardStep({ email }: { email: string }) {
   const router = useRouter();
 
-  const formOnboard = useForm<z.infer<typeof userDataSchema>>({
+  const form = useForm<z.infer<typeof userDataSchema>>({
     resolver: zodResolver(userDataSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-    },
+    defaultValues: { firstName: "", lastName: "", email },
   });
 
-  const isLoading = formOnboard.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting;
 
-  async function onSubmitOnboard(data: z.infer<typeof userDataSchema>) {
+  async function onSubmit(payload: z.infer<typeof userDataSchema>) {
     try {
-      const result = await fetchClient({
-        url: `/user`,
-        method: "POST",
-        body: JSON.stringify(data),
+      await authClient.updateUser({
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        name: `${payload.firstName} ${payload.lastName}`,
+        studentNumber: Number.parseInt(payload.email.split("@")[0]),
+        onboardingCompleted: true,
       });
-      if (!result.ok) {
-        toast.error("Wystąpił błąd podczas zapisywania danych");
-        return;
-      }
       toast.success("Zapisano dane");
       router.push("/plans");
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error("Wystąpił błąd podczas zapisywania danych");
     }
   }
@@ -322,66 +275,64 @@ function OnboardStep() {
       <p className="text-balance text-center text-sm text-muted-foreground">
         Jeśli chcesz, możesz zapisać swoje imię i nazwisko
       </p>
-      <div className="flex w-full flex-col items-center justify-center">
-        <Form {...formOnboard}>
-          <form
-            onSubmit={formOnboard.handleSubmit(onSubmitOnboard)}
-            className="mt-5 max-w-xs space-y-1"
-          >
-            <div className="mb-6 flex flex-col items-center gap-2 md:flex-row">
-              <FormField
-                control={formOnboard.control}
-                name="firstName"
-                disabled={isLoading}
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Imię</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Jan" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={formOnboard.control}
-                name="lastName"
-                disabled={isLoading}
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Nazwisko</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Kowalski" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <Button
-              type="submit"
-              size="sm"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Icons.Loader className="size-4 animate-spin" />
-              ) : null}
-              Zapisz dane
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              className="w-full"
-              variant="ghost"
-              asChild
-            >
-              <Link href="/plans">Pomiń</Link>
-            </Button>
-          </form>
-        </Form>
-      </div>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-5 w-full max-w-xs space-y-1"
+      >
+        <div className="mb-6 flex flex-col items-center gap-2 md:flex-row">
+          <Controller
+            name="firstName"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="onboard-firstname">Imię</FieldLabel>
+                <Input
+                  {...field}
+                  id="onboard-firstname"
+                  aria-invalid={fieldState.invalid}
+                  disabled={isLoading}
+                  placeholder="Jan"
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
+          <Controller
+            name="lastName"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="onboard-lastname">Nazwisko</FieldLabel>
+                <Input
+                  {...field}
+                  id="onboard-lastname"
+                  aria-invalid={fieldState.invalid}
+                  disabled={isLoading}
+                  placeholder="Kowalski"
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
+        </div>
+        <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
+          {isLoading ? <Icons.Loader className="size-4 animate-spin" /> : null}
+          Zapisz dane
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          className="w-full"
+          variant="ghost"
+          asChild
+        >
+          <Link href="/plans">Pomiń</Link>
+        </Button>
+      </form>
     </div>
   );
 }

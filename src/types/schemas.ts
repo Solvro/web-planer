@@ -22,4 +22,5 @@ export const otpPinSchema = z.object({
 export const userDataSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
+  email: z.email(),
 });
