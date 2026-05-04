@@ -178,6 +178,12 @@ export interface SingleCourse {
 
 export type CourseType = SingleCourse[];
 
+export interface ClassgroupDate {
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
 export type FacultyType = {
   id: string;
   name: string;
