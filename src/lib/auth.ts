@@ -59,7 +59,7 @@ export const auth = betterAuth({
           return;
         }
         await mailer.sendMail({
-          from: `"Solvro Planer" <${env.SMTP_USERNAME as string}>`,
+          from: `"Solvro Planer" <${env.SMTP_USERNAME}>`,
           to: email,
           subject: "Kod logowania do Planera | KN Solvro",
           html: `
