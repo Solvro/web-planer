@@ -18,6 +18,13 @@ interface UsosRegistrationRound {
   end_date: Date;
 }
 
+function sortByStartDateFn(
+  a: UsosRegistrationRound,
+  b: UsosRegistrationRound,
+): number {
+  return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+}
+
 export async function getRegistrationRoundsAction(
   registrationId: string,
 ): Promise<UsosRegistrationRound[]> {
@@ -34,7 +41,7 @@ export async function getRegistrationRoundsAction(
         },
       );
 
-      return data;
+      return data.sort(sortByStartDateFn);
     },
   });
 }
