@@ -60,6 +60,7 @@ interface Alert {
 
 interface AlertsProps {
   className?: string;
+  variant?: "banner" | "pill";
 }
 
 function readDismissed(): string[] {
@@ -112,29 +113,48 @@ async function fetchAlerts(appCode: string): Promise<Alert[]> {
 
 const VARIANT_STYLES: Record<
   AlertType,
-  { container: string; icon: typeof Info; iconClass: string }
+  {
+    container: string;
+    pillContainer: string;
+    pillText: string;
+    pillSeparator: string;
+    icon: typeof Info;
+    iconClass: string;
+  }
 > = {
   info: {
     container:
       "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
+    pillContainer:
+      "border-blue-300 bg-blue-50 dark:border-blue-400/30 dark:bg-black/40",
+    pillText: "text-blue-900 dark:text-blue-100",
+    pillSeparator: "bg-blue-400/40",
     icon: Info,
     iconClass: "text-blue-600 dark:text-blue-300",
   },
   warning: {
     container:
       "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
+    pillContainer:
+      "border-amber-300 bg-amber-50 dark:border-amber-400/30 dark:bg-black/40",
+    pillText: "text-amber-900 dark:text-amber-100",
+    pillSeparator: "bg-amber-400/40",
     icon: AlertTriangle,
     iconClass: "text-amber-600 dark:text-amber-300",
   },
   critical: {
     container:
       "border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
+    pillContainer:
+      "border-red-300 bg-red-50 dark:border-red-400/40 dark:bg-black/40",
+    pillText: "text-red-900 dark:text-red-100",
+    pillSeparator: "bg-red-400/50",
     icon: AlertCircle,
     iconClass: "text-red-600 dark:text-red-300",
   },
 };
 
-export function Alerts({ className }: AlertsProps = {}) {
+export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
   const appCode = env.NEXT_PUBLIC_ALERTS_APP_CODE;
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -177,11 +197,93 @@ export function Alerts({ className }: AlertsProps = {}) {
   };
 
   return (
-    <div className={cn("flex w-full flex-col gap-2 px-3 py-1", className)}>
+    <div
+      className={cn(
+        variant === "pill"
+          ? "flex w-full flex-col items-center gap-2"
+          : "flex w-full flex-col gap-2 px-3 py-1",
+        className,
+      )}
+    >
       {visible.map((alert) => {
-        const variant = VARIANT_STYLES[alert.alert_type];
-        const Icon = variant.icon;
+        const styles = VARIANT_STYLES[alert.alert_type];
+        const Icon = styles.icon;
         const hasLink = alert.link !== "";
+
+        if (variant === "pill") {
+          const sanitizedPill = sanitize(alert.content, {
+            ALLOWED_TAGS,
+            ALLOWED_ATTR,
+          });
+          const hasTitle = alert.title.trim() !== "";
+          const hasContent = sanitizedPill.trim() !== "";
+
+          const pillInner = (
+            <div
+              className={cn(
+                "group relative mx-auto flex w-fit max-w-[min(40rem,90vw)] flex-row items-start gap-2.5 rounded-lg border px-3 py-2 text-sm shadow-sm backdrop-blur-sm transition-shadow duration-500 ease-out",
+                styles.pillContainer,
+                hasLink && "cursor-pointer hover:brightness-110",
+              )}
+            >
+              <Icon
+                className={cn("mt-0.5 size-4 shrink-0", styles.iconClass)}
+                aria-hidden="true"
+              />
+              <div
+                className={cn(
+                  "min-w-0 flex-1 text-balance leading-snug",
+                  styles.pillText,
+                )}
+              >
+                {hasTitle ? (
+                  <p className="font-semibold leading-tight">{alert.title}</p>
+                ) : null}
+                {hasContent ? (
+                  <div
+                    className="alert-content prose prose-sm max-w-none dark:prose-invert prose-headings:my-1 prose-headings:text-current prose-p:my-0 prose-p:text-current prose-a:text-current prose-blockquote:text-current prose-strong:text-current prose-em:text-current prose-code:text-current prose-li:text-current"
+                    // eslint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{ __html: sanitizedPill }}
+                  />
+                ) : null}
+              </div>
+              {alert.is_dismissable ? (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    handleDismiss(alert.id);
+                  }}
+                  className={cn(
+                    "ml-1 rounded p-0.5 opacity-70 transition-opacity hover:opacity-100",
+                    styles.pillText,
+                  )}
+                  aria-label="Zamknij powiadomienie"
+                >
+                  <X className="size-3.5" />
+                </button>
+              ) : null}
+            </div>
+          );
+
+          if (hasLink) {
+            return (
+              <a
+                key={alert.id}
+                href={alert.link}
+                target={alert.open_in_new_tab ? "_blank" : undefined}
+                rel={alert.open_in_new_tab ? "noopener noreferrer" : undefined}
+                className="block no-underline"
+              >
+                {pillInner}
+              </a>
+            );
+          }
+
+          return <div key={alert.id}>{pillInner}</div>;
+        }
+
         const sanitized = sanitize(alert.content, {
           ALLOWED_TAGS,
           ALLOWED_ATTR,
@@ -191,12 +293,12 @@ export function Alerts({ className }: AlertsProps = {}) {
           <div
             className={cn(
               "flex items-start gap-3 rounded-md border px-4 py-3 text-sm shadow-sm",
-              variant.container,
+              styles.container,
               hasLink && "transition-colors hover:brightness-105",
             )}
           >
             <Icon
-              className={cn("mt-0.5 size-5 shrink-0", variant.iconClass)}
+              className={cn("mt-0.5 size-5 shrink-0", styles.iconClass)}
               aria-hidden="true"
             />
             <div className="min-w-0 flex-1">
@@ -204,7 +306,7 @@ export function Alerts({ className }: AlertsProps = {}) {
                 <p className="font-semibold leading-tight">{alert.title}</p>
               )}
               <div
-                className="alert-content prose prose-sm max-w-none dark:prose-invert"
+                className="alert-content prose prose-sm max-w-none dark:prose-invert prose-headings:text-current prose-p:text-current prose-a:text-current prose-blockquote:text-current prose-strong:text-current prose-em:text-current prose-code:text-current prose-li:text-current"
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: sanitized }}
               />

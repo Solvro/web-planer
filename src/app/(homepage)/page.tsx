@@ -115,7 +115,10 @@ export default function Home() {
         className="relative mx-auto max-w-[80rem] px-2 text-center md:px-8"
       >
         <div className="mb-2 mt-[5.5rem] min-h-4 text-start md:min-h-20">
-          <Alerts className="animate-in fade-in slide-in-from-top" />
+          <Alerts
+            variant="pill"
+            className="animate-in fade-in slide-in-from-top"
+          />
         </div>
         <div className="z-10 flex animate-fade-in-2 items-center justify-center opacity-0 [--animation-delay:1000ms]">
           <Link href="#topwr">
