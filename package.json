@@ -17,7 +17,8 @@
     "lint:style": "next typegen & eslint . --max-warnings=0",
     "lint:typecheck": "next typegen & tsc --noEmit",
     "start": "next start",
-    "email-dev": "email dev"
+    "email:dev": "email dev",
+    "email:export": "email export"
   },
   "lint-staged": {
     "*": "prettier -w --ignore-unknown"
