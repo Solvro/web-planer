@@ -16,7 +16,8 @@
     "lint:fix": "eslint . --fix",
     "lint:style": "next typegen & eslint . --max-warnings=0",
     "lint:typecheck": "next typegen & tsc --noEmit",
-    "start": "next start"
+    "start": "next start",
+    "email-dev": "email dev"
   },
   "lint-staged": {
     "*": "prettier -w --ignore-unknown"
@@ -37,6 +38,8 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-switch": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.4",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.0.8",
     "@t3-oss/env-nextjs": "^0.11.0",
     "@tanstack/react-query": "^5.54.1",
     "@types/canvas-confetti": "^1.9.0",
@@ -66,6 +69,7 @@
     "pg": "^8.20.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-email": "^6.0.8",
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.3.0",
     "react-use": "^17.6.0",
@@ -78,6 +82,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@react-email/ui": "6.0.8",
     "@solvro/config": "^2.3.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/crypto-js": "^4.2.2",
