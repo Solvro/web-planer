@@ -1,7 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";

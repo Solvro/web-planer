@@ -14,7 +14,7 @@
     "knip": "knip",
     "lint": "pnpm lint:style && pnpm lint:typecheck",
     "lint:fix": "eslint . --fix",
-    "lint:style": "next typegen & eslint . --max-warnings=10",
+    "lint:style": "next typegen & eslint . --max-warnings=0",
     "lint:typecheck": "next typegen & tsc --noEmit",
     "start": "next start"
   },
