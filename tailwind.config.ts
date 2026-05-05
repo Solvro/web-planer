@@ -1,3 +1,4 @@
+import tailwindTypography from "@tailwindcss/typography";
 import tailwindScrollbar from "tailwind-scrollbar";
 import type { Config } from "tailwindcss";
 import tailwindAnimate from "tailwindcss-animate";
@@ -348,7 +349,7 @@ const config = {
       },
     },
   },
-  plugins: [tailwindAnimate, tailwindScrollbar],
+  plugins: [tailwindAnimate, tailwindScrollbar, tailwindTypography],
 } satisfies Config;
 
 // eslint-disable-next-line import/no-default-export
