@@ -31,6 +31,38 @@ interface BatchCoursePreviewParameters {
   days: number;
 }
 
+function normalizeCourseEditions(
+  response: Record<string, UsosCourseEdition[]>,
+): Record<string, CoursePreviewDTO[]> {
+  const normalizedData: Record<string, CoursePreviewDTO[]> = {};
+
+  for (const [editionId, events] of Object.entries(response)) {
+    if (!Array.isArray(events)) {
+      continue;
+    }
+
+    const mapped = events.map((event) => ({
+      id: editionId,
+      startTime: event.start_time ?? "",
+      endTime: event.end_time ?? "",
+      name: event.name?.pl ?? event.name?.en ?? "",
+      type: event.type ?? "",
+      groupNumber: event.group_number ?? "",
+      lecturerIds: event.lecturer_ids ?? [],
+      classTypeName: event.classtype_name?.pl ?? event.classtype_name?.en ?? "",
+    }));
+
+    mapped.sort(
+      (a, b) =>
+        new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+    );
+
+    normalizedData[editionId] = mapped;
+  }
+
+  return normalizedData;
+}
+
 export async function getBatchCoursePreviewAction(
   parameters: BatchCoursePreviewParameters,
 ): Promise<Record<string, CoursePreviewDTO[]>> {
@@ -63,38 +95,7 @@ export async function getBatchCoursePreviewAction(
         },
       );
 
-      if (response == null) {
-        return {};
-      }
-
-      const normalizedData: Record<string, CoursePreviewDTO[]> = {};
-
-      for (const [editionId, events] of Object.entries(response)) {
-        if (!Array.isArray(events)) {
-          continue;
-        }
-
-        const mapped = events.map((event) => ({
-          id: editionId,
-          startTime: event.start_time ?? "",
-          endTime: event.end_time ?? "",
-          name: event.name?.pl ?? event.name?.en ?? "",
-          type: event.type ?? "",
-          groupNumber: event.group_number ?? "",
-          lecturerIds: event.lecturer_ids ?? [],
-          classTypeName:
-            event.classtype_name?.pl ?? event.classtype_name?.en ?? "",
-        }));
-
-        mapped.sort(
-          (a, b) =>
-            new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
-        );
-
-        normalizedData[editionId] = mapped;
-      }
-
-      return normalizedData;
+      return normalizeCourseEditions(response);
     },
   });
 }
