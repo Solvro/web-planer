@@ -1,7 +1,7 @@
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 interface UsosCourseEdition {
   start_time?: string | null;
@@ -24,7 +24,7 @@ export interface CoursePreviewDTO {
   classTypeName: string;
 }
 
-interface BatchCoursePreviewParams {
+interface BatchCoursePreviewParameters {
   courseEditionIds: string[];
   termId: string;
   start: string;
@@ -32,15 +32,18 @@ interface BatchCoursePreviewParams {
 }
 
 export async function getBatchCoursePreviewAction(
-  params: BatchCoursePreviewParams,
+  parameters: BatchCoursePreviewParameters,
 ): Promise<Record<string, CoursePreviewDTO[]>> {
-  const { courseEditionIds, termId, start, days } = params;
+  const { courseEditionIds, termId, start, days } = parameters;
 
-  if (!courseEditionIds.length) return {};
+  if (courseEditionIds.length === 0) {
+    return {};
+  }
 
-  const sortedIds = [...courseEditionIds].sort().join(",");
+  const sortedIds = [...courseEditionIds].toSorted().join(",");
+  const daysString = days.toString();
   const hash = createHash("sha256")
-    .update(`${sortedIds}-${termId}-${start}-${days}`)
+    .update(`${sortedIds}-${termId}-${start}-${daysString}`)
     .digest("hex");
 
   return getOrSetRedis({
@@ -53,19 +56,23 @@ export async function getBatchCoursePreviewAction(
         {
           course_edition_ids: courseEditionIds.join(","),
           term_id: termId,
-          start: start,
-          days: days.toString(),
+          start,
+          days: daysString,
           fields:
             "start_time|end_time|name|type|group_number|lecturer_ids|classtype_name",
         },
       );
 
-      if (!response) return {};
+      if (response == null) {
+        return {};
+      }
 
       const normalizedData: Record<string, CoursePreviewDTO[]> = {};
 
       for (const [editionId, events] of Object.entries(response)) {
-        if (!Array.isArray(events)) continue;
+        if (!Array.isArray(events)) {
+          continue;
+        }
 
         const mapped = events.map((event) => ({
           id: editionId,
