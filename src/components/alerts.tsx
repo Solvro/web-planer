@@ -126,7 +126,7 @@ const VARIANT_STYLES: Record<
     container:
       "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-100",
     pillContainer:
-      "border-blue-300 bg-blue-50 dark:border-blue-400/30 dark:bg-black/40",
+      "border-blue-400/60 bg-blue-50/30 dark:border-blue-400/50 dark:bg-blue-950/20 backdrop-blur-md",
     pillText: "text-blue-900 dark:text-blue-100",
     pillSeparator: "bg-blue-400/40",
     icon: Info,
@@ -136,7 +136,7 @@ const VARIANT_STYLES: Record<
     container:
       "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-100",
     pillContainer:
-      "border-amber-300 bg-amber-50 dark:border-amber-400/30 dark:bg-black/40",
+      "border-amber-400/60 bg-amber-50/30 dark:border-amber-400/40 dark:bg-amber-950/20 backdrop-blur-md",
     pillText: "text-amber-900 dark:text-amber-100",
     pillSeparator: "bg-amber-400/40",
     icon: AlertTriangle,
@@ -146,7 +146,7 @@ const VARIANT_STYLES: Record<
     container:
       "border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/60 dark:text-red-100",
     pillContainer:
-      "border-red-300 bg-red-50 dark:border-red-400/40 dark:bg-black/40",
+      "border-red-400/60 bg-red-50/30 dark:border-red-400/50 dark:bg-red-950/20 backdrop-blur-md",
     pillText: "text-red-900 dark:text-red-100",
     pillSeparator: "bg-red-400/50",
     icon: AlertCircle,
@@ -221,9 +221,9 @@ export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
           const pillInner = (
             <div
               className={cn(
-                "group relative mx-auto flex w-fit max-w-[min(40rem,90vw)] flex-row items-start gap-2.5 rounded-lg border px-3 py-2 text-sm shadow-sm backdrop-blur-sm transition-shadow duration-500 ease-out",
+                "group relative mx-auto flex w-fit max-w-[min(40rem,90vw)] flex-row items-start gap-2.5 rounded-lg border px-3 py-2 text-sm shadow-sm backdrop-blur-md transition-shadow duration-500 ease-out",
                 styles.pillContainer,
-                hasLink && "cursor-pointer hover:brightness-110",
+                hasLink && "cursor-pointer",
               )}
             >
               <Icon
@@ -256,7 +256,7 @@ export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
                     handleDismiss(alert.id);
                   }}
                   className={cn(
-                    "ml-1 rounded p-0.5 opacity-70 transition-opacity hover:opacity-100",
+                    "-mr-1 ml-1 rounded p-0.5 opacity-70 transition-opacity hover:opacity-100",
                     styles.pillText,
                   )}
                   aria-label="Zamknij powiadomienie"
@@ -294,7 +294,7 @@ export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
             className={cn(
               "flex items-start gap-3 rounded-md border px-4 py-3 text-sm shadow-sm",
               styles.container,
-              hasLink && "transition-colors hover:brightness-105",
+              hasLink && "transition-colors",
             )}
           >
             <Icon
@@ -319,7 +319,7 @@ export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
                   event.stopPropagation();
                   handleDismiss(alert.id);
                 }}
-                className="ml-2 rounded p-1 opacity-70 transition-opacity hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
+                className="-mr-1 ml-2 rounded p-1 opacity-70 transition-opacity hover:bg-black/5 hover:opacity-100 dark:hover:bg-white/10"
                 aria-label="Zamknij powiadomienie"
               >
                 <X className="size-4" />
