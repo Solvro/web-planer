@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
+import { Alerts } from "@/components/alerts";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -47,7 +48,8 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   };
 
   return (
-    <div className="flex w-full grow flex-col overflow-x-auto pt-24">
+    <div className="flex w-full grow flex-col overflow-x-auto pt-20">
+      <Alerts />
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4 md:px-14">
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 

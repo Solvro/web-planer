@@ -59,6 +59,7 @@
     "html-to-image": "^1.11.11",
     "input-otp": "^1.4.2",
     "ioredis": "^5.10.1",
+    "isomorphic-dompurify": "^3.11.0",
     "jotai": "^2.9.3",
     "jotai-family": "^1.0.1",
     "lucide-react": "^0.426.0",
@@ -85,6 +86,7 @@
   "devDependencies": {
     "@react-email/ui": "6.0.8",
     "@solvro/config": "^2.3.0",
+    "@tailwindcss/typography": "^0.5.19",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.17.10",
