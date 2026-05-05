@@ -1,7 +1,8 @@
+import { createHash } from "node:crypto";
+
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
-import { createHash } from "node:crypto";
 
 interface UsosCourseEdition {
   start_time?: string | null;
