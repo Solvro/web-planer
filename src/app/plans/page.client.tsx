@@ -44,6 +44,7 @@ export function PlansPage({
   const plansExistingLocallyAndDeletedOnline = plans.filter(
     (plan) =>
       plan.onlineId !== null &&
+      // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
       !onlinePlans.some((p) => p.id.toString() === plan.onlineId),
   );
 

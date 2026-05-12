@@ -30,7 +30,9 @@ export const AnimatedList = React.memo(
   ({ children, className, delay = 1000, ...props }: AnimatedListProps) => {
     const [index, setIndex] = useState(0);
     const childrenArray = useMemo(
+      // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
       () => React.Children.toArray(children),
+      // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
       [children],
     );
 

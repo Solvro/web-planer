@@ -25,7 +25,7 @@ export const planFamily = atomFamily(
         createdAt: new Date(),
         updatedAt: new Date(),
         onlineId: null as string | null,
-        toCreate: true as boolean,
+        toCreate: true,
         synced: false,
       },
       undefined,

@@ -14,18 +14,22 @@ export function SaveOfflineFunction({
   onlinePlan: PlanResponseType | null | undefined;
   coursesFunction: UseMutationResult<CourseType, Error, string>;
 }) {
+  /* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
   const { handleUpdateLocalPlan, firstTime } = useSavePlan({
     plan,
     onlinePlan,
     coursesFunction,
     refetchOnlinePlan: () => null,
   });
+  /* eslint-enable react-you-might-not-need-an-effect/no-event-handler */
 
   useEffect(() => {
     if (
+      /* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
       onlinePlan != null &&
       plan.onlineId !== null &&
       plan.toCreate &&
+      /* eslint-enable react-you-might-not-need-an-effect/no-event-handler */
       firstTime
     ) {
       void handleUpdateLocalPlan();
