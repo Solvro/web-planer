@@ -33,9 +33,7 @@ function toClassgroupDates(
     }));
 }
 
-async function fetchGroupWithPattern(
-  group: CourseGroupDTO,
-): Promise<{
+async function fetchGroupWithPattern(group: CourseGroupDTO): Promise<{
   group: CourseGroupDTO;
   schedulePattern: GroupSchedulePattern | null;
 }> {
