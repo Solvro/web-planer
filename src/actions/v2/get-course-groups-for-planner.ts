@@ -15,10 +15,12 @@ export interface PlannerGroupDTO {
   schedulePattern: GroupSchedulePattern | null;
 }
 
-function toClassgroupDates(group: {
-  startTime: string | null;
-  endTime: string | null;
-}[]): ClassgroupDate[] {
+function toClassgroupDates(
+  group: {
+    startTime: string | null;
+    endTime: string | null;
+  }[],
+): ClassgroupDate[] {
   return group
     .filter(
       (d): d is { startTime: string; endTime: string } =>
@@ -33,7 +35,10 @@ function toClassgroupDates(group: {
 
 async function fetchGroupWithPattern(
   group: CourseGroupDTO,
-): Promise<{ group: CourseGroupDTO; schedulePattern: GroupSchedulePattern | null }> {
+): Promise<{
+  group: CourseGroupDTO;
+  schedulePattern: GroupSchedulePattern | null;
+}> {
   const dates = await getClassgroupDatesAction(group.unitId, group.groupNumber);
   const classgroupDates = toClassgroupDates(dates);
   return {
@@ -49,7 +54,9 @@ export async function getPlannerCourseGroupsAction(
   const editionDetails = await getCourseEditionDetailsAction(courseId, termId);
 
   const [groupsWithPatterns, lecturersMap] = await Promise.all([
-    Promise.all(editionDetails.groups.map(async (group) => fetchGroupWithPattern(group))),
+    Promise.all(
+      editionDetails.groups.map(async (group) => fetchGroupWithPattern(group)),
+    ),
     (async () => {
       const uniqueLecturerIds = [
         ...new Set(editionDetails.groups.flatMap((g) => g.lecturerIds)),

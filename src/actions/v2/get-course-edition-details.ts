@@ -34,7 +34,9 @@ export interface CourseEditionDetailsDTO {
   groups: CourseGroupDTO[];
 }
 
-async function fetchCourseUnitGroups(unitId: string): Promise<CourseGroupDTO[]> {
+async function fetchCourseUnitGroups(
+  unitId: string,
+): Promise<CourseGroupDTO[]> {
   const data = await fetchUsosApi<UsosCourseUnit>("courses/course_unit", {
     unit_id: unitId,
     fields: "id|classtype_id|use_groups|groups[group_number|lecturer_ids]",
