@@ -1,5 +1,6 @@
 /* eslint-disable import/no-default-export */
 /* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
 import type {
   GlobalOptions as ConfettiGlobalOptions,
   CreateTypes as ConfettiInstance,

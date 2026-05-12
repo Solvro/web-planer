@@ -120,7 +120,7 @@ export function OtpEmail({ otp }: OtpEmailProps) {
 
 OtpEmail.PreviewProps = {
   otp: "000000",
-} as OtpEmailProps;
+};
 
 // eslint-disable-next-line import/no-default-export
 export default OtpEmail;

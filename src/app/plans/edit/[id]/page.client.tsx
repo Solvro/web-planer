@@ -57,6 +57,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
     data: onlinePlan,
     refetch: refetchOnlinePlan,
     isLoading,
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
   } = useQuery({
     enabled: plan.onlineId !== null && plan.onlineId !== "",
     queryKey: ["onlinePlan", plan.onlineId],

@@ -169,9 +169,7 @@ export function PlanItem({
         </CardTitle>
         <CardDescription>
           {format(
-            onlineOnly
-              ? updatedAt
-              : ((plan.createdAt as Date | undefined) ?? new Date()),
+            onlineOnly ? updatedAt : plan.createdAt,
             "dd.MM.yyyy - HH:mm",
           )}
         </CardDescription>
