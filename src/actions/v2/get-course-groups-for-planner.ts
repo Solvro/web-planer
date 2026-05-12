@@ -1,10 +1,11 @@
-import type { ClassgroupDate } from "@/types";
 import type { GroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
-import type { CourseGroupDTO } from "./get-course-edition-details";
-import type { LecturerDTO } from "./get-lecturer";
 import { buildGroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
+import type { ClassgroupDate } from "@/types";
+
 import { getClassgroupDatesAction } from "./get-class-group-dates";
+import type { CourseGroupDTO } from "./get-course-edition-details";
 import { getCourseEditionDetailsAction } from "./get-course-edition-details";
+import type { LecturerDTO } from "./get-lecturer";
 import { getLecturerAction } from "./get-lecturer";
 
 export interface PlannerGroupDTO {
