@@ -22,6 +22,7 @@ export function SaveOnlineFunction({
   handleSyncPlan: () => Promise<void>;
 }) {
   useEffect(() => {
+    // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
     if (plan.onlineId === null) {
       void handleCreateOnlinePlan(setOfflineAlert);
     }
