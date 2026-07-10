@@ -1,3 +1,5 @@
+"use server";
+
 import type { GroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
 import { buildGroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
 import type { ClassgroupDate } from "@/types";
