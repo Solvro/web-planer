@@ -1,3 +1,5 @@
+"use server";
+
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
@@ -37,10 +39,9 @@ export async function getRegistrationRoundsAction(
         `registrations/course_registration_rounds`,
         {
           registration_id: registrationId,
-          fields: "fields=id|name|status|registration_mode|start_date|end_date",
+          fields: "id|name|status|registration_mode|start_date|end_date",
         },
       );
-
       return data.toSorted(sortByStartDateFunction);
     },
   });

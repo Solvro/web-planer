@@ -1,6 +1,10 @@
+"use server";
+
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
+
+//todo: w api usos nie ma czegos takiego jak lecturer ids dla tego endpointu (albo cos pojebalem), wiec trzeba to poprawic bo obecnie to jest chyba undefined
 
 interface UsosCourseEdition {
   course_id: string;
@@ -17,7 +21,6 @@ interface UsosCourseUnitGroup {
 interface UsosCourseUnit {
   id: string;
   classtype_id: string;
-  use_groups: boolean;
   groups: UsosCourseUnitGroup[] | null;
 }
 
@@ -37,12 +40,12 @@ export interface CourseEditionDetailsDTO {
 async function fetchCourseUnitGroups(
   unitId: string,
 ): Promise<CourseGroupDTO[]> {
-  const data = await fetchUsosApi<UsosCourseUnit>("courses/course_unit", {
+  const data = await fetchUsosApi<UsosCourseUnit>("courses/unit", {
     unit_id: unitId,
-    fields: "id|classtype_id|use_groups|groups[group_number|lecturer_ids]",
+    fields: "id|classtype_id|groups[group_number|lecturers]",
   });
 
-  if (!data.use_groups || data.groups == null || data.groups.length === 0) {
+  if (data.groups == null || data.groups.length === 0) {
     return [
       {
         unitId: data.id,
