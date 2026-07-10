@@ -62,7 +62,11 @@ export function buildGroupSchedulePattern(
 
   const sorted = [...dates].toSorted((a, b) => a.date.localeCompare(b.date));
   const firstDate = new Date(sorted[0].date);
-  const firstEntry = sorted[0];
+  let firstEntry = sorted[0];
+  if (sorted.length > 1) {
+    firstEntry = sorted[1]; //first date is often irregular, like in 15h course first classes can be 45mins, so if its possible, we can take second
+  }
+  //const firstEntry = sorted[0];
   const lastEntry = sorted.at(-1) ?? firstEntry;
 
   if (sorted.length === 1) {
