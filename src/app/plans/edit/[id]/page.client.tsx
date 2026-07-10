@@ -163,7 +163,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
               {
                 id: Math.floor(Math.random() * 1000),
                 groupId: Number.parseInt(group.groupNumber),
-                startTime: group.schedulePattern?.endTime ?? "7:30",
+                startTime: group.schedulePattern?.startTime ?? "7:30",
                 endTime: group.schedulePattern?.endTime ?? "9:00",
                 week: "-",
                 createdAt: "",
