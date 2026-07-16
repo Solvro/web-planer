@@ -78,6 +78,53 @@ function getGapsMode(numbers: number[]): number[] {
   return modes;
 }
 
+function getHoursMode(hours: string[]): string {
+  const frequencyMap: Record<string, number> = {};
+  let maxCount = 0;
+  let mode = hours[0];
+
+  for (const item of hours) {
+    frequencyMap[item] = (frequencyMap[item] || 0) + 1;
+
+    if (frequencyMap[item] > maxCount) {
+      maxCount = frequencyMap[item];
+      mode = item;
+    }
+  }
+
+  return mode;
+}
+
+export function getMostFrequentTimes(entries: ClassgroupDate[]): {
+  startTime: string;
+  endTime: string;
+} {
+  const startTimes: string[] = [];
+  const endTimes: string[] = [];
+
+  for (const entry of entries) {
+    const startTimePart = entry.startTime.split(" ")[1];
+    const endTimePart = entry.endTime.split(" ")[1];
+
+    if (startTimePart) {
+      startTimes.push(startTimePart);
+    }
+    if (endTimePart) {
+      endTimes.push(endTimePart);
+    }
+  }
+
+  const modeStartTime = getHoursMode(startTimes);
+  const modeEndTime = getHoursMode(endTimes);
+
+  const baseDate = entries[0].date;
+
+  return {
+    startTime: `${baseDate} ${modeStartTime}`,
+    endTime: `${baseDate} ${modeEndTime}`,
+  };
+}
+
 export function buildGroupSchedulePattern(
   dates: ClassgroupDate[],
 ): GroupSchedulePattern | null {
@@ -87,19 +134,18 @@ export function buildGroupSchedulePattern(
 
   const sorted = [...dates].toSorted((a, b) => a.date.localeCompare(b.date));
   const firstDate = new Date(sorted[0].date);
-  let firstEntry = sorted[0];
-  if (sorted.length > 1) {
-    firstEntry = sorted[1]; //first date is often irregular, like in 15h course first classes can be 45mins, so if its possible, we can take second
-  }
+  const firstEntry = sorted[0];
   const lastEntry = sorted.at(-1) ?? firstEntry;
+
+  const { startTime, endTime } = getMostFrequentTimes(dates);
 
   if (sorted.length === 1) {
     return {
       pattern: "irregular",
       parity: "unknown",
       weekday: isoWeekday(firstDate),
-      startTime: firstEntry.startTime,
-      endTime: firstEntry.endTime,
+      startTime,
+      endTime,
       firstOccurrence: firstEntry.date,
       lastOccurrence: lastEntry.date,
       occurrencesCount: 1,
@@ -154,8 +200,8 @@ export function buildGroupSchedulePattern(
     pattern,
     parity,
     weekday: isoWeekday(firstDate),
-    startTime: firstEntry.startTime,
-    endTime: firstEntry.endTime,
+    startTime,
+    endTime,
     firstOccurrence: firstEntry.date,
     lastOccurrence: lastEntry.date,
     occurrencesCount: sorted.length,
