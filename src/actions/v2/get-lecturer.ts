@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
 
-interface UsosLecturer {
+export interface UsosLecturer {
   id: string;
   first_name: string;
   last_name: string;
