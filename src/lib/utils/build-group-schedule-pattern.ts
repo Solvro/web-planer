@@ -21,7 +21,6 @@ export interface GroupSchedulePattern {
 }
 
 const WEEKLY_GAP = 7;
-const BIWEEKLY_GAP = 14;
 const GAP_TOLERANCE = 2;
 
 function daysBetween(a: string, b: string): number {
@@ -53,6 +52,32 @@ function addDays(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+function getGapsMode(numbers: number[]): number[] {
+  if (numbers.length === 0) {
+    return [];
+  }
+
+  const frequencyMap: Record<number, number> = {};
+  let maxFreq = 0;
+
+  for (const gap of numbers) {
+    frequencyMap[gap] = (frequencyMap[gap] || 0) + 1;
+    if (frequencyMap[gap] > maxFreq) {
+      maxFreq = frequencyMap[gap];
+    }
+  }
+
+  const modes: number[] = [];
+
+  for (const key in frequencyMap) {
+    if (frequencyMap[key] === maxFreq) {
+      modes.push(Number(key));
+    }
+  }
+
+  return modes;
+}
+
 export function buildGroupSchedulePattern(
   dates: ClassgroupDate[],
 ): GroupSchedulePattern | null {
@@ -66,7 +91,6 @@ export function buildGroupSchedulePattern(
   if (sorted.length > 1) {
     firstEntry = sorted[1]; //first date is often irregular, like in 15h course first classes can be 45mins, so if its possible, we can take second
   }
-  //const firstEntry = sorted[0];
   const lastEntry = sorted.at(-1) ?? firstEntry;
 
   if (sorted.length === 1) {
@@ -88,15 +112,14 @@ export function buildGroupSchedulePattern(
     .map((entry, index) => daysBetween(sorted[index].date, entry.date));
 
   const weeklyGaps = gaps.filter((g) => isNear(g, WEEKLY_GAP));
-  const biweeklyGaps = gaps.filter((g) => isNear(g, BIWEEKLY_GAP));
   const total = gaps.length;
 
   let pattern: SchedulePattern;
   let parity: ScheduleParity;
   let exceptions: string[] = [];
 
-  const allWeekly = weeklyGaps.length === total;
-  const allBiweekly = biweeklyGaps.length === total;
+  const allWeekly = getGapsMode(gaps).includes(7);
+  const allBiweekly = getGapsMode(gaps).includes(14);
 
   if (allWeekly) {
     pattern = "weekly";

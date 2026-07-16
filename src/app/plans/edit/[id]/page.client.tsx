@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { getPlan } from "@/actions/plans";
 //import { CourseGroupDTO, getCourseEditionGroupsAction } from "@/actions/v2/get-course-editions-details";
 import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
+import type { LecturerDTO } from "@/actions/v2/get-lecturer";
 import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
 //import { getBatchCoursePreviewAction } from "@/actions/v2/get-course-editions-preview";
 import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
@@ -31,6 +32,7 @@ import { useShare } from "@/hooks/use-share";
 //import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
 import { cn } from "@/lib/utils";
+import type { ScheduleParity } from "@/lib/utils/build-group-schedule-pattern";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
 import type { CourseType, SingleCourse /*SingleGroup*/ } from "@/types";
@@ -43,7 +45,8 @@ import { SaveOfflineFunction } from "./_components/save-offline";
 import { SaveOnlineFunction } from "./_components/save-online";
 
 //TODO: usunac zakomentowane importy i logi, moze przeniesc funkcje pomocnicza?
-//Dodac walidacje group schedule pattern starttime/endtime: line 146-151
+//Dodac walidacje group schedule pattern starttime/endtime
+//zajetosc grup
 
 const getDayOfWeek = (startTime: string) => {
   const date = new Date(startTime).getDay();
@@ -71,6 +74,34 @@ const getDayOfWeek = (startTime: string) => {
     }
     default: {
       return "poniedziałek";
+    }
+  }
+};
+
+const getLecturersString = (lecturers: LecturerDTO[]): string => {
+  let output = "";
+  for (const l of lecturers) {
+    output += `${l.firstName} ${l.lastName}`;
+  }
+  //console.log("Wykladowcy", output)
+  return output;
+};
+
+const translateSchedulePatternParity = (
+  parity: ScheduleParity,
+): "-" | "TN" | "TP" | "!" => {
+  switch (parity) {
+    case "all": {
+      return "-";
+    }
+    case "even": {
+      return "TP";
+    }
+    case "odd": {
+      return "TN";
+    }
+    case "unknown": {
+      return "!";
     }
   }
 };
@@ -142,8 +173,9 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
         };
         //console.log("przed zmianami", groups)
         for (const group of groups) {
+          //console.log("grupa", group)
           newCourse.groups.push({
-            id: index,
+            id: Math.random() * index,
             name: course.courseName,
             averageRating: "0.0",
             opinionsCount: 0,
@@ -151,12 +183,23 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
             courseId: course.courseId,
             createdAt: "",
             updatedAt: "",
-            spotsOccupied: 0,
-            spotsTotal: 0,
+            spotsOccupied: course.registrationsCount,
+            spotsTotal: course.limits,
             isActive: true,
             url: "",
-            lecturer: "",
-            lecturers: [],
+            lecturer: getLecturersString(group.lecturers),
+            lecturers: group.lecturers.map((lecturer) => {
+              return {
+                ...lecturer,
+                name: lecturer.firstName,
+                surname: lecturer.lastName,
+                createdAt: "",
+                updatedAt: "",
+                averageRating: "0",
+                opinionsCount: "0",
+                id: Number.parseInt(lecturer.id),
+              };
+            }),
             group: group.groupNumber,
 
             meetings: [
@@ -165,7 +208,9 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
                 groupId: Number.parseInt(group.groupNumber),
                 startTime: group.schedulePattern?.startTime ?? "7:30",
                 endTime: group.schedulePattern?.endTime ?? "9:00",
-                week: "-",
+                week: translateSchedulePatternParity(
+                  group.schedulePattern?.parity ?? "all",
+                ),
                 createdAt: "",
                 updatedAt: "",
                 day: getDayOfWeek(
