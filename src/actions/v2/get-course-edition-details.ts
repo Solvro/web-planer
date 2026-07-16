@@ -3,7 +3,8 @@
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
-import type { UsosLecturer, LecturerDTO } from "./get-lecturer";
+
+import type { LecturerDTO, UsosLecturer } from "./get-lecturer";
 
 interface UsosCourseEdition {
   course_id: string;
@@ -12,7 +13,6 @@ interface UsosCourseEdition {
 }
 
 function normalizeLecturers(lecturers: UsosLecturer[]): LecturerDTO[] {
-
   return lecturers.map((lecturer) => {
     return {
       id: lecturer.id,
@@ -23,8 +23,8 @@ function normalizeLecturers(lecturers: UsosLecturer[]): LecturerDTO[] {
       photoUrl: lecturer.photo_urls?.["50x50"] ?? null,
       homepageUrl: lecturer.homepage_url ?? null,
       profileUrl: lecturer.profile_url ?? null,
-    }
-  })
+    };
+  });
 }
 
 interface UsosCourseUnitGroup {

@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";

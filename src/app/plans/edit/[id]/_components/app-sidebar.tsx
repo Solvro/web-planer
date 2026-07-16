@@ -6,6 +6,7 @@ import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
 import React from "react";
 
+import { getFacultiesAction } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
@@ -37,7 +38,6 @@ import type { CourseType, PlanResponseType } from "@/types";
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
 import { SyncedButton } from "./synced-button";
-import { getFacultiesAction } from "@/actions/v2/get-faculties";
 
 export function AppSidebar({
   plan,
@@ -64,7 +64,6 @@ export function AppSidebar({
   offlineAlert: boolean;
   faculty: string | null;
 }) {
-
   const faculties = getFacultiesAction();
 
   const registrations = useQuery({
