@@ -13,8 +13,6 @@ import { getCourseEditionDetailsAction } from "./get-course-edition-details";
 import type { LecturerDTO } from "./get-lecturer";
 import { getTermAction } from "./get-term";
 
-//import { getLecturerAction } from "./get-lecturer";
-
 export interface PlannerGroupDTO {
   unitId: string;
   groupNumber: string;

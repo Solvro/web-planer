@@ -8,11 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { getPlan } from "@/actions/plans";
-//import { CourseGroupDTO, getCourseEditionGroupsAction } from "@/actions/v2/get-course-editions-details";
 import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
 import type { LecturerDTO } from "@/actions/v2/get-lecturer";
 import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
-//import { getBatchCoursePreviewAction } from "@/actions/v2/get-course-editions-preview";
 import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
