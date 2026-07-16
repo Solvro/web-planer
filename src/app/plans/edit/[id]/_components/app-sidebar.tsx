@@ -7,7 +7,6 @@ import { format } from "date-fns/format";
 import React from "react";
 
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
-//import { getFaculties } from "@/actions/get-faculties";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
@@ -30,15 +29,15 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-//import { fetchClient } from "@/lib/fetch";
 import type { usePlanType } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
 import { serverToLocalPlan } from "@/lib/utils/server-to-local-plan";
-import type { CourseType, FacultyType, PlanResponseType } from "@/types";
+import type { CourseType, PlanResponseType } from "@/types";
 
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
 import { SyncedButton } from "./synced-button";
+import { getFacultiesAction } from "@/actions/v2/get-faculties";
 
 export function AppSidebar({
   plan,
@@ -65,79 +64,25 @@ export function AppSidebar({
   offlineAlert: boolean;
   faculty: string | null;
 }) {
-  // const faculties = useQuery({
-  //   queryKey: ["faculties"],
-  //   queryFn: getFaculties,
-  // });
 
-  //hardcoded lista wydziałów, wzięta z seedów ze starego planera, do usunięcia po dodaniu fetch faculties
-
-  const faculties = {
-    data: [
-      {
-        value: "W4N",
-        name: "W4N",
-        url: "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=CS",
-      },
-      {
-        value: "W02-DEF-ZY-2",
-        name: "Department of Mathematics",
-        url: "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=MATH",
-      },
-      {
-        value: "W03-GHI-WX-3",
-        name: "Department of Physics",
-        url: "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=PHYS",
-      },
-      {
-        value: "W04-JKL-VU-4",
-        name: "Department of Chemistry",
-        url: "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=CHEM",
-      },
-      {
-        value: "W05-MNO-TS-5",
-        name: "Department of Biology",
-        url: "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=BIO",
-      },
-      {
-        value: "W06-PQR-RQ-6",
-        name: "Department of Engineering",
-        url: "https://web.usos.pwr.edu.pl/kontroler.php?_action=news/rejestracje/rejJednostki&jed_org_kod=ENG",
-      },
-    ],
-    isLoading: false,
-    isError: false,
-  };
+  const faculties = getFacultiesAction();
 
   const registrations = useQuery({
-    //enabled: faculty !== null && faculty !== "",
+    enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
     queryFn: async () => {
       const registrationsDTO = await getFacultyRegistrationsAction(
         faculty ?? "",
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       return registrationsDTO.map((registrationDTO) => {
         return {
           id: registrationDTO.id,
           name: registrationDTO.description,
           departmentId: faculty ?? "W4N",
         };
-      }) as unknown as FacultyType;
+      });
     },
-    // queryFn: async () => {
-    //   const response = await fetchClient({
-    //     url: `/departments/${encodeURIComponent(faculty ?? "")}/registrations`,
-    //     method: "GET",
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error("Network response was not ok");
-    //   }
-
-    //   return response.json() as Promise<FacultyType>;
-    // },
   });
 
   return (
