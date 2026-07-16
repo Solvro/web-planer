@@ -3,8 +3,7 @@
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
-
-//todo: w api usos nie ma czegos takiego jak lecturer ids dla tego endpointu (albo cos pojebalem), wiec trzeba to poprawic bo obecnie to jest chyba undefined
+import type { UsosLecturer, LecturerDTO } from "./get-lecturer";
 
 interface UsosCourseEdition {
   course_id: string;
@@ -12,10 +11,26 @@ interface UsosCourseEdition {
   course_units_ids: string[] | null;
 }
 
+function normalizeLecturers(lecturers: UsosLecturer[]): LecturerDTO[] {
+
+  return lecturers.map((lecturer) => {
+    return {
+      id: lecturer.id,
+      firstName: lecturer.first_name,
+      lastName: lecturer.last_name,
+      titlesBefore: lecturer.titles?.before ?? null,
+      titlesAfter: lecturer.titles?.after ?? null,
+      photoUrl: lecturer.photo_urls?.["50x50"] ?? null,
+      homepageUrl: lecturer.homepage_url ?? null,
+      profileUrl: lecturer.profile_url ?? null,
+    }
+  })
+}
+
 interface UsosCourseUnitGroup {
   course_unit_id: string;
   group_number: number;
-  lecturer_ids: string[] | null;
+  lecturers: UsosLecturer[];
 }
 
 interface UsosCourseUnit {
@@ -28,7 +43,7 @@ export interface CourseGroupDTO {
   unitId: string;
   groupNumber: string;
   classtypeId: string;
-  lecturerIds: string[];
+  lecturers: LecturerDTO[];
 }
 
 export interface CourseEditionDetailsDTO {
@@ -51,7 +66,7 @@ async function fetchCourseUnitGroups(
         unitId: data.id,
         groupNumber: "1",
         classtypeId: data.classtype_id,
-        lecturerIds: [],
+        lecturers: [],
       },
     ];
   }
@@ -60,7 +75,7 @@ async function fetchCourseUnitGroups(
     unitId: data.id,
     groupNumber: String(group.group_number),
     classtypeId: data.classtype_id,
-    lecturerIds: group.lecturer_ids ?? [],
+    lecturers: normalizeLecturers(group.lecturers),
   }));
 }
 
