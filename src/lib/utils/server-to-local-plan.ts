@@ -8,6 +8,10 @@ import type {
   SingleGroup,
 } from "@/types";
 
+const formatMeetingTime = (groupMeetingTime: string): string => {
+  return `${groupMeetingTime.split(":")[0].slice(groupMeetingTime.split(":")[0].length - 2, groupMeetingTime.split(":")[0].length)}:${groupMeetingTime.split(":")[1]}`;
+};
+
 export const serverToLocalPlan = (
   courses: CourseType,
   shouldCourseBeChecked: ((course: SingleCourse) => boolean) | boolean,
@@ -49,8 +53,10 @@ export const serverToLocalPlan = (
               meeting.week === "-"
                 ? ""
                 : (meeting.week as "" | "TN" | "TP" | "!"),
-            endTime: meeting.endTime.split(":").slice(0, 2).join(":"),
-            startTime: meeting.startTime.split(":").slice(0, 2).join(":"),
+            //endTime: meeting.endTime.split(":").slice(0, 2).join(":"),
+            endTime: formatMeetingTime(meeting.endTime),
+            //startTime: meeting.startTime.split(":").slice(0, 2).join(":"),
+            startTime: formatMeetingTime(meeting.startTime),
             spotsOccupied: g.spotsOccupied,
             spotsTotal: g.spotsTotal,
             averageRating: Number.parseFloat(g.averageRating),
@@ -61,5 +67,6 @@ export const serverToLocalPlan = (
     .toSorted((a, b) => {
       return a.name.localeCompare(b.name);
     });
+  //console.log("extended courses", extendedCourses)
   return extendedCourses;
 };

@@ -1,3 +1,5 @@
+"use server";
+
 import { createHash } from "node:crypto";
 
 import redis from "@/lib/redis";

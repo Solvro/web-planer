@@ -1,4 +1,9 @@
-import type { GroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
+"use server";
+
+import type {
+  GroupSchedulePattern,
+  ScheduleParity,
+} from "@/lib/utils/build-group-schedule-pattern";
 import { buildGroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
 import type { ClassgroupDate } from "@/types";
 
@@ -6,7 +11,7 @@ import { getClassgroupDatesAction } from "./get-class-group-dates";
 import type { CourseGroupDTO } from "./get-course-edition-details";
 import { getCourseEditionDetailsAction } from "./get-course-edition-details";
 import type { LecturerDTO } from "./get-lecturer";
-import { getLecturerAction } from "./get-lecturer";
+import { getTermAction } from "./get-term";
 
 export interface PlannerGroupDTO {
   unitId: string;
@@ -34,15 +39,40 @@ function toClassgroupDates(
     }));
 }
 
-async function fetchGroupWithPattern(group: CourseGroupDTO): Promise<{
+function daysBetween(a: string, b: string): number {
+  const msPerDay = 1000 * 60 * 60 * 24;
+  return Math.round((new Date(b).getTime() - new Date(a).getTime()) / msPerDay);
+}
+
+async function getSchedulePatternParity(
+  termId: string,
+  classGroupStartTime: string,
+): Promise<ScheduleParity> {
+  const term = await getTermAction(termId);
+  const weekNumber =
+    Math.floor(daysBetween(classGroupStartTime, term.startDate) / 7) + 1;
+  return weekNumber % 2 === 0 ? "odd" : "even";
+}
+
+async function fetchGroupWithPattern(
+  group: CourseGroupDTO,
+  termId: string,
+): Promise<{
   group: CourseGroupDTO;
   schedulePattern: GroupSchedulePattern | null;
 }> {
   const dates = await getClassgroupDatesAction(group.unitId, group.groupNumber);
   const classgroupDates = toClassgroupDates(dates);
+  const schedulePattern = buildGroupSchedulePattern(classgroupDates);
+  if (schedulePattern?.pattern === "biweekly") {
+    schedulePattern.parity = await getSchedulePatternParity(
+      termId,
+      dates[1].startTime ?? "",
+    );
+  }
   return {
     group,
-    schedulePattern: buildGroupSchedulePattern(classgroupDates),
+    schedulePattern,
   };
 }
 
@@ -52,31 +82,17 @@ export async function getPlannerCourseGroupsAction(
 ): Promise<PlannerGroupDTO[]> {
   const editionDetails = await getCourseEditionDetailsAction(courseId, termId);
 
-  const [groupsWithPatterns, lecturersMap] = await Promise.all([
-    Promise.all(
-      editionDetails.groups.map(async (group) => fetchGroupWithPattern(group)),
+  const groupsWithPatterns = await Promise.all(
+    editionDetails.groups.map(async (group) =>
+      fetchGroupWithPattern(group, termId),
     ),
-    (async () => {
-      const uniqueLecturerIds = [
-        ...new Set(editionDetails.groups.flatMap((g) => g.lecturerIds)),
-      ];
-      const lecturerEntries = await Promise.all(
-        uniqueLecturerIds.map(async (id) => {
-          const lecturer = await getLecturerAction(id);
-          return [id, lecturer] as const;
-        }),
-      );
-      return new Map<string, LecturerDTO>(lecturerEntries);
-    })(),
-  ]);
+  );
 
   return groupsWithPatterns.map(({ group, schedulePattern }) => ({
     unitId: group.unitId,
     groupNumber: group.groupNumber,
     classtypeId: group.classtypeId,
-    lecturers: group.lecturerIds
-      .map((id) => lecturersMap.get(id))
-      .filter((l): l is LecturerDTO => l != null),
+    lecturers: group.lecturers,
     schedulePattern,
   }));
 }
