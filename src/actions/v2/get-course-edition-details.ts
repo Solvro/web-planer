@@ -1,6 +1,10 @@
+"use server";
+
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
+
+import type { LecturerDTO, UsosLecturer } from "./get-lecturer";
 
 interface UsosCourseEdition {
   course_id: string;
@@ -8,16 +12,30 @@ interface UsosCourseEdition {
   course_units_ids: string[] | null;
 }
 
+function normalizeLecturers(lecturers: UsosLecturer[]): LecturerDTO[] {
+  return lecturers.map((lecturer) => {
+    return {
+      id: lecturer.id,
+      firstName: lecturer.first_name,
+      lastName: lecturer.last_name,
+      titlesBefore: lecturer.titles?.before ?? null,
+      titlesAfter: lecturer.titles?.after ?? null,
+      photoUrl: lecturer.photo_urls?.["50x50"] ?? null,
+      homepageUrl: lecturer.homepage_url ?? null,
+      profileUrl: lecturer.profile_url ?? null,
+    };
+  });
+}
+
 interface UsosCourseUnitGroup {
   course_unit_id: string;
   group_number: number;
-  lecturer_ids: string[] | null;
+  lecturers: UsosLecturer[];
 }
 
 interface UsosCourseUnit {
   id: string;
   classtype_id: string;
-  use_groups: boolean;
   groups: UsosCourseUnitGroup[] | null;
 }
 
@@ -25,7 +43,7 @@ export interface CourseGroupDTO {
   unitId: string;
   groupNumber: string;
   classtypeId: string;
-  lecturerIds: string[];
+  lecturers: LecturerDTO[];
 }
 
 export interface CourseEditionDetailsDTO {
@@ -37,18 +55,18 @@ export interface CourseEditionDetailsDTO {
 async function fetchCourseUnitGroups(
   unitId: string,
 ): Promise<CourseGroupDTO[]> {
-  const data = await fetchUsosApi<UsosCourseUnit>("courses/course_unit", {
+  const data = await fetchUsosApi<UsosCourseUnit>("courses/unit", {
     unit_id: unitId,
-    fields: "id|classtype_id|use_groups|groups[group_number|lecturer_ids]",
+    fields: "id|classtype_id|groups[group_number|lecturers]",
   });
 
-  if (!data.use_groups || data.groups == null || data.groups.length === 0) {
+  if (data.groups == null || data.groups.length === 0) {
     return [
       {
         unitId: data.id,
         groupNumber: "1",
         classtypeId: data.classtype_id,
-        lecturerIds: [],
+        lecturers: [],
       },
     ];
   }
@@ -57,7 +75,7 @@ async function fetchCourseUnitGroups(
     unitId: data.id,
     groupNumber: String(group.group_number),
     classtypeId: data.classtype_id,
-    lecturerIds: group.lecturer_ids ?? [],
+    lecturers: normalizeLecturers(group.lecturers),
   }));
 }
 

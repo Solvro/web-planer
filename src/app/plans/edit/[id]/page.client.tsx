@@ -8,6 +8,10 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { getPlan } from "@/actions/plans";
+import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
+import type { LecturerDTO } from "@/actions/v2/get-lecturer";
+import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
+import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
 import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
 import { PlanOrientationButton } from "@/components/plan-orientation-button";
@@ -23,12 +27,13 @@ import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { useSavePlan } from "@/hooks/use-save-plan";
 import { useSession } from "@/hooks/use-session";
 import { useShare } from "@/hooks/use-share";
-import { fetchClient } from "@/lib/fetch";
+//import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
 import { cn } from "@/lib/utils";
+import type { ScheduleParity } from "@/lib/utils/build-group-schedule-pattern";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
 import { Day } from "@/types";
-import type { CourseType } from "@/types";
+import type { CourseType, SingleCourse /*SingleGroup*/ } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
@@ -36,6 +41,68 @@ import { AppSidebar } from "./_components/app-sidebar";
 import { HideDaysSettings } from "./_components/hide-days-settings";
 import { SaveOfflineFunction } from "./_components/save-offline";
 import { SaveOnlineFunction } from "./_components/save-online";
+
+//TODO: usunac zakomentowane importy i logi, moze przeniesc funkcje pomocnicza?
+//Dodac walidacje group schedule pattern starttime/endtime
+//zajetosc grup
+
+const getDayOfWeek = (startTime: string) => {
+  const date = new Date(startTime).getDay();
+  switch (date) {
+    case 0: {
+      return "niedziela";
+    }
+    case 1: {
+      return "poniedziałek";
+    }
+    case 2: {
+      return "wtorek";
+    }
+    case 3: {
+      return "środa";
+    }
+    case 4: {
+      return "czwartek";
+    }
+    case 5: {
+      return "piątek";
+    }
+    case 6: {
+      return "sobota";
+    }
+    default: {
+      return "poniedziałek";
+    }
+  }
+};
+
+const getLecturersString = (lecturers: LecturerDTO[]): string => {
+  let output = "";
+  for (const l of lecturers) {
+    output += `${l.firstName} ${l.lastName}`;
+  }
+  //console.log("Wykladowcy", output)
+  return output;
+};
+
+const translateSchedulePatternParity = (
+  parity: ScheduleParity,
+): "-" | "TN" | "TP" | "!" => {
+  switch (parity) {
+    case "all": {
+      return "-";
+    }
+    case "even": {
+      return "TP";
+    }
+    case "odd": {
+      return "TN";
+    }
+    case "unknown": {
+      return "!";
+    }
+  }
+};
 
 export function CreateNewPlanPage({ planId }: { planId: string }) {
   const session = useSession();
@@ -78,22 +145,85 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
   const coursesFunction = useMutation({
     mutationKey: ["courses"],
     mutationFn: async (registrationId: string) => {
-      const onlindeFacultyId =
-        onlinePlan?.registrations[0]?.departmentId ??
-        plan.registrations[0]?.departmentId;
-      const response = await fetchClient({
-        url: `/departments/${encodeURIComponent(onlindeFacultyId)}/registrations/${encodeURIComponent(registrationId)}/courses`,
-        method: "GET",
-      });
+      const rounds = await getRegistrationRoundsAction(registrationId);
 
-      if (!response.ok) {
-        toast.error(
-          "Coś poszło nie tak podczas pobierania kursów, spróbuj ponownie",
+      const nominalRound = rounds[0];
+
+      const roundCourses = await getRegistrationRoundCoursesAction(
+        nominalRound.id,
+      );
+
+      const normalizedCourses: CourseType = [];
+
+      let index = 0;
+
+      for (const course of roundCourses) {
+        const groups = await getPlannerCourseGroupsAction(
+          course.courseId,
+          course.termId,
         );
-        throw new Error("Network response was not ok");
+
+        const newCourse: SingleCourse = {
+          id: course.courseId,
+          name: course.courseName,
+          groups: [],
+          registrationId,
+        };
+        //console.log("przed zmianami", groups)
+        for (const group of groups) {
+          //console.log("grupa", group)
+          newCourse.groups.push({
+            id: Math.random() * index,
+            name: course.courseName,
+            averageRating: "0.0",
+            opinionsCount: 0,
+            type: group.classtypeId as "W" | "C" | "L" | "S" | "P",
+            courseId: course.courseId,
+            createdAt: "",
+            updatedAt: "",
+            spotsOccupied: course.registrationsCount,
+            spotsTotal: course.limits,
+            isActive: true,
+            url: "",
+            lecturer: getLecturersString(group.lecturers),
+            lecturers: group.lecturers.map((lecturer) => {
+              return {
+                ...lecturer,
+                name: lecturer.firstName,
+                surname: lecturer.lastName,
+                createdAt: "",
+                updatedAt: "",
+                averageRating: "0",
+                opinionsCount: "0",
+                id: Number.parseInt(lecturer.id),
+              };
+            }),
+            group: group.groupNumber,
+
+            meetings: [
+              {
+                id: Math.floor(Math.random() * 1000),
+                groupId: Number.parseInt(group.groupNumber),
+                startTime: group.schedulePattern?.startTime ?? "7:30",
+                endTime: group.schedulePattern?.endTime ?? "9:00",
+                week: translateSchedulePatternParity(
+                  group.schedulePattern?.parity ?? "all",
+                ),
+                createdAt: "",
+                updatedAt: "",
+                day: getDayOfWeek(
+                  group.schedulePattern?.startTime ?? "01.01.1970",
+                ),
+              },
+            ],
+          });
+          index++;
+        }
+
+        normalizedCourses.push(newCourse);
       }
 
-      return response.json() as Promise<CourseType>;
+      return normalizedCourses;
     },
   });
   const {

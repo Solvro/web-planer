@@ -6,7 +6,8 @@ import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
 import React from "react";
 
-import { getFaculties } from "@/actions/get-faculties";
+import { getFacultiesAction } from "@/actions/v2/get-faculties";
+import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
@@ -29,11 +30,10 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchClient } from "@/lib/fetch";
 import type { usePlanType } from "@/lib/use-plan";
 import { registrationReplacer } from "@/lib/utils";
 import { serverToLocalPlan } from "@/lib/utils/server-to-local-plan";
-import type { CourseType, FacultyType, PlanResponseType } from "@/types";
+import type { CourseType, PlanResponseType } from "@/types";
 
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
@@ -64,25 +64,23 @@ export function AppSidebar({
   offlineAlert: boolean;
   faculty: string | null;
 }) {
-  const faculties = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
+  const faculties = getFacultiesAction();
 
   const registrations = useQuery({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
     queryFn: async () => {
-      const response = await fetchClient({
-        url: `/departments/${encodeURIComponent(faculty ?? "")}/registrations`,
-        method: "GET",
+      const registrationsDTO = await getFacultyRegistrationsAction(
+        faculty ?? "",
+      );
+
+      return registrationsDTO.map((registrationDTO) => {
+        return {
+          id: registrationDTO.id,
+          name: registrationDTO.description,
+          departmentId: faculty ?? "W4N",
+        };
       });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      return response.json() as Promise<FacultyType>;
     },
   });
 
@@ -190,7 +188,7 @@ export function AppSidebar({
                 </SelectContent>
               ) : (
                 <SelectContent className="max-w-full">
-                  {faculties.data?.map((f) => (
+                  {faculties.data.map((f) => (
                     <SelectItem
                       className="mr-2 max-w-full truncate"
                       key={f.value}
