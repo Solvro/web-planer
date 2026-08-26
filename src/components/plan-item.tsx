@@ -100,13 +100,13 @@ export function PlanItem({
 
   const createFromOnlinePlan = () => {
     const newPlan = {
-      id: uuid,
+      id,
     };
 
     setPlans([...plans, newPlan]);
     plan.setPlan({
       ...plan,
-      id: uuid,
+      id,
       onlineId,
       name,
       createdAt: new Date(),
@@ -120,7 +120,7 @@ export function PlanItem({
   const handleDeletePlan = async () => {
     setLoading(true);
     if (onlineId !== null) {
-      const response = await deletePlan({ id: Number(onlineId) });
+      const response = await deletePlan({ id: onlineId });
       if (!response.success) {
         toast.error(response.message);
         setLoading(false);
@@ -146,7 +146,7 @@ export function PlanItem({
     if (plan.onlineId !== null) {
       void queryClient.prefetchQuery({
         queryKey: ["onlinePlan", plan.onlineId],
-        queryFn: async () => getPlan({ id: Number(plan.onlineId) }),
+        queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
       });
     }
   };

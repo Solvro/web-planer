@@ -1,5 +1,4 @@
-import React from "react";
-
+import { getUserSchedules } from "@/actions/plans";
 import type { ExtendedCourse } from "@/atoms/plan-family";
 import type { Registration } from "@/types";
 
@@ -20,6 +19,8 @@ export interface ErrorResponse {
   error: string;
 }
 
-export default function Plans() {
-  return <PlansPage plans={[]} />;
+export default async function Plans() {
+  const userSchedules = await getUserSchedules();
+
+  return <PlansPage plans={userSchedules ?? []} />;
 }
