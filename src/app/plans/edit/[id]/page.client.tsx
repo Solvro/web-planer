@@ -126,14 +126,10 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
     isLoading,
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
   } = useQuery({
-    enabled: plan.onlineId !== null && plan.onlineId !== "",
     queryKey: ["onlinePlan", plan.onlineId],
     queryFn: async () => {
-      const response = await getPlan({ id: Number(plan.onlineId) });
-      if (
-        response === null ||
-        (response as unknown as { status: number }).status === 404
-      ) {
+      const response = await getPlan({ id: plan.onlineId ?? "" });
+      if (response === null) {
         plan.remove();
         toast.error("Nie udało się pobrać planu");
         router.push("/plans");
@@ -170,10 +166,11 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
           registrationId,
         };
         //console.log("przed zmianami", groups)
+        index = 0;
         for (const group of groups) {
           //console.log("grupa", group)
           newCourse.groups.push({
-            id: Math.random() * index,
+            id: `${course.courseId}_group_${index.toString()}`,
             name: course.courseName,
             averageRating: "0.0",
             opinionsCount: 0,

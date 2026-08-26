@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
+//import type { PlanResponseDataType } from "./page";
+import type { UserSchedulesDTO } from "@/actions/plans";
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
 import { Icons } from "@/components/icons";
 import { PlanItem } from "@/components/plan-item";
-
-import type { PlanResponseDataType } from "./page";
 
 const plansAtom = atom(
   (get) => get(plansIds).map((id) => get(planFamily(id))),
@@ -21,7 +21,7 @@ const plansAtom = atom(
 export function PlansPage({
   plans: onlinePlans,
 }: {
-  plans: PlanResponseDataType[];
+  plans: UserSchedulesDTO[];
 }) {
   const [plans, setPlans] = useAtom(plansAtom);
   const router = useRouter();
@@ -45,7 +45,7 @@ export function PlansPage({
     (plan) =>
       plan.onlineId !== null &&
       // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
-      !onlinePlans.some((p) => p.id.toString() === plan.onlineId),
+      !onlinePlans.some((p) => p.id === plan.onlineId),
   );
 
   const handleDeleteDeletedPlans = () => {
@@ -78,7 +78,7 @@ export function PlansPage({
         >
           <Icons.Plus className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
         </button>
-        {plans.map((plan) => (
+        {/* {plans.map((plan) => (
           <PlanItem
             key={plan.id}
             id={plan.id}
@@ -86,22 +86,22 @@ export function PlansPage({
             synced={plan.synced}
             onlineId={plan.onlineId}
           />
-        ))}
+        ))} */}
         {onlinePlans.map((plan) => {
-          if (plans.some((p) => p.onlineId === plan.id.toString())) {
-            return null;
-          }
+          // if (plans.some((p) => p.id === plan.id)) {
+          //   return null;
+          // }
           return (
             <PlanItem
               key={plan.id}
-              id={plan.id.toString()}
+              id={plan.id}
               name={plan.name}
               synced={true}
-              onlineId={plan.id.toString()}
+              onlineId={plan.id}
               onlineOnly={true}
-              groupsCount={plan.courses.flatMap((c) => c.groups).length}
-              coursesCount={plan.courses.length}
-              registrationsCount={plan.registrations.length}
+              groupsCount={plan.groupsCount}
+              coursesCount={plan.coursesCount}
+              registrationsCount={plan.registrationsCount}
               updatedAt={new Date(plan.updatedAt)}
             />
           );
