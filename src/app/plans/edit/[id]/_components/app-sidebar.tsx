@@ -4,7 +4,7 @@ import type { UseMutationResult } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { getFacultiesAction } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
@@ -83,6 +83,16 @@ export function AppSidebar({
       });
     },
   });
+
+  useEffect(() => {
+    if (
+      onlinePlan !== undefined &&
+      onlinePlan !== null &&
+      inputRef.current !== null
+    ) {
+      inputRef.current.value = onlinePlan.name;
+    }
+  }, [onlinePlan]);
 
   return (
     <Sidebar className="pt-20">
