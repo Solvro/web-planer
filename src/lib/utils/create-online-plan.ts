@@ -33,6 +33,7 @@ export const createOnlinePlan = async (
     courses,
     registrations,
     groups,
+    id: plan.id,
   });
 
   if (response === null) {

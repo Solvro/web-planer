@@ -20,7 +20,7 @@ type SyncPlanResult =
 export const syncPlan = async (plan: PlanState): Promise<SyncPlanResult> => {
   try {
     const response = await updatePlan({
-      id: Number(plan.onlineId),
+      id: plan.id,
       name: plan.name,
       sharedId: plan.sharedId,
       courses: plan.courses
