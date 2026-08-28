@@ -67,10 +67,12 @@ export const updateLocalPlan = async (
       const facultyData = await getRegistrationFacultyAction(registration.id);
 
       const registrationData: Registration = {
-        id: nominalRound.id,
-        name: nominalRound.name.pl,
+        id: registration.id, //may be nominalRound.id
+        name: facultyData.registrationDesc,
         departmentId: facultyData.faculty.id,
       };
+
+      console.log("Dane rejestracji", registrationData);
 
       updatedRegistrations = [...updatedRegistrations, registrationData].filter(
         (regist, index, array) =>

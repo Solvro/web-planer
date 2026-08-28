@@ -197,8 +197,8 @@ export const getPlan = async ({
   const PlanResponse: PlanResponseType = {
     registrations: userSchedule.registrations,
     name: userSchedule.name,
-    id: userSchedule.id, //usunac number, poprawic typ
-    userId: userSchedule.userId, //usunac number, poprawic typ
+    id: userSchedule.id,
+    userId: userSchedule.userId,
     createdAt: userSchedule.createdAt.toISOString(),
     updatedAt: userSchedule.updatedAt.toISOString(),
     courses: userSchedule.courses,
@@ -233,8 +233,6 @@ export const getUserSchedules = async (): Promise<
     .select()
     .from(user)
     .innerJoin(schedule, eq(user.id, schedule.userId));
-
-  console.log("Dane z bazy:", schedules);
 
   return schedules.map((userSchedule) => {
     return {

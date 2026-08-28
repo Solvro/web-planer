@@ -8,6 +8,7 @@ import React, { useEffect } from "react";
 
 import { getFacultiesAction } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
+import { getRegistrationFacultyAction } from "@/actions/v2/get-registration-faculty";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
@@ -84,6 +85,35 @@ export function AppSidebar({
     },
   });
 
+  const mergeRegistrationsWithOnline = () => {
+    const returned: { label: string; value: string }[] = [];
+
+    if (registrations.data !== undefined) {
+      for (const registration of registrations.data) {
+        returned.push({
+          label: registrationReplacer(registration.name),
+          value: registration.id,
+        });
+      }
+    }
+
+    for (const onlineRegistration of plan.registrations) {
+      if (
+        !returned.includes({
+          value: onlineRegistration.id,
+          label: registrationReplacer(onlineRegistration.name),
+        })
+      ) {
+        returned.push({
+          value: onlineRegistration.id,
+          label: registrationReplacer(onlineRegistration.name),
+        });
+      }
+    }
+
+    return returned;
+  };
+
   useEffect(() => {
     if (
       onlinePlan !== undefined &&
@@ -93,6 +123,27 @@ export function AppSidebar({
       inputRef.current.value = onlinePlan.name;
     }
   }, [onlinePlan]);
+
+  useEffect(() => {
+    if (
+      onlinePlan !== undefined &&
+      onlinePlan !== null &&
+      registrations.data !== undefined
+    ) {
+      (async () => {
+        for (const r of onlinePlan.registrations) {
+          const registrationData = await getRegistrationFacultyAction(r.id);
+          registrations.data.push({
+            id: r.id,
+            departmentId: registrationData.faculty.id,
+            name: registrationData.registrationDesc,
+          });
+        }
+      })().catch((err) => {
+        console.log(err);
+      });
+    }
+  }, [onlinePlan, registrations.data]);
 
   return (
     <Sidebar className="pt-20">
@@ -213,16 +264,14 @@ export function AppSidebar({
           </div>
           {registrations.isLoading ? (
             <Skeleton className="h-[40px] w-full rounded-sm" />
-          ) : registrations.data !== undefined &&
-            registrations.data.length > 0 ? (
+          ) : (registrations.data !== undefined &&
+              registrations.data.length > 0) ||
+            plan.registrations.length > 0 ? (
             <div className="w-full">
               <Label htmlFor="registration">Rejestracja</Label>
               <RegistrationCombobox
                 name="registration"
-                registrations={registrations.data.map((r) => ({
-                  value: r.id,
-                  label: registrationReplacer(r.name),
-                }))}
+                registrations={mergeRegistrationsWithOnline()}
                 selectedRegistrations={plan.registrations.map((r) => r.id)}
                 onSelect={(registrationId) => {
                   const selectedRegistration = registrations.data.find(
@@ -277,9 +326,10 @@ export function AppSidebar({
                   onCheckAll={(isChecked) => {
                     plan.checkAllCourses(registration.id, isChecked);
                   }}
-                  courses={plan.courses.filter(
-                    (c) => c.registrationId === registration.id,
-                  )}
+                  courses={plan.courses.filter((c) => {
+                    console.log(c.registrationId, registration.id);
+                    return c.registrationId === registration.id;
+                  })}
                 />
               ))}
             </Accordion>

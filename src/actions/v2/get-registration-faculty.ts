@@ -6,6 +6,7 @@ import { fetchUsosApi } from "@/lib/usos";
 
 interface RegistrationFacultyDTO {
   registrationId: string;
+  registrationDesc: string;
   faculty: {
     id: string;
     name: string;
@@ -17,7 +18,10 @@ interface RegistrationFacultyDTO {
 
 interface UsosRegistration {
   id: string;
-  description: string;
+  description: {
+    pl: string;
+    en: string;
+  };
   message: string;
   type: string;
   faculty: {
@@ -47,6 +51,7 @@ export async function getRegistrationFacultyAction(
       );
       return {
         registrationId,
+        registrationDesc: data.description.pl,
         faculty: data.faculty,
       };
     },
