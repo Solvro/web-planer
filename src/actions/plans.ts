@@ -162,14 +162,14 @@ export const deletePlan = async ({
     };
   }
 
-  //const result = await db.delete(schedule).where(eq(schedule.id, id))
-
-  console.log("TODO: Implement deletePlan in API v2", { id });
-
-  //revalidatePath("/plans");
-  return {
+  const result = await db.delete(schedule).where(eq(schedule.id, id)).returning()
+  revalidatePath("/plans");
+  return result.length > 0 ? {
+    success: true,
+    message: "Plan pomyślnie usunięty"
+  } : {
     success: false,
-    message: "Not implemented",
+    message: "Nie znaleziono planu",
   };
 };
 
