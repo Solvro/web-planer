@@ -1,3 +1,4 @@
+/* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
 "use client";
 
 import type { UseMutationResult } from "@tanstack/react-query";
@@ -8,7 +9,6 @@ import React, { useEffect } from "react";
 
 import { getFacultiesAction } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
-import { getRegistrationFacultyAction } from "@/actions/v2/get-registration-faculty";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
 import { GroupsAccordionItem } from "@/components/groups-accordion";
@@ -122,28 +122,8 @@ export function AppSidebar({
     ) {
       inputRef.current.value = onlinePlan.name;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onlinePlan]);
-
-  useEffect(() => {
-    if (
-      onlinePlan !== undefined &&
-      onlinePlan !== null &&
-      registrations.data !== undefined
-    ) {
-      (async () => {
-        for (const r of onlinePlan.registrations) {
-          const registrationData = await getRegistrationFacultyAction(r.id);
-          registrations.data.push({
-            id: r.id,
-            departmentId: registrationData.faculty.id,
-            name: registrationData.registrationDesc,
-          });
-        }
-      })().catch((err) => {
-        console.log(err);
-      });
-    }
-  }, [onlinePlan, registrations.data]);
 
   return (
     <Sidebar className="pt-20">
@@ -274,6 +254,9 @@ export function AppSidebar({
                 registrations={mergeRegistrationsWithOnline()}
                 selectedRegistrations={plan.registrations.map((r) => r.id)}
                 onSelect={(registrationId) => {
+                  if (registrations.data === undefined) {
+                    return;
+                  }
                   const selectedRegistration = registrations.data.find(
                     (r) => r.id === registrationId,
                   );
@@ -327,7 +310,6 @@ export function AppSidebar({
                     plan.checkAllCourses(registration.id, isChecked);
                   }}
                   courses={plan.courses.filter((c) => {
-                    console.log(c.registrationId, registration.id);
                     return c.registrationId === registration.id;
                   })}
                 />

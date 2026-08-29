@@ -61,51 +61,45 @@ export const createNewPlan = async ({
     };
   }
 
-  const result = await db
-    .insert(schedule)
-    .values({
-      id,
-      name,
-      courses,
-      registrations,
-      groups,
-      userId: session.user.id,
-    })
-    .returning();
+  try {
+    const result = await db
+      .insert(schedule)
+      .values({
+        id,
+        name,
+        courses,
+        registrations,
+        groups,
+        userId: session.user.id,
+      })
+      .returning();
 
-  console.log("Experimental implementation", {
-    name,
-    courses,
-    registrations,
-    groups,
-    id,
-  });
-
-  //revalidatePath("/plans");
-  return {
-    success: true,
-    message: "Plan utworzony pomyślnie",
-    schedule: {
-      name,
-      userId: session.user.id,
-      id,
-      createdAt: result[0].createdAt.toISOString(),
-      updatedAt: result[0].updatedAt.toISOString(),
-    },
-  };
+    return {
+      success: true,
+      message: "Plan utworzony pomyślnie",
+      schedule: {
+        name,
+        userId: session.user.id,
+        id,
+        createdAt: result[0].createdAt.toISOString(),
+        updatedAt: result[0].updatedAt.toISOString(),
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 export const updatePlan = async ({
   id,
   name,
-  //sharedId,
   courses,
   registrations,
   groups,
 }: {
   id: string;
   name: string;
-  sharedId: string | null;
   courses: { id: string }[];
   registrations: { id: string }[];
   groups: { id: string }[];
@@ -114,14 +108,6 @@ export const updatePlan = async ({
   if (session == null) {
     throw new Error("Not logged in");
   }
-
-  console.log("Experimental implementation", {
-    name,
-    courses,
-    registrations,
-    groups,
-    id,
-  });
 
   const result = await db
     .update(schedule)
@@ -133,8 +119,6 @@ export const updatePlan = async ({
     })
     .where(eq(schedule.id, id))
     .returning();
-
-  console.log("Zwrotka z slq query", result);
 
   return {
     success: true,
@@ -162,15 +146,20 @@ export const deletePlan = async ({
     };
   }
 
-  const result = await db.delete(schedule).where(eq(schedule.id, id)).returning()
+  const result = await db
+    .delete(schedule)
+    .where(eq(schedule.id, id))
+    .returning();
   revalidatePath("/plans");
-  return result.length > 0 ? {
-    success: true,
-    message: "Plan pomyślnie usunięty"
-  } : {
-    success: false,
-    message: "Nie znaleziono planu",
-  };
+  return result.length > 0
+    ? {
+        success: true,
+        message: "Plan pomyślnie usunięty",
+      }
+    : {
+        success: false,
+        message: "Nie znaleziono planu",
+      };
 };
 
 export const getPlan = async ({
@@ -226,8 +215,6 @@ export const getUserSchedules = async (): Promise<
   if (session == null) {
     return null;
   }
-
-  console.log("Wczytywanie planow uzytkownika");
 
   const schedules = await db
     .select()

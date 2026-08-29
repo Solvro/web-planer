@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
-//import type { PlanResponseDataType } from "./page";
 import type { UserSchedulesDTO } from "@/actions/plans";
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
@@ -78,19 +77,18 @@ export function PlansPage({
         >
           <Icons.Plus className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
         </button>
-        {/* {plans.map((plan) => (
-          <PlanItem
-            key={plan.id}
-            id={plan.id}
-            name={plan.name}
-            synced={plan.synced}
-            onlineId={plan.onlineId}
-          />
-        ))} */}
+        {plans.map((plan) =>
+          onlinePlans.some((onlinePlan) => onlinePlan.id === plan.id) ? null : (
+            <PlanItem
+              key={plan.id}
+              id={plan.id}
+              name={plan.name}
+              synced={plan.synced}
+              onlineId={plan.onlineId}
+            />
+          ),
+        )}
         {onlinePlans.map((plan) => {
-          // if (plans.some((p) => p.id === plan.id)) {
-          //   return null;
-          // }
           return (
             <PlanItem
               key={plan.id}

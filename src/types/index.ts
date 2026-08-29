@@ -25,7 +25,7 @@ export interface ClassBlockProps {
   endTime: string;
   groupId: string;
   groupNumber: string;
-  groupOnlineId: number;
+  groupOnlineId: string;
   courseId: string;
   courseName: string;
   lecturer: string;

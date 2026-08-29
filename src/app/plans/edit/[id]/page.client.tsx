@@ -129,7 +129,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
     queryKey: ["onlinePlan", plan.onlineId],
     queryFn: async () => {
       const response = await getPlan({ id: plan.onlineId ?? "" });
-      if (response === null) {
+
+      if (response === null && isLoggedIn) {
         plan.remove();
         toast.error("Nie udało się pobrać planu");
         router.push("/plans");
