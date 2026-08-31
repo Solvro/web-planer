@@ -1,10 +1,11 @@
+/* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
 "use client";
 
 import type { UseMutationResult } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { getFacultiesAction } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
@@ -83,6 +84,46 @@ export function AppSidebar({
       });
     },
   });
+
+  const mergeRegistrationsWithOnline = () => {
+    const returned: { label: string; value: string }[] = [];
+
+    if (registrations.data !== undefined) {
+      for (const registration of registrations.data) {
+        returned.push({
+          label: registrationReplacer(registration.name),
+          value: registration.id,
+        });
+      }
+    }
+
+    for (const onlineRegistration of plan.registrations) {
+      if (
+        !returned.includes({
+          value: onlineRegistration.id,
+          label: registrationReplacer(onlineRegistration.name),
+        })
+      ) {
+        returned.push({
+          value: onlineRegistration.id,
+          label: registrationReplacer(onlineRegistration.name),
+        });
+      }
+    }
+
+    return returned;
+  };
+
+  useEffect(() => {
+    if (
+      onlinePlan !== undefined &&
+      onlinePlan !== null &&
+      inputRef.current !== null
+    ) {
+      inputRef.current.value = onlinePlan.name;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onlinePlan]);
 
   return (
     <Sidebar className="pt-20">
@@ -203,18 +244,19 @@ export function AppSidebar({
           </div>
           {registrations.isLoading ? (
             <Skeleton className="h-[40px] w-full rounded-sm" />
-          ) : registrations.data !== undefined &&
-            registrations.data.length > 0 ? (
+          ) : (registrations.data !== undefined &&
+              registrations.data.length > 0) ||
+            plan.registrations.length > 0 ? (
             <div className="w-full">
               <Label htmlFor="registration">Rejestracja</Label>
               <RegistrationCombobox
                 name="registration"
-                registrations={registrations.data.map((r) => ({
-                  value: r.id,
-                  label: registrationReplacer(r.name),
-                }))}
+                registrations={mergeRegistrationsWithOnline()}
                 selectedRegistrations={plan.registrations.map((r) => r.id)}
                 onSelect={(registrationId) => {
+                  if (registrations.data === undefined) {
+                    return;
+                  }
                   const selectedRegistration = registrations.data.find(
                     (r) => r.id === registrationId,
                   );
@@ -267,9 +309,9 @@ export function AppSidebar({
                   onCheckAll={(isChecked) => {
                     plan.checkAllCourses(registration.id, isChecked);
                   }}
-                  courses={plan.courses.filter(
-                    (c) => c.registrationId === registration.id,
-                  )}
+                  courses={plan.courses.filter((c) => {
+                    return c.registrationId === registration.id;
+                  })}
                 />
               ))}
             </Accordion>

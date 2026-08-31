@@ -53,9 +53,7 @@ export const serverToLocalPlan = (
               meeting.week === "-"
                 ? ""
                 : (meeting.week as "" | "TN" | "TP" | "!"),
-            //endTime: meeting.endTime.split(":").slice(0, 2).join(":"),
             endTime: formatMeetingTime(meeting.endTime),
-            //startTime: meeting.startTime.split(":").slice(0, 2).join(":"),
             startTime: formatMeetingTime(meeting.startTime),
             spotsOccupied: g.spotsOccupied,
             spotsTotal: g.spotsTotal,
@@ -67,6 +65,5 @@ export const serverToLocalPlan = (
     .toSorted((a, b) => {
       return a.name.localeCompare(b.name);
     });
-  //console.log("extended courses", extendedCourses)
   return extendedCourses;
 };

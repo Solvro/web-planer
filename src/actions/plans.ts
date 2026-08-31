@@ -1,15 +1,20 @@
 /* eslint-disable no-console */
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
+import { db } from "@/db";
+import { user } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import type {
   CreatePlanResponseType,
   DeletePlanResponseType,
   PlanResponseType,
 } from "@/types";
+
+import { schedule } from "../db/schema/schedule";
 
 const getSession = async () => {
   const session = await auth.api.getSession({
@@ -23,64 +28,115 @@ export const createNewPlan = async ({
   courses,
   registrations,
   groups,
+  id,
 }: {
   name: string;
   courses: { id: string }[];
   registrations: { id: string }[];
-  groups: { id: number }[];
+  groups: { id: string }[];
+  id: string;
 }): Promise<CreatePlanResponseType | null> => {
   const session = await getSession();
   if (session == null) {
     return null;
   }
 
-  console.log("TODO: Implement createNewPlan in API v2", {
-    name,
-    courses,
-    registrations,
-    groups,
-  });
+  const checkIsAlreadyCreated = await db
+    .select()
+    .from(schedule)
+    .where(eq(schedule.id, id));
 
-  revalidatePath("/plans");
-  return null;
+  if (checkIsAlreadyCreated.length > 0) {
+    const result = checkIsAlreadyCreated[0];
+    return {
+      success: true,
+      message: "Plan utworzony pomyślnie",
+      schedule: {
+        name,
+        userId: session.user.id,
+        id,
+        createdAt: result.createdAt.toISOString(),
+        updatedAt: result.updatedAt.toISOString(),
+      },
+    };
+  }
+
+  try {
+    const result = await db
+      .insert(schedule)
+      .values({
+        id,
+        name,
+        courses,
+        registrations,
+        groups,
+        userId: session.user.id,
+      })
+      .returning();
+
+    return {
+      success: true,
+      message: "Plan utworzony pomyślnie",
+      schedule: {
+        name,
+        userId: session.user.id,
+        id,
+        createdAt: result[0].createdAt.toISOString(),
+        updatedAt: result[0].updatedAt.toISOString(),
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 export const updatePlan = async ({
   id,
   name,
-  sharedId,
   courses,
   registrations,
   groups,
 }: {
-  id: number;
+  id: string;
   name: string;
-  sharedId: string | null;
   courses: { id: string }[];
   registrations: { id: string }[];
-  groups: { id: number }[];
+  groups: { id: string }[];
 }): Promise<CreatePlanResponseType> => {
   const session = await getSession();
   if (session == null) {
     throw new Error("Not logged in");
   }
 
-  console.log("TODO: Implement updatePlan in API v2", {
-    id,
-    name,
-    sharedId,
-    courses,
-    registrations,
-    groups,
-  });
+  const result = await db
+    .update(schedule)
+    .set({
+      name,
+      courses,
+      registrations,
+      groups,
+    })
+    .where(eq(schedule.id, id))
+    .returning();
 
-  throw new Error("Not implemented");
+  return {
+    success: true,
+    message: "Plan zaktualizowany pomyślnie",
+    schedule: {
+      name,
+      userId: session.user.id,
+      id,
+      createdAt: result[0].createdAt.toISOString(),
+      updatedAt: result[0].updatedAt.toISOString(),
+    },
+  };
 };
 
 export const deletePlan = async ({
   id,
 }: {
-  id: number;
+  id: string;
 }): Promise<DeletePlanResponseType> => {
   const session = await getSession();
   if (session == null) {
@@ -90,30 +146,91 @@ export const deletePlan = async ({
     };
   }
 
-  console.log("TODO: Implement deletePlan in API v2", { id });
-
+  const result = await db
+    .delete(schedule)
+    .where(eq(schedule.id, id))
+    .returning();
   revalidatePath("/plans");
-  return {
-    success: false,
-    message: "Not implemented",
-  };
+  return result.length > 0
+    ? {
+        success: true,
+        message: "Plan pomyślnie usunięty",
+      }
+    : {
+        success: false,
+        message: "Nie znaleziono planu",
+      };
 };
 
 export const getPlan = async ({
   id,
 }: {
-  id: number | string;
+  id: string;
 }): Promise<PlanResponseType | null> => {
-  if (typeof id === "string") {
-    id = Number.parseInt(id);
-  }
-
   const session = await getSession();
   if (session == null) {
     return null;
   }
 
-  console.log("TODO: Implement getPlan in API v2", { id });
+  const scheduleFromDatabase = await db
+    .select()
+    .from(schedule)
+    .where(eq(schedule.id, id));
 
-  return null;
+  if (scheduleFromDatabase.length === 0) {
+    return null;
+  }
+
+  const userSchedule = scheduleFromDatabase[0];
+
+  const PlanResponse: PlanResponseType = {
+    registrations: userSchedule.registrations,
+    name: userSchedule.name,
+    id: userSchedule.id,
+    userId: userSchedule.userId,
+    createdAt: userSchedule.createdAt.toISOString(),
+    updatedAt: userSchedule.updatedAt.toISOString(),
+    courses: userSchedule.courses,
+    groups: userSchedule.groups,
+  };
+
+  return PlanResponse;
+};
+
+export interface UserSchedulesDTO {
+  id: string;
+  userId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  coursesCount: number;
+  registrationsCount: number;
+  groupsCount: number;
+}
+
+export const getUserSchedules = async (): Promise<
+  UserSchedulesDTO[] | null
+> => {
+  const session = await getSession();
+  if (session == null) {
+    return null;
+  }
+
+  const schedules = await db
+    .select()
+    .from(user)
+    .innerJoin(schedule, eq(user.id, schedule.userId));
+
+  return schedules.map((userSchedule) => {
+    return {
+      id: userSchedule.schedule.id,
+      userId: userSchedule.user.id,
+      name: userSchedule.schedule.name,
+      createdAt: userSchedule.schedule.createdAt.toISOString(),
+      updatedAt: userSchedule.schedule.updatedAt.toISOString(),
+      coursesCount: userSchedule.schedule.courses.length,
+      registrationsCount: userSchedule.schedule.registrations.length,
+      groupsCount: userSchedule.schedule.groups.length,
+    };
+  });
 };

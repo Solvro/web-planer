@@ -1,5 +1,6 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 
+import { getRegistrationFacultyAction } from "@/actions/v2/get-registration-faculty";
 import type { ExtendedCourse } from "@/atoms/plan-family";
 import type {
   CourseType,
@@ -50,16 +51,20 @@ export const updateLocalPlan = async (
         (course: SingleCourse) => {
           return onlinePlan.courses.some((oc) => oc.id === course.id);
         },
-        (course: SingleCourse, group: SingleGroup, _meeting: GroupMeeting) => {
-          return (
-            onlinePlan.courses
-              .find((oc) => oc.id === course.id)
-              ?.groups.some((og) => og.id === group.id) ?? false
-          );
+        (_course: SingleCourse, group: SingleGroup, _meeting: GroupMeeting) => {
+          return onlinePlan.groups.some((og) => og.id === group.id);
         },
       );
 
-      updatedRegistrations = [...updatedRegistrations, registration].filter(
+      const facultyData = await getRegistrationFacultyAction(registration.id);
+
+      const registrationData: Registration = {
+        id: registration.id,
+        name: facultyData.registrationDesc,
+        departmentId: facultyData.faculty.id,
+      };
+
+      updatedRegistrations = [...updatedRegistrations, registrationData].filter(
         (regist, index, array) =>
           array.findIndex((t) => t.id === regist.id) === index,
       );

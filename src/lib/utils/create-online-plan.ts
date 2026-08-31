@@ -33,6 +33,7 @@ export const createOnlinePlan = async (
     courses,
     registrations,
     groups,
+    id: plan.id,
   });
 
   if (response === null) {
@@ -42,6 +43,6 @@ export const createOnlinePlan = async (
   return {
     status: "SUCCESS",
     updatedAt: new Date(response.schedule.updatedAt),
-    onlineId: response.schedule.id.toString(),
+    onlineId: response.schedule.id,
   };
 };

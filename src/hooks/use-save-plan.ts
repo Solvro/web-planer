@@ -61,6 +61,7 @@ export const useSavePlan = ({
         courses: updatedCourses,
         synced: true,
         toCreate: false,
+        name: onlinePlan?.name ?? plan.name,
         updatedAt,
       });
     } else {
