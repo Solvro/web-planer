@@ -19,7 +19,6 @@ export const env = createEnv({
     SMTP_PORT: z.coerce.number().default(465),
     SMTP_USERNAME: z.string().trim().default("planer@solvro.pl"),
     SMTP_PASSWORD: z.string().trim().optional(),
-    CHROME_EVP_ORIGIN_TRIAL_TOKEN: z.string().trim().optional(),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.url(),
@@ -44,7 +43,6 @@ export const env = createEnv({
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_USERNAME: process.env.SMTP_USERNAME,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
-    CHROME_EVP_ORIGIN_TRIAL_TOKEN: process.env.CHROME_EVP_ORIGIN_TRIAL_TOKEN,
   },
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
 });
