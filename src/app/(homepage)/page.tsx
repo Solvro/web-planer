@@ -10,6 +10,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { Particles } from "@/components/magicui/particles";
 import { Block } from "@/components/ui/block";
 import { Button } from "@/components/ui/button";
+import { getCachedAlerts } from "@/lib/get-cached-alerts";
 import { getCachedSession } from "@/lib/get-session";
 import { cn } from "@/lib/utils";
 
@@ -107,7 +108,9 @@ async function JoinUsBlock() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const alerts = await getCachedAlerts();
+
   return (
     <main className="mx-auto flex-1 overflow-hidden">
       <section
@@ -118,6 +121,7 @@ export default function Home() {
           <Alerts
             variant="pill"
             className="animate-in fade-in slide-in-from-top"
+            initialAlerts={alerts}
           />
         </div>
         <div className="animate-fade-in-2 z-10 flex items-center justify-center opacity-0 [--animation-delay:1000ms]">

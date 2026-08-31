@@ -6,9 +6,10 @@ import { AlertCircle, AlertTriangle, Info, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { env } from "@/env.mjs";
+import type { Alert, AlertType } from "@/lib/alerts-api";
+import { fetchAlerts } from "@/lib/alerts-api";
 import { cn } from "@/lib/utils";
 
-const ALERTS_ENDPOINT = "https://alerts.solvro.pl/api/v1/alerts/";
 const STORAGE_KEY = "solvro-alerts-dismissed";
 const STALE_TIME_MS = 60 * 1000;
 
@@ -43,24 +44,10 @@ const ALLOWED_TAGS = [
 ];
 const ALLOWED_ATTR = ["href", "title", "target"];
 
-type AlertType = "info" | "warning" | "critical";
-
-interface Alert {
-  id: string;
-  title: string;
-  content: string;
-  alert_type: AlertType;
-  link: string;
-  open_in_new_tab: boolean;
-  is_global: boolean;
-  is_dismissable: boolean;
-  start_at: string | null;
-  end_at: string | null;
-}
-
 interface AlertsProps {
   className?: string;
   variant?: "banner" | "pill";
+  initialAlerts?: Alert[];
 }
 
 function readDismissed(): string[] {
@@ -91,24 +78,6 @@ function writeDismissed(ids: string[]) {
   } catch {
     // ignore storage errors (private mode, quota, etc.)
   }
-}
-
-async function fetchAlerts(appCode: string): Promise<Alert[]> {
-  const url = new URL(ALERTS_ENDPOINT);
-  url.searchParams.set("app", appCode);
-  const response = await fetch(url.toString());
-  if (response.status === 400) {
-    throw new Error(
-      `Solvro Alerts: unknown app code "${appCode}". Check NEXT_PUBLIC_ALERTS_APP_CODE.`,
-    );
-  }
-  if (!response.ok) {
-    throw new Error(
-      `Solvro Alerts: request failed with ${String(response.status)}`,
-    );
-  }
-  const data = (await response.json()) as Alert[];
-  return Array.isArray(data) ? data : [];
 }
 
 const VARIANT_STYLES: Record<
@@ -154,27 +123,35 @@ const VARIANT_STYLES: Record<
   },
 };
 
-export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
+export function Alerts({
+  className,
+  variant = "banner",
+  initialAlerts,
+}: AlertsProps = {}) {
   const appCode = env.NEXT_PUBLIC_ALERTS_APP_CODE;
+  // Starts empty on both server and first client render (no hydration
+  // mismatch); the effect below fills in any previously dismissed ids a
+  // moment later, so already-dismissed alerts disappear quietly instead of
+  // holding up the whole banner behind a "waiting for hydration" gate.
   const [dismissed, setDismissed] = useState<string[]>([]);
-  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-you-might-not-need-an-effect/no-initialize-state
     setDismissed(readDismissed());
-    // eslint-disable-next-line react-you-might-not-need-an-effect/no-initialize-state
-    setHydrated(true);
   }, []);
 
-  const { data } = useQuery({
+  const { data: fetchedAlerts } = useQuery({
     queryKey: ["solvro-alerts", appCode],
     queryFn: async () => fetchAlerts(appCode),
     staleTime: STALE_TIME_MS,
     gcTime: STALE_TIME_MS,
     refetchOnWindowFocus: false,
+    enabled: initialAlerts === undefined,
   });
 
-  if (!hydrated || data === undefined) {
+  const data = initialAlerts ?? fetchedAlerts;
+
+  if (data === undefined) {
     return null;
   }
 
@@ -232,16 +209,16 @@ export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
               />
               <div
                 className={cn(
-                  "min-w-0 flex-1 text-balance leading-snug",
+                  "min-w-0 flex-1 leading-snug text-balance",
                   styles.pillText,
                 )}
               >
                 {hasTitle ? (
-                  <p className="font-semibold leading-tight">{alert.title}</p>
+                  <p className="leading-tight font-semibold">{alert.title}</p>
                 ) : null}
                 {hasContent ? (
                   <div
-                    className="alert-content prose prose-sm max-w-none dark:prose-invert prose-headings:my-1 prose-headings:text-current prose-p:my-0 prose-p:text-current prose-a:text-current prose-blockquote:text-current prose-strong:text-current prose-em:text-current prose-code:text-current prose-li:text-current"
+                    className="alert-content prose prose-sm dark:prose-invert prose-headings:my-1 prose-headings:text-current prose-p:my-0 prose-p:text-current prose-a:text-current prose-blockquote:text-current prose-strong:text-current prose-em:text-current prose-code:text-current prose-li:text-current max-w-none"
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: sanitizedPill }}
                   />
@@ -303,10 +280,10 @@ export function Alerts({ className, variant = "banner" }: AlertsProps = {}) {
             />
             <div className="min-w-0 flex-1">
               {alert.title !== "" && (
-                <p className="font-semibold leading-tight">{alert.title}</p>
+                <p className="leading-tight font-semibold">{alert.title}</p>
               )}
               <div
-                className="alert-content prose prose-sm max-w-none dark:prose-invert prose-headings:text-current prose-p:text-current prose-a:text-current prose-blockquote:text-current prose-strong:text-current prose-em:text-current prose-code:text-current prose-li:text-current"
+                className="alert-content prose prose-sm dark:prose-invert prose-headings:text-current prose-p:text-current prose-a:text-current prose-blockquote:text-current prose-strong:text-current prose-em:text-current prose-code:text-current prose-li:text-current max-w-none"
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: sanitized }}
               />

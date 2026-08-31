@@ -7,7 +7,7 @@ import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
 import React, { useEffect } from "react";
 
-import { getFacultiesAction } from "@/actions/v2/get-faculties";
+import { FACULTIES } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
@@ -65,8 +65,6 @@ export function AppSidebar({
   offlineAlert: boolean;
   faculty: string | null;
 }) {
-  const faculties = getFacultiesAction();
-
   const registrations = useQuery({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
@@ -214,32 +212,17 @@ export function AppSidebar({
               >
                 <SelectValue placeholder="Wybierz swój wydział" />
               </SelectTrigger>
-              {faculties.isLoading ? (
-                <Skeleton className="h-[40px] w-full rounded-sm" />
-              ) : faculties.isError ? (
-                <SelectContent className="max-w-full">
+              <SelectContent className="max-w-full">
+                {FACULTIES.map((f) => (
                   <SelectItem
-                    className="mr-2 max-w-full truncate text-red-500"
-                    key="error"
-                    value="error"
-                    disabled={true}
+                    className="mr-2 max-w-full truncate"
+                    key={f.value}
+                    value={f.value}
                   >
-                    Wystąpił błąd podczas ładowania wydziałów
+                    {registrationReplacer(f.name)}
                   </SelectItem>
-                </SelectContent>
-              ) : (
-                <SelectContent className="max-w-full">
-                  {faculties.data.map((f) => (
-                    <SelectItem
-                      className="mr-2 max-w-full truncate"
-                      key={f.value}
-                      value={f.value}
-                    >
-                      {registrationReplacer(f.name)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              )}
+                ))}
+              </SelectContent>
             </Select>
           </div>
           {registrations.isLoading ? (
