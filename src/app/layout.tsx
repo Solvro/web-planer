@@ -96,7 +96,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" suppressHydrationWarning={true} className="scroll-smooth">
+    <html
+      lang="pl"
+      suppressHydrationWarning={true}
+      className="scroll-smooth"
+      data-scroll-behavior="smooth"
+    >
       <ClientProviders>
         <body className={cn(inter.className, "min-h-screen")}>
           <ThemeProvider
