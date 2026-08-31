@@ -2,12 +2,11 @@
 
 import React from "react";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 
+import { sharePlan, unsharePlan } from "@/actions/plans";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
-import { fetchClient } from "@/lib/fetch";
 import type { PlanState } from "@/types";
 
 export function SharePlanButton({ plan }: { plan: PlanState }) {
@@ -15,6 +14,7 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
     string | null | undefined
   >(plan.sharedId);
   const [generatingLink, setGeneratingLink] = React.useState<boolean>(false);
+  const [unsharing, setUnsharing] = React.useState<boolean>(false);
 
   const handleCopyLink = async (id: string) => {
     await navigator.clipboard.writeText(
@@ -24,37 +24,54 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
   };
 
   const handleSharePlan = async () => {
+    if (plan.onlineId === null) {
+      toast.error("Najpierw zapisz plan online, aby móc go udostępnić");
+      return;
+    }
+
     setGeneratingLink(true);
-    const preparedData = {
-      name: plan.name,
-      registrations: plan.registrations,
-      courses: plan.courses,
-      allGroups: plan.allGroups,
-    };
-
-    const randomUUID = uuidv4();
-
     try {
-      const response = await fetchClient({
-        url: "/shared",
-        method: "POST",
-        body: JSON.stringify({
-          plan: JSON.stringify(preparedData),
-          id: randomUUID,
-        }),
+      const response = await sharePlan({
+        id: plan.onlineId,
+        snapshot: {
+          name: plan.name,
+          registrations: plan.registrations,
+          courses: plan.courses,
+          allGroups: plan.allGroups,
+        },
       });
 
-      if (response.ok) {
-        setCurrentSharedPlanId(randomUUID);
-        await handleCopyLink(randomUUID);
-        plan.setPlan({ ...plan, sharedId: randomUUID, synced: false });
+      if (response.success) {
+        setCurrentSharedPlanId(plan.onlineId);
+        await handleCopyLink(plan.onlineId);
+        plan.setPlan({ ...plan, sharedId: plan.onlineId });
       } else {
-        toast.error("Wystąpił błąd podczas generowania linku");
+        toast.error(response.message);
       }
     } catch {
       toast.error("Wystąpił błąd podczas generowania linku");
     } finally {
       setGeneratingLink(false);
+    }
+  };
+
+  const handleUnsharePlan = async () => {
+    if (plan.onlineId === null) {
+      return;
+    }
+
+    setUnsharing(true);
+    try {
+      const response = await unsharePlan({ id: plan.onlineId });
+
+      if (response.success) {
+        setCurrentSharedPlanId(null);
+        plan.setPlan({ ...plan, sharedId: null });
+      } else {
+        toast.error(response.message);
+      }
+    } finally {
+      setUnsharing(false);
     }
   };
 
@@ -68,7 +85,7 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
           size="sm"
           className="rounded-full"
           variant="secondary"
-          disabled={generatingLink}
+          disabled={generatingLink || plan.onlineId === null}
           onClick={handleSharePlan}
         >
           {generatingLink ? (
@@ -92,15 +109,28 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
             ) : (
               <Icons.Link className="size-4" />
             )}
-            Nowy link
+            Odśwież
+          </Button>
+          <Button
+            size="sm"
+            className="rounded-none"
+            variant="outline"
+            onClick={async () => handleCopyLink(currentSharedPlanId)}
+          >
+            <Icons.Copy className="size-4" />
           </Button>
           <Button
             size="sm"
             className="rounded-full rounded-l-none"
             variant="outline"
-            onClick={async () => handleCopyLink(currentSharedPlanId)}
+            disabled={unsharing}
+            onClick={handleUnsharePlan}
           >
-            <Icons.Copy className="size-4" />
+            {unsharing ? (
+              <Icons.Loader className="size-4 animate-spin" />
+            ) : (
+              <Icons.X className="size-4" />
+            )}
           </Button>
         </div>
       )}

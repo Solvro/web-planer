@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -12,6 +12,7 @@ import type {
   CreatePlanResponseType,
   DeletePlanResponseType,
   PlanResponseType,
+  SharedPlan,
 } from "@/types";
 
 import { schedule } from "../db/schema/schedule";
@@ -131,6 +132,73 @@ export const updatePlan = async ({
       updatedAt: result[0].updatedAt.toISOString(),
     },
   };
+};
+
+export const sharePlan = async ({
+  id,
+  snapshot,
+}: {
+  id: string;
+  snapshot: SharedPlan["plan"];
+}): Promise<{ success: boolean; message: string }> => {
+  const session = await getSession();
+  if (session == null) {
+    return { success: false, message: "Musisz się zalogować." };
+  }
+
+  const result = await db
+    .update(schedule)
+    .set({ isPublic: true, publicSnapshot: snapshot })
+    .where(and(eq(schedule.id, id), eq(schedule.userId, session.user.id)))
+    .returning();
+
+  return result.length > 0
+    ? { success: true, message: "Plan udostępniony pomyślnie" }
+    : { success: false, message: "Nie znaleziono planu" };
+};
+
+export const unsharePlan = async ({
+  id,
+}: {
+  id: string;
+}): Promise<{ success: boolean; message: string }> => {
+  const session = await getSession();
+  if (session == null) {
+    return { success: false, message: "Musisz się zalogować." };
+  }
+
+  const result = await db
+    .update(schedule)
+    .set({ isPublic: false, publicSnapshot: null })
+    .where(and(eq(schedule.id, id), eq(schedule.userId, session.user.id)))
+    .returning();
+
+  return result.length > 0
+    ? { success: true, message: "Udostępnianie wyłączone" }
+    : { success: false, message: "Nie znaleziono planu" };
+};
+
+export const getSharedPlan = async ({
+  id,
+}: {
+  id: string;
+}): Promise<SharedPlan | null> => {
+  const scheduleFromDatabase = await db
+    .select()
+    .from(schedule)
+    .where(eq(schedule.id, id));
+
+  if (scheduleFromDatabase.length === 0) {
+    return null;
+  }
+
+  const userSchedule = scheduleFromDatabase[0];
+
+  if (!userSchedule.isPublic || userSchedule.publicSnapshot === null) {
+    return null;
+  }
+
+  return { id: userSchedule.id, plan: userSchedule.publicSnapshot };
 };
 
 export const deletePlan = async ({
