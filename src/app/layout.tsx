@@ -102,6 +102,12 @@ export default function RootLayout({
       className="scroll-smooth"
       data-scroll-behavior="smooth"
     >
+      <head>
+        <meta
+          httpEquiv="origin-trial"
+          content="AqgFs1KEaYyU5h9n5Oy3/POxaSIMNi5iG1uqbJcLD3pz1203cHSC9tffZEXmDM7xUhLpCSqptiKr3m+RBBexYQkAAAB2eyJvcmlnaW4iOiJodHRwczovL3BsYW5lci5zb2x2cm8ucGw6NDQzIiwiZmVhdHVyZSI6IkVtYWlsVmVyaWZpY2F0aW9uUHJvdG9jb2wiLCJleHBpcnkiOjE3OTQ4NzM2MDAsImlzU3ViZG9tYWluIjp0cnVlfQ=="
+        />
+      </head>
       <ClientProviders>
         <body className={cn(inter.className, "min-h-screen")}>
           <ThemeProvider
