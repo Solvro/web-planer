@@ -118,8 +118,12 @@ export const updatePlan = async ({
       registrations,
       groups,
     })
-    .where(eq(schedule.id, id))
+    .where(and(eq(schedule.id, id), eq(schedule.userId, session.user.id)))
     .returning();
+
+  if (result.length === 0) {
+    throw new Error("Nie znaleziono planu");
+  }
 
   return {
     success: true,
@@ -216,7 +220,7 @@ export const deletePlan = async ({
 
   const result = await db
     .delete(schedule)
-    .where(eq(schedule.id, id))
+    .where(and(eq(schedule.id, id), eq(schedule.userId, session.user.id)))
     .returning();
   revalidatePath("/plans");
   return result.length > 0
@@ -243,7 +247,7 @@ export const getPlan = async ({
   const scheduleFromDatabase = await db
     .select()
     .from(schedule)
-    .where(eq(schedule.id, id));
+    .where(and(eq(schedule.id, id), eq(schedule.userId, session.user.id)));
 
   if (scheduleFromDatabase.length === 0) {
     return null;
@@ -287,7 +291,8 @@ export const getUserSchedules = async (): Promise<
   const schedules = await db
     .select()
     .from(user)
-    .innerJoin(schedule, eq(user.id, schedule.userId));
+    .innerJoin(schedule, eq(user.id, schedule.userId))
+    .where(eq(user.id, session.user.id));
 
   return schedules.map((userSchedule) => {
     return {
