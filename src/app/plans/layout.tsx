@@ -1,14 +1,17 @@
 import type React from "react";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { getCurrentYear } from "@/lib/get-current-year";
 
 import { PlansTopbar } from "./_components/plans-topbar";
 
-export default function PlansLayout({
+export default async function PlansLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const year = await getCurrentYear();
+
   return (
     <div className="flex h-screen min-h-screen flex-col items-center overflow-x-hidden">
       <SidebarProvider>
@@ -17,18 +20,18 @@ export default function PlansLayout({
         {children}
       </SidebarProvider>
 
-      <div className="flex w-full flex-col items-center justify-center bg-mainbutton7 p-2 py-6 dark:bg-white/5">
+      <div className="bg-mainbutton7 flex w-full flex-col items-center justify-center p-2 py-6 dark:bg-white/5">
         <p className="text-center text-white">
           Made with ❤️ by{" "}
           <a
             href="https://solvro.pwr.edu.pl/"
-            className="font-bold text-mainbutton hover:underline"
+            className="text-mainbutton font-bold hover:underline"
           >
             SOLVRO
           </a>{" "}
-          © {new Date().getFullYear()}
+          © {year}
         </p>
-        <p className="text-balance text-center text-xs text-gray-300 dark:text-muted-foreground">
+        <p className="dark:text-muted-foreground text-center text-xs text-balance text-gray-300">
           Źródłem danych o zajęciach jest USOS i ich prawnym właścicielem jest
           Politechnika Wrocławska
         </p>

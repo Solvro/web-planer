@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
@@ -6,40 +5,42 @@ import { SolvroLogo } from "@/components/solvro-logo";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/get-session";
 
 import { FeedbackButton } from "./feedback-button";
 import { SidebarTriggerButton } from "./sidebar-trigger-button";
 
 export function PlansTopbar() {
   return (
-    <div className="fixed inset-x-0 left-0 top-0 z-30 flex w-full items-center justify-between bg-mainbutton7 py-4 shadow-sm backdrop-blur-[12px] dark:border-b dark:bg-white/5">
+    <div className="bg-mainbutton7 fixed inset-x-0 top-0 left-0 z-30 flex w-full items-center justify-between py-4 shadow-sm backdrop-blur-[12px] dark:border-b dark:bg-white/5">
       <div className="flex w-full items-center justify-between md:container md:mx-auto">
         <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-white md:w-1/4">
           <SolvroLogo />
           <h1 className="hidden text-2xl font-semibold md:block">Planer</h1>
         </div>
         <div className="mr-4 flex w-1/4 items-center justify-end">
-          <SidebarTriggerButton />
+          <Suspense fallback={null}>
+            <SidebarTriggerButton />
+          </Suspense>
           <Button
-            asChild={true}
+            nativeButton={false}
             variant="ghost"
-            className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
-          >
-            <Link href="/plans">Moje plany</Link>
-          </Button>
+            className="hidden text-white hover:bg-blue-200/40 hover:text-white md:flex dark:hover:bg-white/5"
+            render={<Link href="/plans">Moje plany</Link>}
+          />
           <Button
-            asChild={true}
+            nativeButton={false}
             variant="ghost"
-            className="hidden text-white hover:bg-blue-200/40 hover:text-white dark:hover:bg-white/5 md:flex"
-          >
-            <Link
-              href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
-              target="_blank"
-            >
-              Terminarz USOS
-            </Link>
-          </Button>
+            className="hidden text-white hover:bg-blue-200/40 hover:text-white md:flex dark:hover:bg-white/5"
+            render={
+              <Link
+                href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
+                target="_blank"
+              >
+                Terminarz USOS
+              </Link>
+            }
+          />
           <FeedbackButton
             ghost={true}
             className="mr-2 hidden text-white hover:text-white md:flex"
@@ -58,15 +59,16 @@ export function PlansTopbar() {
 }
 
 async function UserProfile() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getCachedSession();
 
   if (session == null) {
     return (
-      <Button variant="default" size="sm" asChild={true}>
-        <Link href="/login">Zaloguj się</Link>
-      </Button>
+      <Button
+        variant="default"
+        size="sm"
+        nativeButton={false}
+        render={<Link href="/login">Zaloguj się</Link>}
+      />
     );
   }
   return <UserButton profile={session.user} />;

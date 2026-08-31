@@ -1,4 +1,8 @@
-export function Footer() {
+import { getCurrentYear } from "@/lib/get-current-year";
+
+export async function Footer() {
+  const year = await getCurrentYear();
+
   return (
     <footer className="mt-12 border-t md:mt-0">
       <p className="p-4 text-center font-medium text-black dark:text-white">
@@ -9,7 +13,7 @@ export function Footer() {
         >
           SOLVRO
         </a>{" "}
-        © {new Date().getFullYear()}
+        © {year}
       </p>
     </footer>
   );

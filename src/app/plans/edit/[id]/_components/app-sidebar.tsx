@@ -7,7 +7,7 @@ import { isEqual } from "date-fns";
 import { format } from "date-fns/format";
 import React, { useEffect } from "react";
 
-import { getFacultiesAction } from "@/actions/v2/get-faculties";
+import { FACULTIES } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
 import { Alerts } from "@/components/alerts";
 import { AlgorithmDialog } from "@/components/algo-dialog";
@@ -65,8 +65,6 @@ export function AppSidebar({
   offlineAlert: boolean;
   faculty: string | null;
 }) {
-  const faculties = getFacultiesAction();
-
   const registrations = useQuery({
     enabled: faculty !== null && faculty !== "",
     queryKey: ["registrations", faculty],
@@ -184,7 +182,7 @@ export function AppSidebar({
               <PlanDisplayLink />
             </div>
 
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Ostatnia aktualizacja online:{" "}
               {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
             </p>
@@ -202,7 +200,7 @@ export function AppSidebar({
             <Label htmlFor="faculty" className="mb-1">
               Wydział
             </Label>
-            <Select
+            <Select<string>
               name="faculty"
               onValueChange={(v) => {
                 setFaculty(v);
@@ -214,32 +212,17 @@ export function AppSidebar({
               >
                 <SelectValue placeholder="Wybierz swój wydział" />
               </SelectTrigger>
-              {faculties.isLoading ? (
-                <Skeleton className="h-[40px] w-full rounded-sm" />
-              ) : faculties.isError ? (
-                <SelectContent className="max-w-full">
+              <SelectContent className="max-w-full">
+                {FACULTIES.map((f) => (
                   <SelectItem
-                    className="mr-2 max-w-full truncate text-red-500"
-                    key="error"
-                    value="error"
-                    disabled={true}
+                    className="mr-2 max-w-full truncate"
+                    key={f.value}
+                    value={f.value}
                   >
-                    Wystąpił błąd podczas ładowania wydziałów
+                    {registrationReplacer(f.name)}
                   </SelectItem>
-                </SelectContent>
-              ) : (
-                <SelectContent className="max-w-full">
-                  {faculties.data.map((f) => (
-                    <SelectItem
-                      className="mr-2 max-w-full truncate"
-                      key={f.value}
-                      value={f.value}
-                    >
-                      {registrationReplacer(f.name)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              )}
+                ))}
+              </SelectContent>
             </Select>
           </div>
           {registrations.isLoading ? (
@@ -295,7 +278,7 @@ export function AppSidebar({
           ) : null}
 
           <div className="flex w-full flex-1 flex-col overflow-y-scroll">
-            <Accordion type="single" collapsible={true}>
+            <Accordion>
               {plan.registrations.map((registration) => (
                 <GroupsAccordionItem
                   key={registration.id}
@@ -318,7 +301,7 @@ export function AppSidebar({
           </div>
         </div>
       </SidebarContent>
-      <Alerts className="mt-4 py-3 animate-in fade-in slide-in-from-left" />
+      <Alerts className="animate-in fade-in slide-in-from-left mt-4 py-3" />
     </Sidebar>
   );
 }

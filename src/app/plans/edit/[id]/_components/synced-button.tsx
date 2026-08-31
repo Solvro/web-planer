@@ -23,11 +23,11 @@ const LOGIC_STATUS_RESULTS = {
   },
   SYNCING: {
     message: "Synchronizowanie...",
-    icon: <Icons.RefreshCw className="size-4 animate-spin text-primary" />,
+    icon: <Icons.RefreshCw className="text-primary size-4 animate-spin" />,
   },
   DIFFERENT_DATES: {
     message: "Twoja wersja różni się od wersji online",
-    icon: <Icons.GitPullRequestClosed className="size-4 text-primary" />,
+    icon: <Icons.GitPullRequestClosed className="text-primary size-4" />,
   },
   LOCAL_CHANGES: {
     message: "Masz lokalne zmiany",
@@ -62,23 +62,25 @@ export function SyncedButton({
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild={true}>
-        <Button
-          size="icon"
-          variant="outline"
-          className="min-w-10"
-          onClick={() => {
-            if (!isEqualsDates) {
-              toast.info(
-                "Wybierz akcję z alertu powyżej, aby zsynchronizować dane tak jak chcesz",
-                { duration: 5000 },
-              );
-            }
-          }}
-        >
-          {icon}
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            size="icon"
+            variant="outline"
+            className="min-w-10"
+            onClick={() => {
+              if (!isEqualsDates) {
+                toast.info(
+                  "Wybierz akcję z alertu powyżej, aby zsynchronizować dane tak jak chcesz",
+                  { duration: 5000 },
+                );
+              }
+            }}
+          >
+            {icon}
+          </Button>
+        }
+      />
       <TooltipContent>
         <p>{message}</p>
       </TooltipContent>

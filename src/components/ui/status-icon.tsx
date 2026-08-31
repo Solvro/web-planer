@@ -38,7 +38,7 @@ export function StatusIcon({
   const icon = LOGIC_STATUS_RESULTS[planStatus].icon;
   return (
     <Tooltip>
-      <TooltipTrigger className="absolute right-4 top-4">
+      <TooltipTrigger className="absolute top-4 right-4">
         <div className="flex size-[20px] items-center justify-center rounded-md backdrop-blur-md">
           {icon}
         </div>

@@ -4,7 +4,7 @@ import type { Config } from "tailwindcss";
 import tailwindAnimate from "tailwindcss-animate";
 
 const config = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -207,25 +207,9 @@ const config = {
             opacity: "1",
           },
         },
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
         gradient: {
           to: {
             "background-position": "-200% center",
-          },
-        },
-        "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
           },
         },
         "fast-bounce": {
@@ -320,8 +304,6 @@ const config = {
         "move-top": "move-top 0.3s ease-in-out infinite alternate",
         "move-bottom": "move-bottom 0.3s ease-in-out infinite alternate",
         gradient: "gradient 3s linear infinite",
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
         "fast-bounce": "fast-bounce 1s",
         "fade-in-2": "fade-in 1s var(--animation-delay, 0ms) ease forwards",
         "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",

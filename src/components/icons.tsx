@@ -1,4 +1,3 @@
-import { StarFilledIcon } from "@radix-ui/react-icons";
 import {
   AlertTriangle,
   BellRingIcon,
@@ -15,7 +14,6 @@ import {
   EllipsisVertical,
   Fingerprint,
   GitPullRequestClosed,
-  Github,
   Link,
   Loader2Icon,
   Lock,
@@ -43,12 +41,18 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import type { ComponentProps } from "react";
+import { FaGithub } from "react-icons/fa";
 import { MdArrowBack } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
 
 import LogoColor from "../../public/assets/logo/logo_solvro_color.png";
 import LogoWhite from "../../public/assets/logo/logo_solvro_mono.png";
+
+function StarFilledIcon(props: ComponentProps<typeof Star>) {
+  return <Star fill="currentColor" stroke="none" {...props} />;
+}
 
 export const Icons = {
   Logo: () => (
@@ -109,7 +113,7 @@ export const Icons = {
   Bug,
   Menu,
   ArrowBack: MdArrowBack,
-  Github,
+  Github: FaGithub,
   FlexyArrow: ({ className }: { className?: string }) => (
     <svg
       width="91"

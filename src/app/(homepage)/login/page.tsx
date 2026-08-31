@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type { z } from "zod";
+import type * as z from "zod";
 
 import SolvroLogoColor from "@/../public/assets/logo/logo_solvro_color.png";
 import SolvroLogoMono from "@/../public/assets/logo/logo_solvro_mono.png";
@@ -41,12 +41,12 @@ export default function LoginPage() {
   const [step, setStep] = React.useState<"email" | "otp" | "onboard">("email");
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-4 pb-20 pt-20 sm:items-center sm:px-6 sm:pb-0 sm:pt-0">
+    <div className="relative flex min-h-screen items-center justify-center px-4 pt-20 pb-20 sm:items-center sm:px-6 sm:pt-0 sm:pb-0">
       <Image
         src={BgImage}
         alt="bg img"
         unoptimized
-        className="absolute inset-0 left-0 top-0 -z-10 h-full w-full opacity-30"
+        className="absolute inset-0 top-0 left-0 -z-10 h-full w-full opacity-30"
       />
       <div className="flex w-full max-w-md flex-col">
         <Link
@@ -55,7 +55,7 @@ export default function LoginPage() {
         >
           <Icons.ArrowBack className="size-4" /> Powrót do strony głównej
         </Link>
-        <div className="flex w-full flex-col items-center gap-2 rounded-lg bg-background p-5 py-9">
+        <div className="bg-background flex w-full flex-col items-center gap-2 rounded-lg p-5 py-9">
           <Image
             src={SolvroLogoColor}
             alt="Solvro Logo"
@@ -75,7 +75,7 @@ export default function LoginPage() {
               <h1 className="mt-5 text-center text-3xl font-bold">
                 Zaloguj się do planera
               </h1>
-              <p className="text-balance text-center text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-center text-sm text-balance">
                 Podaj swój email z domeny Politechniki Wrocławskiej, na który
                 wyślemy jednorazowy kod
               </p>
@@ -130,8 +130,8 @@ function EmailStep({
       >
         Zaloguj się przez USOS
       </Button>
-      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-        <span className="relative z-10 bg-background px-2 text-muted-foreground">
+      <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        <span className="bg-background text-muted-foreground relative z-10 px-2">
           Lub kontynuuj poprzez
         </span>
       </div>
@@ -272,7 +272,7 @@ function OnboardStep({ email }: { email: string }) {
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">Witaj w Planerze!</h1>
-      <p className="text-balance text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm text-balance">
         Jeśli chcesz, możesz zapisać swoje imię i nazwisko
       </p>
       <form
@@ -328,10 +328,9 @@ function OnboardStep({ email }: { email: string }) {
           size="sm"
           className="w-full"
           variant="ghost"
-          asChild
-        >
-          <Link href="/plans">Pomiń</Link>
-        </Button>
+          nativeButton={false}
+          render={<Link href="/plans">Pomiń</Link>}
+        />
       </form>
     </div>
   );

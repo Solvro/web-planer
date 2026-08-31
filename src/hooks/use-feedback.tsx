@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import confetti from "canvas-confetti";
 import { createContext, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import type { z } from "zod";
+import type * as z from "zod";
 
 import { sendFeedbackForm } from "@/actions/feedback";
 import { Icons } from "@/components/icons";
@@ -117,7 +117,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
               <h1 className="mt-5 text-center text-lg font-semibold">
                 Przyjęliśmy Twoje zgłoszenie
               </h1>
-              <p className="mt-2 text-balance text-center text-sm">
+              <p className="mt-2 text-center text-sm text-balance">
                 Odpowiemy na nie tak szybko, jak tylko będziemy mogli.
               </p>
             </div>
@@ -140,7 +140,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-balance text-xs">
+                      <FormDescription className="text-xs text-balance">
                         Twój adres email będzie wykorzystany wyłącznie do
                         odpowiedzi na zgłoszenie.
                       </FormDescription>

@@ -1,28 +1,28 @@
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   server: {
-    BETTER_AUTH_SECRET: z.string().min(32),
-    BETTER_AUTH_URL: z.string().url().default("http://localhost:3000"),
-    DATABASE_URL: z.string().url(),
-    USOS_CONSUMER_KEY: z.string().min(1),
-    USOS_CONSUMER_SECRET: z.string().min(1),
-    USOS_APPS_URL: z.string().url().default("https://apps.usos.pwr.edu.pl"),
-    SITE_URL: z.string().url().default("http://localhost:3000"),
-    FORMS_LINK: z.string().url().default("https://forms.gle/"),
-    FORMS_FIELD_EMAIL: z.string().default("entry.1234567890"),
-    FORMS_FIELD_TITLE: z.string().default("entry.1234567890"),
-    FORMS_FIELD_DESCRIPTION: z.string().default("entry.1234567890"),
-    GITHUB_TOKEN: z.string().optional(),
-    SMTP_HOST: z.string().default("mail.solvro.pl"),
+    BETTER_AUTH_SECRET: z.string().trim().min(32),
+    BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
+    DATABASE_URL: z.url(),
+    USOS_CONSUMER_KEY: z.string().trim().min(1),
+    USOS_CONSUMER_SECRET: z.string().trim().min(1),
+    USOS_APPS_URL: z.url().default("https://apps.usos.pwr.edu.pl"),
+    SITE_URL: z.url().default("http://localhost:3000"),
+    FORMS_LINK: z.url().default("https://forms.gle/"),
+    FORMS_FIELD_EMAIL: z.string().trim().default("entry.1234567890"),
+    FORMS_FIELD_TITLE: z.string().trim().default("entry.1234567890"),
+    FORMS_FIELD_DESCRIPTION: z.string().trim().default("entry.1234567890"),
+    GITHUB_TOKEN: z.string().trim().optional(),
+    SMTP_HOST: z.string().trim().default("mail.solvro.pl"),
     SMTP_PORT: z.coerce.number().default(465),
-    SMTP_USERNAME: z.string().default("planer@solvro.pl"),
-    SMTP_PASSWORD: z.string().optional(),
+    SMTP_USERNAME: z.string().trim().default("planer@solvro.pl"),
+    SMTP_PASSWORD: z.string().trim().optional(),
   },
   client: {
-    NEXT_PUBLIC_SITE_URL: z.string().url(),
-    NEXT_PUBLIC_ALERTS_APP_CODE: z.string().min(1).default("planer"),
+    NEXT_PUBLIC_SITE_URL: z.url(),
+    NEXT_PUBLIC_ALERTS_APP_CODE: z.string().trim().min(1).default("planer"),
   },
   runtimeEnv: {
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
