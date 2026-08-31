@@ -15,7 +15,6 @@ import {
   EllipsisVertical,
   Fingerprint,
   GitPullRequestClosed,
-  Github,
   Link,
   Loader2Icon,
   Lock,
@@ -43,6 +42,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import { FaGithub } from "react-icons/fa";
 import { MdArrowBack } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
@@ -109,7 +109,7 @@ export const Icons = {
   Bug,
   Menu,
   ArrowBack: MdArrowBack,
-  Github,
+  Github: FaGithub,
   FlexyArrow: ({ className }: { className?: string }) => (
     <svg
       width="91"
