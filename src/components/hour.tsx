@@ -14,8 +14,8 @@ function Hour({ hour, widthPx = "100" }: { hour: string; widthPx?: string }) {
       className={cn(
         "relative z-0 text-xs leading-6 text-gray-500 after:absolute after:-z-10 after:bg-slate-200 dark:after:bg-slate-800",
         isHorizontal
-          ? `after:top-1/2 after:h-[1px] after:w-[var(--after-width)] after:min-w-[130px]`
-          : "-translate-x-1/2 transform text-center after:left-1/2 after:top-[-30px] after:h-[5000px] after:w-[1px]",
+          ? `after:top-1/2 after:h-px after:w-(--after-width) after:min-w-[130px]`
+          : "-translate-x-1/2 transform text-center after:top-[-30px] after:left-1/2 after:h-[5000px] after:w-px",
       )}
       style={
         isHorizontal
@@ -30,7 +30,7 @@ function Hour({ hour, widthPx = "100" }: { hour: string; widthPx?: string }) {
             }
       }
     >
-      <span className="bg-white py-0.5 dark:bg-background">{hour}</span>
+      <span className="dark:bg-background bg-white py-0.5">{hour}</span>
     </div>
   );
 }

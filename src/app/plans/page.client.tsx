@@ -69,13 +69,13 @@ export function PlansPage({
   }, [plansExistingLocallyAndDeletedOnline]);
 
   return (
-    <div className="container mx-auto max-h-full flex-1 flex-grow overflow-y-auto p-4 pt-24">
+    <div className="container mx-auto max-h-full flex-1 grow overflow-y-auto p-4 pt-24">
       <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <button
           onClick={addNewPlan}
-          className="group flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:border-primary hover:bg-primary/5 hover:shadow-xl dark:border-gray-800"
+          className="group hover:border-primary hover:bg-primary/5 flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:shadow-xl dark:border-gray-800"
         >
-          <Icons.Plus className="h-24 w-24 text-gray-400 transition-colors group-hover:text-primary dark:text-gray-600" />
+          <Icons.Plus className="group-hover:text-primary h-24 w-24 text-gray-400 transition-colors dark:text-gray-600" />
         </button>
         {plans.map((plan) =>
           onlinePlans.some((onlinePlan) => onlinePlan.id === plan.id) ? null : (

@@ -27,16 +27,16 @@ export function UserButton({ profile }: { profile: User }) {
         align="end"
         className="w-96 rounded-2xl p-0 shadow-md"
       >
-        <div className="flex w-full flex-col items-center bg-muted/50">
-          <div className="flex w-full items-center gap-2 bg-background p-4">
+        <div className="bg-muted/50 flex w-full flex-col items-center">
+          <div className="bg-background flex w-full items-center gap-2 p-4">
             <UserAvatar profile={profile} />
             <div className="flex w-full items-start gap-3">
               <div className="flex flex-col gap-1">
-                <h1 className="translate-y-0.5 text-lg font-semibold leading-none">
+                <h1 className="translate-y-0.5 text-lg leading-none font-semibold">
                   {profile.firstName} {profile.lastName}
                 </h1>
 
-                <p className="text-xs font-medium leading-none">
+                <p className="text-xs leading-none font-medium">
                   {profile.studentNumber}@student.pwr.edu.pl
                 </p>
               </div>
@@ -50,7 +50,7 @@ export function UserButton({ profile }: { profile: User }) {
           </div>
           <Link href="/plans/account" className="w-full">
             <button
-              className="flex w-full items-center gap-3 border-t bg-background p-4 py-4 transition-all hover:bg-muted/50"
+              className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 border-t p-4 py-4 transition-all"
               onClick={() => {
                 setOpened(false);
               }}
@@ -63,7 +63,7 @@ export function UserButton({ profile }: { profile: User }) {
           </Link>
           <Link href="/plans/account/calendar" className="w-full">
             <button
-              className="flex w-full items-center gap-3 border-t bg-background p-4 py-4 transition-all hover:bg-muted/50"
+              className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 border-t p-4 py-4 transition-all"
               onClick={() => {
                 setOpened(false);
               }}
@@ -75,7 +75,7 @@ export function UserButton({ profile }: { profile: User }) {
             </button>
           </Link>
           <SignOutButton asChild={true}>
-            <button className="flex w-full items-center gap-3 rounded-b-lg border-b border-t bg-background p-4 py-4 shadow-sm transition-all hover:bg-muted/50 dark:hover:shadow-black/50">
+            <button className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 rounded-b-lg border-t border-b p-4 py-4 shadow-sm transition-all dark:hover:shadow-black/50">
               <div className="mr-1 flex w-[40px] items-center justify-center">
                 <Icons.LogOut className="h-4 w-4" />
               </div>
@@ -83,7 +83,7 @@ export function UserButton({ profile }: { profile: User }) {
             </button>
           </SignOutButton>
           <div className="flex w-full items-center justify-center gap-3 p-4 py-2.5">
-            <p className="translate-y-[1px] text-xs font-medium">
+            <p className="translate-y-px text-xs font-medium">
               Secured by{" "}
               <Link href="/" className="font-semibold">
                 🔒 Solvro

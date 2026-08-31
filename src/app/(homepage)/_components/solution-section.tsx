@@ -27,7 +27,7 @@ const features = [
     href: "/plans",
     cta: "Przejdź do planowania",
     background: (
-      <AnimatedGroupsDemo className="absolute top-10 h-[240px] [--duration:40s] [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)]" />
+      <AnimatedGroupsDemo className="absolute top-10 h-[240px] mask-[linear-gradient(to_top,transparent_40%,#000_100%)] [--duration:40s]" />
     ),
   },
   {
@@ -39,7 +39,7 @@ const features = [
     href: "/plans",
     cta: "Przejdź do planowania",
     background: (
-      <img className="absolute -right-20 -top-20 opacity-60" alt="" />
+      <img className="absolute -top-20 -right-20 opacity-60" alt="" />
     ),
   },
   {
@@ -50,7 +50,7 @@ const features = [
     href: "/plans/account/notifications",
     cta: "Sprawdź ustawienia",
     background: (
-      <AnimatedNotificationsDemo className="absolute right-2 top-4 h-[600px] w-full scale-75 border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-90" />
+      <AnimatedNotificationsDemo className="absolute top-4 right-2 h-[600px] w-full scale-75 border-none mask-[linear-gradient(to_top,transparent_10%,#000_100%)] transition-all duration-300 ease-out group-hover:scale-90" />
     ),
   },
   {
@@ -62,7 +62,7 @@ const features = [
     href: "https://solvro.pwr.edu.pl/",
     cta: "Odwiedź stronę koła",
     background: (
-      <img className="absolute -right-20 -top-20 opacity-60" alt="" />
+      <img className="absolute -top-20 -right-20 opacity-60" alt="" />
     ),
   },
 ];
@@ -83,7 +83,7 @@ export function SolutionSection() {
     <section>
       <div className="bg-neutral-100 dark:bg-white/5">
         <motion.div
-          className="container relative mx-auto max-w-7xl px-4 py-16"
+          className="relative container mx-auto max-w-7xl px-4 py-16"
           variants={parentVariants}
           ref={ref}
           initial="hidden"
@@ -93,7 +93,7 @@ export function SolutionSection() {
           <div className="mx-auto space-y-4 pb-6 text-center">
             <motion.h2
               variants={childVariants}
-              className="font-mono text-sm font-medium uppercase tracking-wider text-primary"
+              className="text-primary font-mono text-sm font-medium tracking-wider uppercase"
             >
               rozwiązanie
             </motion.h2>
@@ -102,7 +102,7 @@ export function SolutionSection() {
               <TitleHighlight>wymarzony plan</TitleHighlight>
               <TitleText> z planerem!</TitleText>
             </AnimatedTitle>
-            <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-6 text-balance text-slate-600">
               Wybierz swój wydział, kierunek i już. Możesz ułożyć swój plan
               widząc swoje wszystkie zajęcia na jednej stronie.
             </p>
