@@ -3,12 +3,16 @@ import React from "react";
 
 import { Separator } from "@/components/ui/separator";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default function FAQCalendarPage() {
   return (
     <div className="mb-8 w-full space-y-6">
       <div>
         <h3 className="text-lg font-medium">Jak dodać do kalendarza</h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Tutaj znajdziesz krótki tutorial, jak dodać swój plan zajęć do swojego
           kalendarza Google
         </p>
@@ -79,7 +83,7 @@ export default function FAQCalendarPage() {
 function Title({ title, step }: { title: string; step: number }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex size-10 items-center justify-center rounded-md bg-primary text-lg font-semibold text-white">
+      <div className="bg-primary flex size-10 items-center justify-center rounded-md text-lg font-semibold text-white">
         {step}.
       </div>
       <h1 className="text-lg font-semibold">{title}</h1>

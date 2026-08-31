@@ -5,6 +5,10 @@ import { Separator } from "@/components/ui/separator";
 import { UserAvatar } from "@/components/user-button";
 import { auth } from "@/lib/auth";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default async function ProfilePage() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -19,7 +23,7 @@ export default async function ProfilePage() {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">Profil</h3>
-        <p className="text-sm text-muted-foreground">Twoje dane profilowe.</p>
+        <p className="text-muted-foreground text-sm">Twoje dane profilowe.</p>
       </div>
       <Separator />
       <div className="flex flex-col items-start gap-4 rounded-md border p-5 md:flex-row">
@@ -27,7 +31,7 @@ export default async function ProfilePage() {
         <div className="flex w-full flex-col">
           <h1 className="text-lg font-semibold">
             {profile.firstName == null || profile.lastName == null ? (
-              <span className="font-medium italic text-muted-foreground">
+              <span className="text-muted-foreground font-medium italic">
                 Nie podano imienia i nazwiska
               </span>
             ) : (

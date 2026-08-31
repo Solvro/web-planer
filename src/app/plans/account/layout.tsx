@@ -9,6 +9,10 @@ import { auth } from "@/lib/auth";
 
 import { SidebarSettings } from "../_components/settings-sidebar";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "Ustawienia",
   description: "Advanced form example using react-hook-form and Zod.",
@@ -45,7 +49,7 @@ export default async function SettingsLayout({
   }
 
   return (
-    <div className="w-full overflow-y-auto pb-10 pt-20">
+    <div className="w-full overflow-y-auto pt-20 pb-10">
       <div className="container mx-auto flex h-full min-h-screen flex-col space-y-6 p-4 pb-0 md:p-10">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Ustawienia</h2>
@@ -54,7 +58,7 @@ export default async function SettingsLayout({
           </p>
         </div>
         <Separator className="my-6" />
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
           <aside className="-mx-4 lg:w-1/5">
             <SidebarSettings items={sidebarNavItems} />
           </aside>
