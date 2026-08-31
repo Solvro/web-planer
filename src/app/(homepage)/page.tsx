@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -11,7 +10,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { Particles } from "@/components/magicui/particles";
 import { Block } from "@/components/ui/block";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/get-session";
 import { cn } from "@/lib/utils";
 
 import HeroImageDark from "../../../public/assets/planer-dark.png";
@@ -21,10 +20,6 @@ import { ProblemSection } from "./_components/problem-section";
 import { SolutionSection } from "./_components/solution-section";
 import { ToPWrSection } from "./_components/topwr-section";
 import { TrustedSection } from "./_components/trusted-section";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 function AnimationLogo() {
   return (
@@ -64,9 +59,7 @@ function AnimationLogo() {
 }
 
 async function JoinUsBlock() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getCachedSession();
   const user = session?.user ?? null;
 
   if (user === null) {

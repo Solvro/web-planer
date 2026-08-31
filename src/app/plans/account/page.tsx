@@ -1,18 +1,11 @@
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { Separator } from "@/components/ui/separator";
 import { UserAvatar } from "@/components/user-button";
-import { auth } from "@/lib/auth";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+import { getCachedSession } from "@/lib/get-session";
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getCachedSession();
   if (session == null) {
     return notFound();
   }

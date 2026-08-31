@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
@@ -6,7 +5,7 @@ import { SolvroLogo } from "@/components/solvro-logo";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
-import { auth } from "@/lib/auth";
+import { getCachedSession } from "@/lib/get-session";
 
 import { FeedbackButton } from "./feedback-button";
 import { SidebarTriggerButton } from "./sidebar-trigger-button";
@@ -20,7 +19,9 @@ export function PlansTopbar() {
           <h1 className="hidden text-2xl font-semibold md:block">Planer</h1>
         </div>
         <div className="mr-4 flex w-1/4 items-center justify-end">
-          <SidebarTriggerButton />
+          <Suspense fallback={null}>
+            <SidebarTriggerButton />
+          </Suspense>
           <Button
             nativeButton={false}
             variant="ghost"
@@ -58,9 +59,7 @@ export function PlansTopbar() {
 }
 
 async function UserProfile() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getCachedSession();
 
   if (session == null) {
     return (

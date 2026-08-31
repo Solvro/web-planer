@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
-import { auth } from "@/lib/auth";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getCachedSession } from "@/lib/get-session";
 
 import { SidebarSettings } from "../_components/settings-sidebar";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 export const metadata: Metadata = {
   title: "Ustawienia",
@@ -36,18 +32,11 @@ const sidebarNavItems = [
   },
 ];
 
-export default async function SettingsLayout({
+export default function SettingsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (session == null) {
-    return notFound();
-  }
-
   return (
     <div className="w-full overflow-y-auto pt-20 pb-10">
       <div className="container mx-auto flex h-full min-h-screen flex-col space-y-6 p-4 pb-0 md:p-10">
@@ -62,9 +51,21 @@ export default async function SettingsLayout({
           <aside className="-mx-4 lg:w-1/5">
             <SidebarSettings items={sidebarNavItems} />
           </aside>
-          <div className="flex-1 lg:max-w-3xl">{children}</div>
+          <div className="flex-1 lg:max-w-3xl">
+            <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+              <AuthGuard>{children}</AuthGuard>
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>
   );
+}
+
+async function AuthGuard({ children }: { children: React.ReactNode }) {
+  const session = await getCachedSession();
+  if (session == null) {
+    notFound();
+  }
+  return children;
 }
