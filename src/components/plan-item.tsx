@@ -128,10 +128,9 @@ export function PlanItem({
       }
     }
     plan.remove();
-    if (!onlineOnly) {
-      setPlans(plans.filter((p) => p.id !== id));
-    }
+    setPlans(plans.filter((p) => p.id !== id));
     toast.success("Plan został usunięty.");
+    router.refresh();
   };
 
   const groupCountLocal = plan.courses
