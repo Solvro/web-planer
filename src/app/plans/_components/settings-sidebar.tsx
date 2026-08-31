@@ -28,8 +28,8 @@ export function SidebarSettings({
     >
       {items.map((item) => (
         <Button
-          asChild
           key={item.href}
+          nativeButton={false}
           variant="ghost"
           className={cn(
             pathname === item.href
@@ -37,12 +37,13 @@ export function SidebarSettings({
               : "hover:bg-transparent hover:underline",
             "justify-start",
           )}
-        >
-          <Link key={item.href} href={item.href}>
-            {item.icon}
-            {item.title}
-          </Link>
-        </Button>
+          render={
+            <Link href={item.href}>
+              {item.icon}
+              {item.title}
+            </Link>
+          }
+        />
       ))}
     </nav>
   );

@@ -20,7 +20,7 @@ export function AnimatedTitle({ children }: { children: React.ReactNode }) {
 export function TitleHighlight({ children }: { children: React.ReactNode }) {
   return (
     <span className="relative whitespace-nowrap text-white">
-      <span className="absolute -left-[5%] -top-[2.5%] z-0 h-[110%] w-[110%] -rotate-1 transform-gpu bg-blue-400/20 transition-all group-hover:-rotate-0 dark:bg-blue-200/10"></span>
+      <span className="absolute top-[-2.5%] left-[-5%] z-0 h-[110%] w-[110%] -rotate-1 transform-gpu bg-blue-400/20 transition-all group-hover:-rotate-0 dark:bg-blue-200/10"></span>
       <span className="relative z-10 text-blue-600 dark:text-blue-400">
         {children}
       </span>

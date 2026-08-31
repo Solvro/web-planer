@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import type * as LabelPrimitive from "@radix-ui/react-label";
-import { Slot } from "@radix-ui/react-slot";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import * as React from "react";
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import { Controller, FormProvider, useFormContext } from "react-hook-form";
@@ -79,8 +79,8 @@ const FormItem = React.forwardRef<
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+  React.ElementRef<"label">,
+  React.ComponentPropsWithoutRef<"label">
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
@@ -95,25 +95,24 @@ const FormLabel = React.forwardRef<
 });
 FormLabel.displayName = "FormLabel";
 
-const FormControl = React.forwardRef<
-  React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
+function FormControl({ children }: { children: React.ReactElement }) {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
-  return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={
-        error ? `${formDescriptionId} ${formMessageId}` : formDescriptionId
-      }
-      aria-invalid={Boolean(error)}
-      {...props}
-    />
-  );
-});
+  return useRender({
+    render: children,
+    props: mergeProps<"div">(
+      {
+        id: formItemId,
+        "aria-describedby": error
+          ? `${formDescriptionId} ${formMessageId}`
+          : formDescriptionId,
+        "aria-invalid": Boolean(error),
+      } as React.ComponentProps<"div">,
+      {},
+    ),
+  });
+}
 FormControl.displayName = "FormControl";
 
 const FormDescription = React.forwardRef<
@@ -126,7 +125,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-muted-foreground text-sm", className)}
       {...props}
     />
   );
@@ -148,7 +147,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
+      className={cn("text-destructive text-sm font-medium", className)}
       {...props}
     >
       {body}

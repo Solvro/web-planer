@@ -13,11 +13,13 @@ export function PlanDisplayLink() {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild={true}>
-        <Button size="icon" className="min-w-10" onClick={openDialog}>
-          <Icons.Share className="size-4" />
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button size="icon" className="min-w-10" onClick={openDialog}>
+            <Icons.Share className="size-4" />
+          </Button>
+        }
+      />
       <TooltipContent>
         <p>Udostępnij</p>
       </TooltipContent>

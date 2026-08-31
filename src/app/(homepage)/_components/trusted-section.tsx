@@ -30,7 +30,7 @@ export function TrustedSection() {
       transition={{ staggerChildren: 0.1 }}
     >
       <div className="py-14">
-        <div className="mx-auto max-w-screen-xl px-4 md:px-8">
+        <div className="mx-auto max-w-[theme(screens.xl)] px-4 md:px-8">
           <motion.h2
             variants={childVariants}
             className="text-center text-sm font-semibold text-gray-600"
@@ -55,7 +55,7 @@ export function TrustedSection() {
                 <img
                   alt="Solvro"
                   src="/assets/logo/solvro_black.png"
-                  className="w-34 h-8 px-2 dark:brightness-0 dark:invert"
+                  className="h-8 w-34 px-2 dark:brightness-0 dark:invert"
                 />
               </motion.li>
               <motion.li variants={childVariants}>

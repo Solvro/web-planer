@@ -34,10 +34,10 @@ export function OtpEmail({ otp }: OtpEmailProps) {
               alt="Plaid"
               className="mb-8 block"
             />
-            <Heading className="mb-4 mt-0 p-0 text-2xl font-bold text-zinc-900">
+            <Heading className="mt-0 mb-4 p-0 text-2xl font-bold text-zinc-900">
               Twój kod logowania
             </Heading>
-            <Text className="mb-6 mt-0 text-sm text-zinc-500">
+            <Text className="mt-0 mb-6 text-sm text-zinc-500">
               Użyj poniższego kodu, aby zalogować się do Planera Solvro:
             </Text>
             <Section className="mb-6 rounded-lg bg-zinc-100 py-6 text-center">
@@ -66,10 +66,10 @@ export function OtpEmail({ otp }: OtpEmailProps) {
               </tr>
               <tr className="w-full">
                 <td align="center">
-                  <Text className="my-[8px] text-[16px] font-semibold leading-[24px] text-gray-900">
+                  <Text className="my-[8px] text-[16px] leading-[24px] font-semibold text-gray-900">
                     Koło Naukowe Solvro
                   </Text>
-                  <Text className="mb-0 mt-[4px] text-[16px] leading-[24px] text-gray-500">
+                  <Text className="mt-[4px] mb-0 text-[16px] leading-[24px] text-gray-500">
                     Otwieramy drzwi do świata IT.
                   </Text>
                 </td>
@@ -102,10 +102,10 @@ export function OtpEmail({ otp }: OtpEmailProps) {
               </tr>
               <tr>
                 <td align="center">
-                  <Text className="my-[8px] text-[12px] font-medium leading-[14px] text-gray-500">
+                  <Text className="my-[8px] text-[12px] leading-[14px] font-medium text-gray-500">
                     Zygmunta Wróblewskiego 27 | Pokój nr 4, 51-627 Wrocław
                   </Text>
-                  <Text className="mb-0 mt-[4px] text-[10px] leading-[12px] text-gray-500">
+                  <Text className="mt-[4px] mb-0 text-[10px] leading-[12px] text-gray-500">
                     kn.solvro@pwr.edu.pl
                   </Text>
                 </td>

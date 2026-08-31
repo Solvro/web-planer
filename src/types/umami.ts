@@ -67,12 +67,7 @@ type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
  */
 interface EventData {
   [key: string]:
-    | EventData
-    | EventData[]
-    | number[]
-    | string[]
-    | number
-    | string;
+    EventData | EventData[] | number[] | string[] | number | string;
 }
 
 type EventProperties = WithRequired<TrackedProperties, "website"> & {

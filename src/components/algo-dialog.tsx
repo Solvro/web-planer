@@ -196,11 +196,13 @@ export function AlgorithmDialog({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>
-        <Button className="w-full" variant={"default"}>
-          Automatyczny plan <Sparkles />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button className="w-full" variant={"default"}>
+            Automatyczny plan <Sparkles />
+          </Button>
+        }
+      />
       <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto focus:outline-none">
         <DialogHeader>
           <DialogTitle>Ułóż plan automatycznie</DialogTitle>
@@ -216,7 +218,7 @@ export function AlgorithmDialog({
               {DAYS.map(({ key, label }) => (
                 <div
                   key={key}
-                  className="flex justify-between space-y-3 rounded-lg bg-muted/30 p-4"
+                  className="bg-muted/30 flex justify-between space-y-3 rounded-lg p-4"
                 >
                   <div className="flex items-center space-x-3">
                     <Switch
@@ -339,13 +341,13 @@ export function AlgorithmDialog({
 
             {scheduleResult !== null && (
               <>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Wybrane dni:{" "}
                   {DAYS.filter(({ key }) => preferences[key].enabled)
                     .map(({ label }) => label)
                     .join(", ")}
                 </p>
-                <div className="rounded-lg bg-muted/50 p-4">
+                <div className="bg-muted/50 rounded-lg p-4">
                   <div className="mb-2 flex items-center gap-2">
                     <h3 className="font-medium">Wyniki:</h3>
                     <Badge

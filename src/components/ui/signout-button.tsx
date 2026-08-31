@@ -1,6 +1,7 @@
 "use client";
 
-import { Slot } from "@radix-ui/react-slot";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import type React from "react";
 
 import { signOutFunction } from "@/actions/logout";
@@ -43,25 +44,32 @@ const signOut = async () => {
   window.location.reload();
 };
 
-export function SignOutButton({
-  children,
-  asChild = false,
-}: {
-  children?: React.ReactNode;
-  asChild?: boolean;
-}) {
-  if (asChild) {
-    return (
-      <Slot
-        className="w-full"
-        onClick={(event) => {
+function SignOutButtonRender({ render }: { render: React.ReactElement }) {
+  return useRender({
+    defaultTagName: "button",
+    render,
+    props: mergeProps<"button">(
+      {
+        className: "w-full",
+        onClick: (event: React.MouseEvent) => {
           event.preventDefault();
           void signOut();
-        }}
-      >
-        {children}
-      </Slot>
-    );
+        },
+      } as React.ComponentProps<"button">,
+      {},
+    ),
+  });
+}
+
+export function SignOutButton({
+  children,
+  render,
+}: {
+  children?: React.ReactNode;
+  render?: React.ReactElement;
+}) {
+  if (render !== undefined) {
+    return <SignOutButtonRender render={render} />;
   }
   return (
     <form

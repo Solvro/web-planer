@@ -1,10 +1,7 @@
 import type { ClassgroupDate } from "@/types";
 
 export type SchedulePattern =
-  | "weekly"
-  | "biweekly"
-  | "weekly_with_exceptions"
-  | "irregular";
+  "weekly" | "biweekly" | "weekly_with_exceptions" | "irregular";
 
 export type ScheduleParity = "even" | "odd" | "all" | "unknown";
 

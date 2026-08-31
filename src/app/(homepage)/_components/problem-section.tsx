@@ -31,11 +31,11 @@ export function ProblemSection() {
       animate={controls}
       transition={{ staggerChildren: 0.1 }}
     >
-      <div className="container relative mx-auto max-w-7xl px-4 py-16">
+      <div className="relative container mx-auto max-w-7xl px-4 py-16">
         <div className="mx-auto space-y-4 pb-6 text-center">
           <motion.h2
             variants={childVariants}
-            className="font-mono text-sm font-medium uppercase tracking-wider text-primary"
+            className="text-primary font-mono text-sm font-medium tracking-wider uppercase"
           >
             problem
           </motion.h2>
@@ -52,10 +52,10 @@ export function ProblemSection() {
               duration: 0.4,
             }}
             variants={childVariants}
-            className="rounded-lg border border-none bg-background text-card-foreground shadow-none"
+            className="bg-background text-card-foreground rounded-lg border border-none shadow-none"
           >
             <div className="space-y-4 p-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
                 <Icons.Biohazard className="size-6 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold">Ogólny bałagan</h3>
@@ -72,10 +72,10 @@ export function ProblemSection() {
               duration: 0.4,
             }}
             variants={childVariants}
-            className="rounded-lg border border-none bg-background text-card-foreground shadow-none"
+            className="bg-background text-card-foreground rounded-lg border border-none shadow-none"
           >
             <div className="space-y-4 p-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
                 <Icons.Plans className="size-6 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold">Nakładające się zajęcia</h3>
@@ -92,10 +92,10 @@ export function ProblemSection() {
               duration: 0.4,
             }}
             variants={childVariants}
-            className="rounded-lg border border-none bg-background text-card-foreground shadow-none"
+            className="bg-background text-card-foreground rounded-lg border border-none shadow-none"
           >
             <div className="space-y-4 p-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
                 <Icons.Timer className="size-6 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold">Zapisy na sekundy</h3>

@@ -122,7 +122,7 @@ function ClassSchedule({
         isHorizontal ? "border-x" : "border-y",
       )}
     >
-      <div className="z-20 ml-2 flex items-center bg-white text-2xl font-semibold dark:bg-background">
+      <div className="dark:bg-background z-20 ml-2 flex items-center bg-white text-2xl font-semibold">
         {day}
       </div>
       <div
@@ -135,8 +135,8 @@ function ClassSchedule({
         <div
           className={cn(
             isHorizontal
-              ? "grid grid-rows-dayPlan"
-              : "grid min-w-[1400px] grid-cols-dayPlan px-[10px]",
+              ? "grid-rows-dayPlan grid"
+              : "grid-cols-dayPlan grid min-w-[1400px] px-[10px]",
           )}
         >
           {upperHours.map((hour) => (
@@ -149,15 +149,15 @@ function ClassSchedule({
         <div
           className={cn(
             isHorizontal
-              ? "grid grid-rows-dayPlan gap-x-3 px-5 py-3"
-              : "grid min-w-[1400px] grid-flow-col grid-cols-dayPlan gap-y-3 px-[10px] py-5",
+              ? "grid-rows-dayPlan grid gap-x-3 px-5 py-3"
+              : "grid-cols-dayPlan grid min-w-[1400px] grid-flow-col gap-y-3 px-[10px] py-5",
           )}
         >
           <div
             className={cn(
               isHorizontal
                 ? "absolute after:absolute after:bg-slate-200"
-                : "absolute bottom-0 after:absolute after:left-1/2 after:w-[1px] after:bg-slate-200",
+                : "absolute bottom-0 after:absolute after:left-1/2 after:w-px after:bg-slate-200",
             )}
           />
           {groups.map((block) => {

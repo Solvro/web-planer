@@ -144,10 +144,14 @@ export function PlanItem({
 
   const handleCacheOnlinePlan = () => {
     if (plan.onlineId !== null) {
-      void queryClient.prefetchQuery({
-        queryKey: ["onlinePlan", plan.onlineId],
-        queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
-      });
+      queryClient
+        .query({
+          queryKey: ["onlinePlan", plan.onlineId],
+          queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
+        })
+        .catch(() => {
+          // ignore prefetch errors, the real fetch will surface them
+        });
     }
   };
 
@@ -164,7 +168,7 @@ export function PlanItem({
       ref={ref}
     >
       <CardHeader className="space-y-1 p-2 min-[520px]:p-4">
-        <CardTitle className="leading-2 w-5/6 text-balance text-sm min-[520px]:text-lg min-[520px]:leading-4">
+        <CardTitle className="w-5/6 text-sm leading-2 text-balance min-[520px]:text-lg min-[520px]:leading-4">
           {name}
         </CardTitle>
         <CardDescription>
@@ -200,14 +204,16 @@ export function PlanItem({
       </CardContent>
       <CardFooter className="justify-between gap-2 border-t p-2 min-[520px]:p-3">
         <DropdownMenu open={dropdownOpened} onOpenChange={setDropdownOpened}>
-          <DropdownMenuTrigger asChild={true}>
-            <Button
-              variant="secondary"
-              className="h-7 w-7 px-0 min-[520px]:h-9 min-[520px]:w-9"
-            >
-              <Icons.EllipsisVertical className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="secondary"
+                className="h-7 w-7 px-0 min-[520px]:h-9 min-[520px]:w-9"
+              >
+                <Icons.EllipsisVertical className="size-4" />
+              </Button>
+            }
+          />
           <DropdownMenuContent align="start" side="top" className="w-50">
             <DropdownMenuLabel>Wybierz akcję</DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -245,13 +251,14 @@ export function PlanItem({
         ) : (
           <Button
             className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
-            asChild={true}
-          >
-            <Link href={`/plans/edit/${id}`}>
-              <Icons.Pencil className="h-4 w-4" />
-              Edytuj
-            </Link>
-          </Button>
+            nativeButton={false}
+            render={
+              <Link href={`/plans/edit/${id}`}>
+                <Icons.Pencil className="h-4 w-4" />
+                Edytuj
+              </Link>
+            }
+          />
         )}
       </CardFooter>
 

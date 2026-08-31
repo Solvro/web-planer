@@ -13,7 +13,6 @@ import type { LecturerDTO } from "@/actions/v2/get-lecturer";
 import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
 import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
 import { ClassSchedule } from "@/components/class-schedule";
-import { Icons } from "@/components/icons";
 import { PlanOrientationButton } from "@/components/plan-orientation-button";
 import {
   Dialog,
@@ -123,7 +122,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
   const {
     data: onlinePlan,
     refetch: refetchOnlinePlan,
-    isLoading,
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
   } = useQuery({
     queryKey: ["onlinePlan", plan.onlineId],
@@ -260,16 +258,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <Icons.Loader size={64} className="mb-4 animate-spin text-primary" />
-        <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
-        <p className="text-xs text-muted-foreground">To potrwa tylko chwilkę</p>
-      </div>
-    );
-  }
-
   return (
     <>
       <AppSidebar
@@ -286,7 +274,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
         faculty={faculty}
       />
       <SidebarInset className="mr-1 w-full overflow-x-auto overflow-y-auto bg-transparent pt-[72px]">
-        <div className="ml-2 flex h-full w-full flex-1 flex-grow flex-col items-start md:ml-0 md:w-auto">
+        <div className="ml-2 flex h-full w-full flex-1 grow flex-col items-start md:ml-0 md:w-auto">
           <div
             className={cn(
               "flex flex-auto gap-3",
@@ -346,7 +334,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
             <div
               ref={captureRef}
               className={cn(
-                "relative flex gap-2 bg-background p-1",
+                "bg-background relative flex gap-2 p-1",
                 isHorizontal ? "flex-row" : "flex-col",
               )}
             >
@@ -394,8 +382,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
                   ),
               )}
 
-              <div className="absolute bottom-4 right-0 z-20 opacity-10">
-                <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-black dark:text-white md:w-1/4">
+              <div className="absolute right-0 bottom-4 z-20 opacity-10">
+                <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-black md:w-1/4 dark:text-white">
                   <Image
                     src={"/assets/logo/logo_solvro_mono.png"}
                     alt="Solvro logo"
@@ -422,7 +410,7 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 100, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
-              className="absolute bottom-6 right-8 z-20 flex flex-col items-center gap-2 rounded-xl border bg-background/50 px-3 py-2 shadow-md backdrop-blur-[12px] md:flex-row md:rounded-full"
+              className="bg-background/50 absolute right-8 bottom-6 z-20 flex flex-col items-center gap-2 rounded-xl border px-3 py-2 shadow-md backdrop-blur-[12px] md:flex-row md:rounded-full"
             >
               <PlanOrientationButton icon={true} />
               <DownloadPlanButton

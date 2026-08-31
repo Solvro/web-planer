@@ -40,17 +40,19 @@ export function RegistrationCombobox({
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild={true}>
-          <Button
-            name={name}
-            variant="outline"
-            className="w-full justify-start truncate font-normal"
-          >
-            {selectedRegistrations === null
-              ? "Rejestracja"
-              : `${selectedRegistrations.length.toString()} wybranych`}
-          </Button>
-        </PopoverTrigger>
+        <PopoverTrigger
+          render={
+            <Button
+              name={name}
+              variant="outline"
+              className="w-full justify-start truncate font-normal"
+            >
+              {selectedRegistrations === null
+                ? "Rejestracja"
+                : `${selectedRegistrations.length.toString()} wybranych`}
+            </Button>
+          }
+        />
         <PopoverContent className="w-full p-0" align="start">
           <RegistrationList
             allRegistrations={registrations}

@@ -15,19 +15,21 @@ export function PlanOrientationButton({ icon = false }: { icon?: boolean }) {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild={true}>
-        <Button
-          size={icon ? "icon" : "default"}
-          variant={"secondary"}
-          onClick={toggle}
-          className={cn("w-full", {
-            "w-10 min-w-10 rounded-full": icon,
-          })}
-        >
-          {icon ? null : "Obróć"}
-          {isHorizontal ? <GalleryVertical /> : <GalleryHorizontal />}
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            size={icon ? "icon" : "default"}
+            variant={"secondary"}
+            onClick={toggle}
+            className={cn("w-full", {
+              "w-10 min-w-10 rounded-full": icon,
+            })}
+          >
+            {icon ? null : "Obróć"}
+            {isHorizontal ? <GalleryVertical /> : <GalleryHorizontal />}
+          </Button>
+        }
+      />
       <TooltipContent>
         <p>Obróć</p>
       </TooltipContent>

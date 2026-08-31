@@ -77,38 +77,41 @@ export function Navbar() {
       <div className="container mx-auto flex items-center justify-between px-6 md:px-20">
         <Logo />
 
-        <nav className="hidden h-20 items-center font-semibold text-black dark:text-white md:flex">
+        <nav className="hidden h-20 items-center font-semibold text-black md:flex dark:text-white">
           <div className="flex items-center gap-2">
             <Button
-              asChild={true}
+              nativeButton={false}
               variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
-            >
-              <Link href="https://www.facebook.com/knsolvro" target="_blank">
-                Aktualności
-              </Link>
-            </Button>
+              render={
+                <Link href="https://www.facebook.com/knsolvro" target="_blank">
+                  Aktualności
+                </Link>
+              }
+            />
             <Button
-              asChild={true}
+              nativeButton={false}
               variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
-            >
-              <Link
-                href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
-                target="_blank"
-              >
-                Terminarz USOS
-              </Link>
-            </Button>
+              render={
+                <Link
+                  href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
+                  target="_blank"
+                >
+                  Terminarz USOS
+                </Link>
+              }
+            />
             <Button
-              asChild={true}
+              nativeButton={false}
               variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
-            >
-              <Link href="https://solvro.pwr.edu.pl/contact/" target="_blank">
-                Kontakt
-              </Link>
-            </Button>
+              render={
+                <Link href="https://solvro.pwr.edu.pl/contact/" target="_blank">
+                  Kontakt
+                </Link>
+              }
+            />
             <FeedbackButton />
             <ModeToggle />
           </div>
@@ -133,9 +136,9 @@ export function Navbar() {
               initial={{ opacity: 0, y: -400 }}
               animate={{ opacity: 100, y: 0 }}
               exit={{ opacity: 0, y: -400 }}
-              className="absolute left-0 top-full w-full bg-background shadow-lg md:hidden"
+              className="bg-background absolute top-full left-0 w-full shadow-lg md:hidden"
             >
-              <ul className="flex flex-col gap-4 p-4 text-center uppercase text-black dark:text-white">
+              <ul className="flex flex-col gap-4 p-4 text-center text-black uppercase dark:text-white">
                 <li className="p-2">
                   <Link href="https://www.facebook.com/knsolvro">
                     Aktualności

@@ -26,23 +26,25 @@ export function AvatarCircles({ className, contributors }: AvatarCirclesProps) {
     <div className={cn("z-10 flex -space-x-4 rtl:space-x-reverse", className)}>
       {contributors.map((contributor, index) => (
         <Tooltip key={contributor.id}>
-          <TooltipTrigger asChild={true}>
-            <Link
-              href={`https://github.com/${contributor.name}`}
-              target="_blank"
-              className="relative -mx-0.5 transition-all hover:z-10 hover:scale-125"
-              rel="noopener noreferrer"
-            >
-              <img
-                key={index}
-                className="h-16 w-16 rounded-full border-2 border-white bg-background dark:border-gray-800"
-                src={contributor.avatar}
-                width={64}
-                height={64}
-                alt={`Avatar ${index + 1}`}
-              />
-            </Link>
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <Link
+                href={`https://github.com/${contributor.name}`}
+                target="_blank"
+                className="relative -mx-0.5 transition-all hover:z-10 hover:scale-125"
+                rel="noopener noreferrer"
+              >
+                <img
+                  key={index}
+                  className="bg-background h-16 w-16 rounded-full border-2 border-white dark:border-gray-800"
+                  src={contributor.avatar}
+                  width={64}
+                  height={64}
+                  alt={`Avatar ${index + 1}`}
+                />
+              </Link>
+            }
+          />
           <TooltipContent align="center" side="top">
             <div>
               <h1 className="font-semibold">@{contributor.name}</h1>
