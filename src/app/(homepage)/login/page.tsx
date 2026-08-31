@@ -97,27 +97,72 @@ function EmailStep({
   setStep,
   setEmail,
 }: {
-  setStep: (value: "email" | "otp") => void;
+  setStep: (value: "email" | "otp" | "onboard") => void;
   setEmail: (value: string) => void;
 }) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
     resolver: zodResolver(loginOtpEmailSchema),
     defaultValues: { email: "" },
   });
+  const tokenInputRef = React.useRef<HTMLInputElement>(null);
+  const [evpNonce, setEvpNonce] = React.useState<string | null>(null);
 
   const isLoading = form.formState.isSubmitting;
 
-  async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
+  React.useEffect(() => {
+    let cancelled = false;
+    authClient.evp
+      .getNonce()
+      .then(({ data }) => {
+        if (!cancelled && data !== null) {
+          setEvpNonce(data.nonce);
+        }
+      })
+      .catch(() => {
+        setEvpNonce(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function sendOtp(email: string) {
     const { error } = await authClient.emailOtp.sendVerificationOtp({
-      email: values.email,
+      email,
       type: "sign-in",
     });
     if (error !== null) {
       toast.error("Wystąpił błąd podczas wysyłania kodu");
       return;
     }
-    setEmail(values.email);
+    setEmail(email);
     setStep("otp");
+  }
+
+  async function onSubmit(values: z.infer<typeof loginOtpEmailSchema>) {
+    const evpToken = tokenInputRef.current?.value;
+
+    if (evpToken !== undefined && evpToken.length > 0 && evpNonce !== null) {
+      const { data } = await authClient.evp.verify({
+        email: values.email,
+        token: evpToken,
+        nonce: evpNonce,
+      });
+      if (data?.verified === true && "user" in data) {
+        setEmail(values.email);
+        if (data.user.onboardingCompleted === true) {
+          toast.success("Zalogowano pomyślnie");
+          router.push("/plans");
+        } else {
+          handleTriggerConfetti();
+          setStep("onboard");
+        }
+        return;
+      }
+    }
+
+    await sendOtp(values.email);
   }
 
   return (
@@ -146,6 +191,7 @@ function EmailStep({
                 <Input
                   {...field}
                   id="login-email"
+                  autoComplete="email"
                   aria-invalid={fieldState.invalid}
                   disabled={isLoading}
                   placeholder="123456@student.pwr.edu.pl"
@@ -157,6 +203,15 @@ function EmailStep({
             )}
           />
         </FieldGroup>
+        {evpNonce === null ? null : (
+          <input
+            ref={tokenInputRef}
+            type="hidden"
+            name="token"
+            nonce={evpNonce}
+            autoComplete="email-verification-token"
+          />
+        )}
         <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
           {isLoading ? <Icons.Loader className="size-4 animate-spin" /> : null}
           Wyślij kod

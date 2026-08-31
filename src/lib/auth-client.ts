@@ -1,3 +1,4 @@
+import { emailVerificationProtocolClient } from "better-auth-evp/client";
 import { usosAuthClient } from "better-auth-usos/client";
 import {
   emailOTPClient,
@@ -13,6 +14,7 @@ export const authClient = createAuthClient({
   baseURL: env.NEXT_PUBLIC_SITE_URL,
   plugins: [
     emailOTPClient(),
+    emailVerificationProtocolClient(),
     inferAdditionalFields<typeof auth>(),
     usosAuthClient(),
   ],
