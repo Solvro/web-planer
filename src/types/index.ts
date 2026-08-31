@@ -25,7 +25,7 @@ export interface ClassBlockProps {
   endTime: string;
   groupId: string;
   groupNumber: string;
-  groupOnlineId: number;
+  groupOnlineId: string;
   courseId: string;
   courseName: string;
   lecturer: string;
@@ -87,40 +87,28 @@ export interface CreatePlanResponseType {
   message: string;
   schedule: {
     name: string;
-    userId: number;
+    userId: string;
     createdAt: string;
     updatedAt: string;
-    id: number;
+    id: string;
   };
 }
 
 export interface PlanResponseType {
   name: string;
-  sharedId: string | null;
-  userId: number;
-  id: number;
+  //sharedId: string | null;
+  userId: string;
+  id: string;
   createdAt: string;
   updatedAt: string;
   courses: {
     id: string;
-    name: string;
-    department: string;
-    lecturer: string;
-    type: string;
-    ects: number;
-    semester: number;
-    groups: {
-      id: number;
-      name: string;
-      day: string;
-      time: string;
-      room: string;
-    }[];
+  }[];
+  groups: {
+    id: string;
   }[];
   registrations: {
     id: string;
-    name: string;
-    departmentId: string;
   }[];
 }
 
@@ -151,7 +139,7 @@ export interface GroupLecturer {
 }
 
 export interface SingleGroup {
-  id: number;
+  id: string;
   name: string;
   lecturer: string;
   averageRating: string;

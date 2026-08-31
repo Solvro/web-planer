@@ -7,35 +7,7 @@ import React, { useState } from "react";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-interface PlanResponseType {
-  name: string;
-  userId: number;
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  courses: {
-    id: string;
-    name: string;
-    department: string;
-    lecturer: string;
-    type: string;
-    ects: number;
-    semester: number;
-    groups: {
-      id: number;
-      name: string;
-      day: string;
-      time: string;
-      room: string;
-    }[];
-  }[];
-  registrations: {
-    id: string;
-    name: string;
-    departmentId: string;
-  }[];
-}
+import type { PlanResponseType } from "@/types";
 
 export function SyncErrorAlert({
   onlinePlan,

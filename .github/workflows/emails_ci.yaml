@@ -10,6 +10,9 @@ on:
     paths:
       - "emails/**"
 
+permissions:
+  contents: read
+
 jobs:
   export:
     name: Export emails
