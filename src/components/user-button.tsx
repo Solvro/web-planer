@@ -74,14 +74,16 @@ export function UserButton({ profile }: { profile: User }) {
               <h2 className="text-sm font-medium">Jak dodać do kalendarza?</h2>
             </button>
           </Link>
-          <SignOutButton asChild={true}>
-            <button className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 rounded-b-lg border-t border-b p-4 py-4 shadow-sm transition-all dark:hover:shadow-black/50">
-              <div className="mr-1 flex w-[40px] items-center justify-center">
-                <Icons.LogOut className="h-4 w-4" />
-              </div>
-              <h2 className="text-sm font-medium">Wyloguj się</h2>
-            </button>
-          </SignOutButton>
+          <SignOutButton
+            render={
+              <button className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 rounded-b-lg border-t border-b p-4 py-4 shadow-sm transition-all dark:hover:shadow-black/50">
+                <div className="mr-1 flex w-[40px] items-center justify-center">
+                  <Icons.LogOut className="h-4 w-4" />
+                </div>
+                <h2 className="text-sm font-medium">Wyloguj się</h2>
+              </button>
+            }
+          />
           <div className="flex w-full items-center justify-center gap-3 p-4 py-2.5">
             <p className="translate-y-px text-xs font-medium">
               Secured by{" "}

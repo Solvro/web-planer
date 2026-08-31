@@ -70,24 +70,26 @@ async function JoinUsBlock() {
       <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
         <Button
           className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
-          asChild={true}
-        >
-          <Link href="/login">
-            <Icons.Lock className="size-4" />
-            Zaloguj się do planera
-          </Link>
-        </Button>
+          nativeButton={false}
+          render={
+            <Link href="/login">
+              <Icons.Lock className="size-4" />
+              Zaloguj się do planera
+            </Link>
+          }
+        />
 
         <Button
-          asChild={true}
+          nativeButton={false}
           className="animate-fade-in-2 opacity-0 [--animation-delay:600ms]"
           variant="outline"
-        >
-          <Link href="/plans">
-            <Icons.Plans className="size-4" />
-            Kontynuuj bez logowania
-          </Link>
-        </Button>
+          render={
+            <Link href="/plans">
+              <Icons.Plans className="size-4" />
+              Kontynuuj bez logowania
+            </Link>
+          }
+        />
       </div>
     );
   }
@@ -96,13 +98,14 @@ async function JoinUsBlock() {
     <div className="flex items-center justify-center gap-3">
       <Button
         className="animate-fade-in-2 opacity-0 [--animation-delay:500ms]"
-        asChild={true}
-      >
-        <Link href="/plans">
-          <Icons.Plans className="size-4" />
-          Przejdź do swoich planów
-        </Link>
-      </Button>
+        nativeButton={false}
+        render={
+          <Link href="/plans">
+            <Icons.Plans className="size-4" />
+            Przejdź do swoich planów
+          </Link>
+        }
+      />
     </div>
   );
 }

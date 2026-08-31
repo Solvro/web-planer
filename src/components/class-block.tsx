@@ -89,77 +89,80 @@ export function ClassBlock({
   const isLoggedIn = session.data !== null;
 
   return (
-    <Tooltip delayDuration={500}>
-      <TooltipTrigger asChild={true}>
-        <button
-          suppressHydrationWarning={true}
-          disabled={isDisabled}
-          onClick={isReadonly ? undefined : onClick}
-          style={
-            isHorizontal
-              ? {
-                  gridRowStart: startGrid,
-                  gridRowEnd: `span ${durationSpan.toString()}`,
-                }
-              : {
-                  gridColumnStart: startGrid,
-                  gridColumnEnd: `span ${durationSpan.toString()}`,
-                }
-          }
-          className={cn(
-            position,
-            typeBgColors[courseType],
-            `border-l-3 relative flex flex-col justify-between overflow-hidden truncate rounded-md p-2 text-left shadow-md`,
-            isChecked
-              ? "cursor-pointer"
-              : isDisabled
-                ? "opacity-20 dark:opacity-10"
-                : "cursor-pointer opacity-60 dark:opacity-40",
-            isReadonly ? "cursor-default" : null,
-            isHorizontal ? "w-40" : null,
-            className,
-          )}
-        >
-          <div
+    <Tooltip>
+      <TooltipTrigger
+        delay={500}
+        render={
+          <button
+            suppressHydrationWarning={true}
+            disabled={isDisabled}
+            onClick={isReadonly ? undefined : onClick}
+            style={
+              isHorizontal
+                ? {
+                    gridRowStart: startGrid,
+                    gridRowEnd: `span ${durationSpan.toString()}`,
+                  }
+                : {
+                    gridColumnStart: startGrid,
+                    gridColumnEnd: `span ${durationSpan.toString()}`,
+                  }
+            }
             className={cn(
-              "absolute inset-y-0 left-0 top-0 w-[4px]",
-              typeBarColors[courseType],
+              position,
+              typeBgColors[courseType],
+              `relative flex flex-col justify-between truncate overflow-hidden rounded-md border-l-3 p-2 text-left shadow-md`,
+              isChecked
+                ? "cursor-pointer"
+                : isDisabled
+                  ? "opacity-20 dark:opacity-10"
+                  : "cursor-pointer opacity-60 dark:opacity-40",
+              isReadonly ? "cursor-default" : null,
+              isHorizontal ? "w-40" : null,
+              className,
             )}
-          ></div>
-          <div className="flex w-full justify-between">
-            <div className="flex gap-1">
-              <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
-            </div>
-            <p>{`Grupa ${groupNumber}`}</p>
-          </div>
-          <div>
-            <p className="truncate font-bold">{courseName}</p>
-            <p className="truncate font-semibold">{lecturer}</p>
-          </div>
-          <p className="mt-2 flex w-full justify-between truncate">
-            <Icons.UsersRound className="size-3" />
-            <span
+          >
+            <div
               className={cn(
-                "font-bold",
-                spotsOccupied >= spotsTotal ? "text-red-500" : null,
+                "absolute inset-y-0 top-0 left-0 w-[4px]",
+                typeBarColors[courseType],
               )}
-            >
-              {spotsOccupied}/{spotsTotal}
-            </span>
-          </p>
-          {isLoggedIn ? (
-            <div className={"flex w-full justify-between truncate"}>
-              <StarsRating
-                rating={averageRating > 0 ? averageRating : 1}
-                hideStars={durationSpan < 10}
-              />
-              <p className="font-bold">
-                {averageRating} ({opinionsCount})
-              </p>
+            ></div>
+            <div className="flex w-full justify-between">
+              <div className="flex gap-1">
+                <p>{`${courseType} ${week === "" ? "" : `|${week}`}`}</p>
+              </div>
+              <p>{`Grupa ${groupNumber}`}</p>
             </div>
-          ) : null}
-        </button>
-      </TooltipTrigger>
+            <div>
+              <p className="truncate font-bold">{courseName}</p>
+              <p className="truncate font-semibold">{lecturer}</p>
+            </div>
+            <p className="mt-2 flex w-full justify-between truncate">
+              <Icons.UsersRound className="size-3" />
+              <span
+                className={cn(
+                  "font-bold",
+                  spotsOccupied >= spotsTotal ? "text-red-500" : null,
+                )}
+              >
+                {spotsOccupied}/{spotsTotal}
+              </span>
+            </p>
+            {isLoggedIn ? (
+              <div className={"flex w-full justify-between truncate"}>
+                <StarsRating
+                  rating={averageRating > 0 ? averageRating : 1}
+                  hideStars={durationSpan < 10}
+                />
+                <p className="font-bold">
+                  {averageRating} ({opinionsCount})
+                </p>
+              </div>
+            ) : null}
+          </button>
+        }
+      />
       {disableTooltip === false && (
         <TooltipContent>
           <p>

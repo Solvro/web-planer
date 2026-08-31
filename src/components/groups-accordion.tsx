@@ -39,7 +39,7 @@ export function GroupsAccordionItem({
           <Icons.X className="size-4" />
         </Button>
         <AccordionTrigger className="px-4 hover:no-underline">
-          <span className="text-balance text-left text-sm">
+          <span className="text-left text-sm text-balance">
             {registrationName}
           </span>
         </AccordionTrigger>
@@ -51,7 +51,7 @@ export function GroupsAccordionItem({
             <Checkbox
               className="h-5 w-5"
               onCheckedChange={(c) => {
-                onCheckAll(c.valueOf() === true);
+                onCheckAll(c);
               }}
               checked={courses.every((c) => c.isChecked)}
             />
@@ -62,12 +62,12 @@ export function GroupsAccordionItem({
             <div className="grid grid-cols-[1fr_5fr] items-center justify-between rounded-md p-4 py-2 text-base transition-colors hover:cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-100/20">
               <div
                 className={cn(
-                  "flex size-[45px] items-center justify-center rounded-full bg-secondary",
+                  "bg-secondary flex size-[45px] items-center justify-center rounded-full",
                 )}
               >
                 <GraduationCap className="size-5" />
               </div>
-              <label className="ml-4 flex h-full items-center justify-between text-wrap leading-tight hover:cursor-pointer">
+              <label className="ml-4 flex h-full items-center justify-between leading-tight text-wrap hover:cursor-pointer">
                 {course.name}
 
                 <Checkbox

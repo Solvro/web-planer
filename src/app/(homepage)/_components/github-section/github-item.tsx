@@ -43,11 +43,11 @@ export function GithubItem({
       animate={controls}
       transition={{ staggerChildren: 0.1 }}
     >
-      <div className="container relative mx-auto max-w-7xl px-4 py-16">
+      <div className="relative container mx-auto max-w-7xl px-4 py-16">
         <div className="mx-auto space-y-4 pb-6 text-center">
           <motion.h2
             variants={childVariants}
-            className="font-mono text-sm font-medium uppercase tracking-wider text-primary"
+            className="text-primary font-mono text-sm font-medium tracking-wider uppercase"
           >
             autorzy
           </motion.h2>
@@ -63,17 +63,18 @@ export function GithubItem({
           <AvatarCircles contributors={contributors} />
           <Icons.FlexyArrow className="mt-12" />
           <Button
-            className="group mt-4 bg-primary text-white ring-amber-500 ring-offset-2 transition-all hover:bg-blue-600 hover:ring-2 dark:bg-white dark:text-black dark:hover:bg-slate-200"
+            className="group bg-primary mt-4 text-white ring-amber-500 ring-offset-2 transition-all hover:bg-blue-600 hover:ring-2 dark:bg-white dark:text-black dark:hover:bg-slate-200"
             size="lg"
-            asChild
-          >
-            <Link href="https://github.com/Solvro/web-planer" target="_blank">
-              <Icons.Github className="size-4" />
-              Walnij nam gwiazdkę
-              <Icons.StarFilledIcon className="text-slate-300 transition-all group-hover:text-amber-500 dark:text-slate-600" />
-              {stars}
-            </Link>
-          </Button>
+            nativeButton={false}
+            render={
+              <Link href="https://github.com/Solvro/web-planer" target="_blank">
+                <Icons.Github className="size-4" />
+                Walnij nam gwiazdkę
+                <Icons.StarFilledIcon className="text-slate-300 transition-all group-hover:text-amber-500 dark:text-slate-600" />
+                {stars}
+              </Link>
+            }
+          />
         </motion.div>
       </div>
     </motion.section>

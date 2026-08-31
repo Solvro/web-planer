@@ -184,7 +184,7 @@ export function AppSidebar({
               <PlanDisplayLink />
             </div>
 
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Ostatnia aktualizacja online:{" "}
               {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
             </p>
@@ -202,7 +202,7 @@ export function AppSidebar({
             <Label htmlFor="faculty" className="mb-1">
               Wydział
             </Label>
-            <Select
+            <Select<string>
               name="faculty"
               onValueChange={(v) => {
                 setFaculty(v);
@@ -295,7 +295,7 @@ export function AppSidebar({
           ) : null}
 
           <div className="flex w-full flex-1 flex-col overflow-y-scroll">
-            <Accordion type="single" collapsible={true}>
+            <Accordion>
               {plan.registrations.map((registration) => (
                 <GroupsAccordionItem
                   key={registration.id}
@@ -318,7 +318,7 @@ export function AppSidebar({
           </div>
         </div>
       </SidebarContent>
-      <Alerts className="mt-4 py-3 animate-in fade-in slide-in-from-left" />
+      <Alerts className="animate-in fade-in slide-in-from-left mt-4 py-3" />
     </Sidebar>
   );
 }

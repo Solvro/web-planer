@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
-    <TooltipProvider delayDuration={0}>
+    <TooltipProvider delay={0}>
       <FeedbackProvider>
         <ShareProvider>
           <QueryClientProvider client={queryClient}>
