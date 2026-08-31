@@ -13,7 +13,6 @@ import type { LecturerDTO } from "@/actions/v2/get-lecturer";
 import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
 import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
 import { ClassSchedule } from "@/components/class-schedule";
-import { Icons } from "@/components/icons";
 import { PlanOrientationButton } from "@/components/plan-orientation-button";
 import {
   Dialog,
@@ -123,7 +122,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
   const {
     data: onlinePlan,
     refetch: refetchOnlinePlan,
-    isLoading,
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
   } = useQuery({
     queryKey: ["onlinePlan", plan.onlineId],
@@ -259,16 +257,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <Icons.Loader size={64} className="text-primary mb-4 animate-spin" />
-        <h1 className="text-lg font-medium">Ładowanie twojego planu...</h1>
-        <p className="text-muted-foreground text-xs">To potrwa tylko chwilkę</p>
-      </div>
-    );
-  }
 
   return (
     <>
