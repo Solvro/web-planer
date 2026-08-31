@@ -144,10 +144,14 @@ export function PlanItem({
 
   const handleCacheOnlinePlan = () => {
     if (plan.onlineId !== null) {
-      void queryClient.prefetchQuery({
-        queryKey: ["onlinePlan", plan.onlineId],
-        queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
-      });
+      queryClient
+        .query({
+          queryKey: ["onlinePlan", plan.onlineId],
+          queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
+        })
+        .catch(() => {
+          // ignore prefetch errors, the real fetch will surface them
+        });
     }
   };
 

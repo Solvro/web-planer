@@ -12,7 +12,7 @@ export default function AppearancePage() {
     <>
       <div>
         <h3 className="text-lg font-medium">Wygląd</h3>
-        <h2 className="text-sm text-muted-foreground">
+        <h2 className="text-muted-foreground text-sm">
           Wybierz preferowany motyw strony.
         </h2>
       </div>
@@ -26,9 +26,9 @@ export default function AppearancePage() {
           >
             <div
               className={cn(
-                "items-center rounded-md border-2 border-muted p-1",
+                "border-muted items-center rounded-md border-2 p-1",
                 {
-                  "ring-2 ring-ring ring-offset-2 ring-offset-background":
+                  "ring-ring ring-offset-background ring-2 ring-offset-2":
                     theme === "light",
                 },
               )}
@@ -48,7 +48,7 @@ export default function AppearancePage() {
                 </div>
               </div>
             </div>
-            <span className="font-cal mt-3 text-sm font-light text-muted-foreground">
+            <span className="font-cal text-muted-foreground mt-3 text-sm font-light">
               Jasny
             </span>
           </button>
@@ -59,9 +59,9 @@ export default function AppearancePage() {
           >
             <div
               className={cn(
-                "items-center rounded-md border-2 border-muted p-1",
+                "border-muted items-center rounded-md border-2 p-1",
                 {
-                  "ring-2 ring-ring ring-offset-2 ring-offset-background":
+                  "ring-ring ring-offset-background ring-2 ring-offset-2":
                     theme === "dark",
                 },
               )}
@@ -81,7 +81,7 @@ export default function AppearancePage() {
                 </div>
               </div>
             </div>
-            <span className="font-cal mt-3 text-sm font-light text-muted-foreground">
+            <span className="font-cal text-muted-foreground mt-3 text-sm font-light">
               Ciemny
             </span>
           </button>
@@ -93,9 +93,9 @@ export default function AppearancePage() {
             <div className="relative">
               <div
                 className={cn(
-                  "items-center rounded-md border-2 border-muted p-1",
+                  "border-muted items-center rounded-md border-2 p-1",
                   {
-                    "ring-2 ring-ring ring-offset-2 ring-offset-background":
+                    "ring-ring ring-offset-background ring-2 ring-offset-2":
                       theme === "system",
                   },
                 )}
@@ -116,12 +116,12 @@ export default function AppearancePage() {
                 </div>
               </div>
               <div
-                className="absolute bottom-0 left-0 right-0 top-0"
+                className="absolute top-0 right-0 bottom-0 left-0"
                 style={{
                   clipPath: "polygon(100% 0, 0 0, 100% 100%)",
                 }}
               >
-                <div className="items-center rounded-md border-2 border-muted bg-popover p-1">
+                <div className="border-muted bg-popover items-center rounded-md border-2 p-1">
                   <div className="space-y-2 rounded-sm bg-zinc-950 p-2">
                     <div className="space-y-2 rounded-md bg-zinc-800 p-2 shadow-sm">
                       <div className="h-2 w-[80px] rounded-lg bg-zinc-400"></div>
@@ -139,7 +139,7 @@ export default function AppearancePage() {
                 </div>
               </div>
             </div>
-            <span className="font-cal mt-3 text-sm font-light text-muted-foreground">
+            <span className="font-cal text-muted-foreground mt-3 text-sm font-light">
               System
             </span>
           </button>

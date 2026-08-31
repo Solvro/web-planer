@@ -43,7 +43,6 @@ export function PlansPage({
   const plansExistingLocallyAndDeletedOnline = plans.filter(
     (plan) =>
       plan.onlineId !== null &&
-      // eslint-disable-next-line react-you-might-not-need-an-effect/no-event-handler
       !onlinePlans.some((p) => p.id === plan.onlineId),
   );
 
@@ -62,7 +61,6 @@ export function PlansPage({
 
   useEffect(() => {
     if (firstTime.current && plansExistingLocallyAndDeletedOnline.length > 0) {
-      // eslint-disable-next-line react-you-might-not-need-an-effect/no-pass-data-to-parent
       handleDeleteDeletedPlans();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

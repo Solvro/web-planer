@@ -5,10 +5,7 @@ import { getOrSetRedis } from "@/lib/redis/get-set";
 import { fetchUsosApi } from "@/lib/usos";
 
 export type CourseRegistrationStatus =
-  | "register_and_unregister"
-  | "unregister_only"
-  | "closed"
-  | "register_only";
+  "register_and_unregister" | "unregister_only" | "closed" | "register_only";
 
 interface UsosRoundCourse {
   course: {

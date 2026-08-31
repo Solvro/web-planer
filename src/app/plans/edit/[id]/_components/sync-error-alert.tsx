@@ -44,12 +44,12 @@ export function SyncErrorAlert({
   return (
     <div
       className={cn(
-        "flex w-full flex-col rounded-md bg-primary/10 transition-all",
+        "bg-primary/10 flex w-full flex-col rounded-md transition-all",
       )}
     >
       <div className="flex w-full items-start justify-start p-4 pb-2">
         <div className="">
-          <h1 className="text-lg font-bold text-primary">
+          <h1 className="text-primary text-lg font-bold">
             Wystąpił konflikt w chmurze!
           </h1>
           <p className="text-xs font-medium text-black/90 dark:text-white">

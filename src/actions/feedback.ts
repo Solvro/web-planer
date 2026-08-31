@@ -1,6 +1,6 @@
 "use server";
 
-import type { z } from "zod";
+import type * as z from "zod";
 
 import { env } from "@/env.mjs";
 import { feedbackFormSchema } from "@/types/schemas";

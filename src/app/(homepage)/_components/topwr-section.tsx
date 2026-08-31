@@ -31,12 +31,12 @@ export function ToPWrSection() {
 
   return (
     <section
-      className="relative overflow-hidden rounded-t-xl bg-background"
+      className="bg-background relative overflow-hidden rounded-t-xl"
       id="topwr"
     >
       <div className="relative z-10 rounded-t-xl bg-orange-500/20 py-16 dark:bg-orange-900/50">
         <motion.div
-          className="container relative mx-auto max-w-7xl px-4 py-16"
+          className="relative container mx-auto max-w-7xl px-4 py-16"
           variants={parentVariants}
           ref={ref}
           initial="hidden"
@@ -46,7 +46,7 @@ export function ToPWrSection() {
           <div className="mx-auto space-y-4 pb-6 text-center">
             <motion.h2
               variants={childVariants}
-              className="font-mono text-sm font-semibold uppercase tracking-wider text-orange-500"
+              className="font-mono text-sm font-semibold tracking-wider text-orange-500 uppercase"
             >
               Jesteś studentem politechniki wrocławskiej?
             </motion.h2>
@@ -65,14 +65,14 @@ export function ToPWrSection() {
             </motion.h3>
             <motion.p
               variants={childVariants}
-              className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-6 text-slate-600 dark:text-slate-300"
+              className="mx-auto mt-6 max-w-2xl text-lg leading-6 text-balance text-slate-600 dark:text-slate-300"
             >
               Znajdziesz w niej wszystkie potrzebne informacje o parkingach,
               menu w SKS, mapie kampusu i wiele więcej.
             </motion.p>
           </div>
 
-          <div className="flex w-full flex-col items-center justify-center space-y-4 pt-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+          <div className="flex w-full flex-col items-center justify-center space-y-4 pt-4 sm:flex-row sm:space-y-0 sm:space-x-4">
             <motion.div
               variants={childVariants}
               className="mt-4 flex items-center gap-2"
