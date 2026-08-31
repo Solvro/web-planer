@@ -96,7 +96,6 @@ export interface CreatePlanResponseType {
 
 export interface PlanResponseType {
   name: string;
-  //sharedId: string | null;
   userId: string;
   id: string;
   createdAt: string;

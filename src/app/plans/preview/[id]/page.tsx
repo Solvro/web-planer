@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import React from "react";
 
-import { env } from "@/env.mjs";
-import type { SharedPlan } from "@/types";
+import { getSharedPlan } from "@/actions/plans";
 
 import { SharePlanPage } from "./page.client";
 
@@ -21,25 +20,11 @@ export default async function SharePlan({ params }: PageProps) {
     return notFound();
   }
 
-  const result = await fetch(`${env.SITE_URL}/api/v2/shared/${id}`, {
-    method: "GET",
-  })
-    .then(
-      async (response) =>
-        response.json() as Promise<{
-          success: boolean;
-          plan: SharedPlan;
-        } | null>,
-    )
-    .catch(() => null);
+  const result = await getSharedPlan({ id });
 
-  if (result?.success === false || result === null) {
+  if (result === null) {
     return notFound();
   }
 
-  const plan = JSON.parse(
-    result.plan.plan as unknown as string,
-  ) as SharedPlan["plan"];
-
-  return <SharePlanPage plan={plan} />;
+  return <SharePlanPage plan={result.plan} />;
 }
