@@ -1,5 +1,6 @@
 import OtpEmail from "@emails/otp-email";
 import { betterAuth } from "better-auth";
+import { emailVerificationProtocol } from "better-auth-evp";
 import { usosAuth } from "better-auth-usos";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -37,7 +38,11 @@ export const auth = betterAuth({
   account: {
     accountLinking: {
       enabled: true,
-      trustedProviders: ["usos-auth", "email-otp"],
+      trustedProviders: [
+        "usos-auth",
+        "email-otp",
+        "email-verification-protocol",
+      ],
     },
   },
   plugins: [
@@ -52,6 +57,10 @@ export const auth = betterAuth({
       otpLength: 6,
       expiresIn: 300,
       sendVerificationOnSignUp: false,
+    }),
+    emailVerificationProtocol({
+      origin: env.SITE_URL,
+      allowedEmailDomains: ["pwr.edu.pl", "student.pwr.edu.pl"],
     }),
     usosAuth({
       usosBaseUrl: env.USOS_APPS_URL,
