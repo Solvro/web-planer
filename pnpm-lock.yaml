@@ -43,9 +43,6 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      crypto-js:
-        specifier: ^4.2.0
-        version: 4.2.0
       date-fns:
         specifier: ^4.4.0
         version: 4.4.0
@@ -155,9 +152,6 @@ importers:
       "@trivago/prettier-plugin-sort-imports":
         specifier: ^6.0.2
         version: 6.0.2(prettier@3.9.6)
-      "@types/crypto-js":
-        specifier: ^4.2.2
-        version: 4.2.2
       "@types/node":
         specifier: ^26.4.0
         version: 26.4.0
@@ -3459,12 +3453,6 @@ packages:
     resolution:
       {
         integrity: sha512-mFNylyeyqN93lfe/9CSxOGREz8cpzAhH+E93xJ4xWQf62V8sQ/24reV2nyzUWM6H6Xji+GGHpkbLe7pVoUEskg==,
-      }
-
-  "@types/crypto-js@4.2.2":
-    resolution:
-      {
-        integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==,
       }
 
   "@types/estree@1.0.9":
@@ -10587,8 +10575,6 @@ snapshots:
   "@types/cors@2.8.19":
     dependencies:
       "@types/node": 26.4.0
-
-  "@types/crypto-js@4.2.2": {}
 
   "@types/estree@1.0.9": {}
 
