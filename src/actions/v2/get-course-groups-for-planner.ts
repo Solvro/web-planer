@@ -10,6 +10,7 @@ import type { ClassgroupDate } from "@/types";
 import { getClassgroupDatesAction } from "./get-class-group-dates";
 import type { CourseGroupDTO } from "./get-course-edition-details";
 import { getCourseEditionDetailsAction } from "./get-course-edition-details";
+import { getGroupSpotsAction } from "./get-group-spots";
 import type { LecturerDTO } from "./get-lecturer";
 import { getTermAction } from "./get-term";
 
@@ -19,6 +20,8 @@ export interface PlannerGroupDTO {
   classtypeId: string;
   lecturers: LecturerDTO[];
   schedulePattern: GroupSchedulePattern | null;
+  spotsOccupied: number;
+  spotsTotal: number;
 }
 
 function toClassgroupDates(
@@ -60,8 +63,13 @@ async function fetchGroupWithPattern(
 ): Promise<{
   group: CourseGroupDTO;
   schedulePattern: GroupSchedulePattern | null;
+  spotsOccupied: number;
+  spotsTotal: number;
 }> {
-  const dates = await getClassgroupDatesAction(group.unitId, group.groupNumber);
+  const [dates, spots] = await Promise.all([
+    getClassgroupDatesAction(group.unitId, group.groupNumber),
+    getGroupSpotsAction(group.unitId, group.groupNumber),
+  ]);
   const classgroupDates = toClassgroupDates(dates);
   const schedulePattern = buildGroupSchedulePattern(classgroupDates);
   if (schedulePattern?.pattern === "biweekly") {
@@ -73,6 +81,8 @@ async function fetchGroupWithPattern(
   return {
     group,
     schedulePattern,
+    spotsOccupied: spots.spotsOccupied,
+    spotsTotal: spots.spotsTotal,
   };
 }
 
@@ -88,11 +98,15 @@ export async function getPlannerCourseGroupsAction(
     ),
   );
 
-  return groupsWithPatterns.map(({ group, schedulePattern }) => ({
-    unitId: group.unitId,
-    groupNumber: group.groupNumber,
-    classtypeId: group.classtypeId,
-    lecturers: group.lecturers,
-    schedulePattern,
-  }));
+  return groupsWithPatterns.map(
+    ({ group, schedulePattern, spotsOccupied, spotsTotal }) => ({
+      unitId: group.unitId,
+      groupNumber: group.groupNumber,
+      classtypeId: group.classtypeId,
+      lecturers: group.lecturers,
+      schedulePattern,
+      spotsOccupied,
+      spotsTotal,
+    }),
+  );
 }

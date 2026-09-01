@@ -55,15 +55,19 @@ export const useSavePlan = ({
 
     if (response.status === "SUCCESS") {
       const { updatedRegistrations, updatedCourses, updatedAt } = response;
-      plan.setPlan({
-        ...plan,
+      plan.setPlan((previous) => ({
+        ...previous,
         registrations: updatedRegistrations,
-        courses: updatedCourses,
+        courses: updatedCourses.filter((course) =>
+          updatedRegistrations.some(
+            (registration) => registration.id === course.registrationId,
+          ),
+        ),
         synced: true,
         toCreate: false,
-        name: onlinePlan?.name ?? plan.name,
+        name: onlinePlan?.name ?? previous.name,
         updatedAt,
-      });
+      }));
     } else {
       toast.error(response.message, {
         duration: 10_000,
