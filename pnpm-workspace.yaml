@@ -8,4 +8,4 @@ allowBuilds:
   sharp: true
 
 minimumReleaseAgeExclude:
-  - better-auth-evp@0.1.0 || 1.0.1 || 1.0.2
+  - better-auth-evp@0.1.0 || 1.0.1 || 1.0.2 || 1.0.7
