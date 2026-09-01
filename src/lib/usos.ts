@@ -1,4 +1,4 @@
-import CryptoJS, { HmacSHA1 } from "crypto-js";
+import { createHmac } from "node:crypto";
 import OAuth from "oauth-1.0a";
 
 const USOS_APPS_URL =
@@ -7,8 +7,7 @@ const USOS_CONSUMER_KEY = process.env.USOS_CONSUMER_KEY ?? "";
 const USOS_CONSUMER_SECRET = process.env.USOS_CONSUMER_SECRET ?? "";
 
 function createHmacSha1Base64(baseString: string, key: string) {
-  const hmac: CryptoJS.lib.WordArray = HmacSHA1(baseString, key);
-  return CryptoJS.enc.Base64.stringify(hmac);
+  return createHmac("sha1", key).update(baseString).digest("base64");
 }
 
 const oauth = new OAuth({
