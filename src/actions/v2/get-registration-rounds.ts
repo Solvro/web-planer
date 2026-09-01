@@ -33,7 +33,7 @@ export async function getRegistrationRoundsAction(
   return getOrSetRedis({
     redis,
     key: `usos:registration_rounds:${registrationId}`,
-    ttlSeconds: 60,
+    ttlSeconds: 60 * 5,
     fetcher: async () => {
       const data = await fetchUsosApi<UsosRegistrationRound[]>(
         `registrations/course_registration_rounds`,

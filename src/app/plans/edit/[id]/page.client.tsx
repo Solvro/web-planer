@@ -177,8 +177,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
             courseId: course.courseId,
             createdAt: "",
             updatedAt: "",
-            spotsOccupied: course.registrationsCount,
-            spotsTotal: course.limits,
+            spotsOccupied: group.spotsOccupied,
+            spotsTotal: group.spotsTotal,
             isActive: true,
             url: "",
             lecturer: getLecturersString(group.lecturers),
@@ -245,7 +245,11 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
       if (isChanged) {
         plan.setPlan((previous) => ({
           ...previous,
-          courses: updatedCourses,
+          courses: updatedCourses.filter((course) =>
+            previous.registrations.some(
+              (registration) => registration.id === course.registrationId,
+            ),
+          ),
         }));
       }
     }
