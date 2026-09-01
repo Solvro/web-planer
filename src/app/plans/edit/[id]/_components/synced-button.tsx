@@ -66,7 +66,7 @@ export function SyncedButton({
         render={
           <Button
             size="icon"
-            variant="outline"
+            variant="ghost"
             className="min-w-10"
             onClick={() => {
               if (!isEqualsDates) {

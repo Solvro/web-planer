@@ -10,9 +10,16 @@ import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
 import { Icons } from "@/components/icons";
 import { PlanItem } from "@/components/plan-item";
+import { Button } from "@/components/ui/button";
 
 const plansAtom = atom(
-  (get) => get(plansIds).map((id) => get(planFamily(id))),
+  (get) => {
+    const ids = get(plansIds);
+    const uniqueIds = ids.filter(
+      (value, index) => ids.findIndex((v) => v.id === value.id) === index,
+    );
+    return uniqueIds.map((id) => get(planFamily(id)));
+  },
   (_get, set, values: { id: string }[]) => {
     set(plansIds, values);
   },
@@ -67,27 +74,39 @@ export function PlansPage({
   }, [plansExistingLocallyAndDeletedOnline]);
 
   return (
-    <div className="container mx-auto max-h-full flex-1 grow overflow-y-auto p-4 pt-24">
-      <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        <button
-          onClick={addNewPlan}
-          className="group hover:border-primary hover:bg-primary/5 flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:shadow-xl dark:border-gray-800"
-        >
-          <Icons.Plus className="group-hover:text-primary h-24 w-24 text-gray-400 transition-colors dark:text-gray-600" />
-        </button>
-        {plans.map((plan) =>
-          onlinePlans.some((onlinePlan) => onlinePlan.id === plan.id) ? null : (
-            <PlanItem
-              key={plan.id}
-              id={plan.id}
-              name={plan.name}
-              synced={plan.synced}
-              onlineId={plan.onlineId}
-            />
-          ),
-        )}
-        {onlinePlans.map((plan) => {
-          return (
+    <div className="container mx-auto max-h-full flex-1 grow overflow-y-auto p-4 pt-20">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">Moje plany</h1>
+          {plans.length > 0 ? (
+            <p className="text-muted-foreground text-sm">
+              Ostatnio edytowany{" "}
+              {new Date(
+                Math.max(...plans.map((p) => new Date(p.updatedAt).getTime())),
+              ).toLocaleString("pl-PL")}
+            </p>
+          ) : null}
+        </div>
+        <Button onClick={addNewPlan}>
+          <Icons.Plus className="size-4" />
+          Nowy plan
+        </Button>
+      </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {plans.map((plan) => (
+          <PlanItem
+            key={plan.id}
+            id={plan.id}
+            name={plan.name}
+            synced={plan.synced}
+            onlineId={plan.onlineId}
+          />
+        ))}
+        {onlinePlans
+          .filter(
+            (onlinePlan) => !plans.some((plan) => plan.id === onlinePlan.id),
+          )
+          .map((plan) => (
             <PlanItem
               key={plan.id}
               id={plan.id}
@@ -100,8 +119,7 @@ export function PlansPage({
               registrationsCount={plan.registrationsCount}
               updatedAt={new Date(plan.updatedAt)}
             />
-          );
-        })}
+          ))}
       </div>
     </div>
   );

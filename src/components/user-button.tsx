@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import React, { useMemo } from "react";
 
@@ -15,8 +16,15 @@ import { Icons } from "./icons";
 import { Badge } from "./ui/badge";
 import { SignOutButton } from "./ui/signout-button";
 
+const THEME_LABEL: Record<string, string> = {
+  light: "jasny",
+  dark: "ciemny",
+  system: "automatyczny",
+};
+
 export function UserButton({ profile }: { profile: User }) {
   const [opened, setOpened] = React.useState(false);
+  const { theme } = useTheme();
 
   return (
     <DropdownMenu open={opened} onOpenChange={setOpened}>
@@ -48,32 +56,30 @@ export function UserButton({ profile }: { profile: User }) {
               </Badge>
             </div>
           </div>
-          <Link href="/plans/account" className="w-full">
-            <button
-              className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 border-t p-4 py-4 transition-all"
-              onClick={() => {
-                setOpened(false);
-              }}
-            >
-              <div className="mr-1 flex w-[40px] items-center justify-center">
-                <Icons.Settings className="h-4 w-4" />
-              </div>
-              <h2 className="text-sm font-medium">Ustawienia</h2>
-            </button>
-          </Link>
-          <Link href="/plans/account/calendar" className="w-full">
-            <button
-              className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 border-t p-4 py-4 transition-all"
-              onClick={() => {
-                setOpened(false);
-              }}
-            >
-              <div className="mr-1 flex w-[40px] items-center justify-center">
-                <Icons.CircleHelp className="h-4 w-4" />
-              </div>
-              <h2 className="text-sm font-medium">Jak dodać do kalendarza?</h2>
-            </button>
-          </Link>
+          <MenuLink
+            href="/plans/account"
+            icon={<Icons.Settings className="h-4 w-4" />}
+            label="Ustawienia konta"
+            onNavigate={() => {
+              setOpened(false);
+            }}
+          />
+          <MenuLink
+            href="/plans/account/appearance"
+            icon={<Icons.Palette className="h-4 w-4" />}
+            label={`Motyw: ${THEME_LABEL[theme ?? "system"]}`}
+            onNavigate={() => {
+              setOpened(false);
+            }}
+          />
+          <MenuLink
+            href="/plans/account/calendar"
+            icon={<Icons.CircleHelp className="h-4 w-4" />}
+            label="Jak dodać do kalendarza?"
+            onNavigate={() => {
+              setOpened(false);
+            }}
+          />
           <SignOutButton
             render={
               <button className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 rounded-b-lg border-t border-b p-4 py-4 shadow-sm transition-all dark:hover:shadow-black/50">
@@ -95,6 +101,32 @@ export function UserButton({ profile }: { profile: User }) {
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function MenuLink({
+  href,
+  icon,
+  label,
+  onNavigate,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  onNavigate: () => void;
+}) {
+  return (
+    <Link href={href} className="w-full">
+      <button
+        className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 border-t p-4 py-4 transition-all"
+        onClick={onNavigate}
+      >
+        <div className="mr-1 flex w-[40px] items-center justify-center">
+          {icon}
+        </div>
+        <h2 className="text-sm font-medium">{label}</h2>
+      </button>
+    </Link>
   );
 }
 

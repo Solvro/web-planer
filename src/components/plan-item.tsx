@@ -11,6 +11,7 @@ import { toast } from "sonner";
 
 import { deletePlan, getPlan } from "@/actions/plans";
 import { plansIds } from "@/atoms/plans-ids";
+import { TYPE_BAR } from "@/components/schedule/type-colors";
 import {
   Dialog,
   DialogContent,
@@ -28,20 +29,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { usePlan } from "@/lib/use-plan";
-import { pluralize } from "@/lib/utils";
+import { cn, pluralize } from "@/lib/utils";
 import { generateICSFile } from "@/lib/utils/generate-ics-file";
 
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { StatusIcon } from "./ui/status-icon";
+import { Card } from "./ui/card";
 
 export function PlanItem({
   id,
@@ -79,42 +72,34 @@ export function PlanItem({
   const copyPlan = () => {
     setDropdownOpened(false);
 
-    const newPlan = {
-      id: uuidToCopy,
-    };
+    if (!plans.some((p) => p.id === uuidToCopy)) {
+      void window.umami?.track("Create plan", {
+        numberOfPlans: plans.length,
+      });
 
-    void window.umami?.track("Create plan", {
-      numberOfPlans: plans.length,
-    });
+      setPlans([...plans, { id: uuidToCopy }]);
+      planToCopy.setPlan({
+        ...planToCopy,
+        courses: plan.courses,
+      });
+    }
 
-    setPlans([...plans, newPlan]);
-    planToCopy.setPlan({
-      ...planToCopy,
-      courses: plan.courses,
-    });
-
-    setTimeout(() => {
-      router.push(`/plans/edit/${newPlan.id}`);
-    }, 200);
+    router.push(`/plans/edit/${uuidToCopy}`);
   };
 
   const createFromOnlinePlan = () => {
-    const newPlan = {
-      id,
-    };
+    if (!plans.some((p) => p.id === id)) {
+      setPlans([...plans, { id }]);
+      plan.setPlan({
+        ...plan,
+        id,
+        onlineId,
+        name,
+        createdAt: new Date(),
+      });
+    }
 
-    setPlans([...plans, newPlan]);
-    plan.setPlan({
-      ...plan,
-      id,
-      onlineId,
-      name,
-      createdAt: new Date(),
-    });
-
-    setTimeout(() => {
-      router.push(`/plans/edit/${newPlan.id}`);
-    }, 200);
+    router.push(`/plans/edit/${id}`);
   };
 
   const handleDeletePlan = async () => {
@@ -133,13 +118,30 @@ export function PlanItem({
     router.refresh();
   };
 
-  const groupCountLocal = plan.courses
-    .flatMap((c) => c.groups)
-    .filter((group) => group.isChecked).length;
+  const allLocalGroups = plan.courses.flatMap((c) => c.groups);
+  const groupCountLocal = allLocalGroups.filter(
+    (group) => group.isChecked,
+  ).length;
+  const totalGroupsLocal = allLocalGroups.length;
 
   const registrationsLength = plan.registrations.length;
   const coursesLength = plan.courses.length;
+  const coursesTotal = coursesCount || coursesLength;
+  const hasLocalSelectionData = totalGroupsLocal > 0;
+  const coursesWithSelectionLocal = new Set(
+    allLocalGroups
+      .filter((group) => group.isChecked)
+      .map((group) => group.courseId),
+  ).size;
+  const groupsTotal = groupsCount || totalGroupsLocal;
+  const groupsSelected = groupsCount || groupCountLocal;
   const queryClient = useQueryClient();
+
+  const usedTypes = [
+    ...new Set(
+      allLocalGroups.filter((g) => g.isChecked).map((g) => g.courseType),
+    ),
+  ];
 
   const handleCacheOnlinePlan = () => {
     if (plan.onlineId !== null) {
@@ -148,9 +150,7 @@ export function PlanItem({
           queryKey: ["onlinePlan", plan.onlineId],
           queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
         })
-        .catch(() => {
-          // ignore prefetch errors, the real fetch will surface them
-        });
+        .catch(() => false);
     }
   };
 
@@ -163,21 +163,41 @@ export function PlanItem({
 
   return (
     <Card
-      className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md"
+      className="relative flex flex-col gap-3 p-4 shadow-sm transition-all hover:shadow-md"
       ref={ref}
     >
-      <CardHeader className="space-y-1 p-2 min-[520px]:p-4">
-        <CardTitle className="w-5/6 text-sm leading-2 text-balance min-[520px]:text-lg min-[520px]:leading-4">
-          {name}
-        </CardTitle>
-        <CardDescription>
-          {format(
-            onlineOnly ? updatedAt : plan.createdAt,
-            "dd.MM.yyyy - HH:mm",
+      <div className="flex items-start justify-between gap-2">
+        <p className="min-w-0 truncate text-lg font-semibold">{name}</p>
+        <span
+          className={cn(
+            "shrink-0 rounded-full px-2 py-0.5 text-xs font-medium",
+            onlineOnly || synced
+              ? "bg-status-ready/15 text-status-ready"
+              : "bg-status-pending/15 text-status-pending",
           )}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 p-2 pt-0 text-xs min-[520px]:p-4 min-[520px]:text-sm">
+        >
+          {onlineOnly || synced ? "online" : "lokalny"}
+        </span>
+      </div>
+
+      <div className="bg-muted flex h-1.5 w-full overflow-hidden rounded-full">
+        {usedTypes.length > 0 ? (
+          usedTypes.map((type) => (
+            <span key={type} className={cn("h-full flex-1", TYPE_BAR[type])} />
+          ))
+        ) : groupsSelected > 0 ? (
+          <span
+            className="bg-primary h-full rounded-full"
+            style={{
+              width: `${Math.min((groupsSelected / Math.max(groupsTotal, 1)) * 100, 100).toString()}%`,
+            }}
+          />
+        ) : (
+          <span className="bg-muted h-full w-full" />
+        )}
+      </div>
+
+      <div className="text-muted-foreground flex flex-col gap-0.5 text-sm">
         <p>
           {registrationsCount || registrationsLength}{" "}
           {pluralize(
@@ -185,30 +205,32 @@ export function PlanItem({
             "rejestracja",
             "rejestracje",
             "rejestracji",
-          )}
+          )}{" "}
+          · {coursesTotal} {pluralize(coursesTotal, "kurs", "kursy", "kursów")}
         </p>
         <p>
-          {coursesCount || coursesLength}{" "}
-          {pluralize(coursesCount || coursesLength, "kurs", "kursy", "kursów")}
-        </p>
-        <p className="hidden min-[380px]:block">
-          {groupsCount || groupCountLocal}{" "}
-          {pluralize(
-            groupsCount || groupCountLocal,
-            "wybrana grupa",
-            "wybrane grupy",
-            "wybranych grup",
+          {hasLocalSelectionData ? (
+            <>
+              {coursesWithSelectionLocal} z {coursesTotal}{" "}
+              {pluralize(coursesTotal, "kurs", "kursy", "kursów")} wybranych
+            </>
+          ) : (
+            <>
+              {groupsCount} {pluralize(groupsCount, "grupa", "grupy", "grup")}{" "}
+              wybranych
+            </>
           )}
         </p>
-      </CardContent>
-      <CardFooter className="justify-between gap-2 border-t p-2 min-[520px]:p-3">
+        <p className="text-xs">
+          {format(onlineOnly ? updatedAt : plan.updatedAt, "dd.MM.yyyy, HH:mm")}
+        </p>
+      </div>
+
+      <div className="mt-1 flex items-center justify-between gap-2 border-t pt-3">
         <DropdownMenu open={dropdownOpened} onOpenChange={setDropdownOpened}>
           <DropdownMenuTrigger
             render={
-              <Button
-                variant="secondary"
-                className="h-7 w-7 px-0 min-[520px]:h-9 min-[520px]:w-9"
-              >
+              <Button variant="secondary" className="h-9 w-9 px-0">
                 <Icons.EllipsisVertical className="size-4" />
               </Button>
             }
@@ -240,16 +262,13 @@ export function PlanItem({
           </DropdownMenuContent>
         </DropdownMenu>
         {onlineOnly ? (
-          <Button
-            className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
-            onClick={createFromOnlinePlan}
-          >
+          <Button className="h-9 flex-1" onClick={createFromOnlinePlan}>
             <Icons.Pencil className="h-4 w-4" />
-            <p className="hidden min-[380px]:block">Edytuj</p>
+            Edytuj
           </Button>
         ) : (
           <Button
-            className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
+            className="h-9 flex-1"
             nativeButton={false}
             render={
               <Link href={`/plans/edit/${id}`}>
@@ -259,9 +278,7 @@ export function PlanItem({
             }
           />
         )}
-      </CardFooter>
-
-      <StatusIcon synced={synced} onlineId={onlineId} />
+      </div>
 
       <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
         <DialogContent className="max-w-[425px]" aria-describedby={undefined}>

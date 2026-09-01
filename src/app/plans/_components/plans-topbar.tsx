@@ -12,26 +12,34 @@ import { SidebarTriggerButton } from "./sidebar-trigger-button";
 
 export function PlansTopbar() {
   return (
-    <div className="bg-mainbutton7 fixed inset-x-0 top-0 left-0 z-30 flex w-full items-center justify-between py-4 shadow-sm backdrop-blur-[12px] dark:border-b dark:bg-white/5">
-      <div className="flex w-full items-center justify-between md:container md:mx-auto">
-        <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-white md:w-1/4">
-          <SolvroLogo />
-          <h1 className="hidden text-2xl font-semibold md:block">Planer</h1>
-        </div>
-        <div className="mr-4 flex w-1/4 items-center justify-end">
-          <Suspense fallback={null}>
-            <SidebarTriggerButton />
-          </Suspense>
+    <header className="border-border/60 bg-background/85 fixed inset-x-0 top-0 z-30 border-b backdrop-blur-md">
+      <div className="mx-auto flex h-14 w-full items-center gap-3 px-4">
+        <Link href="/plans" className="flex shrink-0 items-center gap-2">
+          <SolvroLogo href={null} />
+          <span className="hidden text-lg font-semibold sm:block">Planer</span>
+        </Link>
+
+        <div
+          id="plan-header-slot"
+          className="flex min-w-0 flex-1 items-center gap-2"
+        />
+
+        <Suspense fallback={null}>
+          <SidebarTriggerButton />
+        </Suspense>
+
+        <nav className="hidden shrink-0 items-center gap-1 md:flex">
           <Button
             nativeButton={false}
-            variant="ghost"
-            className="hidden text-white hover:bg-blue-200/40 hover:text-white md:flex dark:hover:bg-white/5"
+            variant="secondary"
+            size="sm"
             render={<Link href="/plans">Moje plany</Link>}
           />
           <Button
             nativeButton={false}
             variant="ghost"
-            className="hidden text-white hover:bg-blue-200/40 hover:text-white md:flex dark:hover:bg-white/5"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground"
             render={
               <Link
                 href="https://web.usos.pwr.edu.pl/kontroler.php?_action=news/default&panel=DOMYSLNY&file=zapisyPL.html"
@@ -43,18 +51,15 @@ export function PlansTopbar() {
           />
           <FeedbackButton
             ghost={true}
-            className="mr-2 hidden text-white hover:text-white md:flex"
+            className="text-muted-foreground hover:text-foreground"
           />
-          {/* <ModeToggle className="ml-1 mr-2 min-w-10" /> */}
+        </nav>
 
-          <Suspense
-            fallback={<Skeleton className="size-[40px] rounded-full" />}
-          >
-            <UserProfile />
-          </Suspense>
-        </div>
+        <Suspense fallback={<Skeleton className="size-9 rounded-full" />}>
+          <UserProfile />
+        </Suspense>
       </div>
-    </div>
+    </header>
   );
 }
 

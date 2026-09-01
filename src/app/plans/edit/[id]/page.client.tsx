@@ -12,8 +12,8 @@ import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for
 import type { LecturerDTO } from "@/actions/v2/get-lecturer";
 import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
 import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
-import { ClassSchedule } from "@/components/class-schedule";
-import { PlanOrientationButton } from "@/components/plan-orientation-button";
+import { ScheduleBoard } from "@/components/schedule/schedule-board";
+import { WeekGrid } from "@/components/schedule/week-grid";
 import {
   Dialog,
   DialogContent,
@@ -22,17 +22,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SidebarInset } from "@/components/ui/sidebar";
-import { usePlanOrientation } from "@/hooks/use-plan-orientation";
 import { useSavePlan } from "@/hooks/use-save-plan";
 import { useSession } from "@/hooks/use-session";
 import { useShare } from "@/hooks/use-share";
-//import { fetchClient } from "@/lib/fetch";
 import { usePlan } from "@/lib/use-plan";
-import { cn } from "@/lib/utils";
 import type { ScheduleParity } from "@/lib/utils/build-group-schedule-pattern";
 import { updateSpotsOccupied } from "@/lib/utils/update-spots-occupied";
-import { Day } from "@/types";
-import type { CourseType, SingleCourse /*SingleGroup*/ } from "@/types";
+import type { CourseType, SingleCourse } from "@/types";
 
 import { DownloadPlanButton } from "../../_components/download-button";
 import { SharePlanButton } from "../../_components/share-plan-button";
@@ -40,10 +36,6 @@ import { AppSidebar } from "./_components/app-sidebar";
 import { HideDaysSettings } from "./_components/hide-days-settings";
 import { SaveOfflineFunction } from "./_components/save-offline";
 import { SaveOnlineFunction } from "./_components/save-online";
-
-//TODO: usunac zakomentowane importy i logi, moze przeniesc funkcje pomocnicza?
-//Dodac walidacje group schedule pattern starttime/endtime
-//zajetosc grup
 
 const getDayOfWeek = (startTime: string) => {
   const date = new Date(startTime).getDay();
@@ -80,7 +72,6 @@ const getLecturersString = (lecturers: LecturerDTO[]): string => {
   for (const l of lecturers) {
     output += `${l.firstName} ${l.lastName}`;
   }
-  //console.log("Wykladowcy", output)
   return output;
 };
 
@@ -117,7 +108,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
 
   const router = useRouter();
   const plan = usePlan({ planId });
-  const { isHorizontal } = usePlanOrientation();
 
   const {
     data: onlinePlan,
@@ -164,10 +154,8 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
           groups: [],
           registrationId,
         };
-        //console.log("przed zmianami", groups)
         index = 0;
         for (const group of groups) {
-          //console.log("grupa", group)
           newCourse.groups.push({
             id: `${course.courseId}_group_${index.toString()}`,
             name: course.courseName,
@@ -277,51 +265,15 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
         offlineAlert={offlineAlert}
         faculty={faculty}
       />
-      <SidebarInset className="mr-1 w-full overflow-x-auto overflow-y-auto bg-transparent pt-[72px]">
-        <div className="ml-2 flex h-full w-full flex-1 grow flex-col items-start md:ml-0 md:w-auto">
-          <div
-            className={cn(
-              "flex flex-auto gap-3",
-              isHorizontal ? "flex-row" : "h-0 flex-col",
-            )}
-          >
-            {[
-              { day: Day.MONDAY, label: "Poniedziałek" },
-              { day: Day.TUESDAY, label: "Wtorek" },
-              { day: Day.WEDNESDAY, label: "Środa" },
-              { day: Day.THURSDAY, label: "Czwartek" },
-              { day: Day.FRIDAY, label: "Piątek" },
-            ].map(({ day, label }) => (
-              <ClassSchedule
-                key={day}
-                day={label}
-                selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
-                groups={plan.allGroups.filter(
-                  (g) => (g.day.toLocaleLowerCase() as Day) === day,
-                )}
-                onSelectGroup={(groupdId) => {
-                  plan.selectGroup(groupdId);
-                }}
-              />
-            ))}
-            {[
-              { day: Day.SATURDAY, label: "Sobota" },
-              { day: Day.SUNDAY, label: "Niedziela" },
-            ].map(
-              ({ day, label }) =>
-                plan.allGroups.some((g) => g.day === day) && (
-                  <ClassSchedule
-                    key={day}
-                    day={label}
-                    selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
-                    groups={plan.allGroups.filter((g) => g.day === day)}
-                    onSelectGroup={(groupdId) => {
-                      plan.selectGroup(groupdId);
-                    }}
-                  />
-                ),
-            )}
-          </div>
+      <SidebarInset className="mr-1 w-full overflow-x-auto overflow-y-auto bg-transparent pt-14">
+        <div className="ml-2 flex h-full w-full flex-1 grow flex-col items-start p-2 md:ml-0 md:w-auto">
+          <ScheduleBoard
+            allGroups={plan.allGroups}
+            selectedGroups={plan.allGroups.filter((g) => g.isChecked)}
+            onSelectGroup={(groupId) => {
+              plan.selectGroup(groupId);
+            }}
+          />
         </div>
       </SidebarInset>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -335,56 +287,13 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
           </DialogHeader>
           <div className="relative h-full max-h-[800px] overflow-y-auto">
             <HideDaysSettings hideDays={hideDays} setHideDays={setHideDays} />
-            <div
-              ref={captureRef}
-              className={cn(
-                "bg-background relative flex gap-2 p-1",
-                isHorizontal ? "flex-row" : "flex-col",
-              )}
-            >
-              {[
-                { day: Day.MONDAY, label: "Poniedziałek" },
-                { day: Day.TUESDAY, label: "Wtorek" },
-                { day: Day.WEDNESDAY, label: "Środa" },
-                { day: Day.THURSDAY, label: "Czwartek" },
-                { day: Day.FRIDAY, label: "Piątek" },
-              ].map(
-                ({ day, label }) =>
-                  (!hideDays ||
-                    plan.allGroups
-                      .filter((g) => g.isChecked)
-                      .some((g) => g.day === day)) && (
-                    <ClassSchedule
-                      key={day}
-                      day={label}
-                      isReadonly={true}
-                      selectedGroups={[]}
-                      groups={plan.allGroups.filter(
-                        (g) => g.day === day && g.isChecked,
-                      )}
-                      onSelectGroup={(groupdId) => {
-                        plan.selectGroup(groupdId);
-                      }}
-                    />
-                  ),
-              )}
-              {[
-                { day: Day.SATURDAY, label: "Sobota" },
-                { day: Day.SUNDAY, label: "Niedziela" },
-              ].map(
-                ({ day, label }) =>
-                  plan.allGroups.some((g) => g.day === day) && (
-                    <ClassSchedule
-                      key={day}
-                      day={label}
-                      isReadonly={true}
-                      selectedGroups={[]}
-                      groups={plan.allGroups.filter(
-                        (g) => g.day === day && g.isChecked,
-                      )}
-                    />
-                  ),
-              )}
+            <div ref={captureRef} className="bg-background relative p-1">
+              <WeekGrid
+                allGroups={plan.allGroups.filter((g) => g.isChecked)}
+                selectedGroups={[]}
+                isReadonly={true}
+                onlyDaysWithGroups={hideDays}
+              />
 
               <div className="absolute right-0 bottom-4 z-20 opacity-10">
                 <div className="ml-4 flex items-center gap-4 text-2xl font-bold text-black md:w-1/4 dark:text-white">
@@ -416,7 +325,6 @@ export function CreateNewPlanPage({ planId }: { planId: string }) {
               exit={{ opacity: 0, y: -30 }}
               className="bg-background/50 absolute right-8 bottom-6 z-20 flex flex-col items-center gap-2 rounded-xl border px-3 py-2 shadow-md backdrop-blur-[12px] md:flex-row md:rounded-full"
             >
-              <PlanOrientationButton icon={true} />
               <DownloadPlanButton
                 plan={plan}
                 captureRef={captureRef}

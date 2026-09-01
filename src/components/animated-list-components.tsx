@@ -3,9 +3,9 @@
 import Image from "next/image";
 
 import { AnimatedList } from "@/components/magicui/animated-list";
+import { TYPE_BAR, TYPE_BG } from "@/components/schedule/type-colors";
 import { cn } from "@/lib/utils";
 
-import { ClassBlock } from "./class-block";
 import { Marquee } from "./magicui/marquee";
 
 /* eslint-disable react/no-array-index-key */
@@ -162,21 +162,46 @@ export function AnimatedNotificationsDemo({
   );
 }
 
+function DemoClassCard({
+  startTime,
+  endTime,
+  groupNumber,
+  courseName,
+  lecturer,
+  courseType,
+  spotsOccupied,
+  spotsTotal,
+}: (typeof courses)[number]) {
+  return (
+    <div
+      className={cn(
+        "relative flex w-[400px] transform-gpu flex-col gap-1 overflow-hidden rounded-lg border-l-4 p-3 text-left text-sm shadow-sm blur-[1px] transition-all duration-300 ease-out hover:blur-none",
+        TYPE_BG[courseType],
+      )}
+    >
+      <span
+        className={cn("absolute inset-y-0 left-0 w-1", TYPE_BAR[courseType])}
+      />
+      <div className="flex items-center justify-between text-xs font-semibold uppercase">
+        <span>{courseType}</span>
+        <span>
+          {startTime}–{endTime} · grupa {groupNumber}
+        </span>
+      </div>
+      <p className="truncate font-bold">{courseName}</p>
+      <p className="text-muted-foreground truncate">{lecturer}</p>
+      <p className="text-muted-foreground text-xs font-semibold">
+        {spotsOccupied}/{spotsTotal} miejsc
+      </p>
+    </div>
+  );
+}
+
 export function AnimatedGroupsDemo({ className }: { className?: string }) {
   return (
     <Marquee pauseOnHover className={className}>
       {courses.map((f, index) => (
-        <ClassBlock
-          key={`${f.courseName}-${index.toString()}`}
-          {...f}
-          isChecked
-          isDisabled
-          disableTooltip
-          className={cn(
-            f.className,
-            "w-[400px] transform-gpu blur-[1px] transition-all duration-300 ease-out hover:blur-none",
-          )}
-        />
+        <DemoClassCard key={`${f.courseName}-${index.toString()}`} {...f} />
       ))}
     </Marquee>
   );

@@ -1,21 +1,18 @@
-/* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
 "use client";
 
 import type { UseMutationResult } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { isEqual } from "date-fns";
-import { format } from "date-fns/format";
+import { format, isEqual } from "date-fns";
 import React, { useEffect } from "react";
 
 import { FACULTIES } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
 import { Alerts } from "@/components/alerts";
-import { AlgorithmDialog } from "@/components/algo-dialog";
-import { GroupsAccordionItem } from "@/components/groups-accordion";
+import { Icons } from "@/components/icons";
 import { PlanDisplayLink } from "@/components/plan-display-link";
-import { PlanOrientationButton } from "@/components/plan-orientation-button";
 import { RegistrationCombobox } from "@/components/registration-combobox";
-import { Accordion } from "@/components/ui/accordion";
+import { TopbarPortal } from "@/components/topbar-portal";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -32,10 +29,16 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { usePlanType } from "@/lib/use-plan";
-import { registrationReplacer } from "@/lib/utils";
+import { cn, registrationReplacer } from "@/lib/utils";
+import {
+  collidingGroupIds,
+  detectCollisions,
+} from "@/lib/utils/detect-collisions";
+import { generateICSFile } from "@/lib/utils/generate-ics-file";
 import { serverToLocalPlan } from "@/lib/utils/server-to-local-plan";
 import type { CourseType, PlanResponseType } from "@/types";
 
+import { CourseList } from "./course-list";
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
 import { SyncedButton } from "./synced-button";
@@ -96,12 +99,7 @@ export function AppSidebar({
     }
 
     for (const onlineRegistration of plan.registrations) {
-      if (
-        !returned.includes({
-          value: onlineRegistration.id,
-          label: registrationReplacer(onlineRegistration.name),
-        })
-      ) {
+      if (!returned.some((r) => r.value === onlineRegistration.id)) {
         returned.push({
           value: onlineRegistration.id,
           label: registrationReplacer(onlineRegistration.name),
@@ -112,6 +110,7 @@ export function AppSidebar({
     return returned;
   };
 
+  /* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
   useEffect(() => {
     if (
       onlinePlan !== undefined &&
@@ -122,186 +121,213 @@ export function AppSidebar({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onlinePlan]);
+  /* eslint-enable react-you-might-not-need-an-effect/no-event-handler */
+
+  const collisions = detectCollisions(
+    plan.allGroups.filter((g) => g.isChecked),
+  );
+  const collidingIds = collidingGroupIds(collisions);
+
+  const isSynced = isEqual(
+    plan.updatedAt,
+    new Date(onlinePlan == null ? plan.updatedAt : onlinePlan.updatedAt),
+  );
 
   return (
-    <Sidebar className="pt-20">
-      <SidebarHeader />
-      <SidebarContent>
-        <div className="flex max-h-screen w-full flex-none flex-col items-center justify-center gap-2 px-2 md:ml-4 md:w-[350px] md:flex-col">
-          {offlineAlert ? <OfflineAlert /> : null}
-          {isLoggedIn && onlinePlan !== null ? (
-            <SyncErrorAlert
-              onlinePlan={onlinePlan}
-              planDate={plan.updatedAt}
-              downloadChanges={handleUpdateLocalPlan}
-              sendChanges={handleSyncPlan}
+    <>
+      <TopbarPortal>
+        <form
+          className="flex max-w-md min-w-0 flex-1 items-center gap-2"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            // eslint-disable-next-line @typescript-eslint/no-base-to-string
+            plan.changeName(formData.get("name")?.toString() ?? "");
+            inputRef.current?.blur();
+          }}
+        >
+          <Input
+            ref={inputRef}
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Wolne poniedziałki"
+            defaultValue={typeof window === "undefined" ? "" : plan.name}
+            onChange={(event) => {
+              plan.changeName(event.currentTarget.value);
+            }}
+            className="border-border bg-card/60 min-w-0 flex-1 rounded-lg text-sm font-medium"
+          />
+          <span
+            className={cn(
+              "hidden shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap sm:inline-flex",
+              isSynced
+                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                : "border-amber-500/20 bg-amber-500/10 text-amber-400",
+            )}
+          >
+            <span
+              className={cn(
+                "size-1.5 rounded-full",
+                isSynced ? "bg-emerald-400" : "bg-amber-400",
+              )}
             />
-          ) : null}
-
-          <div className="flex w-full flex-col justify-start gap-3">
-            <div className="flex w-full items-end gap-1">
-              <div className="flex w-full items-end gap-1">
-                <form
-                  className="flex w-full items-center justify-center"
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                    plan.changeName(formData.get("name")?.toString() ?? "");
-                    inputRef.current?.blur();
-                  }}
-                >
-                  <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="name">Nazwa</Label>
-                    <Input
-                      ref={inputRef}
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="Wolne poniedziałki"
-                      defaultValue={
-                        typeof window === "undefined" ? "" : plan.name
-                      }
-                      onChange={(event) => {
-                        plan.changeName(event.currentTarget.value);
-                      }}
-                    />
-                  </div>
-                </form>
-              </div>
-              <SyncedButton
-                plan={plan}
-                isSyncing={syncing}
-                isEqualsDates={isEqual(
-                  plan.updatedAt,
-                  new Date(
-                    onlinePlan == null ? plan.updatedAt : onlinePlan.updatedAt,
-                  ),
-                )}
+            {isSynced
+              ? `Zapisano ${format(plan.updatedAt, "HH:mm")}`
+              : "Niezapisane zmiany"}
+          </span>
+          <SyncedButton
+            plan={plan}
+            isSyncing={syncing}
+            isEqualsDates={isSynced}
+          />
+        </form>
+      </TopbarPortal>
+      <Sidebar className="pt-16">
+        <SidebarHeader />
+        <SidebarContent>
+          <div className="flex max-h-screen w-full flex-none flex-col gap-3 px-3 md:ml-4 md:w-[360px]">
+            {offlineAlert ? <OfflineAlert /> : null}
+            {isLoggedIn && onlinePlan !== null ? (
+              <SyncErrorAlert
+                onlinePlan={onlinePlan}
+                planDate={plan.updatedAt}
+                downloadChanges={handleUpdateLocalPlan}
+                sendChanges={handleSyncPlan}
               />
+            ) : null}
+
+            <div className="flex gap-2">
               <PlanDisplayLink />
-            </div>
-
-            <p className="text-muted-foreground text-xs">
-              Ostatnia aktualizacja online:{" "}
-              {format(plan.updatedAt, "dd.MM.yyyy HH:mm")}
-            </p>
-
-            <div className="flex items-center gap-2">
-              <AlgorithmDialog
-                availableCourses={plan.courses}
-                planId={plan.id}
-              />
-              <PlanOrientationButton />
-            </div>
-          </div>
-
-          <div className="w-full">
-            <Label htmlFor="faculty" className="mb-1">
-              Wydział
-            </Label>
-            <Select<string>
-              name="faculty"
-              onValueChange={(v) => {
-                setFaculty(v);
-              }}
-            >
-              <SelectTrigger
-                className="pl-2"
-                disabled={registrations.isLoading}
-              >
-                <SelectValue placeholder="Wybierz swój wydział" />
-              </SelectTrigger>
-              <SelectContent className="max-w-full">
-                {FACULTIES.map((f) => (
-                  <SelectItem
-                    className="mr-2 max-w-full truncate"
-                    key={f.value}
-                    value={f.value}
-                  >
-                    {registrationReplacer(f.name)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          {registrations.isLoading ? (
-            <Skeleton className="h-[40px] w-full rounded-sm" />
-          ) : (registrations.data !== undefined &&
-              registrations.data.length > 0) ||
-            plan.registrations.length > 0 ? (
-            <div className="w-full">
-              <Label htmlFor="registration">Rejestracja</Label>
-              <RegistrationCombobox
-                name="registration"
-                registrations={mergeRegistrationsWithOnline()}
-                selectedRegistrations={plan.registrations.map((r) => r.id)}
-                onSelect={(registrationId) => {
-                  if (registrations.data === undefined) {
-                    return;
-                  }
-                  const selectedRegistration = registrations.data.find(
-                    (r) => r.id === registrationId,
-                  );
-                  if (selectedRegistration === undefined) {
-                    return;
-                  }
-
-                  if (
-                    plan.registrations.some(
-                      (r) => r.id === selectedRegistration.id,
-                    )
-                  ) {
-                    plan.removeRegistration(selectedRegistration.id);
-                  } else {
-                    coursesFunction.mutate(selectedRegistration.id, {
-                      onSuccess: (data) => {
-                        const extendedCourses = serverToLocalPlan(
-                          data,
-                          true,
-                          (_course, _group, _meeting) => false,
-                        );
-                        plan.addRegistration(
-                          selectedRegistration,
-                          extendedCourses,
-                        );
-                      },
-                    });
-                  }
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => {
+                  generateICSFile(plan.allGroups, plan.name);
                 }}
-              />
+              >
+                <Icons.Download className="size-4" />
+                Eksport .ics
+              </Button>
             </div>
-          ) : registrations.data?.length === 0 ? (
-            <div className="w-full items-center justify-center">
-              <p className="text-center">Brak wybranych</p>
-            </div>
-          ) : null}
 
-          <div className="flex w-full flex-1 flex-col overflow-y-scroll">
-            <Accordion>
-              {plan.registrations.map((registration) => (
-                <GroupsAccordionItem
-                  key={registration.id}
-                  registrationName={registrationReplacer(registration.name)}
-                  onCourseCheck={(courseId) => {
-                    plan.selectCourse(courseId);
-                  }}
-                  onDelete={() => {
-                    plan.removeRegistration(registration.id);
-                  }}
-                  onCheckAll={(isChecked) => {
-                    plan.checkAllCourses(registration.id, isChecked);
-                  }}
-                  courses={plan.courses.filter((c) => {
-                    return c.registrationId === registration.id;
-                  })}
-                />
-              ))}
-            </Accordion>
+            <div>
+              <Label htmlFor="faculty" className="mb-1">
+                Wydział
+              </Label>
+              <Select<string>
+                name="faculty"
+                onValueChange={(v) => {
+                  setFaculty(v);
+                }}
+              >
+                <SelectTrigger
+                  className="pl-2"
+                  disabled={registrations.isLoading}
+                >
+                  <SelectValue placeholder="Wybierz swój wydział" />
+                </SelectTrigger>
+                <SelectContent className="max-w-full">
+                  {FACULTIES.map((f) => (
+                    <SelectItem
+                      className="mr-2 max-w-full truncate"
+                      key={f.value}
+                      value={f.value}
+                    >
+                      {registrationReplacer(f.name)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium">Rejestracje</p>
+              <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                {plan.registrations.map((registration) => (
+                  <span
+                    key={registration.id}
+                    className="bg-secondary flex items-center gap-1 rounded-full py-1 pr-1 pl-2.5 text-xs"
+                  >
+                    {registrationReplacer(registration.name)}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        plan.removeRegistration(registration.id);
+                      }}
+                      className="hover:bg-background/60 rounded-full p-0.5"
+                    >
+                      <Icons.X className="size-3" />
+                    </button>
+                  </span>
+                ))}
+                {registrations.isLoading ? (
+                  <Skeleton className="h-7 w-24 rounded-full" />
+                ) : (registrations.data?.length ?? 0) > 0 ? (
+                  <RegistrationCombobox
+                    name="registration"
+                    registrations={mergeRegistrationsWithOnline()}
+                    selectedRegistrations={plan.registrations.map((r) => r.id)}
+                    onSelect={(registrationId) => {
+                      if (registrations.data === undefined) {
+                        return;
+                      }
+                      const selectedRegistration = registrations.data.find(
+                        (r) => r.id === registrationId,
+                      );
+                      if (selectedRegistration === undefined) {
+                        return;
+                      }
+
+                      if (
+                        plan.registrations.some(
+                          (r) => r.id === selectedRegistration.id,
+                        )
+                      ) {
+                        plan.removeRegistration(selectedRegistration.id);
+                      } else {
+                        coursesFunction.mutate(selectedRegistration.id, {
+                          onSuccess: (data) => {
+                            const extendedCourses = serverToLocalPlan(
+                              data,
+                              true,
+                              (_course, _group, _meeting) => false,
+                            );
+                            plan.addRegistration(
+                              selectedRegistration,
+                              extendedCourses,
+                            );
+                          },
+                        });
+                      }
+                    }}
+                  />
+                ) : registrations.data?.length === 0 ? (
+                  <p className="text-muted-foreground text-xs">
+                    Brak rejestracji
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            <CourseList
+              registrations={plan.registrations}
+              courses={plan.courses}
+              collidingGroupIds={collidingIds}
+              onToggleGroup={(groupId) => {
+                plan.selectGroup(groupId);
+              }}
+              onToggleCourse={(courseId, isChecked) => {
+                plan.selectCourse(courseId, isChecked);
+              }}
+              onRemoveRegistration={(registrationId) => {
+                plan.removeRegistration(registrationId);
+              }}
+            />
           </div>
-        </div>
-      </SidebarContent>
-      <Alerts className="animate-in fade-in slide-in-from-left mt-4 py-3" />
-    </Sidebar>
+        </SidebarContent>
+        <Alerts className="animate-in fade-in slide-in-from-left mt-4 py-3" />
+      </Sidebar>
+    </>
   );
 }

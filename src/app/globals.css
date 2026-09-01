@@ -34,37 +34,57 @@ layer(base);
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --type-w: 0 66% 40%;
+    --type-l: 217 84% 47%;
+    --type-c: 142 65% 36%;
+    --type-s: 32 87% 43%;
+    --type-p: 289 58% 47%;
+
+    --status-ready: 142 71% 45%;
+    --status-collision: 0 72% 55%;
+    --status-pending: 217 15% 55%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 224 45% 6%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222 38% 10%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 38% 10%;
     --popover-foreground: 210 40% 98%;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 222 30% 15%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 222 30% 15%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 222 30% 16%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 222 25% 18%;
+    --input: 222 25% 18%;
     --ring: 224.3 76.3% 48%;
 
-    --sidebar-background: 240 5.9% 10%;
+    --sidebar-background: 224 45% 7%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent: 222 30% 14%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-border: 222 25% 16%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --type-w: 0 64% 49%;
+    --type-l: 217 83.6% 53.62%;
+    --type-c: 142 55% 43%;
+    --type-s: 32 83% 47%;
+    --type-p: 289 51% 54%;
+
+    --status-ready: 142 60% 55%;
+    --status-collision: 0 75% 65%;
+    --status-pending: 217 15% 60%;
   }
 }
 
@@ -87,14 +107,14 @@ layer(base);
 
 * {
   &::-webkit-scrollbar {
-    width: 6px; /* Szerokość scrollbara */
-    height: 6px; /* Wysokość scrollbara (dla osi X) */
+    width: 6px;
+    height: 6px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: #a0aec0; /* Kolor paska przewijania */
-    border-radius: 8px; /* Zaokrąglenia */
+    background-color: hsl(var(--border));
+    border-radius: 8px;
   }
   &::-webkit-scrollbar-track {
-    background-color: #edf2f7; /* Kolor tła scrollbara */
+    background-color: transparent;
   }
 }

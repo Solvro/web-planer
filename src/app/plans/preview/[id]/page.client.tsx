@@ -8,19 +8,15 @@ import { v4 as uuidv4 } from "uuid";
 
 import { planFamily } from "@/atoms/plan-family";
 import { plansIds } from "@/atoms/plans-ids";
-import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
+import { WeekGrid } from "@/components/schedule/week-grid";
 import { Button } from "@/components/ui/button";
-import { usePlanOrientation } from "@/hooks/use-plan-orientation";
-import { cn } from "@/lib/utils";
 import type { SharedPlan } from "@/types";
-import { Day } from "@/types";
 
 export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const uuid = useMemo(() => uuidv4(), []);
   const [plans, setPlans] = useAtom(plansIds);
   const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
-  const { isHorizontal } = usePlanOrientation();
 
   const router = useRouter();
   const captureRef = useRef<HTMLDivElement>(null);
@@ -47,7 +43,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   };
 
   return (
-    <div className="flex w-full grow flex-col overflow-x-auto pt-20">
+    <div className="flex w-full grow flex-col overflow-x-auto pt-16">
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4 md:px-14">
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 
@@ -59,48 +55,12 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
         </div>
       </div>
 
-      <div
-        ref={captureRef}
-        className={cn(
-          "bg-background flex scrollbar-thin gap-2 p-1",
-          isHorizontal ? "flex-row justify-center" : "flex-col overflow-auto",
-        )}
-      >
-        {[
-          { day: Day.MONDAY, label: "Poniedziałek" },
-          { day: Day.TUESDAY, label: "Wtorek" },
-          { day: Day.WEDNESDAY, label: "Środa" },
-          { day: Day.THURSDAY, label: "Czwartek" },
-          { day: Day.FRIDAY, label: "Piątek" },
-        ].map(({ day, label }) => (
-          <ClassSchedule
-            key={day}
-            day={label}
-            isReadonly={true}
-            selectedGroups={[]}
-            groups={plan.allGroups.filter((g) => g.day === day && g.isChecked)}
-            onSelectGroup={() => {
-              return null;
-            }}
-          />
-        ))}
-        {[
-          { day: Day.SATURDAY, label: "Sobota" },
-          { day: Day.SUNDAY, label: "Niedziela" },
-        ].map(
-          ({ day, label }) =>
-            plan.allGroups.some((g) => g.day === day) && (
-              <ClassSchedule
-                key={day}
-                day={label}
-                isReadonly={true}
-                selectedGroups={[]}
-                groups={plan.allGroups.filter(
-                  (g) => g.day === day && g.isChecked,
-                )}
-              />
-            ),
-        )}
+      <div ref={captureRef} className="bg-background scrollbar-thin p-1">
+        <WeekGrid
+          allGroups={plan.allGroups.filter((g) => g.isChecked)}
+          selectedGroups={[]}
+          isReadonly={true}
+        />
       </div>
     </div>
   );
