@@ -34,6 +34,7 @@
     "better-auth-evp": "^1.0.7",
     "better-auth-usos": "^1.1.1",
     "canvas-confetti": "^1.9.4",
+    "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
