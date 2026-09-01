@@ -1,154 +1,47 @@
-# 🎓 Planer - University Scheduler
+# 🎓 Planer
 
-> Welcome to the repository of the Solvro project, a student organization at the Wrocław University of Science and Technology!
+University schedule planner for Wrocław University of Science and Technology students, built by [KN Solvro](https://solvro.pwr.edu.pl/).
 
 [![Welcome Page](https://i.imgur.com/dVjBfjS.png)](https://planer.solvro.pl)
 
-## 🎯 Project Goal
+**[planer.solvro.pl](https://planer.solvro.pl)** · [Project portfolio](https://solvro.pwr.edu.pl/portfolio/planer/) · [Docs](https://docs.solvro.pl)
 
-The Solvro Planer project aims to create an intuitive and user-friendly application that helps students plan their academic schedule. Our planer is designed to:
+## Stack
 
-- Minimize time spent on manual timetable adjustments
-- Provide full control over your schedule
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
+![Coolify](https://img.shields.io/badge/Coolify-FF0000?style=flat-square&logo=coolify&logoColor=white)
 
-## 👥 Current Team
-
-| Role                                                                  | Member             |
-| --------------------------------------------------------------------- | ------------------ |
-| Project Manager                                                       | @unewMe            |
-| Fullstack Developer / Commander of the Unexpected                     | @D0dii             |
-| Fullstack Developer / Solution Wizard                                 | @olekszczepanowski |
-| Fullstack Developer / Engineer of the Impossible / Everyday Superhero | @qamarq            |
-
-## 🚀 Technologies
-
-- ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-- ![React.js](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-- ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-- ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-- ![Coolify](https://img.shields.io/badge/Coolify-FF0000?style=for-the-badge&logo=coolify&logoColor=white)
-
-## 🔗 Links
-
-[![docs.solvro.pl](https://i.imgur.com/fuV0gra.png)](https://docs.solvro.pl)
-
-- [Live Application](https://planer.solvro.pl)
-- [Project Portfolio](https://solvro.pwr.edu.pl/portfolio/planer/)
-
-## 📊 Analytics
-
-We have analytics available at [our analytics dashboard](https://analytics.solvro.pl/share/FlXFbZth4tByVpog/planer.solvro.pl).
-
-For Solvro Planer version 1.0:
-
-[![Analytics](https://i.imgur.com/My4U8lY.png)](https://i.imgur.com)
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
+## Getting Started
 
 ```bash
-git clone https://github.com/Solvro/web-planer.git
-```
-
-### 2. Install Dependencies
-
-```bash
+git clone git@github.com:Solvro/web-planer.git
 cd web-planer
-npm install
+pnpm install
+cp .env.example .env   # fill in USOS_*, BETTER_AUTH_SECRET, etc.
+docker compose up -d   # postgres + redis
+pnpm dev
 ```
 
-### 3. Configure Environment
+App runs at [localhost:3000](http://localhost:3000).
 
-Create a `.env` file in the `frontend` directory with the following content:
+## Contributing
 
-```env
-SITE_URL=http://localhost:3000
-USOS_CONSUMER_KEY=<your-key>
-USOS_CONSUMER_SECRET=<your-key>
-USOS_BASE_URL=<your-key-default-for-pwr:usos.pwr.edu.pl>
-```
+1. Fork the repo, branch off `main` as `type/short-description` (e.g. `feat/course-filters`, `fix/login-redirect`)
+2. Commit using [Conventional Commits](https://docs.solvro.pl/git-github/solvro#nazewnictwo-commit%C3%B3w) (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `ci:`, `build:`) — commitlint enforces this
+3. Push to your fork, open a PR — CI runs checks automatically
+4. Never push directly to `main`
 
-### 4. Run the Project
+Full workflow: [Solvro GitHub Handbook](https://docs.google.com/document/d/1Sb5lYqYLnYuecS1Essn3YwietsbuLPCTsTuW0EMpG5o/edit?usp=sharing)
 
-```bash
-cd frontend && npm run dev
-```
+## Contributors
 
-### 5. View the Application
+[![Contributors](https://contrib.rocks/image?repo=Solvro/web-planer)](https://github.com/Solvro/web-planer/graphs/contributors)
 
-Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
+## Contact
 
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-- 🐛 Report bugs or suggest improvements
-- 🌟 Request new features
-- 🧪 Test and provide feedback
-
-## 🔄 Git Workflow
-
-> Don't worry if you forget any steps – our automatic GitHub Action will run checks and notify you of any issues.
-
-### 📘 Solvro GitHub Handbook
-
-Check out our [detailed GitHub workflow guide](https://docs.google.com/document/d/1Sb5lYqYLnYuecS1Essn3YwietsbuLPCTsTuW0EMpG5o/edit?usp=sharing).
-
-### 🔐 SSH Setup
-
-For Windows users, follow this [SSH setup tutorial](https://www.youtube.com/watch?v=vExsOTgIOGw).
-
-### 🌿 Feature Development Workflow
-
-1. Checkout and update main:
-
-   ```bash
-   git checkout main
-   git pull origin main
-   git fetch
-   ```
-
-2. Create a feature branch:
-
-   ```bash
-   git checkout -b WEB-x_my_feature_branch
-   ```
-
-3. Make your changes and commit:
-
-   ```bash
-   git add .
-   git commit -m "My changes description"
-   ```
-
-4. Push to remote:
-
-   ```bash
-   git push origin WEB-x_my_feature_branch
-   ```
-
-5. Create a Pull Request on GitHub
-
-### ⚠️ Important Reminders
-
-- Never push directly to the main branch
-- Always commit before checking out to a different branch
-- After successful merge, clean up:
-
-  ```bash
-  git branch -d WEB-x_my_feature_branch
-  git push origin --delete WEB-x_my_feature_branch
-  ```
-
-## 📞 Contact
-
-For questions or suggestions, reach out to us:
-
-- ✉️ Email: <kn.solvro@pwr.edu.pl>
-- 🌐 Website: [solvro.pwr.edu.pl](https://solvro.pwr.edu.pl/)
-- 📘 Facebook: [KN Solvro](https://www.facebook.com/knsolvro)
-
----
-
-Thank you for your interest in our project! 🙌
+📧 [kn.solvro@pwr.edu.pl](mailto:kn.solvro@pwr.edu.pl) · 🌐 [solvro.pwr.edu.pl](https://solvro.pwr.edu.pl/) · 📘 [Facebook](https://www.facebook.com/knsolvro)
