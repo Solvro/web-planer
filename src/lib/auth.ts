@@ -1,3 +1,4 @@
+import { passkey } from "@better-auth/passkey";
 import OtpEmail from "@emails/otp-email";
 import { betterAuth } from "better-auth";
 import { emailVerificationProtocol } from "better-auth-evp";
@@ -85,6 +86,11 @@ export const auth = betterAuth({
         );
         return "/plans";
       },
+    }),
+    passkey({
+      rpID: new URL(env.SITE_URL).hostname,
+      rpName: "Planer Solvro",
+      origin: env.SITE_URL,
     }),
     nextCookies(),
   ],

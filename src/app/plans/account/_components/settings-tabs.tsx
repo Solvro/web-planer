@@ -13,6 +13,11 @@ const TABS = [
     icon: <Icons.User className="size-4" />,
   },
   {
+    title: "Bezpieczeństwo",
+    href: "/plans/account/security",
+    icon: <Icons.Shield className="size-4" />,
+  },
+  {
     title: "Motyw strony",
     href: "/plans/account/appearance",
     icon: <Icons.Palette className="size-4" />,

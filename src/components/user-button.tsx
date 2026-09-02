@@ -75,6 +75,13 @@ export function UserButton({ profile }: { profile: User }) {
               }}
             />
             <MenuButton
+              icon={<Icons.Shield className="h-4 w-4" />}
+              label="Bezpieczeństwo"
+              onClick={() => {
+                openSettings("security");
+              }}
+            />
+            <MenuButton
               icon={<Icons.Palette className="h-4 w-4" />}
               label={`Motyw: ${THEME_LABEL[theme ?? "system"]}`}
               onClick={() => {

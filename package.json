@@ -26,6 +26,7 @@
   "prettier": "@solvro/config/prettier",
   "dependencies": {
     "@base-ui/react": "^1.7.0",
+    "@better-auth/passkey": "1.7.2",
     "@hookform/resolvers": "^5.9.1",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@tanstack/react-query": "^5.102.8",
