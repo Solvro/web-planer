@@ -1,91 +1,79 @@
 "use client";
 
-import { atom, useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 import type { UserSchedulesDTO } from "@/actions/plans";
-import { planFamily } from "@/atoms/plan-family";
-import { plansIds } from "@/atoms/plans-ids";
+import { getPlan } from "@/actions/plans";
+import { localPlansAtom } from "@/atoms/plans-ids";
 import { Icons } from "@/components/icons";
 import { PlanItem } from "@/components/plan-item";
 import { Button } from "@/components/ui/button";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { useLocalPlans } from "@/lib/plan/local-plans";
+import type { StoredPlan } from "@/types";
 
-const plansAtom = atom(
-  (get) => {
-    const ids = get(plansIds);
-    const uniqueIds = ids.filter(
-      (value, index) => ids.findIndex((v) => v.id === value.id) === index,
-    );
-    return uniqueIds.map((id) => get(planFamily(id)));
-  },
-  (_get, set, values: { id: string }[]) => {
-    set(plansIds, values);
-  },
-);
+import PlansLoading from "./loading";
+
 export function PlansPage({
-  plans: onlinePlans,
+  onlinePlans,
 }: {
-  plans: UserSchedulesDTO[];
+  /** Online plans of the signed-in user, null when logged out. */
+  onlinePlans: UserSchedulesDTO[] | null;
 }) {
-  const [plans, setPlans] = useAtom(plansAtom);
+  const hydrated = useHydrated();
+
+  if (!hydrated) {
+    return <PlansLoading />;
+  }
+
+  return <PlansList onlinePlans={onlinePlans} />;
+}
+
+function PlansList({
+  onlinePlans,
+}: {
+  onlinePlans: UserSchedulesDTO[] | null;
+}) {
+  const localPlans = useAtomValue(localPlansAtom);
+  const { create, remove } = useLocalPlans();
   const router = useRouter();
-  const firstTime = useRef(true);
+
+  useRemoveOrphanedLocalPlans(localPlans, onlinePlans, remove);
 
   const addNewPlan = () => {
-    const uuid = crypto.randomUUID();
-    const newPlan = {
-      id: uuid,
-    };
-
     void window.umami?.track("Create plan", {
-      numberOfPlans: plans.length,
+      numberOfPlans: localPlans.length,
     });
-
-    router.push(`/plans/edit/${newPlan.id}`);
-    setPlans([...plans, newPlan]);
+    const plan = create();
+    router.push(`/plans/edit/${plan.id}`);
   };
 
-  const plansExistingLocallyAndDeletedOnline = plans.filter(
-    (plan) =>
-      plan.onlineId !== null &&
-      !onlinePlans.some((p) => p.id === plan.onlineId),
+  const localIds = new Set(localPlans.map((plan) => plan.id));
+  const onlineOnlyPlans = (onlinePlans ?? []).filter(
+    (plan) => !localIds.has(plan.id),
   );
-
-  const handleDeleteDeletedPlans = () => {
-    firstTime.current = false;
-    setPlans(
-      plans.filter(
-        (plan) =>
-          !plansExistingLocallyAndDeletedOnline.some((p) => p.id === plan.id),
-      ),
-    );
-    toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
-      duration: 5000,
-    });
-  };
-
-  useEffect(() => {
-    if (firstTime.current && plansExistingLocallyAndDeletedOnline.length > 0) {
-      handleDeleteDeletedPlans();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plansExistingLocallyAndDeletedOnline]);
+  const lastEdited =
+    localPlans.length > 0
+      ? new Date(
+          Math.max(
+            ...localPlans.map((plan) => new Date(plan.updatedAt).getTime()),
+          ),
+        )
+      : null;
 
   return (
     <div className="container mx-auto max-h-full flex-1 grow overflow-y-auto p-4 pt-20">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Moje plany</h1>
-          {plans.length > 0 ? (
+          {lastEdited === null ? null : (
             <p className="text-muted-foreground text-sm">
-              Ostatnio edytowany{" "}
-              {new Date(
-                Math.max(...plans.map((p) => new Date(p.updatedAt).getTime())),
-              ).toLocaleString("pl-PL")}
+              Ostatnio edytowany {lastEdited.toLocaleString("pl-PL")}
             </p>
-          ) : null}
+          )}
         </div>
         <Button onClick={addNewPlan}>
           <Icons.Plus className="size-4" />
@@ -93,34 +81,64 @@ export function PlansPage({
         </Button>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {plans.map((plan) => (
-          <PlanItem
-            key={plan.id}
-            id={plan.id}
-            name={plan.name}
-            synced={plan.synced}
-            onlineId={plan.onlineId}
-          />
+        {localPlans.map((plan) => (
+          <PlanItem key={plan.id} local={plan} />
         ))}
-        {onlinePlans
-          .filter(
-            (onlinePlan) => !plans.some((plan) => plan.id === onlinePlan.id),
-          )
-          .map((plan) => (
-            <PlanItem
-              key={plan.id}
-              id={plan.id}
-              name={plan.name}
-              synced={true}
-              onlineId={plan.id}
-              onlineOnly={true}
-              groupsCount={plan.groupsCount}
-              coursesCount={plan.coursesCount}
-              registrationsCount={plan.registrationsCount}
-              updatedAt={new Date(plan.updatedAt)}
-            />
-          ))}
+        {onlineOnlyPlans.map((plan) => (
+          <PlanItem key={plan.id} online={plan} />
+        ))}
       </div>
     </div>
   );
+}
+
+/**
+ * Local copies of plans deleted online on another device are dropped once per
+ * visit. Each candidate is re-checked against the server so a stale router
+ * cache never removes a plan that still exists.
+ */
+function useRemoveOrphanedLocalPlans(
+  localPlans: StoredPlan[],
+  onlinePlans: UserSchedulesDTO[] | null,
+  remove: (id: string) => void,
+) {
+  const checked = useRef(false);
+
+  // Reconciling browser storage with server data is a genuine side effect,
+  // not something a parent could do in an event handler.
+  /* eslint-disable react-you-might-not-need-an-effect/no-event-handler, react-you-might-not-need-an-effect/no-pass-data-to-parent */
+  useEffect(() => {
+    if (checked.current || onlinePlans === null) {
+      return;
+    }
+    checked.current = true;
+
+    const onlineIds = new Set(onlinePlans.map((plan) => plan.id));
+    const candidates = localPlans.filter(
+      (plan) => plan.onlineId !== null && !onlineIds.has(plan.onlineId),
+    );
+    if (candidates.length === 0) {
+      return;
+    }
+
+    void (async () => {
+      const results = await Promise.all(
+        candidates.map(async (plan) => ({
+          id: plan.id,
+          exists: (await getPlan({ id: plan.onlineId ?? "" })) !== null,
+        })),
+      );
+      const orphaned = results.filter((result) => !result.exists);
+      if (orphaned.length === 0) {
+        return;
+      }
+      for (const { id } of orphaned) {
+        remove(id);
+      }
+      toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
+        duration: 5000,
+      });
+    })();
+  }, [localPlans, onlinePlans, remove]);
+  /* eslint-enable react-you-might-not-need-an-effect/no-event-handler, react-you-might-not-need-an-effect/no-pass-data-to-parent */
 }

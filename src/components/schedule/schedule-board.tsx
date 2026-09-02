@@ -1,8 +1,8 @@
 "use client";
 
-import type { ExtendedGroup } from "@/atoms/plan-family";
 import { useScheduleView } from "@/hooks/use-schedule-view";
-import { detectCollisions } from "@/lib/utils/detect-collisions";
+import type { Collision } from "@/lib/utils/detect-collisions";
+import type { ExtendedGroup } from "@/types";
 
 import { CollisionBanner } from "./collision-banner";
 import { DayView } from "./day-view";
@@ -13,17 +13,19 @@ import { OrientationSwitch } from "./orientation-switch";
 import { ViewSwitcher } from "./view-switcher";
 import { WeekGrid } from "./week-grid";
 
-export function ScheduleBoard({
-  allGroups,
-  selectedGroups,
-  onSelectGroup,
-}: {
+export interface ScheduleViewProps {
+  /** Every slot that can be shown (all groups of included courses). */
   allGroups: ExtendedGroup[];
+  /** Slots the user picked. */
   selectedGroups: ExtendedGroup[];
-  onSelectGroup: (groupId: string) => void;
-}) {
+  /** Collisions between selected slots, computed once by the owner. */
+  collisions: Collision[];
+  onSelectGroup?: (groupId: string) => void;
+  isReadonly?: boolean;
+}
+
+export function ScheduleBoard(props: ScheduleViewProps) {
   const { viewMode } = useScheduleView();
-  const collisions = detectCollisions(selectedGroups);
 
   return (
     <div className="flex h-full w-full flex-col gap-4">
@@ -34,27 +36,15 @@ export function ScheduleBoard({
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <DensitySwitcher />
-          <CollisionBanner collisions={collisions} />
+          <CollisionBanner collisions={props.collisions} />
         </div>
       </div>
       {viewMode === "week" ? (
-        <WeekGrid
-          allGroups={allGroups}
-          selectedGroups={selectedGroups}
-          onSelectGroup={onSelectGroup}
-        />
+        <WeekGrid {...props} />
       ) : viewMode === "day" ? (
-        <DayView
-          allGroups={allGroups}
-          selectedGroups={selectedGroups}
-          onSelectGroup={onSelectGroup}
-        />
+        <DayView {...props} />
       ) : (
-        <ListView
-          allGroups={allGroups}
-          selectedGroups={selectedGroups}
-          onSelectGroup={onSelectGroup}
-        />
+        <ListView {...props} />
       )}
       <ScheduleLegend />
     </div>

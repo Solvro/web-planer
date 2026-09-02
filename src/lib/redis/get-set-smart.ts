@@ -55,16 +55,24 @@ async function refresh<T>({
   maxStaleSeconds: number;
 }): Promise<T | null> {
   const lockKey = `${key}:lock`;
-  const lockAcquired = await redis.set(lockKey, "1", "EX", lockSeconds, "NX");
+  let lockAcquired: string | null;
+  try {
+    lockAcquired = await redis.set(lockKey, "1", "EX", lockSeconds, "NX");
+  } catch {
+    // Redis unavailable – the caller falls back to fetching without cache.
+    return null;
+  }
 
-  if (!lockAcquired) {
+  if (lockAcquired === null) {
     return null;
   }
 
   try {
     const data = await fetcher();
     const entry: StoredEntry = { data: serialize(data), fetchedAt: Date.now() };
-    await redis.set(key, JSON.stringify(entry), "EX", maxStaleSeconds);
+    await redis
+      .set(key, JSON.stringify(entry), "EX", maxStaleSeconds)
+      .catch(() => null);
     return data;
   } catch {
     return null;

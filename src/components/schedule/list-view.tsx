@@ -1,32 +1,32 @@
 "use client";
 
-import type { ExtendedGroup } from "@/atoms/plan-family";
+import { useMemo } from "react";
+
 import { ALL_DAYS } from "@/constants/days";
 import { cn, pluralize } from "@/lib/utils";
-import {
-  collidingGroupIds,
-  detectCollisions,
-} from "@/lib/utils/detect-collisions";
+import { collidingGroupIds } from "@/lib/utils/detect-collisions";
 
+import type { ScheduleViewProps } from "./schedule-board";
 import { TYPE_BAR, TYPE_LABELS } from "./type-colors";
+import { groupByDay } from "./week-grid";
 
 export function ListView({
-  allGroups,
   selectedGroups,
+  collisions,
   onSelectGroup,
   isReadonly = false,
-}: {
-  allGroups: ExtendedGroup[];
-  selectedGroups: ExtendedGroup[];
-  onSelectGroup?: (groupId: string) => void;
-  isReadonly?: boolean;
-}) {
-  const collisions = detectCollisions(selectedGroups);
-  const collidingIds = collidingGroupIds(collisions);
-
-  const days = ALL_DAYS.filter((d) =>
-    allGroups.some((g) => g.day === d.day && g.isChecked),
+}: ScheduleViewProps) {
+  const collidingIds = useMemo(
+    () => collidingGroupIds(collisions),
+    [collisions],
   );
+  const groupsByDay = useMemo(
+    () => groupByDay(selectedGroups),
+    [selectedGroups],
+  );
+  const collisionsByDay = useMemo(() => groupByDay(collisions), [collisions]);
+
+  const days = ALL_DAYS.filter((d) => groupsByDay.has(d.day));
 
   if (days.length === 0) {
     return (
@@ -39,31 +39,26 @@ export function ListView({
   return (
     <div className="flex flex-col gap-6">
       {days.map(({ day, label }) => {
-        const dayGroups = allGroups
-          .filter((g) => g.day === day && g.isChecked)
-          .toSorted((a, b) => a.startTime.localeCompare(b.startTime));
-        const dayCollisions = collisions.filter((c) => c.day === day);
+        const dayGroups = (groupsByDay.get(day) ?? []).toSorted((a, b) =>
+          a.startTime.localeCompare(b.startTime),
+        );
+        const dayCollisions = collisionsByDay.get(day)?.length ?? 0;
 
         return (
           <div key={day}>
             <div className="mb-2 flex items-center justify-between">
               <h3 className="font-semibold">{label}</h3>
-              {dayCollisions.length > 0 ? (
+              {dayCollisions > 0 ? (
                 <span className="text-status-collision text-xs font-medium">
-                  {dayCollisions.length}{" "}
-                  {pluralize(
-                    dayCollisions.length,
-                    "kolizja",
-                    "kolizje",
-                    "kolizji",
-                  )}
+                  {dayCollisions}{" "}
+                  {pluralize(dayCollisions, "kolizja", "kolizje", "kolizji")}
                 </span>
               ) : null}
             </div>
             <div className="flex flex-col gap-2">
               {dayGroups.map((group) => (
                 <button
-                  key={group.groupId + group.courseId}
+                  key={group.groupId}
                   type="button"
                   onClick={() => {
                     onSelectGroup?.(group.groupId);

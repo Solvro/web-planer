@@ -1,8 +1,7 @@
 "use client";
 
-import type { ExtendedCourse } from "@/atoms/plan-family";
 import { registrationReplacer } from "@/lib/utils";
-import type { Registration } from "@/types";
+import type { ExtendedCourse, Registration } from "@/types";
 
 import { CourseRow } from "./course-row";
 

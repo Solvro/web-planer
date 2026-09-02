@@ -1,9 +1,9 @@
 "use client";
 
-import type { UseMutationResult } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { format, isEqual } from "date-fns";
-import React, { useEffect } from "react";
+import { format } from "date-fns";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { FACULTIES } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
@@ -28,15 +28,17 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { usePlanType } from "@/lib/use-plan";
-import { cn, registrationReplacer } from "@/lib/utils";
+import { exportPlanToIcs } from "@/lib/plan/export-ics";
 import {
-  collidingGroupIds,
-  detectCollisions,
-} from "@/lib/utils/detect-collisions";
-import { generateICSFile } from "@/lib/utils/generate-ics-file";
-import { serverToLocalPlan } from "@/lib/utils/server-to-local-plan";
-import type { CourseType, PlanResponseType } from "@/types";
+  useRegistrationCoursesFetcher,
+  withSelection,
+} from "@/lib/plan/registration-courses";
+import type { PlanHandle } from "@/lib/plan/use-plan";
+import type { usePlanSync } from "@/lib/plan/use-plan-sync";
+import { cn, registrationReplacer } from "@/lib/utils";
+import type { Collision } from "@/lib/utils/detect-collisions";
+import { collidingGroupIds } from "@/lib/utils/detect-collisions";
+import type { Registration } from "@/types";
 
 import { CourseList } from "./course-list";
 import { OfflineAlert } from "./offline-alert";
@@ -45,93 +47,87 @@ import { SyncedButton } from "./synced-button";
 
 export function AppSidebar({
   plan,
-  handleUpdateLocalPlan,
-  handleSyncPlan,
-  onlinePlan,
-  syncing,
-  setFaculty,
-  coursesFunction,
-  inputRef,
-  offlineAlert,
-  faculty,
-  isLoggedIn,
+  sync,
+  collisions,
 }: {
-  isLoggedIn: boolean;
-  plan: usePlanType;
-  handleUpdateLocalPlan: () => Promise<void>;
-  handleSyncPlan: () => Promise<void>;
-  onlinePlan: PlanResponseType | null | undefined;
-  syncing: boolean;
-  setFaculty: React.Dispatch<React.SetStateAction<string | null>>;
-  coursesFunction: UseMutationResult<CourseType, Error, string>;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  offlineAlert: boolean;
-  faculty: string | null;
+  plan: PlanHandle;
+  sync: ReturnType<typeof usePlanSync>;
+  collisions: Collision[];
 }) {
-  const registrations = useQuery({
-    enabled: faculty !== null && faculty !== "",
-    queryKey: ["registrations", faculty],
-    queryFn: async () => {
-      const registrationsDTO = await getFacultyRegistrationsAction(
-        faculty ?? "",
-      );
+  const [faculty, setFaculty] = useState<string | null>(null);
+  const [pendingRegistrationId, setPendingRegistrationId] = useState<
+    string | null
+  >(null);
+  const fetchCourses = useRegistrationCoursesFetcher();
 
-      return registrationsDTO.map((registrationDTO) => {
-        return {
-          id: registrationDTO.id,
-          name: registrationDTO.description,
-          departmentId: faculty ?? "W4N",
-        };
-      });
+  const registrations = useQuery({
+    enabled: faculty !== null,
+    queryKey: ["registrations", faculty],
+    queryFn: async (): Promise<Registration[]> => {
+      const data = await getFacultyRegistrationsAction(faculty ?? "");
+      return data.map((registration) => ({
+        id: registration.id,
+        name: registration.description,
+        departmentId: faculty ?? "",
+      }));
     },
   });
 
-  const mergeRegistrationsWithOnline = () => {
-    const returned: { label: string; value: string }[] = [];
-
-    if (registrations.data !== undefined) {
-      for (const registration of registrations.data) {
-        returned.push({
-          label: registrationReplacer(registration.name),
-          value: registration.id,
-        });
+  const registrationOptions = useMemo(() => {
+    const options = new Map<string, string>();
+    for (const registration of registrations.data ?? []) {
+      options.set(registration.id, registrationReplacer(registration.name));
+    }
+    for (const registration of plan.registrations) {
+      if (!options.has(registration.id)) {
+        options.set(registration.id, registrationReplacer(registration.name));
       }
     }
+    return [...options].map(([value, label]) => ({ value, label }));
+  }, [registrations.data, plan.registrations]);
 
-    for (const onlineRegistration of plan.registrations) {
-      if (!returned.some((r) => r.value === onlineRegistration.id)) {
-        returned.push({
-          value: onlineRegistration.id,
-          label: registrationReplacer(onlineRegistration.name),
-        });
-      }
+  const collidingIds = useMemo(
+    () => collidingGroupIds(collisions),
+    [collisions],
+  );
+
+  // Local-only plans are persisted in the browser on every change.
+  const isSaved = sync.status === "synced" || sync.status === "local-only";
+  const savedLabel =
+    sync.status === "synced"
+      ? `Zapisano ${format(new Date(plan.updatedAt), "HH:mm")}`
+      : sync.status === "local-only"
+        ? "Zapisano lokalnie"
+        : "Niezapisane zmiany";
+
+  const toggleRegistration = async (registrationId: string) => {
+    if (plan.registrations.some((r) => r.id === registrationId)) {
+      plan.removeRegistration(registrationId);
+      return;
+    }
+    const registration = registrations.data?.find(
+      (r) => r.id === registrationId,
+    );
+    if (registration === undefined) {
+      return;
     }
 
-    return returned;
+    setPendingRegistrationId(registrationId);
+    try {
+      const courses = await fetchCourses(registrationId);
+      plan.addRegistration(
+        registration,
+        withSelection(courses, {
+          isCourseChecked: () => true,
+          isGroupChecked: () => false,
+        }),
+      );
+    } catch {
+      toast.error("Nie udało się pobrać kursów dla tej rejestracji");
+    } finally {
+      setPendingRegistrationId(null);
+    }
   };
-
-  /* eslint-disable react-you-might-not-need-an-effect/no-event-handler */
-  useEffect(() => {
-    if (
-      onlinePlan !== undefined &&
-      onlinePlan !== null &&
-      inputRef.current !== null
-    ) {
-      inputRef.current.value = onlinePlan.name;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onlinePlan]);
-  /* eslint-enable react-you-might-not-need-an-effect/no-event-handler */
-
-  const collisions = detectCollisions(
-    plan.allGroups.filter((g) => g.isChecked),
-  );
-  const collidingIds = collidingGroupIds(collisions);
-
-  const isSynced = isEqual(
-    plan.updatedAt,
-    new Date(onlinePlan == null ? plan.updatedAt : onlinePlan.updatedAt),
-  );
 
   return (
     <>
@@ -140,19 +136,19 @@ export function AppSidebar({
           className="flex max-w-md min-w-0 flex-1 items-center gap-2"
           onSubmit={(event) => {
             event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
-            plan.changeName(formData.get("name")?.toString() ?? "");
-            inputRef.current?.blur();
+            (
+              event.currentTarget.elements.namedItem(
+                "name",
+              ) as HTMLInputElement | null
+            )?.blur();
           }}
         >
           <Input
-            ref={inputRef}
             type="text"
             name="name"
             id="name"
             placeholder="Wolne poniedziałki"
-            defaultValue={typeof window === "undefined" ? "" : plan.name}
+            value={plan.name}
             onChange={(event) => {
               plan.changeName(event.currentTarget.value);
             }}
@@ -161,7 +157,7 @@ export function AppSidebar({
           <span
             className={cn(
               "hidden shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap sm:inline-flex",
-              isSynced
+              isSaved
                 ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
                 : "border-amber-500/20 bg-amber-500/10 text-amber-400",
             )}
@@ -169,31 +165,27 @@ export function AppSidebar({
             <span
               className={cn(
                 "size-1.5 rounded-full",
-                isSynced ? "bg-emerald-400" : "bg-amber-400",
+                isSaved ? "bg-emerald-400" : "bg-amber-400",
               )}
             />
-            {isSynced
-              ? `Zapisano ${format(plan.updatedAt, "HH:mm")}`
-              : "Niezapisane zmiany"}
+            {savedLabel}
           </span>
-          <SyncedButton
-            plan={plan}
-            isSyncing={syncing}
-            isEqualsDates={isSynced}
-          />
+          <SyncedButton status={sync.status} />
         </form>
       </TopbarPortal>
       <Sidebar className="pt-16">
         <SidebarHeader />
         <SidebarContent>
           <div className="flex max-h-screen w-full flex-none flex-col gap-3 px-3 md:ml-4 md:w-[360px]">
-            {offlineAlert ? <OfflineAlert /> : null}
-            {isLoggedIn && onlinePlan !== null ? (
+            {sync.offlineAlert ? <OfflineAlert /> : null}
+            {sync.hasConflict && sync.onlinePlan != null ? (
               <SyncErrorAlert
-                onlinePlan={onlinePlan}
-                planDate={plan.updatedAt}
-                downloadChanges={handleUpdateLocalPlan}
-                sendChanges={handleSyncPlan}
+                localUpdatedAt={plan.updatedAt}
+                onlineUpdatedAt={sync.onlinePlan.updatedAt}
+                isPulling={sync.isPulling}
+                isPushing={sync.isPushing}
+                onPull={sync.pull}
+                onPush={sync.push}
               />
             ) : null}
 
@@ -203,7 +195,7 @@ export function AppSidebar({
                 variant="outline"
                 className="flex-1"
                 onClick={() => {
-                  generateICSFile(plan.allGroups, plan.name);
+                  exportPlanToIcs(plan.allGroups, plan.name);
                 }}
               >
                 <Icons.Download className="size-4" />
@@ -215,12 +207,7 @@ export function AppSidebar({
               <Label htmlFor="faculty" className="mb-1">
                 Wydział
               </Label>
-              <Select<string>
-                name="faculty"
-                onValueChange={(v) => {
-                  setFaculty(v);
-                }}
-              >
+              <Select<string> name="faculty" onValueChange={setFaculty}>
                 <SelectTrigger
                   className="pl-2"
                   disabled={registrations.isLoading}
@@ -252,6 +239,7 @@ export function AppSidebar({
                     {registrationReplacer(registration.name)}
                     <button
                       type="button"
+                      aria-label="Usuń rejestrację"
                       onClick={() => {
                         plan.removeRegistration(registration.id);
                       }}
@@ -263,50 +251,22 @@ export function AppSidebar({
                 ))}
                 {registrations.isLoading ? (
                   <Skeleton className="h-7 w-24 rounded-full" />
-                ) : (registrations.data?.length ?? 0) > 0 ? (
-                  <RegistrationCombobox
-                    name="registration"
-                    registrations={mergeRegistrationsWithOnline()}
-                    selectedRegistrations={plan.registrations.map((r) => r.id)}
-                    onSelect={(registrationId) => {
-                      if (registrations.data === undefined) {
-                        return;
-                      }
-                      const selectedRegistration = registrations.data.find(
-                        (r) => r.id === registrationId,
-                      );
-                      if (selectedRegistration === undefined) {
-                        return;
-                      }
-
-                      if (
-                        plan.registrations.some(
-                          (r) => r.id === selectedRegistration.id,
-                        )
-                      ) {
-                        plan.removeRegistration(selectedRegistration.id);
-                      } else {
-                        coursesFunction.mutate(selectedRegistration.id, {
-                          onSuccess: (data) => {
-                            const extendedCourses = serverToLocalPlan(
-                              data,
-                              true,
-                              (_course, _group, _meeting) => false,
-                            );
-                            plan.addRegistration(
-                              selectedRegistration,
-                              extendedCourses,
-                            );
-                          },
-                        });
-                      }
-                    }}
-                  />
-                ) : registrations.data?.length === 0 ? (
+                ) : registrations.data === undefined ? null : registrations.data
+                    .length === 0 ? (
                   <p className="text-muted-foreground text-xs">
                     Brak rejestracji
                   </p>
-                ) : null}
+                ) : (
+                  <RegistrationCombobox
+                    name="registration"
+                    registrations={registrationOptions}
+                    selectedRegistrations={plan.registrations.map((r) => r.id)}
+                    isPending={pendingRegistrationId !== null}
+                    onSelect={(registrationId) => {
+                      void toggleRegistration(registrationId);
+                    }}
+                  />
+                )}
               </div>
             </div>
 
@@ -314,15 +274,9 @@ export function AppSidebar({
               registrations={plan.registrations}
               courses={plan.courses}
               collidingGroupIds={collidingIds}
-              onToggleGroup={(groupId) => {
-                plan.selectGroup(groupId);
-              }}
-              onToggleCourse={(courseId, isChecked) => {
-                plan.selectCourse(courseId, isChecked);
-              }}
-              onRemoveRegistration={(registrationId) => {
-                plan.removeRegistration(registrationId);
-              }}
+              onToggleGroup={plan.selectGroup}
+              onToggleCourse={plan.selectCourse}
+              onRemoveRegistration={plan.removeRegistration}
             />
           </div>
         </SidebarContent>

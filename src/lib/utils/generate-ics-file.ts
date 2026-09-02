@@ -1,223 +1,127 @@
-import type { ExtendedGroup } from "@/atoms/plan-family";
+import type { ExtendedGroup } from "@/types";
 
-const polishToEnglishDays: Record<string, string> = {
-  poniedziałek: "MO",
-  wtorek: "TU",
-  środa: "WE",
-  czwartek: "TH",
-  piątek: "FR",
-  sobota: "SA",
-  niedziela: "SU",
+const CRLF = "\r\n";
+const TIMEZONE = "Europe/Warsaw";
+
+const VTIMEZONE = [
+  "BEGIN:VTIMEZONE",
+  `TZID:${TIMEZONE}`,
+  `X-LIC-LOCATION:${TIMEZONE}`,
+  "BEGIN:DAYLIGHT",
+  "TZOFFSETFROM:+0100",
+  "TZOFFSETTO:+0200",
+  "TZNAME:CEST",
+  "DTSTART:19700329T020000",
+  "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+  "END:DAYLIGHT",
+  "BEGIN:STANDARD",
+  "TZOFFSETFROM:+0200",
+  "TZOFFSETTO:+0100",
+  "TZNAME:CET",
+  "DTSTART:19701025T030000",
+  "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+  "END:STANDARD",
+  "END:VTIMEZONE",
+];
+
+const BACKSLASH = String.fromCodePoint(92);
+
+/** RFC 5545 text escaping. */
+const escapeText = (value: string) =>
+  value
+    .replaceAll(BACKSLASH, BACKSLASH + BACKSLASH)
+    .replaceAll(";", String.raw`\;`)
+    .replaceAll(",", String.raw`\,`)
+    .replaceAll(/\r?\n/g, String.raw`\n`);
+
+/** "YYYY-MM-DD" + "HH:MM" → "YYYYMMDDTHHMM00" (floating local time, qualified with TZID). */
+const toLocalStamp = (date: string, time: string) => {
+  const [hours = "00", minutes = "00"] = time.split(":");
+  return `${date.replaceAll("-", "")}T${hours.padStart(2, "0")}${minutes.padStart(2, "0")}00`;
 };
 
-const englishDays = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
-const changeDateToUTC = (date: Date) => {
-  return date
+const toUtcStamp = (date: Date) =>
+  date
     .toISOString()
     .replaceAll(/[-:]/g, "")
     .replace(/\.\d{3}/, "");
-};
 
-interface Override {
-  date: string;
-  day: string;
-  week: "odd" | "even";
-}
-
-const overrides: Override[] = [
-  {
-    date: "2024-10-07",
-    day: "poniedziałek",
-    week: "even",
-  },
-  {
-    date: "2024-10-08",
-    day: "wtorek",
-    week: "even",
-  },
-  {
-    date: "2024-11-08",
-    day: "piątek",
-    week: "even",
-  },
-  {
-    date: "2024-12-10",
-    day: "wtorek",
-    week: "odd",
-  },
-  {
-    date: "2024-12-11",
-    day: "piątek",
-    week: "odd",
-  },
-  {
-    date: "2025-01-28",
-    day: "wtorek",
-    week: "even",
-  },
-  {
-    date: "2025-01-29",
-    day: "środa",
-    week: "even",
-  },
-  {
-    date: "2025-01-30",
-    day: "czwartek",
-    week: "even",
-  },
-  {
-    date: "2025-01-31",
-    day: "poniedziałek",
-    week: "even",
-  },
-  {
-    date: "2025-02-03",
-    day: "piątek",
-    week: "even",
-  },
-  {
-    date: "2025-02-04",
-    day: "poniedziałek",
-    week: "even",
-  },
-];
-
-const freeDays: { date: string; description: string }[] = [
-  {
-    date: "2024-10-01",
-    description: "Inauguracja Roku Akademickiego - dzień wolny od zajęć",
-  },
-  { date: "2024-10-31", description: "Dzień wolny od zajęć" },
-  { date: "2024-11-01", description: "Święto Wszystkich Świętych" },
-  { date: "2024-11-11", description: "Święto Niepodległości" },
-  {
-    date: "2024-11-15",
-    description: "Święto Politechniki Wrocławskiej - dzień wolny od zajęć",
-  },
-];
-
-const holidayStart = new Date("2024-12-23");
-const holidayEnd = new Date("2025-01-06");
-
-for (
-  let currentDate = new Date(holidayStart);
-  // eslint-disable-next-line no-unmodified-loop-condition
-  currentDate <= holidayEnd;
-  currentDate.setDate(currentDate.getDate() + 1)
-) {
-  freeDays.push({
-    date: currentDate.toISOString().split("T")[0],
-    description: "Ferie świąteczne - dzień wolny od zajęć",
-  });
-}
-
-const isEvenOrOddWeek = (
-  targetDate: Date,
-  referenceDate = new Date("2024-09-30"),
-  referenceIsEven = true,
-): "even" | "odd" => {
-  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
-
-  const diffInMs = targetDate.getTime() - referenceDate.getTime();
-  const diffInWeeks = Math.floor(diffInMs / msPerWeek);
-
-  return (diffInWeeks % 2 === 0) === referenceIsEven ? "even" : "odd";
-};
-
-const extractStartTimeUTCEndTimeUTC = (
-  currentDate: Date,
+function buildEvent(
   group: ExtendedGroup,
-) => {
-  const startDateTime = new Date(currentDate);
-  const endDateTime = new Date(currentDate);
-  const [startHour, startMinute] = group.startTime.split(":").map(Number);
-  const [endHour, endMinute] = group.endTime.split(":").map(Number);
-  startDateTime.setUTCHours(startHour, startMinute, 0, 0);
-  endDateTime.setUTCHours(endHour, endMinute, 0, 0);
-  const startTimeUTC = changeDateToUTC(startDateTime);
-  const endTimeUTC = changeDateToUTC(endDateTime);
-  return { startTimeUTC, endTimeUTC };
-};
+  date: string,
+  stamp: string,
+): string[] {
+  return [
+    "BEGIN:VEVENT",
+    `UID:${group.groupOnlineId}-${date}@planer.solvro.pl`,
+    `DTSTAMP:${stamp}`,
+    `SUMMARY:${escapeText(`${group.courseName} (${group.courseType})`)}`,
+    `DESCRIPTION:${escapeText(`Grupa ${group.groupNumber}${group.lecturer === "" ? "" : ` · ${group.lecturer}`}`)}`,
+    `DTSTART;TZID=${TIMEZONE}:${toLocalStamp(date, group.startTime)}`,
+    `DTEND;TZID=${TIMEZONE}:${toLocalStamp(date, group.endTime)}`,
+    "STATUS:CONFIRMED",
+    "END:VEVENT",
+  ];
+}
 
-export const generateICSFile = (
-  groups: ExtendedGroup[],
-  name: string,
-  startDate = new Date("2024-10-01"),
-  endDate = new Date("2025-02-05"),
-) => {
-  const checkedGroups = groups.filter((group) => group.isChecked);
-  let icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Planer Solvro//NONSGML v1.0//EN\n`;
+export interface IcsExport {
+  content: string;
+  /** Selected groups that were exported. */
+  exportedGroups: number;
+  /** Selected groups without meeting dates (saved before dates were stored). */
+  skippedGroups: number;
+}
 
-  icsContent += `BEGIN:VTIMEZONE\nTZID:Europe/Warsaw\nX-LIC-LOCATION:Europe/Warsaw\nBEGIN:DAYLIGHT\nTZOFFSETFROM:+0100\nTZOFFSETTO:+0200\nTZNAME:CEST\nDTSTART:20240331T020000\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\nEND:DAYLIGHT\nBEGIN:STANDARD\nTZOFFSETFROM:+0200\nTZOFFSETTO:+0100\nTZNAME:CET\nDTSTART:20241027T030000\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\nEND:STANDARD\nEND:VTIMEZONE\n`;
+/**
+ * Builds a calendar with one event per real meeting date of every selected
+ * group. Dates come straight from USOS, so holidays and rescheduled weeks are
+ * already accounted for.
+ */
+function buildIcs(groups: ExtendedGroup[]): IcsExport {
+  const stamp = toUtcStamp(new Date());
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Planer Solvro//NONSGML v2.0//EN",
+    "CALSCALE:GREGORIAN",
+    ...VTIMEZONE,
+  ];
 
-  for (
-    let currentDate = new Date(startDate);
-    // eslint-disable-next-line no-unmodified-loop-condition
-    currentDate <= endDate;
-    currentDate.setDate(currentDate.getDate() + 1)
-  ) {
-    const freeDay = freeDays.find(
-      (day) => day.date === currentDate.toISOString().split("T")[0],
-    );
-    if (freeDay != null) {
+  let exportedGroups = 0;
+  let skippedGroups = 0;
+
+  for (const group of groups) {
+    if (!group.isChecked) {
       continue;
     }
-    for (const group of checkedGroups) {
-      let currentDay = currentDate.getUTCDay();
-      let currentWeek = isEvenOrOddWeek(currentDate);
-
-      const groupDayOfWeek = polishToEnglishDays[group.day.toLowerCase()];
-      if (!groupDayOfWeek) {
-        continue;
-      }
-      const indexOfGroupDay = englishDays.indexOf(groupDayOfWeek);
-
-      const override = overrides.find(
-        (o) => o.date === currentDate.toISOString().split("T")[0],
-      );
-
-      if (override != null) {
-        currentWeek = override.week;
-        const overrideDayOfWeek =
-          polishToEnglishDays[override.day.toLowerCase()];
-        const ovverideIndexOfDay = englishDays.indexOf(overrideDayOfWeek);
-        currentDay = ovverideIndexOfDay;
-      }
-
-      if (indexOfGroupDay !== currentDay) {
-        continue;
-      }
-      if (
-        (group.week === "TP" && currentWeek === "odd") ||
-        (group.week === "TN" && currentWeek === "even")
-      ) {
-        continue;
-      }
-
-      // For one-time classes marked with "!", skip week filtering
-      if (group.week === "!") {
-        // One-time classes appear regardless of week parity
-      }
-
-      const { startTimeUTC, endTimeUTC } = extractStartTimeUTCEndTimeUTC(
-        currentDate,
-        group,
-      );
-      icsContent += `BEGIN:VEVENT\n`;
-      icsContent += `SUMMARY:${group.courseName}\n`;
-      icsContent += `DESCRIPTION:${group.lecturer}\n`;
-      icsContent += `DTSTART;TZID=Europe/Warsaw:${startTimeUTC}\n`;
-      icsContent += `DTEND;TZID=Europe/Warsaw:${endTimeUTC}\n`;
-      icsContent += `STATUS:CONFIRMED\n`;
-      icsContent += `END:VEVENT\n`;
+    const dates = group.dates ?? [];
+    if (dates.length === 0) {
+      skippedGroups++;
+      continue;
+    }
+    exportedGroups++;
+    for (const date of dates) {
+      lines.push(...buildEvent(group, date, stamp));
     }
   }
 
-  icsContent += "END:VCALENDAR\n";
-  const blob = new Blob([icsContent], { type: "text/calendar" });
+  lines.push("END:VCALENDAR");
+  return { content: lines.join(CRLF) + CRLF, exportedGroups, skippedGroups };
+}
+
+export function downloadIcs(groups: ExtendedGroup[], name: string): IcsExport {
+  const result = buildIcs(groups);
+  if (result.exportedGroups === 0) {
+    return result;
+  }
+
+  const blob = new Blob([result.content], { type: "text/calendar" });
+  const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `${name}.ics`;
+  link.href = url;
+  link.download = `${name || "plan"}.ics`;
   link.click();
-};
+  URL.revokeObjectURL(url);
+
+  return result;
+}

@@ -2,14 +2,13 @@
 
 import { useMemo } from "react";
 
-import type { ExtendedGroup } from "@/atoms/plan-family";
 import { ALL_DAYS } from "@/constants/days";
 import { useScheduleDensity } from "@/hooks/use-schedule-density";
 import { useScheduleView } from "@/hooks/use-schedule-view";
 import { cn } from "@/lib/utils";
-import { detectCollisions } from "@/lib/utils/detect-collisions";
 
 import { DayColumn } from "./day-column";
+import type { ScheduleViewProps } from "./schedule-board";
 import {
   DENSITY_MINUTE_HEIGHT,
   buildHourMarks,
@@ -20,30 +19,30 @@ import {
 export function DayView({
   allGroups,
   selectedGroups,
+  collisions,
   onSelectGroup,
   isReadonly = false,
-}: {
-  allGroups: ExtendedGroup[];
-  selectedGroups: ExtendedGroup[];
-  onSelectGroup?: (groupId: string) => void;
-  isReadonly?: boolean;
-}) {
+}: ScheduleViewProps) {
   const { density } = useScheduleDensity();
   const { selectedDay, setSelectedDay } = useScheduleView();
   const minuteHeight = DENSITY_MINUTE_HEIGHT[density];
 
-  const availableDays = useMemo(
-    () => ALL_DAYS.filter((d) => allGroups.some((g) => g.day === d.day)),
-    [allGroups],
-  );
-  const activeDays =
-    availableDays.length > 0 ? availableDays : ALL_DAYS.slice(0, 5);
+  const activeDays = useMemo(() => {
+    const withGroups = ALL_DAYS.filter((d) =>
+      allGroups.some((g) => g.day === d.day),
+    );
+    return withGroups.length > 0 ? withGroups : ALL_DAYS.slice(0, 5);
+  }, [allGroups]);
   const activeDay =
     activeDays.find((d) => d.day === selectedDay) ?? activeDays[0];
 
   const dayGroups = useMemo(
     () => allGroups.filter((g) => g.day === activeDay.day),
     [allGroups, activeDay.day],
+  );
+  const dayCollisions = useMemo(
+    () => collisions.filter((c) => c.day === activeDay.day),
+    [collisions, activeDay.day],
   );
   const { startMinutes, endMinutes } = useMemo(
     () => getDayTimeRange(dayGroups),
@@ -52,11 +51,6 @@ export function DayView({
   const hourMarks = useMemo(
     () => buildHourMarks(startMinutes, endMinutes),
     [startMinutes, endMinutes],
-  );
-  const collisions = useMemo(
-    () =>
-      detectCollisions(selectedGroups.filter((g) => g.day === activeDay.day)),
-    [selectedGroups, activeDay.day],
   );
   const totalHeight = Math.max((endMinutes - startMinutes) * minuteHeight, 120);
 
@@ -99,7 +93,7 @@ export function DayView({
           label={activeDay.label}
           groups={dayGroups}
           selectedGroups={selectedGroups}
-          collisions={collisions}
+          collisions={dayCollisions}
           onSelectGroup={onSelectGroup}
           isReadonly={isReadonly}
           startMinutes={startMinutes}

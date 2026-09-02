@@ -2,9 +2,9 @@
 
 import type { CSSProperties } from "react";
 
-import type { ExtendedGroup } from "@/atoms/plan-family";
-import { useSession } from "@/hooks/use-session";
+import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import type { ExtendedGroup } from "@/types";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { TYPE_BAR, TYPE_BG, TYPE_BG_MUTED } from "./type-colors";

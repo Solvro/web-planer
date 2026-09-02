@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 
-import type { ExtendedGroup } from "@/atoms/plan-family";
 import { cn, pluralize } from "@/lib/utils";
 import type { Collision } from "@/lib/utils/detect-collisions";
 import { collidingGroupIds } from "@/lib/utils/detect-collisions";
+import type { ExtendedGroup } from "@/types";
 
 import { ClassCard } from "./class-card";
 import { layoutOverlaps, parseTimeToMinutes } from "./time-scale";

@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 
 import { SolvroLogo } from "@/components/solvro-logo";
+import { TOPBAR_SLOT_ID } from "@/components/topbar-portal";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
@@ -14,13 +15,13 @@ export function PlansTopbar() {
   return (
     <header className="border-border/60 bg-background/85 fixed inset-x-0 top-0 z-30 border-b backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full items-center gap-3 px-4">
-        <Link href="/plans" className="flex shrink-0 items-center gap-2">
+        <Link href="/" className="flex shrink-0 items-center gap-2">
           <SolvroLogo href={null} />
           <span className="hidden text-lg font-semibold sm:block">Planer</span>
         </Link>
 
         <div
-          id="plan-header-slot"
+          id={TOPBAR_SLOT_ID}
           className="flex min-w-0 flex-1 items-center gap-2"
         />
 

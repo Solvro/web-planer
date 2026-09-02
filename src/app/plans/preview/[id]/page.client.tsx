@@ -1,45 +1,34 @@
 "use client";
 
-import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import * as React from "react";
-import { useMemo, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useMemo } from "react";
 
-import { planFamily } from "@/atoms/plan-family";
-import { plansIds } from "@/atoms/plans-ids";
 import { Icons } from "@/components/icons";
 import { WeekGrid } from "@/components/schedule/week-grid";
 import { Button } from "@/components/ui/button";
+import { useLocalPlans } from "@/lib/plan/local-plans";
 import type { SharedPlan } from "@/types";
 
 export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
-  const uuid = useMemo(() => uuidv4(), []);
-  const [plans, setPlans] = useAtom(plansIds);
-  const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
-
   const router = useRouter();
-  const captureRef = useRef<HTMLDivElement>(null);
+  const localPlans = useLocalPlans();
+
+  const selectedGroups = useMemo(
+    () => plan.allGroups.filter((group) => group.isChecked),
+    [plan.allGroups],
+  );
 
   const copyPlan = () => {
-    const newPlan = {
-      id: uuid,
-      ...plan,
-    };
-
     void window.umami?.track("Create plan", {
-      numberOfPlans: plans.length,
+      numberOfPlans: localPlans.ids().length,
     });
-
-    setPlans([...plans, newPlan]);
-    setPlanToCopy({
-      ...planToCopy,
-      ...plan,
+    const copy = localPlans.create({
+      name: plan.name,
+      courses: plan.courses,
+      registrations: plan.registrations,
+      toCreate: false,
     });
-
-    setTimeout(() => {
-      router.push(`/plans/edit/${newPlan.id}`);
-    }, 200);
+    router.push(`/plans/edit/${copy.id}`);
   };
 
   return (
@@ -55,10 +44,11 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
         </div>
       </div>
 
-      <div ref={captureRef} className="bg-background scrollbar-thin p-1">
+      <div className="bg-background scrollbar-thin p-1">
         <WeekGrid
-          allGroups={plan.allGroups.filter((g) => g.isChecked)}
+          allGroups={selectedGroups}
           selectedGroups={[]}
+          collisions={[]}
           isReadonly={true}
         />
       </div>

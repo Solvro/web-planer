@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import {
@@ -27,11 +28,13 @@ export function RegistrationCombobox({
   name,
   registrations,
   selectedRegistrations,
+  isPending = false,
   onSelect,
 }: {
   name: string;
   registrations: Option[];
   selectedRegistrations: string[] | null;
+  isPending?: boolean;
   onSelect: (id: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -45,8 +48,12 @@ export function RegistrationCombobox({
             <Button
               name={name}
               variant="outline"
+              disabled={isPending}
               className="w-full justify-start truncate font-normal"
             >
+              {isPending ? (
+                <Icons.Loader className="size-4 animate-spin" />
+              ) : null}
               {selectedRegistrations === null
                 ? "Rejestracja"
                 : `${selectedRegistrations.length.toString()} wybranych`}
@@ -72,8 +79,10 @@ export function RegistrationCombobox({
         <Button
           name={name}
           variant="outline"
+          disabled={isPending}
           className="w-full justify-start truncate font-normal"
         >
+          {isPending ? <Icons.Loader className="size-4 animate-spin" /> : null}
           {selectedRegistrations === null
             ? "Wybierz rejestracje"
             : `${selectedRegistrations.length.toString()} wybranych`}
@@ -113,11 +122,8 @@ function RegistrationList({
               <CommandItem
                 key={option.value}
                 value={option.label}
-                onSelect={(value) => {
-                  const id = allRegistrations.find(
-                    (r) => r.label === value,
-                  )?.value;
-                  setSelectedRegistrationId(id ?? "");
+                onSelect={() => {
+                  setSelectedRegistrationId(option.value);
                 }}
               >
                 {option.label}

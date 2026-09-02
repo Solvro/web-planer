@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-import type { ExtendedCourse } from "@/atoms/plan-family";
 import { TYPE_BAR } from "@/components/schedule/type-colors";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn, pluralize } from "@/lib/utils";
+import type { ExtendedCourse } from "@/types";
 
 type CourseStatus = "gotowe" | "kolizja" | "do-wyboru" | "brak-grupy";
 

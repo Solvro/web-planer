@@ -1,6 +1,5 @@
-import type { ExtendedGroup } from "@/atoms/plan-family";
 import { parseTimeToMinutes } from "@/components/schedule/time-scale";
-import type { Day } from "@/types";
+import type { Day, ExtendedGroup } from "@/types";
 
 export interface Collision {
   day: Day;
