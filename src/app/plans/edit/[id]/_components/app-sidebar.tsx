@@ -31,8 +31,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { exportPlanToIcs } from "@/lib/plan/export-ics";
+import { planUpdates } from "@/lib/plan/plan-updates";
 import {
   RegistrationUnavailableError,
+  refreshGroupSpots,
   useRegistrationCoursesFetcher,
   withSelection,
 } from "@/lib/plan/registration-courses";
@@ -117,12 +119,18 @@ export function AppSidebar({
     setPendingRegistrationId(registrationId);
     try {
       const courses = await fetchCourses(registrationId);
-      plan.addRegistration(
-        registration,
-        withSelection(courses, {
-          isCourseChecked: () => true,
-          isGroupChecked: () => false,
-        }),
+      const selected = withSelection(courses, {
+        isCourseChecked: () => true,
+        isGroupChecked: () => false,
+      });
+      plan.addRegistration(registration, selected);
+      void refreshGroupSpots(
+        selected.flatMap((course) => course.groups),
+        (groupOnlineId, patch) => {
+          plan.setPlan(
+            planUpdates.refreshGroups(new Map([[groupOnlineId, patch]])),
+          );
+        },
       );
     } catch (error) {
       toast.error(

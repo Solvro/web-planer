@@ -5,6 +5,7 @@ import { useCallback } from "react";
 
 import type { PlannerGroupDTO } from "@/actions/v2/get-course-groups-for-planner";
 import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
+import { getGroupSpotsAction } from "@/actions/v2/get-group-spots";
 import { getRegistrationFacultyAction } from "@/actions/v2/get-registration-faculty";
 import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
 import type { RoundCourseDTO } from "@/actions/v2/get-round-courses";
@@ -106,7 +107,43 @@ function toExtendedGroup(
     opinionsCount: 0,
     isChecked: false,
     dates: pattern?.dates ?? [],
+    unitId: group.unitId,
   };
+}
+
+export type GroupSpotsPatch = Pick<
+  ExtendedGroup,
+  "spotsOccupied" | "spotsTotal" | "week"
+>;
+
+const GROUP_SPOTS_CONCURRENCY = 8;
+
+/**
+ * Live spot counts and week parity are scraped from the USOS group page and
+ * are noticeably slower than the official API used to build the groups
+ * themselves, so groups are shown instantly with placeholder spots/parity
+ * and this fills them in afterwards. `onGroupReady` fires per group as its
+ * data arrives instead of waiting for all of them.
+ */
+export async function refreshGroupSpots(
+  groups: ExtendedGroup[],
+  onGroupReady: (groupOnlineId: string, patch: GroupSpotsPatch) => void,
+): Promise<void> {
+  await mapConcurrent(groups, GROUP_SPOTS_CONCURRENCY, async (group) => {
+    if (group.unitId === undefined) {
+      return;
+    }
+    try {
+      const spots = await getGroupSpotsAction(group.unitId, group.groupNumber);
+      onGroupReady(group.groupOnlineId, {
+        spotsOccupied: spots.spotsOccupied,
+        spotsTotal: spots.spotsTotal,
+        week: PARITY_TO_WEEK[spots.parity],
+      });
+    } catch {
+      // Best effort: the group keeps its placeholder spots/parity.
+    }
+  });
 }
 
 async function fetchCourse(
