@@ -5,10 +5,13 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 const LOGO_SRC = "/assets/logo/logo_solvro_mono.svg";
-const POINTER_RADIUS = 90;
-const POINTER_FORCE = 4;
+
+const POINTER_RADIUS = 70;
+const MIN_POINTER_DT_MS = 8;
+const MAX_POINTER_SPEED = 6;
+const SCATTER_FORCE = 3.2;
 const SPRING = 0.045;
-const FRICTION = 0.84;
+const FRICTION = 0.9;
 
 interface Particle {
   x: number;
@@ -41,7 +44,7 @@ export function ParticleLogo({
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const pointer = { x: -9999, y: -9999 };
+    const pointer = { x: -9999, y: -9999, t: 0, tracking: false };
     let particles: Particle[] = [];
     let width = 0;
     let height = 0;
@@ -118,18 +121,8 @@ export function ParticleLogo({
       for (const particle of particles) {
         const driftX = Math.sin(seconds * 0.8 + particle.phase) * 1.4;
         const driftY = Math.cos(seconds * 0.6 + particle.phase) * 1.4;
-        let ax = (particle.targetX + driftX - particle.x) * SPRING;
-        let ay = (particle.targetY + driftY - particle.y) * SPRING;
-
-        const dx = particle.x - pointer.x;
-        const dy = particle.y - pointer.y;
-        const distanceSquared = dx * dx + dy * dy;
-        if (distanceSquared < POINTER_RADIUS * POINTER_RADIUS) {
-          const distance = Math.sqrt(distanceSquared) || 1;
-          const force = (1 - distance / POINTER_RADIUS) * POINTER_FORCE;
-          ax += (dx / distance) * force;
-          ay += (dy / distance) * force;
-        }
+        const ax = (particle.targetX + driftX - particle.x) * SPRING;
+        const ay = (particle.targetY + driftY - particle.y) * SPRING;
 
         particle.vx = (particle.vx + ax) * FRICTION;
         particle.vy = (particle.vy + ay) * FRICTION;
@@ -197,14 +190,44 @@ export function ParticleLogo({
     });
     intersectionObserver.observe(canvas);
 
+    const scatter = (x: number, y: number, speed: number) => {
+      for (const particle of particles) {
+        const dx = particle.x - x;
+        const dy = particle.y - y;
+        const distance = Math.hypot(dx, dy);
+        if (distance >= POINTER_RADIUS || distance < 0.01) {
+          continue;
+        }
+        const falloff = 1 - distance / POINTER_RADIUS;
+        const kick = speed * SCATTER_FORCE * falloff;
+        particle.vx += (dx / distance) * kick;
+        particle.vy += (dy / distance) * kick;
+      }
+    };
+
     const onPointerMove = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
-      pointer.x = event.clientX - rect.left;
-      pointer.y = event.clientY - rect.top;
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const now = event.timeStamp;
+
+      if (pointer.tracking) {
+        const dt = Math.max(now - pointer.t, MIN_POINTER_DT_MS);
+        const dx = x - pointer.x;
+        const dy = y - pointer.y;
+        const speed = Math.min(Math.hypot(dx, dy) / dt, MAX_POINTER_SPEED);
+        if (speed > 0.02) {
+          scatter(x, y, speed);
+        }
+      }
+
+      pointer.x = x;
+      pointer.y = y;
+      pointer.t = now;
+      pointer.tracking = true;
     };
     const onPointerLeave = () => {
-      pointer.x = -9999;
-      pointer.y = -9999;
+      pointer.tracking = false;
     };
     canvas.addEventListener("pointermove", onPointerMove);
     canvas.addEventListener("pointerleave", onPointerLeave);
