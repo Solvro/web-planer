@@ -50,7 +50,7 @@ export const FACULTIES: Faculty[] = [
     name: "Wydział Podstawowych Problemów Techniki",
   },
   {
-    value: "W12",
+    value: "W12N",
     name: "Wydział Elektroniki, Fotoniki i Mikrosystemów",
   },
   {
