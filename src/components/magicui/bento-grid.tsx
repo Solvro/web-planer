@@ -19,7 +19,6 @@ interface BentoCardProps extends Omit<
 > {
   name: string;
   className: string;
-  /** Illustration rendered inside the inset panel at the top of the card. */
   background: ReactNode;
   description: ReactNode;
   href: string;
@@ -87,7 +86,6 @@ function BentoCard({
   );
 }
 
-/** Inline keycap-like chip used in bento descriptions. */
 function Kbd({ children }: { children: ReactNode }) {
   return (
     <kbd className="bg-muted text-foreground/80 border-border/70 rounded-md border px-1.5 py-0.5 font-mono text-[11px] font-medium shadow-[inset_0_-1px_0_hsl(var(--foreground)/.08)]">

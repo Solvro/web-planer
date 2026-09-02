@@ -1,9 +1,5 @@
 import type { SVGProps } from "react";
 
-/**
- * Solvro logo mark as inline SVG (fills with currentColor).
- * Extracted from public/assets/logo/logo_solvro_mono.svg.
- */
 export function SolvroMark(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

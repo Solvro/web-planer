@@ -119,8 +119,6 @@ layer(base);
   }
 }
 
-/* ---------- homepage motion ---------- */
-
 .aurora-field {
   opacity: 0.75;
   background-repeat: no-repeat;
@@ -177,7 +175,6 @@ layer(base);
   }
 }
 
-/* shimmering gradient text */
 .text-shimmer {
   background-image: linear-gradient(
     100deg,
@@ -198,7 +195,6 @@ layer(base);
   }
 }
 
-/* svg illustration primitives */
 .svg-float {
   animation: svg-float 5s ease-in-out infinite;
   transform-box: fill-box;

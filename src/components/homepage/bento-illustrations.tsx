@@ -1,12 +1,6 @@
 import { SolvroMark } from "@/components/solvro-mark";
 import { cn } from "@/lib/utils";
 
-/*
- * Monochrome line-art illustrations for the bento cards: thin strokes in the
- * muted foreground colour, one blue accent, monospace labels. Every motion is
- * a CSS animation (globals.css "svg-*" classes), nothing runs in JS.
- */
-
 const MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
 
 function Art({
@@ -38,7 +32,6 @@ function Art({
   );
 }
 
-/** Window chrome: rounded frame with three dots and an optional title. */
 function Window({
   x,
   y,
@@ -78,7 +71,6 @@ const PLAN_ROWS = [
   { y: 86, w: 50, delay: "2.4s" },
 ];
 
-/** USOS window → arrow → planner window, class rows appearing one by one. */
 export function ScheduleSyncArt({ className }: { className?: string }) {
   return (
     <Art viewBox="0 0 320 160" className={className}>
@@ -144,7 +136,6 @@ export function ScheduleSyncArt({ className }: { className?: string }) {
 const SHARE_PATH_TOP = "M 220 63 C 248 63, 248 40, 268 40";
 const SHARE_PATH_BOTTOM = "M 220 63 C 248 63, 248 92, 268 92";
 
-/** A preview link with a blinking cursor and two friends receiving it. */
 export function ShareArt({ className }: { className?: string }) {
   return (
     <Art viewBox="0 0 320 160" className={className}>
@@ -220,7 +211,6 @@ const HOURS: [string, number][] = [
   ["15:15", 180],
 ];
 
-/** Two overlapping classes with a hatched overlap and a spots meter. */
 export function CollisionsArt({ className }: { className?: string }) {
   return (
     <Art viewBox="0 0 240 300" className={className}>
@@ -333,7 +323,6 @@ const PHONE_ROWS = [
   { y: 70, w: 26, delay: "2.1s" },
 ];
 
-/** A laptop with a terminal pushing code to a phone that shows the plan. */
 export function StudentsArt({ className }: { className?: string }) {
   return (
     <Art viewBox="0 0 400 180" className={className}>

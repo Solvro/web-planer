@@ -19,6 +19,13 @@ import type {
 } from "@/types";
 import { Day } from "@/types";
 
+export class RegistrationUnavailableError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RegistrationUnavailableError";
+  }
+}
+
 const COURSE_FETCH_CONCURRENCY = 6;
 const COURSES_STALE_TIME_MS = 60 * 1000;
 
@@ -129,10 +136,17 @@ async function fetchRegistrationCourses(
   const rounds = await getRegistrationRoundsAction(registrationId);
   const nominalRound = rounds.at(0);
   if (nominalRound === undefined) {
-    throw new Error(`Rejestracja ${registrationId} nie ma żadnej tury`);
+    throw new RegistrationUnavailableError(
+      "Ta rejestracja nie ma jeszcze żadnej tury zapisów w USOS.",
+    );
   }
 
   const roundCourses = await getRegistrationRoundCoursesAction(nominalRound.id);
+  if (roundCourses.length === 0) {
+    throw new RegistrationUnavailableError(
+      "Ta rejestracja nie ma jeszcze żadnych kursów w USOS.",
+    );
+  }
   const courses = await mapConcurrent(
     roundCourses,
     COURSE_FETCH_CONCURRENCY,

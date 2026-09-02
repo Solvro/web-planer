@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import { useScheduleView } from "@/hooks/use-schedule-view";
 import type { Collision } from "@/lib/utils/detect-collisions";
 import type { ExtendedGroup } from "@/types";
@@ -14,11 +15,8 @@ import { ViewSwitcher } from "./view-switcher";
 import { WeekGrid } from "./week-grid";
 
 export interface ScheduleViewProps {
-  /** Every slot that can be shown (all groups of included courses). */
   allGroups: ExtendedGroup[];
-  /** Slots the user picked. */
   selectedGroups: ExtendedGroup[];
-  /** Collisions between selected slots, computed once by the owner. */
   collisions: Collision[];
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
@@ -26,6 +24,23 @@ export interface ScheduleViewProps {
 
 export function ScheduleBoard(props: ScheduleViewProps) {
   const { viewMode } = useScheduleView();
+
+  if (props.allGroups.length === 0) {
+    return (
+      <div className="flex h-full w-full flex-col gap-4">
+        <div className="border-border/70 text-muted-foreground flex min-h-[320px] flex-1 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed p-8 text-center">
+          <Icons.Plans className="text-primary/70 mb-2 size-8" />
+          <p className="text-foreground text-base font-semibold">
+            Zacznij od dodania rejestracji
+          </p>
+          <p className="max-w-sm text-sm text-balance">
+            Wybierz wydział i rejestrację w panelu po lewej. Zajęcia pojawią się
+            tutaj, a grupy zaznaczysz jednym kliknięciem.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full w-full flex-col gap-4">

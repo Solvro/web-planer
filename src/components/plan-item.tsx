@@ -45,7 +45,6 @@ interface PlanCardView {
   coursesCount: number;
   groupsSelected: number;
   groupsTotal: number;
-  /** Courses with at least one chosen group; null when only online counts are known. */
   coursesWithSelection: number | null;
   usedTypes: ClassType[];
   updatedAt: Date;
@@ -136,7 +135,6 @@ export function PlanItem(props: PlanItemProps) {
     router.push(`/plans/edit/${copy.id}`);
   };
 
-  /** Online plan not present in this browser yet: create an empty shell the editor fills in. */
   const openOnlinePlan = () => {
     const existing = localPlans.ids().some((entry) => entry.id === view.id);
     if (!existing) {
@@ -230,7 +228,10 @@ export function PlanItem(props: PlanItemProps) {
             </>
           )}
         </p>
-        <p className="text-xs">{format(view.updatedAt, "dd.MM.yyyy, HH:mm")}</p>
+        <p className="text-xs">
+          {view.isOnline ? "Zapisano" : "Utworzono"}{" "}
+          {format(view.updatedAt, "dd.MM.yyyy, HH:mm")}
+        </p>
       </div>
 
       <div className="mt-1 flex items-center justify-between gap-2 border-t pt-3">

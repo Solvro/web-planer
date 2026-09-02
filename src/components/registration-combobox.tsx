@@ -27,13 +27,11 @@ interface Option {
 export function RegistrationCombobox({
   name,
   registrations,
-  selectedRegistrations,
   isPending = false,
   onSelect,
 }: {
   name: string;
   registrations: Option[];
-  selectedRegistrations: string[] | null;
   isPending?: boolean;
   onSelect: (id: string) => void;
 }) {
@@ -54,9 +52,8 @@ export function RegistrationCombobox({
               {isPending ? (
                 <Icons.Loader className="size-4 animate-spin" />
               ) : null}
-              {selectedRegistrations === null
-                ? "Rejestracja"
-                : `${selectedRegistrations.length.toString()} wybranych`}
+              <Icons.Plus className="size-4" />
+              Dodaj rejestrację
             </Button>
           }
         />
@@ -83,9 +80,8 @@ export function RegistrationCombobox({
           className="w-full justify-start truncate font-normal"
         >
           {isPending ? <Icons.Loader className="size-4 animate-spin" /> : null}
-          {selectedRegistrations === null
-            ? "Wybierz rejestracje"
-            : `${selectedRegistrations.length.toString()} wybranych`}
+          <Icons.Plus className="size-4" />
+          Dodaj rejestrację
         </Button>
       </DrawerTrigger>
       <DrawerContent>

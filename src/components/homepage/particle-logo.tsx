@@ -19,18 +19,11 @@ interface Particle {
   targetY: number;
   size: number;
   phase: number;
-  /** 0 at the top of the logo, 1 at the bottom – drives the hue gradient. */
   depth: number;
 }
 
-/**
- * The Solvro mark drawn from a few hundred drifting particles that assemble
- * into the logo, shimmer, and scatter around the pointer. One canvas, one
- * animation frame loop, paused when off-screen. Static under reduced motion.
- */
 export function ParticleLogo({
   className,
-  /** Distance between sampled points in CSS pixels; lower = more particles. */
   density = 2,
 }: {
   className?: string;

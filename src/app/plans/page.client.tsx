@@ -1,5 +1,7 @@
 "use client";
 
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -20,7 +22,6 @@ import PlansLoading from "./loading";
 export function PlansPage({
   onlinePlans,
 }: {
-  /** Online plans of the signed-in user, null when logged out. */
   onlinePlans: UserSchedulesDTO[] | null;
 }) {
   const hydrated = useHydrated();
@@ -71,7 +72,8 @@ function PlansList({
           <h1 className="text-2xl font-semibold">Moje plany</h1>
           {lastEdited === null ? null : (
             <p className="text-muted-foreground text-sm">
-              Ostatnio edytowany {lastEdited.toLocaleString("pl-PL")}
+              Ostatnia zmiana{" "}
+              {format(lastEdited, "d MMM yyyy, HH:mm", { locale: pl })}
             </p>
           )}
         </div>
@@ -80,6 +82,22 @@ function PlansList({
           Nowy plan
         </Button>
       </div>
+      {localPlans.length === 0 && onlineOnlyPlans.length === 0 ? (
+        <div className="border-border/70 text-muted-foreground flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed px-6 py-16 text-center">
+          <Icons.Plans className="text-primary/70 size-8" />
+          <p className="text-foreground text-lg font-semibold">
+            Nie masz jeszcze żadnego planu
+          </p>
+          <p className="max-w-sm text-sm text-balance">
+            Utwórz pierwszy plan, dodaj rejestrację z USOS i poukładaj grupy
+            tak, jak lubisz.
+          </p>
+          <Button onClick={addNewPlan} className="mt-2">
+            <Icons.Plus className="size-4" />
+            Utwórz plan
+          </Button>
+        </div>
+      ) : null}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {localPlans.map((plan) => (
           <PlanItem key={plan.id} local={plan} />
@@ -92,11 +110,6 @@ function PlansList({
   );
 }
 
-/**
- * Local copies of plans deleted online on another device are dropped once per
- * visit. Each candidate is re-checked against the server so a stale router
- * cache never removes a plan that still exists.
- */
 function useRemoveOrphanedLocalPlans(
   localPlans: StoredPlan[],
   onlinePlans: UserSchedulesDTO[] | null,
@@ -104,8 +117,6 @@ function useRemoveOrphanedLocalPlans(
 ) {
   const checked = useRef(false);
 
-  // Reconciling browser storage with server data is a genuine side effect,
-  // not something a parent could do in an event handler.
   /* eslint-disable react-you-might-not-need-an-effect/no-event-handler, react-you-might-not-need-an-effect/no-pass-data-to-parent */
   useEffect(() => {
     if (checked.current || onlinePlans === null) {

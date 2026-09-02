@@ -2,11 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { useAtom } from "jotai";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { FACULTIES } from "@/actions/v2/get-faculties";
 import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
+import { selectedFacultyAtom } from "@/atoms/faculty";
 import { Alerts } from "@/components/alerts";
 import { Icons } from "@/components/icons";
 import { PlanDisplayLink } from "@/components/plan-display-link";
@@ -30,6 +32,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { exportPlanToIcs } from "@/lib/plan/export-ics";
 import {
+  RegistrationUnavailableError,
   useRegistrationCoursesFetcher,
   withSelection,
 } from "@/lib/plan/registration-courses";
@@ -54,7 +57,7 @@ export function AppSidebar({
   sync: ReturnType<typeof usePlanSync>;
   collisions: Collision[];
 }) {
-  const [faculty, setFaculty] = useState<string | null>(null);
+  const [faculty, setFaculty] = useAtom(selectedFacultyAtom);
   const [pendingRegistrationId, setPendingRegistrationId] = useState<
     string | null
   >(null);
@@ -91,7 +94,6 @@ export function AppSidebar({
     [collisions],
   );
 
-  // Local-only plans are persisted in the browser on every change.
   const isSaved = sync.status === "synced" || sync.status === "local-only";
   const savedLabel =
     sync.status === "synced"
@@ -122,8 +124,13 @@ export function AppSidebar({
           isGroupChecked: () => false,
         }),
       );
-    } catch {
-      toast.error("Nie udało się pobrać kursów dla tej rejestracji");
+    } catch (error) {
+      toast.error(
+        error instanceof RegistrationUnavailableError
+          ? error.message
+          : "Nie udało się pobrać kursów dla tej rejestracji. Spróbuj ponownie.",
+        { duration: 6000 },
+      );
     } finally {
       setPendingRegistrationId(null);
     }
@@ -207,12 +214,25 @@ export function AppSidebar({
               <Label htmlFor="faculty" className="mb-1">
                 Wydział
               </Label>
-              <Select<string> name="faculty" onValueChange={setFaculty}>
+              <Select<string>
+                name="faculty"
+                value={faculty}
+                onValueChange={setFaculty}
+              >
                 <SelectTrigger
                   className="pl-2"
                   disabled={registrations.isLoading}
                 >
-                  <SelectValue placeholder="Wybierz swój wydział" />
+                  <SelectValue placeholder="Wybierz swój wydział">
+                    {(value: string | null) =>
+                      value === null
+                        ? "Wybierz swój wydział"
+                        : registrationReplacer(
+                            FACULTIES.find((f) => f.value === value)?.name ??
+                              value,
+                          )
+                    }
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="max-w-full">
                   {FACULTIES.map((f) => (
@@ -260,7 +280,6 @@ export function AppSidebar({
                   <RegistrationCombobox
                     name="registration"
                     registrations={registrationOptions}
-                    selectedRegistrations={plan.registrations.map((r) => r.id)}
                     isPending={pendingRegistrationId !== null}
                     onSelect={(registrationId) => {
                       void toggleRegistration(registrationId);

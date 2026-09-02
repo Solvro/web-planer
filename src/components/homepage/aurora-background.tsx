@@ -1,10 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/**
- * Soft, slowly drifting colour field (Siri / Gemini style). Pure CSS: a few
- * large radial gradients whose positions are animated, no blur filters, so it
- * costs nothing on the GPU. Fades out towards the bottom.
- */
 export function AuroraBackground({ className }: { className?: string }) {
   return (
     <div
