@@ -110,41 +110,38 @@ export function CourseRow({
             return (
               <label
                 key={group.groupId}
-                aria-label={`${group.courseType} grupa ${group.groupNumber}, ${DAY_SHORT[group.day]} ${group.startTime}–${group.endTime}`}
                 className={cn(
-                  "hover:bg-muted/50 flex items-center justify-between gap-2 rounded-md p-1.5 text-sm",
+                  "hover:bg-muted/50 flex items-center gap-2 rounded-md p-1.5 text-sm",
                   isColliding && "bg-status-collision/10",
                 )}
               >
-                <span className="flex min-w-0 items-center gap-2">
-                  <span
-                    className={cn(
-                      "h-7 w-1 shrink-0 rounded-full",
-                      TYPE_BAR[group.courseType],
-                    )}
-                  />
-                  <span className="min-w-0">
-                    <span className="block truncate">
-                      {group.courseType} grupa {group.groupNumber}
-                      {group.week === "" ? "" : ` · ${group.week}`} ·{" "}
-                      {DAY_SHORT[group.day]} {group.startTime}–{group.endTime}
+                <span
+                  className={cn(
+                    "h-7 w-1 shrink-0 rounded-full",
+                    TYPE_BAR[group.courseType],
+                  )}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate">
+                    {group.courseType} grupa {group.groupNumber}
+                    {group.week === "" ? "" : ` · ${group.week}`} ·{" "}
+                    {DAY_SHORT[group.day]} {group.startTime}–{group.endTime}
+                  </span>
+                  <span className="text-muted-foreground block truncate text-xs">
+                    {group.lecturer || "brak prowadzącego"} ·{" "}
+                    <span
+                      className={cn(
+                        isFull && "text-status-collision font-medium",
+                      )}
+                    >
+                      {group.spotsOccupied}/{group.spotsTotal} miejsc
                     </span>
-                    <span className="text-muted-foreground block truncate text-xs">
-                      {group.lecturer || "brak prowadzącego"} ·{" "}
-                      <span
-                        className={cn(
-                          isFull && "text-status-collision font-medium",
-                        )}
-                      >
-                        {group.spotsOccupied}/{group.spotsTotal} miejsc
+                    {isColliding ? (
+                      <span className="text-status-collision font-medium">
+                        {" "}
+                        · kolizja
                       </span>
-                      {isColliding ? (
-                        <span className="text-status-collision font-medium">
-                          {" "}
-                          · kolizja
-                        </span>
-                      ) : null}
-                    </span>
+                    ) : null}
                   </span>
                 </span>
                 <Checkbox
