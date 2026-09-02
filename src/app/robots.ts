@@ -5,7 +5,6 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/plans/", "/api/"],
     },
     sitemap: "https://planer.solvro.pl/sitemap.xml",
   };
