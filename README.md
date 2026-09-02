@@ -2,7 +2,8 @@
 
 University schedule planner for Wrocław University of Science and Technology students, built by [KN Solvro](https://solvro.pwr.edu.pl/).
 
-[![Welcome Page](https://i.imgur.com/dVjBfjS.png)](https://planer.solvro.pl)
+[![Welcome Page](https://github.com/user-attachments/assets/693f3a0c-89fe-4d39-8128-13f1cbf734c7)](https://planer.solvro.pl)
+
 
 **[planer.solvro.pl](https://planer.solvro.pl)** · [Project portfolio](https://solvro.pwr.edu.pl/portfolio/planer/) · [Docs](https://docs.solvro.pl)
 
