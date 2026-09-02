@@ -1,15 +1,7 @@
 "use server";
 
-import type {
-  GroupSchedulePattern,
-  ScheduleParity,
-} from "@/lib/utils/build-group-schedule-pattern";
-import {
-  buildGroupSchedulePattern,
-  daysBetween,
-  isoWeekday,
-  mostFrequent,
-} from "@/lib/utils/build-group-schedule-pattern";
+import type { GroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
+import { buildGroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
 import type { ClassgroupDate } from "@/types";
 
 import type { ClassgroupDateDTO } from "./get-class-group-dates";
@@ -18,7 +10,6 @@ import type { CourseGroupDTO } from "./get-course-edition-details";
 import { getCourseEditionDetailsAction } from "./get-course-edition-details";
 import { getGroupSpotsAction } from "./get-group-spots";
 import type { LecturerDTO } from "./get-lecturer";
-import { getTermAction } from "./get-term";
 
 export interface PlannerGroupDTO {
   unitId: string;
@@ -44,46 +35,8 @@ function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
   );
 }
 
-/** 0 for a Monday, 6 for a Sunday. */
-function daysSinceMonday(date: string): number {
-  return isoWeekday(date) - 1;
-}
-
-/**
- * Week 1 of the term is "odd" (TN), week 2 is "even" (TP) and so on. Weeks are
- * aligned to Mondays, so a term starting on a Wednesday still counts the
- * whole surrounding week as week 1. The parity of a group is the parity most
- * of its meetings fall into, which makes single exceptions harmless.
- */
-function parityRelativeToTerm(
-  dates: string[],
-  termStartDate: string,
-): ScheduleParity {
-  const termWeekStart = daysSinceMonday(termStartDate);
-  const parities = dates.map((date) => {
-    const days =
-      daysBetween(termStartDate, date) + termWeekStart - daysSinceMonday(date);
-    const weekIndex = Math.round(days / 7);
-    return weekIndex % 2 === 0 ? "odd" : "even";
-  });
-  return mostFrequent(parities) ?? "unknown";
-}
-
-async function resolveBiweeklyParity(
-  pattern: GroupSchedulePattern,
-  termId: string,
-): Promise<ScheduleParity> {
-  try {
-    const term = await getTermAction(termId);
-    return parityRelativeToTerm(pattern.dates, term.startDate);
-  } catch {
-    return pattern.parity;
-  }
-}
-
 async function buildPlannerGroup(
   group: CourseGroupDTO,
-  termId: string,
 ): Promise<PlannerGroupDTO> {
   const [dates, spots] = await Promise.all([
     getClassgroupDatesAction(group.unitId, group.groupNumber),
@@ -91,11 +44,8 @@ async function buildPlannerGroup(
   ]);
 
   const schedulePattern = buildGroupSchedulePattern(toClassgroupDates(dates));
-  if (schedulePattern?.pattern === "biweekly") {
-    schedulePattern.parity = await resolveBiweeklyParity(
-      schedulePattern,
-      termId,
-    );
+  if (schedulePattern != null) {
+    schedulePattern.parity = spots.parity;
   }
 
   return {
@@ -116,8 +66,6 @@ export async function getPlannerCourseGroupsAction(
   const editionDetails = await getCourseEditionDetailsAction(courseId, termId);
 
   return Promise.all(
-    editionDetails.groups.map(async (group) =>
-      buildPlannerGroup(group, termId),
-    ),
+    editionDetails.groups.map(async (group) => buildPlannerGroup(group)),
   );
 }

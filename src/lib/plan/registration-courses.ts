@@ -44,7 +44,7 @@ const PARITY_TO_WEEK: Record<ScheduleParity, WeekParity> = {
   all: "",
   even: "TP",
   odd: "TN",
-  unknown: "!",
+  unknown: "",
 };
 
 const registrationCoursesQueryKey = (registrationId: string) =>

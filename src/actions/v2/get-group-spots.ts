@@ -4,10 +4,12 @@ import * as cheerio from "cheerio";
 
 import redis from "@/lib/redis";
 import { getOrSetRedisSmart } from "@/lib/redis/get-set-smart";
+import type { ScheduleParity } from "@/lib/utils/build-group-schedule-pattern";
 
 export interface GroupSpotsDTO {
   spotsOccupied: number;
   spotsTotal: number;
+  parity: ScheduleParity;
 }
 
 const USOS_WEB_URL = process.env.USOS_WEB_URL ?? "https://web.usos.pwr.edu.pl";
@@ -20,8 +22,8 @@ function buildGroupPageUrl(unitId: string, groupNumber: string): string {
   return url.toString();
 }
 
-function extractRowValue($: cheerio.CheerioAPI, label: string): number {
-  const text = $("div#layout-c22")
+function findRow($: cheerio.CheerioAPI, label: string) {
+  return $("div#layout-c22")
     .find("table")
     .find("tbody")
     .children()
@@ -29,12 +31,35 @@ function extractRowValue($: cheerio.CheerioAPI, label: string): number {
       return $(this).text().includes(label);
     })
     .find("td")
-    .eq(1)
-    .text()
-    .trim();
+    .eq(1);
+}
+
+function extractRowValue($: cheerio.CheerioAPI, label: string): number {
+  const text = findRow($, label).text().trim();
 
   const value = Number.parseInt(text, 10);
   return Number.isNaN(value) ? 0 : value;
+}
+
+/**
+ * The "Termin i miejsce" row states the meeting frequency in Polish, e.g.
+ * "co drugi piątek (nieparzyste)" (odd weeks) or "co dwa tygodnie
+ * (parzyste)" (even weeks) or "co tydzień" (every week). We read this text
+ * directly instead of inferring parity from the list of past meeting dates.
+ */
+function extractParity($: cheerio.CheerioAPI): ScheduleParity {
+  const text = findRow($, "Termin i miejsce:").text();
+
+  if (text.includes("nieparzyste")) {
+    return "odd";
+  }
+  if (text.includes("parzyste")) {
+    return "even";
+  }
+  if (text.includes("co tydzień")) {
+    return "all";
+  }
+  return "unknown";
 }
 
 async function scrapeGroupSpots(groupUrl: string): Promise<GroupSpotsDTO> {
@@ -52,6 +77,7 @@ async function scrapeGroupSpots(groupUrl: string): Promise<GroupSpotsDTO> {
   return {
     spotsOccupied: extractRowValue($, "Liczba osób w grupie:"),
     spotsTotal: extractRowValue($, "Limit miejsc:"),
+    parity: extractParity($),
   };
 }
 
@@ -61,7 +87,7 @@ export async function getGroupSpotsAction(
 ): Promise<GroupSpotsDTO> {
   return getOrSetRedisSmart({
     redis,
-    key: `usos:group_spots:${unitId}:${groupNumber}`,
+    key: `usos:group_spots:v2:${unitId}:${groupNumber}`,
     minFreshSeconds: 60 * 5,
     maxStaleSeconds: 60 * 60 * 48,
     fetcher: async () =>
