@@ -8,7 +8,6 @@ import type { ClassgroupDateDTO } from "./get-class-group-dates";
 import { getClassgroupDatesAction } from "./get-class-group-dates";
 import type { CourseGroupDTO } from "./get-course-edition-details";
 import { getCourseEditionDetailsAction } from "./get-course-edition-details";
-import { getGroupSpotsAction } from "./get-group-spots";
 import type { LecturerDTO } from "./get-lecturer";
 
 export interface PlannerGroupDTO {
@@ -17,6 +16,11 @@ export interface PlannerGroupDTO {
   classtypeId: string;
   lecturers: LecturerDTO[];
   schedulePattern: GroupSchedulePattern | null;
+  /**
+   * Placeholder until `getGroupSpotsAction` (scraped, slower) fills these in
+   * client-side. Left at 0 here so this action only waits on the official
+   * USOS API and returns instantly.
+   */
   spotsOccupied: number;
   spotsTotal: number;
 }
@@ -38,15 +42,8 @@ function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
 async function buildPlannerGroup(
   group: CourseGroupDTO,
 ): Promise<PlannerGroupDTO> {
-  const [dates, spots] = await Promise.all([
-    getClassgroupDatesAction(group.unitId, group.groupNumber),
-    getGroupSpotsAction(group.unitId, group.groupNumber),
-  ]);
-
+  const dates = await getClassgroupDatesAction(group.unitId, group.groupNumber);
   const schedulePattern = buildGroupSchedulePattern(toClassgroupDates(dates));
-  if (schedulePattern != null) {
-    schedulePattern.parity = spots.parity;
-  }
 
   return {
     unitId: group.unitId,
@@ -54,8 +51,8 @@ async function buildPlannerGroup(
     classtypeId: group.classtypeId,
     lecturers: group.lecturers,
     schedulePattern,
-    spotsOccupied: spots.spotsOccupied,
-    spotsTotal: spots.spotsTotal,
+    spotsOccupied: 0,
+    spotsTotal: 0,
   };
 }
 

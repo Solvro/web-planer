@@ -40,6 +40,12 @@ export interface ExtendedGroup {
   isChecked: boolean;
   /** Real meeting dates ("YYYY-MM-DD") from USOS; missing on plans saved before this field existed. */
   dates?: string[];
+  /**
+   * USOS course-unit id, used to fetch live spot counts and week parity
+   * after the group is already shown. Missing on plans saved before this
+   * field existed.
+   */
+  unitId?: string;
 }
 
 export interface ExtendedCourse {

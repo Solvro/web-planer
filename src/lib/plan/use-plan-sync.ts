@@ -19,6 +19,7 @@ import type {
 import { planUpdates } from "./plan-updates";
 import {
   fetchRegistrationDetails,
+  refreshGroupSpots,
   useRegistrationCoursesFetcher,
   withSelection,
 } from "./registration-courses";
@@ -254,6 +255,12 @@ export function usePlanSync(plan: PlanHandle) {
           updatedAt: online.updatedAt,
         }),
       );
+      void refreshGroupSpots(
+        courses.flatMap((course) => course.groups),
+        (groupOnlineId, patch) => {
+          setPlan(planUpdates.refreshGroups(new Map([[groupOnlineId, patch]])));
+        },
+      );
     } catch {
       toast.error("Nie udało się pobrać kursów", {
         duration: ERROR_TOAST_DURATION_MS,
@@ -292,33 +299,39 @@ export function usePlanSync(plan: PlanHandle) {
     );
 
     const fresh = new Map<string, Partial<ExtendedGroup>>();
+    const groups: ExtendedGroup[] = [];
     for (const result of results) {
       if (result.status !== "fulfilled") {
         continue;
       }
       for (const course of result.value) {
         for (const group of course.groups) {
+          // Spots/parity are scraped and noticeably slower than the rest of
+          // this (official-API) data, so they're refreshed separately below
+          // instead of blocking this patch or momentarily zeroing them out.
           fresh.set(group.groupOnlineId, {
             groupNumber: group.groupNumber,
             courseName: group.courseName,
             courseType: group.courseType,
             lecturer: group.lecturer,
             day: group.day,
-            week: group.week,
             startTime: group.startTime,
             endTime: group.endTime,
-            spotsOccupied: group.spotsOccupied,
-            spotsTotal: group.spotsTotal,
             averageRating: group.averageRating,
             opinionsCount: group.opinionsCount,
             dates: group.dates,
+            unitId: group.unitId,
           });
+          groups.push(group);
         }
       }
     }
     if (fresh.size > 0) {
       setPlan(planUpdates.refreshGroups(fresh));
     }
+    void refreshGroupSpots(groups, (groupOnlineId, patch) => {
+      setPlan(planUpdates.refreshGroups(new Map([[groupOnlineId, patch]])));
+    });
   }, [readPlan, fetchCourses, setPlan]);
 
   const refreshed = useRef(false);
