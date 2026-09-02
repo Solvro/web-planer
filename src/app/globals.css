@@ -118,3 +118,228 @@ layer(base);
     background-color: transparent;
   }
 }
+
+/* ---------- homepage motion ---------- */
+
+.aurora-field {
+  opacity: 0.75;
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(closest-side, hsl(215 100% 62% / 0.45), transparent),
+    radial-gradient(closest-side, hsl(268 90% 66% / 0.38), transparent),
+    radial-gradient(closest-side, hsl(190 95% 60% / 0.32), transparent),
+    radial-gradient(closest-side, hsl(320 90% 68% / 0.26), transparent);
+  background-size:
+    60% 60%,
+    52% 52%,
+    46% 46%,
+    40% 40%;
+  background-position:
+    10% 20%,
+    80% 10%,
+    55% 75%,
+    25% 85%;
+  animation: aurora 22s ease-in-out infinite alternate;
+  will-change: background-position;
+}
+.dark .aurora-field {
+  opacity: 0.55;
+}
+
+@keyframes aurora {
+  0% {
+    background-position:
+      10% 20%,
+      80% 10%,
+      55% 75%,
+      25% 85%;
+  }
+  33% {
+    background-position:
+      30% 40%,
+      60% 30%,
+      75% 55%,
+      10% 60%;
+  }
+  66% {
+    background-position:
+      0% 60%,
+      90% 45%,
+      40% 90%,
+      45% 70%;
+  }
+  100% {
+    background-position:
+      20% 30%,
+      70% 20%,
+      60% 65%,
+      35% 95%;
+  }
+}
+
+/* shimmering gradient text */
+.text-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    hsl(215 100% 58%) 0%,
+    hsl(268 90% 64%) 35%,
+    hsl(190 95% 55%) 65%,
+    hsl(215 100% 58%) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -250% center;
+  }
+}
+
+/* svg illustration primitives */
+.svg-float {
+  animation: svg-float 5s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.svg-pop {
+  animation: svg-pop 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.svg-dash {
+  stroke-dasharray: 4 10;
+  animation: svg-dash 1.6s linear infinite;
+}
+.svg-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: svg-draw 5s ease-in-out infinite;
+}
+.svg-travel {
+  offset-rotate: 0deg;
+  animation: svg-travel 20s linear infinite;
+}
+.svg-spin {
+  animation: svg-orbit 8s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.svg-ring {
+  animation: svg-ring 3s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.svg-fill {
+  animation: svg-fill 6s ease-in-out infinite;
+}
+.svg-blink {
+  animation: svg-blink 2.4s ease-in-out infinite;
+}
+
+@keyframes svg-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes svg-pop {
+  0%,
+  8% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  18%,
+  85% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  95%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+@keyframes svg-dash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+@keyframes svg-draw {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  45%,
+  70% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+@keyframes svg-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes svg-travel {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+@keyframes svg-ring {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+@keyframes svg-fill {
+  0%,
+  10% {
+    width: 12%;
+  }
+  60%,
+  100% {
+    width: 92%;
+  }
+}
+@keyframes svg-blink {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-field,
+  .text-shimmer,
+  .svg-float,
+  .svg-pop,
+  .svg-dash,
+  .svg-draw,
+  .svg-travel,
+  .svg-spin,
+  .svg-ring,
+  .svg-fill,
+  .svg-blink {
+    animation: none;
+  }
+  .svg-pop {
+    opacity: 1;
+  }
+}

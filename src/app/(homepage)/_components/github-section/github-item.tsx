@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, useAnimation, useInView } from "motion/react";
+import { motion } from "motion/react";
 import Link from "next/link";
-import React, { useEffect, useRef } from "react";
 
 import {
   AnimatedTitle,
@@ -24,23 +23,12 @@ export function GithubItem({
   contributors: Contributor[];
   stars: number;
 }) {
-  const ref = useRef(null);
-  const isInview = useInView(ref, { once: true, amount: 0.6 });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (isInview) {
-      void controls.start("visible");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInview]);
-
   return (
     <motion.section
       variants={parentVariants}
-      ref={ref}
       initial="hidden"
-      animate={controls}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.4 }}
       transition={{ staggerChildren: 0.1 }}
     >
       <div className="relative container mx-auto max-w-7xl px-4 py-16">
@@ -61,16 +49,16 @@ export function GithubItem({
           className="mt-2 flex flex-col items-center justify-center"
         >
           <AvatarCircles contributors={contributors} />
-          <Icons.FlexyArrow className="mt-12" />
+          <Icons.FlexyArrow className="text-muted-foreground mt-12" />
           <Button
-            className="group bg-primary mt-4 text-white ring-amber-500 ring-offset-2 transition-all hover:bg-blue-600 hover:ring-2 dark:bg-white dark:text-black dark:hover:bg-slate-200"
+            className="group bg-primary mt-4 rounded-full text-white ring-amber-500 ring-offset-2 transition-all hover:bg-blue-600 hover:ring-2 dark:bg-white dark:text-black dark:hover:bg-slate-200"
             size="lg"
             nativeButton={false}
             render={
               <Link href="https://github.com/Solvro/web-planer" target="_blank">
                 <Icons.Github className="size-4" />
                 Walnij nam gwiazdkę
-                <Icons.StarFilledIcon className="text-slate-300 transition-all group-hover:text-amber-500 dark:text-slate-600" />
+                <Icons.StarFilledIcon className="text-slate-300 transition-all group-hover:scale-125 group-hover:text-amber-500 dark:text-slate-600" />
                 {stars}
               </Link>
             }

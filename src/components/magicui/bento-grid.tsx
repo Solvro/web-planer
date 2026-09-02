@@ -1,5 +1,5 @@
 import { ArrowRight as ArrowRightIcon } from "lucide-react";
-import type { MotionProps, Variants } from "motion/react";
+import type { MotionProps, Transition, Variants } from "motion/react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
@@ -26,6 +26,7 @@ interface BentoCardProps extends Omit<
   href: string;
   cta: string;
   variants?: Variants | undefined;
+  transition?: Transition | undefined;
 }
 
 function BentoGrid({ children, className, ...props }: BentoGridProps) {
@@ -56,29 +57,33 @@ function BentoCard({
     <motion.div
       key={name}
       className={cn(
-        "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl",
-        // light styles
-        "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
-        // dark styles
-        "dark:bg-background transform-gpu dark:[box-shadow:0_-20px_80px_-20px_#0000001f_inset] dark:[border:1px_solid_rgba(0,0,0,.1)]",
+        "group relative col-span-3 flex flex-col justify-end overflow-hidden rounded-2xl",
+        "border-border/60 bg-card/70 border shadow-[0_1px_2px_rgba(0,0,0,.04),0_12px_32px_-16px_rgba(15,23,42,.18)] backdrop-blur-sm",
+        "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 hover:shadow-[0_1px_2px_rgba(0,0,0,.04),0_24px_48px_-20px_hsl(var(--primary)/.35)]",
+        "dark:bg-card/50 dark:hover:border-primary/40 dark:shadow-none",
         className,
       )}
       {...props}
     >
-      <div>{background}</div>
-      <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-10">
-        <Icon className="h-12 w-12 origin-left transform-gpu text-blue-600 transition-all duration-300 ease-in-out group-hover:scale-75" />
-        <h3 className="text-xl font-semibold text-neutral-700 dark:text-neutral-300">
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 [background:radial-gradient(60%_50%_at_50%_0%,hsl(var(--primary)/.14),transparent_70%)] group-hover:opacity-100" />
+      <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.03]">
+        {background}
+      </div>
+      <div className="from-card via-card/85 pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t to-transparent" />
+
+      <div className="pointer-events-none relative z-10 flex flex-col gap-1.5 p-6 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-9">
+        <span className="bg-primary/10 text-primary ring-primary/15 mb-1 inline-flex size-10 items-center justify-center rounded-xl ring-1">
+          <Icon className="size-5" />
+        </span>
+        <h3 className="text-foreground text-xl font-semibold tracking-tight">
           {name}
         </h3>
-        <p className="max-w-lg text-balance text-neutral-400">{description}</p>
+        <p className="text-muted-foreground max-w-lg text-sm text-balance">
+          {description}
+        </p>
       </div>
 
-      <div
-        className={cn(
-          "pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
-        )}
-      >
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex translate-y-8 items-center p-4 opacity-0 transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-y-0 group-hover:opacity-100">
         <Button
           variant="ghost"
           nativeButton={false}
@@ -87,12 +92,11 @@ function BentoCard({
           render={
             <a href={href}>
               {cta}
-              <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
+              <ArrowRightIcon className="ms-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:rotate-180" />
             </a>
           }
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10" />
     </motion.div>
   );
 }
