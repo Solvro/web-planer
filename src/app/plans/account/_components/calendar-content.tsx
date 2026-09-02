@@ -1,0 +1,85 @@
+import Image from "next/image";
+
+import { Separator } from "@/components/ui/separator";
+
+export function CalendarContent() {
+  return (
+    <div className="mb-8 w-full space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">Jak dodać do kalendarza</h3>
+        <p className="text-muted-foreground text-sm">
+          Tutaj znajdziesz krótki tutorial, jak dodać swój plan zajęć do swojego
+          kalendarza Google
+        </p>
+      </div>
+      <Separator />
+      <div className="space-y-3">
+        <Title title={"Pobierz plik .ics"} step={1} />
+        <p>Kliknij przycisk &quot;Dodaj do kalendarza (.ics)&quot;</p>
+        <Image
+          src={"/assets/tutorial/tutorial-1.png"}
+          alt="Strona z planami, przycisk dodaj do kalendarza"
+          width={800}
+          height={450}
+          unoptimized
+          className="w-full"
+        />
+      </div>
+      <div className="space-y-3">
+        <Title
+          title={"Przejdź do kalendarza google i kliknij importuj"}
+          step={2}
+        />
+        <p>
+          Przejdź na stronę kalendarza Google i kliknij plus w dolnym lewym rogu
+          &gt; importuj
+        </p>
+        <Image
+          src={"/assets/tutorial/tutorial-2.jpg"}
+          alt="Strona główna kalendarza google z zaznaczonym na czerwono przyciskiem dodaj"
+          width={800}
+          height={450}
+          unoptimized
+          className="w-full"
+        />
+        <Image
+          src={"/assets/tutorial/tutorial-3.jpg"}
+          alt="Strona kalendarza google z zaznaczonym na czerwono przyciskiem importuj"
+          width={800}
+          height={450}
+          unoptimized
+          className="w-full"
+        />
+      </div>
+      <div className="space-y-3">
+        <Title title={"Wybierz pobrany plik"} step={3} />
+        <p>
+          Wybierz plik .ics, który pobrałeś wcześniej z naszej strony i kliknij
+          importuj
+        </p>
+        <Image
+          src={"/assets/tutorial/tutorial-4.jpg"}
+          alt="Strona importu pliku do kalendarza google"
+          width={800}
+          height={450}
+          unoptimized
+          className="w-full"
+        />
+      </div>
+      <div className="space-y-3">
+        <Title title={"Ciesz się zaimportowanymi wydarzeniami"} step={4} />
+      </div>
+    </div>
+  );
+}
+
+function Title({ title, step }: { title: string; step: number }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="bg-primary flex size-10 items-center justify-center rounded-md text-lg font-semibold text-white">
+        {step}.
+      </div>
+      <h1 className="text-lg font-semibold">{title}</h1>
+    </div>
+  );
+}

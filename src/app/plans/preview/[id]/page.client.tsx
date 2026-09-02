@@ -1,53 +1,38 @@
 "use client";
 
-import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import * as React from "react";
-import { useMemo, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useMemo } from "react";
 
-import { planFamily } from "@/atoms/plan-family";
-import { plansIds } from "@/atoms/plans-ids";
-import { ClassSchedule } from "@/components/class-schedule";
 import { Icons } from "@/components/icons";
+import { WeekGrid } from "@/components/schedule/week-grid";
 import { Button } from "@/components/ui/button";
-import { usePlanOrientation } from "@/hooks/use-plan-orientation";
-import { cn } from "@/lib/utils";
+import { useLocalPlans } from "@/lib/plan/local-plans";
 import type { SharedPlan } from "@/types";
-import { Day } from "@/types";
 
 export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
-  const uuid = useMemo(() => uuidv4(), []);
-  const [plans, setPlans] = useAtom(plansIds);
-  const [planToCopy, setPlanToCopy] = useAtom(planFamily({ id: uuid }));
-  const { isHorizontal } = usePlanOrientation();
-
   const router = useRouter();
-  const captureRef = useRef<HTMLDivElement>(null);
+  const localPlans = useLocalPlans();
+
+  const selectedGroups = useMemo(
+    () => plan.allGroups.filter((group) => group.isChecked),
+    [plan.allGroups],
+  );
 
   const copyPlan = () => {
-    const newPlan = {
-      id: uuid,
-      ...plan,
-    };
-
     void window.umami?.track("Create plan", {
-      numberOfPlans: plans.length,
+      numberOfPlans: localPlans.ids().length,
     });
-
-    setPlans([...plans, newPlan]);
-    setPlanToCopy({
-      ...planToCopy,
-      ...plan,
+    const copy = localPlans.create({
+      name: plan.name,
+      courses: plan.courses,
+      registrations: plan.registrations,
+      toCreate: false,
     });
-
-    setTimeout(() => {
-      router.push(`/plans/edit/${newPlan.id}`);
-    }, 200);
+    router.push(`/plans/edit/${copy.id}`);
   };
 
   return (
-    <div className="flex w-full grow flex-col overflow-x-auto pt-20">
+    <div className="flex w-full grow flex-col overflow-x-auto pt-16">
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4 md:px-14">
         <h1 className="text-xl font-semibold">{plan.name}</h1>
 
@@ -59,48 +44,13 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
         </div>
       </div>
 
-      <div
-        ref={captureRef}
-        className={cn(
-          "bg-background flex scrollbar-thin gap-2 p-1",
-          isHorizontal ? "flex-row justify-center" : "flex-col overflow-auto",
-        )}
-      >
-        {[
-          { day: Day.MONDAY, label: "Poniedziałek" },
-          { day: Day.TUESDAY, label: "Wtorek" },
-          { day: Day.WEDNESDAY, label: "Środa" },
-          { day: Day.THURSDAY, label: "Czwartek" },
-          { day: Day.FRIDAY, label: "Piątek" },
-        ].map(({ day, label }) => (
-          <ClassSchedule
-            key={day}
-            day={label}
-            isReadonly={true}
-            selectedGroups={[]}
-            groups={plan.allGroups.filter((g) => g.day === day && g.isChecked)}
-            onSelectGroup={() => {
-              return null;
-            }}
-          />
-        ))}
-        {[
-          { day: Day.SATURDAY, label: "Sobota" },
-          { day: Day.SUNDAY, label: "Niedziela" },
-        ].map(
-          ({ day, label }) =>
-            plan.allGroups.some((g) => g.day === day) && (
-              <ClassSchedule
-                key={day}
-                day={label}
-                isReadonly={true}
-                selectedGroups={[]}
-                groups={plan.allGroups.filter(
-                  (g) => g.day === day && g.isChecked,
-                )}
-              />
-            ),
-        )}
+      <div className="bg-background scrollbar-thin p-1">
+        <WeekGrid
+          allGroups={selectedGroups}
+          selectedGroups={[]}
+          collisions={[]}
+          isReadonly={true}
+        />
       </div>
     </div>
   );

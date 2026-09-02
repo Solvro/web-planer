@@ -1,16 +1,15 @@
 import type React from "react";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { getCurrentYear } from "@/lib/get-current-year";
 
 import { PlansTopbar } from "./_components/plans-topbar";
 
-export default async function PlansLayout({
+export default function PlansLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const year = await getCurrentYear();
+  // const year = await getCurrentYear();
 
   return (
     <div className="flex h-screen min-h-screen flex-col items-center overflow-x-hidden">
@@ -20,7 +19,7 @@ export default async function PlansLayout({
         {children}
       </SidebarProvider>
 
-      <div className="bg-mainbutton7 flex w-full flex-col items-center justify-center p-2 py-6 dark:bg-white/5">
+      {/* <div className="flex w-full flex-col items-center justify-center p-2 py-6">
         <p className="text-center text-white">
           Made with ❤️ by{" "}
           <a
@@ -35,7 +34,7 @@ export default async function PlansLayout({
           Źródłem danych o zajęciach jest USOS i ich prawnym właścicielem jest
           Politechnika Wrocławska
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }

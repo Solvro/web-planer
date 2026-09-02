@@ -1,108 +1,155 @@
 "use client";
 
-import { atom, useAtom } from "jotai";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 import type { UserSchedulesDTO } from "@/actions/plans";
-import { planFamily } from "@/atoms/plan-family";
-import { plansIds } from "@/atoms/plans-ids";
+import { getPlan } from "@/actions/plans";
+import { localPlansAtom } from "@/atoms/plans-ids";
 import { Icons } from "@/components/icons";
 import { PlanItem } from "@/components/plan-item";
+import { Button } from "@/components/ui/button";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { useLocalPlans } from "@/lib/plan/local-plans";
+import type { StoredPlan } from "@/types";
 
-const plansAtom = atom(
-  (get) => get(plansIds).map((id) => get(planFamily(id))),
-  (_get, set, values: { id: string }[]) => {
-    set(plansIds, values);
-  },
-);
+import PlansLoading from "./loading";
+
 export function PlansPage({
-  plans: onlinePlans,
+  onlinePlans,
 }: {
-  plans: UserSchedulesDTO[];
+  onlinePlans: UserSchedulesDTO[] | null;
 }) {
-  const [plans, setPlans] = useAtom(plansAtom);
+  const hydrated = useHydrated();
+
+  if (!hydrated) {
+    return <PlansLoading />;
+  }
+
+  return <PlansList onlinePlans={onlinePlans} />;
+}
+
+function PlansList({
+  onlinePlans,
+}: {
+  onlinePlans: UserSchedulesDTO[] | null;
+}) {
+  const localPlans = useAtomValue(localPlansAtom);
+  const { create, remove } = useLocalPlans();
   const router = useRouter();
-  const firstTime = useRef(true);
+
+  useRemoveOrphanedLocalPlans(localPlans, onlinePlans, remove);
 
   const addNewPlan = () => {
-    const uuid = crypto.randomUUID();
-    const newPlan = {
-      id: uuid,
-    };
-
     void window.umami?.track("Create plan", {
-      numberOfPlans: plans.length,
+      numberOfPlans: localPlans.length,
     });
-
-    router.push(`/plans/edit/${newPlan.id}`);
-    setPlans([...plans, newPlan]);
+    const plan = create();
+    router.push(`/plans/edit/${plan.id}`);
   };
 
-  const plansExistingLocallyAndDeletedOnline = plans.filter(
-    (plan) =>
-      plan.onlineId !== null &&
-      !onlinePlans.some((p) => p.id === plan.onlineId),
+  const localIds = new Set(localPlans.map((plan) => plan.id));
+  const onlineOnlyPlans = (onlinePlans ?? []).filter(
+    (plan) => !localIds.has(plan.id),
   );
-
-  const handleDeleteDeletedPlans = () => {
-    firstTime.current = false;
-    setPlans(
-      plans.filter(
-        (plan) =>
-          !plansExistingLocallyAndDeletedOnline.some((p) => p.id === plan.id),
-      ),
-    );
-    toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
-      duration: 5000,
-    });
-  };
-
-  useEffect(() => {
-    if (firstTime.current && plansExistingLocallyAndDeletedOnline.length > 0) {
-      handleDeleteDeletedPlans();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plansExistingLocallyAndDeletedOnline]);
+  const lastEdited =
+    localPlans.length > 0
+      ? new Date(
+          Math.max(
+            ...localPlans.map((plan) => new Date(plan.updatedAt).getTime()),
+          ),
+        )
+      : null;
 
   return (
-    <div className="container mx-auto max-h-full flex-1 grow overflow-y-auto p-4 pt-24">
-      <div className="grid grid-cols-2 gap-4 sm:justify-start md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        <button
-          onClick={addNewPlan}
-          className="group hover:border-primary hover:bg-primary/5 flex aspect-square items-center justify-center rounded-lg border-2 border-dashed border-gray-400 p-4 shadow-md transition-all hover:shadow-xl dark:border-gray-800"
-        >
-          <Icons.Plus className="group-hover:text-primary h-24 w-24 text-gray-400 transition-colors dark:text-gray-600" />
-        </button>
-        {plans.map((plan) =>
-          onlinePlans.some((onlinePlan) => onlinePlan.id === plan.id) ? null : (
-            <PlanItem
-              key={plan.id}
-              id={plan.id}
-              name={plan.name}
-              synced={plan.synced}
-              onlineId={plan.onlineId}
-            />
-          ),
-        )}
-        {onlinePlans.map((plan) => {
-          return (
-            <PlanItem
-              key={plan.id}
-              id={plan.id}
-              name={plan.name}
-              synced={true}
-              onlineId={plan.id}
-              onlineOnly={true}
-              groupsCount={plan.groupsCount}
-              coursesCount={plan.coursesCount}
-              registrationsCount={plan.registrationsCount}
-              updatedAt={new Date(plan.updatedAt)}
-            />
-          );
-        })}
+    <div className="container mx-auto max-h-full flex-1 grow overflow-y-auto p-4 pt-20">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">Moje plany</h1>
+          {lastEdited === null ? null : (
+            <p className="text-muted-foreground text-sm">
+              Ostatnia zmiana{" "}
+              {format(lastEdited, "d MMM yyyy, HH:mm", { locale: pl })}
+            </p>
+          )}
+        </div>
+        <Button onClick={addNewPlan}>
+          <Icons.Plus className="size-4" />
+          Nowy plan
+        </Button>
+      </div>
+      {localPlans.length === 0 && onlineOnlyPlans.length === 0 ? (
+        <div className="border-border/70 text-muted-foreground flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed px-6 py-16 text-center">
+          <Icons.Plans className="text-primary/70 size-8" />
+          <p className="text-foreground text-lg font-semibold">
+            Nie masz jeszcze żadnego planu
+          </p>
+          <p className="max-w-sm text-sm text-balance">
+            Utwórz pierwszy plan, dodaj rejestrację z USOS i poukładaj grupy
+            tak, jak lubisz.
+          </p>
+          <Button onClick={addNewPlan} className="mt-2">
+            <Icons.Plus className="size-4" />
+            Utwórz plan
+          </Button>
+        </div>
+      ) : null}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {localPlans.map((plan) => (
+          <PlanItem key={plan.id} local={plan} />
+        ))}
+        {onlineOnlyPlans.map((plan) => (
+          <PlanItem key={plan.id} online={plan} />
+        ))}
       </div>
     </div>
   );
+}
+
+function useRemoveOrphanedLocalPlans(
+  localPlans: StoredPlan[],
+  onlinePlans: UserSchedulesDTO[] | null,
+  remove: (id: string) => void,
+) {
+  const checked = useRef(false);
+
+  /* eslint-disable react-you-might-not-need-an-effect/no-event-handler, react-you-might-not-need-an-effect/no-pass-data-to-parent */
+  useEffect(() => {
+    if (checked.current || onlinePlans === null) {
+      return;
+    }
+    checked.current = true;
+
+    const onlineIds = new Set(onlinePlans.map((plan) => plan.id));
+    const candidates = localPlans.filter(
+      (plan) => plan.onlineId !== null && !onlineIds.has(plan.onlineId),
+    );
+    if (candidates.length === 0) {
+      return;
+    }
+
+    void (async () => {
+      const results = await Promise.all(
+        candidates.map(async (plan) => ({
+          id: plan.id,
+          exists: (await getPlan({ id: plan.onlineId ?? "" })) !== null,
+        })),
+      );
+      const orphaned = results.filter((result) => !result.exists);
+      if (orphaned.length === 0) {
+        return;
+      }
+      for (const { id } of orphaned) {
+        remove(id);
+      }
+      toast.success("Usunięto plany, które usunąłeś na innym urządzeniu.", {
+        duration: 5000,
+      });
+    })();
+  }, [localPlans, onlinePlans, remove]);
+  /* eslint-enable react-you-might-not-need-an-effect/no-event-handler, react-you-might-not-need-an-effect/no-pass-data-to-parent */
 }

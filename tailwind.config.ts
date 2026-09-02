@@ -78,6 +78,18 @@ const config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        type: {
+          w: "hsl(var(--type-w))",
+          l: "hsl(var(--type-l))",
+          c: "hsl(var(--type-c))",
+          s: "hsl(var(--type-s))",
+          p: "hsl(var(--type-p))",
+        },
+        status: {
+          ready: "hsl(var(--status-ready))",
+          collision: "hsl(var(--status-collision))",
+          pending: "hsl(var(--status-pending))",
+        },
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
@@ -313,21 +325,6 @@ const config = {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
         marquee: "marquee var(--duration) linear infinite",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
-      },
-      gridColumnStart: {
-        "13": "13",
-        "14": "14",
-        "15": "15",
-        "16": "16",
-      },
-      gridTemplateColumns: {
-        "14": "repeat(14, minmax(0, 1fr))",
-        "15": "repeat(15, minmax(0, 1fr))",
-        "16": "repeat(16, minmax(0, 1fr))",
-        dayPlan: "repeat(174, 1fr)",
-      },
-      gridTemplateRows: {
-        dayPlan: "repeat(174, 6px)",
       },
     },
   },

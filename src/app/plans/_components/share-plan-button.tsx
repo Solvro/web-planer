@@ -1,38 +1,36 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { sharePlan, unsharePlan } from "@/actions/plans";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
-import type { PlanState } from "@/types";
+import type { PlanHandle } from "@/lib/plan/use-plan";
 
-export function SharePlanButton({ plan }: { plan: PlanState }) {
-  const [currentSharedPlanId, setCurrentSharedPlanId] = React.useState<
-    string | null | undefined
-  >(plan.sharedId);
-  const [generatingLink, setGeneratingLink] = React.useState<boolean>(false);
-  const [unsharing, setUnsharing] = React.useState<boolean>(false);
+const previewUrl = (id: string) =>
+  `${env.NEXT_PUBLIC_SITE_URL}/plans/preview/${id}`;
 
-  const handleCopyLink = async (id: string) => {
-    await navigator.clipboard.writeText(
-      `${env.NEXT_PUBLIC_SITE_URL}/plans/preview/${id}`,
-    );
-    toast.success("Skopiowano link do schowka");
-  };
+async function copyLink(id: string) {
+  await navigator.clipboard.writeText(previewUrl(id));
+  toast.success("Skopiowano link do schowka");
+}
 
-  const handleSharePlan = async () => {
-    if (plan.onlineId === null) {
+export function SharePlanButton({ plan }: { plan: PlanHandle }) {
+  const [sharing, setSharing] = useState(false);
+  const [unsharing, setUnsharing] = useState(false);
+  const { onlineId, sharedId } = plan;
+
+  const share = async () => {
+    if (onlineId === null) {
       toast.error("Najpierw zapisz plan online, aby móc go udostępnić");
       return;
     }
-
-    setGeneratingLink(true);
+    setSharing(true);
     try {
-      const response = await sharePlan({
-        id: plan.onlineId,
+      const result = await sharePlan({
+        id: onlineId,
         snapshot: {
           name: plan.name,
           registrations: plan.registrations,
@@ -40,36 +38,33 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
           allGroups: plan.allGroups,
         },
       });
-
-      if (response.success) {
-        setCurrentSharedPlanId(plan.onlineId);
-        await handleCopyLink(plan.onlineId);
-        plan.setPlan({ ...plan, sharedId: plan.onlineId });
-      } else {
-        toast.error(response.message);
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+      plan.setSharedId(onlineId, result.data.updatedAt);
+      await copyLink(onlineId);
     } catch {
       toast.error("Wystąpił błąd podczas generowania linku");
     } finally {
-      setGeneratingLink(false);
+      setSharing(false);
     }
   };
 
-  const handleUnsharePlan = async () => {
-    if (plan.onlineId === null) {
+  const unshare = async () => {
+    if (onlineId === null) {
       return;
     }
-
     setUnsharing(true);
     try {
-      const response = await unsharePlan({ id: plan.onlineId });
-
-      if (response.success) {
-        setCurrentSharedPlanId(null);
-        plan.setPlan({ ...plan, sharedId: null });
-      } else {
-        toast.error(response.message);
+      const result = await unsharePlan({ id: onlineId });
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+      plan.setSharedId(null, result.data.updatedAt);
+    } catch {
+      toast.error("Nie udało się wyłączyć udostępniania");
     } finally {
       setUnsharing(false);
     }
@@ -78,17 +73,19 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
   return (
     <div className="bg-background/50 flex items-center gap-2 rounded-full border p-1">
       <p className="hidden truncate pl-2 md:block">
-        {env.NEXT_PUBLIC_SITE_URL}/plans/preview/{currentSharedPlanId ?? "..."}
+        {previewUrl(sharedId ?? "...")}
       </p>
-      {currentSharedPlanId === null || currentSharedPlanId === undefined ? (
+      {sharedId === null ? (
         <Button
           size="sm"
           className="rounded-full"
           variant="secondary"
-          disabled={generatingLink || plan.onlineId === null}
-          onClick={handleSharePlan}
+          disabled={sharing || onlineId === null}
+          onClick={() => {
+            void share();
+          }}
         >
-          {generatingLink ? (
+          {sharing ? (
             <Icons.Loader className="size-4 animate-spin" />
           ) : (
             <Icons.Link className="size-4" />
@@ -101,10 +98,12 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
             size="sm"
             className="rounded-full rounded-r-none"
             variant="secondary"
-            disabled={generatingLink}
-            onClick={handleSharePlan}
+            disabled={sharing}
+            onClick={() => {
+              void share();
+            }}
           >
-            {generatingLink ? (
+            {sharing ? (
               <Icons.Loader className="size-4 animate-spin" />
             ) : (
               <Icons.Link className="size-4" />
@@ -115,7 +114,10 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
             size="sm"
             className="rounded-none"
             variant="outline"
-            onClick={async () => handleCopyLink(currentSharedPlanId)}
+            aria-label="Kopiuj link"
+            onClick={() => {
+              void copyLink(sharedId);
+            }}
           >
             <Icons.Copy className="size-4" />
           </Button>
@@ -123,8 +125,11 @@ export function SharePlanButton({ plan }: { plan: PlanState }) {
             size="sm"
             className="rounded-full rounded-l-none"
             variant="outline"
+            aria-label="Wyłącz udostępnianie"
             disabled={unsharing}
-            onClick={handleUnsharePlan}
+            onClick={() => {
+              void unshare();
+            }}
           >
             {unsharing ? (
               <Icons.Loader className="size-4 animate-spin" />

@@ -4,9 +4,15 @@ import type {
   GroupSchedulePattern,
   ScheduleParity,
 } from "@/lib/utils/build-group-schedule-pattern";
-import { buildGroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
+import {
+  buildGroupSchedulePattern,
+  daysBetween,
+  isoWeekday,
+  mostFrequent,
+} from "@/lib/utils/build-group-schedule-pattern";
 import type { ClassgroupDate } from "@/types";
 
+import type { ClassgroupDateDTO } from "./get-class-group-dates";
 import { getClassgroupDatesAction } from "./get-class-group-dates";
 import type { CourseGroupDTO } from "./get-course-edition-details";
 import { getCourseEditionDetailsAction } from "./get-course-edition-details";
@@ -24,62 +30,79 @@ export interface PlannerGroupDTO {
   spotsTotal: number;
 }
 
-function toClassgroupDates(
-  group: {
-    startTime: string | null;
-    endTime: string | null;
-  }[],
-): ClassgroupDate[] {
-  return group
-    .filter(
-      (d): d is { startTime: string; endTime: string } =>
-        d.startTime != null && d.endTime != null,
-    )
-    .map((d) => ({
-      date: d.startTime.slice(0, 10),
-      startTime: d.startTime,
-      endTime: d.endTime,
-    }));
+function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
+  return dates.flatMap((entry) =>
+    entry.startTime != null && entry.endTime != null
+      ? [
+          {
+            date: entry.startTime.slice(0, 10),
+            startTime: entry.startTime,
+            endTime: entry.endTime,
+          },
+        ]
+      : [],
+  );
 }
 
-function daysBetween(a: string, b: string): number {
-  const msPerDay = 1000 * 60 * 60 * 24;
-  return Math.round((new Date(b).getTime() - new Date(a).getTime()) / msPerDay);
+/** 0 for a Monday, 6 for a Sunday. */
+function daysSinceMonday(date: string): number {
+  return isoWeekday(date) - 1;
 }
 
-async function getSchedulePatternParity(
+/**
+ * Week 1 of the term is "odd" (TN), week 2 is "even" (TP) and so on. Weeks are
+ * aligned to Mondays, so a term starting on a Wednesday still counts the
+ * whole surrounding week as week 1. The parity of a group is the parity most
+ * of its meetings fall into, which makes single exceptions harmless.
+ */
+function parityRelativeToTerm(
+  dates: string[],
+  termStartDate: string,
+): ScheduleParity {
+  const termWeekStart = daysSinceMonday(termStartDate);
+  const parities = dates.map((date) => {
+    const days =
+      daysBetween(termStartDate, date) + termWeekStart - daysSinceMonday(date);
+    const weekIndex = Math.round(days / 7);
+    return weekIndex % 2 === 0 ? "odd" : "even";
+  });
+  return mostFrequent(parities) ?? "unknown";
+}
+
+async function resolveBiweeklyParity(
+  pattern: GroupSchedulePattern,
   termId: string,
-  classGroupStartTime: string,
 ): Promise<ScheduleParity> {
-  const term = await getTermAction(termId);
-  const weekNumber =
-    Math.floor(daysBetween(classGroupStartTime, term.startDate) / 7) + 1;
-  return weekNumber % 2 === 0 ? "odd" : "even";
+  try {
+    const term = await getTermAction(termId);
+    return parityRelativeToTerm(pattern.dates, term.startDate);
+  } catch {
+    return pattern.parity;
+  }
 }
 
-async function fetchGroupWithPattern(
+async function buildPlannerGroup(
   group: CourseGroupDTO,
   termId: string,
-): Promise<{
-  group: CourseGroupDTO;
-  schedulePattern: GroupSchedulePattern | null;
-  spotsOccupied: number;
-  spotsTotal: number;
-}> {
+): Promise<PlannerGroupDTO> {
   const [dates, spots] = await Promise.all([
     getClassgroupDatesAction(group.unitId, group.groupNumber),
     getGroupSpotsAction(group.unitId, group.groupNumber),
   ]);
-  const classgroupDates = toClassgroupDates(dates);
-  const schedulePattern = buildGroupSchedulePattern(classgroupDates);
+
+  const schedulePattern = buildGroupSchedulePattern(toClassgroupDates(dates));
   if (schedulePattern?.pattern === "biweekly") {
-    schedulePattern.parity = await getSchedulePatternParity(
+    schedulePattern.parity = await resolveBiweeklyParity(
+      schedulePattern,
       termId,
-      dates[1].startTime ?? "",
     );
   }
+
   return {
-    group,
+    unitId: group.unitId,
+    groupNumber: group.groupNumber,
+    classtypeId: group.classtypeId,
+    lecturers: group.lecturers,
     schedulePattern,
     spotsOccupied: spots.spotsOccupied,
     spotsTotal: spots.spotsTotal,
@@ -92,21 +115,9 @@ export async function getPlannerCourseGroupsAction(
 ): Promise<PlannerGroupDTO[]> {
   const editionDetails = await getCourseEditionDetailsAction(courseId, termId);
 
-  const groupsWithPatterns = await Promise.all(
+  return Promise.all(
     editionDetails.groups.map(async (group) =>
-      fetchGroupWithPattern(group, termId),
+      buildPlannerGroup(group, termId),
     ),
-  );
-
-  return groupsWithPatterns.map(
-    ({ group, schedulePattern, spotsOccupied, spotsTotal }) => ({
-      unitId: group.unitId,
-      groupNumber: group.groupNumber,
-      classtypeId: group.classtypeId,
-      lecturers: group.lecturers,
-      schedulePattern,
-      spotsOccupied,
-      spotsTotal,
-    }),
   );
 }

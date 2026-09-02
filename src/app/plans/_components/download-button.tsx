@@ -1,29 +1,30 @@
 "use client";
 
 import { toPng } from "html-to-image";
-import React, { useCallback } from "react";
+import type { RefObject } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import type { PlanState } from "@/types";
 
 export function DownloadPlanButton({
   captureRef,
-  plan,
+  planName,
   hideDays,
 }: {
-  captureRef: React.RefObject<HTMLDivElement | null>;
-  plan: PlanState;
+  captureRef: RefObject<HTMLDivElement | null>;
+  planName: string;
   hideDays: boolean;
 }) {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const downloadPlan = useCallback(async () => {
-    if (captureRef.current === null) {
+  const downloadPlan = async () => {
+    const element = captureRef.current;
+    if (element === null) {
       return;
     }
     setLoading(true);
-    const element = captureRef.current;
     try {
       const dataUrl = await toPng(element, {
         cacheBust: true,
@@ -31,26 +32,28 @@ export function DownloadPlanButton({
         height: element.scrollHeight,
       });
       const link = document.createElement("a");
-      link.download = `${plan.name}.png`;
+      link.download = `${planName || "plan"}.png`;
       link.href = dataUrl;
       link.click();
 
       void window.umami?.track("Download plan", {
         withHiddenDays: hideDays.toString(),
       });
-    } catch (error: unknown) {
+    } catch (error) {
       console.error(error);
+      toast.error("Nie udało się wygenerować obrazka");
     } finally {
       setLoading(false);
     }
-  }, [captureRef, hideDays, plan.name]);
+  };
 
   return (
     <Button
       className="rounded-full dark:bg-white dark:text-black"
-      variant={"default"}
       disabled={loading}
-      onClick={downloadPlan}
+      onClick={() => {
+        void downloadPlan();
+      }}
     >
       {loading ? (
         <Icons.Loader className="size-4 animate-spin" />
