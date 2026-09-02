@@ -5,7 +5,7 @@ const DAYS = ["Pon", "Wt", "Śr", "Czw", "Pt"];
 export default function EditPlanLoading() {
   return (
     <div className="flex h-screen w-full overflow-hidden">
-      <aside className="hidden h-svh w-(--sidebar-width) shrink-0 border-r pt-20 md:block">
+      <aside className="hidden h-svh w-(--sidebar-width) shrink-0 border-r pt-16 md:block">
         <div className="ml-4 flex max-h-screen w-[calc(100%-2rem)] flex-col gap-4 px-2">
           <div className="flex w-full items-end gap-1">
             <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -48,7 +48,7 @@ export default function EditPlanLoading() {
         </div>
       </aside>
 
-      <div className="flex flex-1 gap-3 overflow-x-auto p-3 pt-24">
+      <div className="flex flex-1 gap-3 overflow-x-auto p-3 pt-14">
         {DAYS.map((day) => (
           <div
             key={day}

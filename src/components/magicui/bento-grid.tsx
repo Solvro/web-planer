@@ -1,9 +1,8 @@
 import { ArrowRight as ArrowRightIcon } from "lucide-react";
-import type { MotionProps, Variants } from "motion/react";
+import type { MotionProps, Transition, Variants } from "motion/react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface BentoGridProps extends Omit<
@@ -21,11 +20,11 @@ interface BentoCardProps extends Omit<
   name: string;
   className: string;
   background: ReactNode;
-  Icon: React.ElementType;
-  description: string;
+  description: ReactNode;
   href: string;
   cta: string;
   variants?: Variants | undefined;
+  transition?: Transition | undefined;
 }
 
 function BentoGrid({ children, className, ...props }: BentoGridProps) {
@@ -46,7 +45,6 @@ function BentoCard({
   name,
   className,
   background,
-  Icon,
   description,
   href,
   cta,
@@ -56,45 +54,44 @@ function BentoCard({
     <motion.div
       key={name}
       className={cn(
-        "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl",
-        // light styles
-        "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
-        // dark styles
-        "dark:bg-background transform-gpu dark:[box-shadow:0_-20px_80px_-20px_#0000001f_inset] dark:[border:1px_solid_rgba(0,0,0,.1)]",
+        "group border-border/70 bg-card/60 relative col-span-3 flex flex-col overflow-hidden rounded-2xl border p-3 backdrop-blur-sm",
+        "hover:border-primary/40 transition-[border-color,box-shadow] duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:shadow-[0_20px_50px_-30px_hsl(var(--primary)/.5)]",
         className,
       )}
       {...props}
     >
-      <div>{background}</div>
-      <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-10">
-        <Icon className="h-12 w-12 origin-left transform-gpu text-blue-600 transition-all duration-300 ease-in-out group-hover:scale-75" />
-        <h3 className="text-xl font-semibold text-neutral-700 dark:text-neutral-300">
+      <a
+        href={href}
+        aria-label={`${name} – ${cta}`}
+        className="focus-visible:ring-primary/60 absolute inset-0 z-20 rounded-2xl focus-visible:ring-2 focus-visible:outline-none"
+      />
+      <div className="border-border/60 bg-background/70 relative min-h-0 flex-1 overflow-hidden rounded-xl border shadow-[inset_0_1px_0_hsl(var(--foreground)/.04)] dark:bg-black/30">
+        <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.02]">
+          {background}
+        </div>
+      </div>
+      <div className="flex flex-col gap-1.5 px-3 pt-4 pb-2">
+        <h3 className="text-foreground text-lg font-semibold tracking-tight">
           {name}
         </h3>
-        <p className="max-w-lg text-balance text-neutral-400">{description}</p>
+        <p className="text-muted-foreground text-sm text-balance">
+          {description}
+        </p>
+        <span className="text-primary mt-1 inline-flex items-center gap-1 text-sm font-medium opacity-0 transition-[opacity,transform] duration-500 group-hover:translate-x-0.5 group-hover:opacity-100">
+          {cta}
+          <ArrowRightIcon className="size-4" />
+        </span>
       </div>
-
-      <div
-        className={cn(
-          "pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
-        )}
-      >
-        <Button
-          variant="ghost"
-          nativeButton={false}
-          size="sm"
-          className="pointer-events-auto"
-          render={
-            <a href={href}>
-              {cta}
-              <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
-            </a>
-          }
-        />
-      </div>
-      <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/[.03] group-hover:dark:bg-neutral-800/10" />
     </motion.div>
   );
 }
 
-export { BentoCard, BentoGrid };
+function Kbd({ children }: { children: ReactNode }) {
+  return (
+    <kbd className="bg-muted text-foreground/80 border-border/70 rounded-md border px-1.5 py-0.5 font-mono text-[11px] font-medium shadow-[inset_0_-1px_0_hsl(var(--foreground)/.08)]">
+      {children}
+    </kbd>
+  );
+}
+
+export { BentoCard, BentoGrid, Kbd };

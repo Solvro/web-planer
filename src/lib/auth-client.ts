@@ -1,3 +1,4 @@
+import { passkeyClient } from "@better-auth/passkey/client";
 import { emailVerificationProtocolClient } from "better-auth-evp/client";
 import { usosAuthClient } from "better-auth-usos/client";
 import {
@@ -17,6 +18,7 @@ export const authClient = createAuthClient({
     emailVerificationProtocolClient(),
     inferAdditionalFields<typeof auth>(),
     usosAuthClient(),
+    passkeyClient(),
   ],
 });
 

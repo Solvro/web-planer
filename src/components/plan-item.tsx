@@ -2,15 +2,14 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import { useHoverDirty } from "react-use";
+import { useState } from "react";
 import { toast } from "sonner";
 
+import type { UserSchedulesDTO } from "@/actions/plans";
 import { deletePlan, getPlan } from "@/actions/plans";
-import { plansIds } from "@/atoms/plans-ids";
+import { TYPE_BAR } from "@/components/schedule/type-colors";
 import {
   Dialog,
   DialogContent,
@@ -27,187 +26,222 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { usePlan } from "@/lib/use-plan";
-import { pluralize } from "@/lib/utils";
-import { generateICSFile } from "@/lib/utils/generate-ics-file";
+import { exportPlanToIcs } from "@/lib/plan/export-ics";
+import { useLocalPlans } from "@/lib/plan/local-plans";
+import { onlinePlanQueryKey } from "@/lib/plan/use-plan-sync";
+import { cn, pluralize } from "@/lib/utils";
+import type { ClassType, StoredPlan } from "@/types";
 
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { StatusIcon } from "./ui/status-icon";
+import { Card } from "./ui/card";
 
-export function PlanItem({
-  id,
-  name,
-  synced,
-  onlineId,
-  onlineOnly = false,
-  groupsCount = 0,
-  coursesCount = 0,
-  registrationsCount = 0,
-  updatedAt = new Date(),
-}: {
+interface PlanCardView {
   id: string;
   name: string;
-  synced: boolean;
+  isOnline: boolean;
   onlineId: string | null;
-  onlineOnly?: boolean;
-  groupsCount?: number;
-  coursesCount?: number;
-  registrationsCount?: number;
-  updatedAt?: Date;
-}) {
-  const uuid = React.useMemo(() => crypto.randomUUID(), []);
-  const uuidToCopy = React.useMemo(() => crypto.randomUUID(), []);
-  const [plans, setPlans] = useAtom(plansIds);
-  const plan = usePlan({ planId: onlineOnly ? uuid : id });
-  const planToCopy = usePlan({ planId: uuid });
+  registrationsCount: number;
+  coursesCount: number;
+  groupsSelected: number;
+  groupsTotal: number;
+  coursesWithSelection: number | null;
+  usedTypes: ClassType[];
+  updatedAt: Date;
+}
+
+function localView(plan: StoredPlan): PlanCardView {
+  const allGroups = plan.courses.flatMap((course) => course.groups);
+  const selected = allGroups.filter((group) => group.isChecked);
+  return {
+    id: plan.id,
+    name: plan.name,
+    isOnline: plan.synced && plan.onlineId !== null,
+    onlineId: plan.onlineId,
+    registrationsCount: plan.registrations.length,
+    coursesCount: plan.courses.length,
+    groupsSelected: selected.length,
+    groupsTotal: allGroups.length,
+    coursesWithSelection:
+      allGroups.length > 0
+        ? new Set(selected.map((group) => group.courseId)).size
+        : null,
+    usedTypes: [...new Set(selected.map((group) => group.courseType))],
+    updatedAt: new Date(plan.updatedAt),
+  };
+}
+
+function onlineView(plan: UserSchedulesDTO): PlanCardView {
+  return {
+    id: plan.id,
+    name: plan.name,
+    isOnline: true,
+    onlineId: plan.id,
+    registrationsCount: plan.registrationsCount,
+    coursesCount: plan.coursesCount,
+    groupsSelected: plan.groupsCount,
+    groupsTotal: plan.groupsCount,
+    coursesWithSelection: null,
+    usedTypes: [],
+    updatedAt: new Date(plan.updatedAt),
+  };
+}
+
+type PlanItemProps =
+  | { local: StoredPlan; online?: undefined }
+  | { local?: undefined; online: UserSchedulesDTO };
+
+export function PlanItem(props: PlanItemProps) {
+  const view =
+    props.local === undefined
+      ? onlineView(props.online)
+      : localView(props.local);
+  const localPlan = props.local;
+
   const router = useRouter();
-  const [dialogOpened, setDialogOpened] = React.useState(false);
-  const [dropdownOpened, setDropdownOpened] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const ref = React.useRef<HTMLDivElement>(null);
-  const isHovering = useHoverDirty(ref as React.RefObject<Element>);
+  const queryClient = useQueryClient();
+  const localPlans = useLocalPlans();
+  const [dialogOpened, setDialogOpened] = useState(false);
+  const [dropdownOpened, setDropdownOpened] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const prefetchOnlinePlan = () => {
+    if (view.onlineId === null) {
+      return;
+    }
+    const onlineId = view.onlineId;
+    queryClient
+      .query({
+        queryKey: onlinePlanQueryKey(onlineId),
+        queryFn: async () => getPlan({ id: onlineId }),
+      })
+      .catch(() => null);
+  };
 
   const copyPlan = () => {
+    if (localPlan === undefined) {
+      return;
+    }
     setDropdownOpened(false);
-
-    const newPlan = {
-      id: uuidToCopy,
-    };
-
     void window.umami?.track("Create plan", {
-      numberOfPlans: plans.length,
+      numberOfPlans: localPlans.ids().length,
     });
-
-    setPlans([...plans, newPlan]);
-    planToCopy.setPlan({
-      ...planToCopy,
-      courses: plan.courses,
+    const copy = localPlans.create({
+      name: `${localPlan.name} (kopia)`,
+      courses: localPlan.courses,
+      registrations: localPlan.registrations,
+      toCreate: localPlan.toCreate,
     });
-
-    setTimeout(() => {
-      router.push(`/plans/edit/${newPlan.id}`);
-    }, 200);
+    router.push(`/plans/edit/${copy.id}`);
   };
 
-  const createFromOnlinePlan = () => {
-    const newPlan = {
-      id,
-    };
-
-    setPlans([...plans, newPlan]);
-    plan.setPlan({
-      ...plan,
-      id,
-      onlineId,
-      name,
-      createdAt: new Date(),
-    });
-
-    setTimeout(() => {
-      router.push(`/plans/edit/${newPlan.id}`);
-    }, 200);
+  const openOnlinePlan = () => {
+    const existing = localPlans.ids().some((entry) => entry.id === view.id);
+    if (!existing) {
+      localPlans.create({ id: view.id, onlineId: view.id, name: view.name });
+    }
+    router.push(`/plans/edit/${view.id}`);
   };
 
-  const handleDeletePlan = async () => {
-    setLoading(true);
-    if (onlineId !== null) {
-      const response = await deletePlan({ id: onlineId });
-      if (!response.success) {
-        toast.error(response.message);
-        setLoading(false);
-        return;
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      if (view.onlineId !== null) {
+        const result = await deletePlan({ id: view.onlineId });
+        if (!result.ok && result.reason !== "not_found") {
+          toast.error(result.message);
+          return;
+        }
       }
-    }
-    plan.remove();
-    setPlans(plans.filter((p) => p.id !== id));
-    toast.success("Plan został usunięty.");
-    router.refresh();
-  };
-
-  const groupCountLocal = plan.courses
-    .flatMap((c) => c.groups)
-    .filter((group) => group.isChecked).length;
-
-  const registrationsLength = plan.registrations.length;
-  const coursesLength = plan.courses.length;
-  const queryClient = useQueryClient();
-
-  const handleCacheOnlinePlan = () => {
-    if (plan.onlineId !== null) {
-      queryClient
-        .query({
-          queryKey: ["onlinePlan", plan.onlineId],
-          queryFn: async () => getPlan({ id: plan.onlineId ?? "" }),
-        })
-        .catch(() => {
-          // ignore prefetch errors, the real fetch will surface them
-        });
+      localPlans.remove(view.id);
+      toast.success("Plan został usunięty.");
+      setDialogOpened(false);
+      router.refresh();
+    } finally {
+      setDeleting(false);
     }
   };
 
-  useEffect(() => {
-    if (isHovering) {
-      handleCacheOnlinePlan();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHovering]);
+  const selectionRatio =
+    view.groupsTotal > 0
+      ? Math.min(view.groupsSelected / view.groupsTotal, 1)
+      : 0;
 
   return (
     <Card
-      className="relative flex aspect-square flex-col shadow-sm transition-all hover:shadow-md"
-      ref={ref}
+      className="relative flex flex-col gap-3 p-4 shadow-sm transition-all hover:shadow-md"
+      onMouseEnter={prefetchOnlinePlan}
     >
-      <CardHeader className="space-y-1 p-2 min-[520px]:p-4">
-        <CardTitle className="w-5/6 text-sm leading-2 text-balance min-[520px]:text-lg min-[520px]:leading-4">
-          {name}
-        </CardTitle>
-        <CardDescription>
-          {format(
-            onlineOnly ? updatedAt : plan.createdAt,
-            "dd.MM.yyyy - HH:mm",
+      <div className="flex items-start justify-between gap-2">
+        <p className="min-w-0 truncate text-lg font-semibold">{view.name}</p>
+        <span
+          className={cn(
+            "shrink-0 rounded-full px-2 py-0.5 text-xs font-medium",
+            view.isOnline
+              ? "bg-status-ready/15 text-status-ready"
+              : "bg-status-pending/15 text-status-pending",
           )}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 p-2 pt-0 text-xs min-[520px]:p-4 min-[520px]:text-sm">
+        >
+          {view.isOnline ? "online" : "lokalny"}
+        </span>
+      </div>
+
+      <div className="bg-muted flex h-1.5 w-full overflow-hidden rounded-full">
+        {view.usedTypes.length > 0 ? (
+          view.usedTypes.map((type) => (
+            <span key={type} className={cn("h-full flex-1", TYPE_BAR[type])} />
+          ))
+        ) : view.groupsSelected > 0 ? (
+          <span
+            className="bg-primary h-full rounded-full"
+            style={{ width: `${(selectionRatio * 100).toString()}%` }}
+          />
+        ) : (
+          <span className="bg-muted h-full w-full" />
+        )}
+      </div>
+
+      <div className="text-muted-foreground flex flex-col gap-0.5 text-sm">
         <p>
-          {registrationsCount || registrationsLength}{" "}
+          {view.registrationsCount}{" "}
           {pluralize(
-            registrationsCount || registrationsLength,
+            view.registrationsCount,
             "rejestracja",
             "rejestracje",
             "rejestracji",
-          )}
+          )}{" "}
+          · {view.coursesCount}{" "}
+          {pluralize(view.coursesCount, "kurs", "kursy", "kursów")}
         </p>
         <p>
-          {coursesCount || coursesLength}{" "}
-          {pluralize(coursesCount || coursesLength, "kurs", "kursy", "kursów")}
-        </p>
-        <p className="hidden min-[380px]:block">
-          {groupsCount || groupCountLocal}{" "}
-          {pluralize(
-            groupsCount || groupCountLocal,
-            "wybrana grupa",
-            "wybrane grupy",
-            "wybranych grup",
+          {view.coursesWithSelection === null ? (
+            <>
+              {view.groupsSelected}{" "}
+              {pluralize(view.groupsSelected, "grupa", "grupy", "grup")}{" "}
+              wybranych
+            </>
+          ) : (
+            <>
+              {view.coursesWithSelection} z {view.coursesCount}{" "}
+              {pluralize(view.coursesCount, "kurs", "kursy", "kursów")}{" "}
+              wybranych
+            </>
           )}
         </p>
-      </CardContent>
-      <CardFooter className="justify-between gap-2 border-t p-2 min-[520px]:p-3">
+        <p className="text-xs">
+          {view.isOnline ? "Zapisano" : "Utworzono"}{" "}
+          {format(view.updatedAt, "dd.MM.yyyy, HH:mm")}
+        </p>
+      </div>
+
+      <div className="mt-1 flex items-center justify-between gap-2 border-t pt-3">
         <DropdownMenu open={dropdownOpened} onOpenChange={setDropdownOpened}>
           <DropdownMenuTrigger
             render={
               <Button
                 variant="secondary"
-                className="h-7 w-7 px-0 min-[520px]:h-9 min-[520px]:w-9"
+                className="h-9 w-9 px-0"
+                aria-label="Więcej akcji"
               >
                 <Icons.EllipsisVertical className="size-4" />
               </Button>
@@ -216,18 +250,27 @@ export function PlanItem({
           <DropdownMenuContent align="start" side="top" className="w-50">
             <DropdownMenuLabel>Wybierz akcję</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={copyPlan}>
-              <Icons.Copy />
-              <span>Kopiuj</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                generateICSFile(plan.allGroups, plan.name);
-              }}
-            >
-              <Icons.Download />
-              <span>Dodaj do kalendarza (.ics)</span>
-            </DropdownMenuItem>
+            {localPlan === undefined ? null : (
+              <>
+                <DropdownMenuItem onClick={copyPlan}>
+                  <Icons.Copy />
+                  <span>Kopiuj</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    exportPlanToIcs(
+                      localPlan.courses
+                        .filter((course) => course.isChecked)
+                        .flatMap((course) => course.groups),
+                      localPlan.name,
+                    );
+                  }}
+                >
+                  <Icons.Download />
+                  <span>Dodaj do kalendarza (.ics)</span>
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuItem
               onClick={() => {
                 setDropdownOpened(false);
@@ -239,32 +282,27 @@ export function PlanItem({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        {onlineOnly ? (
-          <Button
-            className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
-            onClick={createFromOnlinePlan}
-          >
+        {localPlan === undefined ? (
+          <Button className="h-9 flex-1" onClick={openOnlinePlan}>
             <Icons.Pencil className="h-4 w-4" />
-            <p className="hidden min-[380px]:block">Edytuj</p>
+            Edytuj
           </Button>
         ) : (
           <Button
-            className="h-7 px-3 py-1.5 min-[520px]:h-9 min-[520px]:rounded-md min-[520px]:px-3"
+            className="h-9 flex-1"
             nativeButton={false}
             render={
-              <Link href={`/plans/edit/${id}`}>
+              <Link href={`/plans/edit/${view.id}`}>
                 <Icons.Pencil className="h-4 w-4" />
                 Edytuj
               </Link>
             }
           />
         )}
-      </CardFooter>
-
-      <StatusIcon synced={synced} onlineId={onlineId} />
+      </div>
 
       <Dialog open={dialogOpened} onOpenChange={setDialogOpened}>
-        <DialogContent className="max-w-[425px]" aria-describedby={undefined}>
+        <DialogContent className="max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Czy na pewno chcesz usunąć plan?</DialogTitle>
             <DialogDescription>Tej akcji nie da się cofnąć!</DialogDescription>
@@ -279,13 +317,13 @@ export function PlanItem({
               Anuluj
             </Button>
             <Button
-              disabled={loading}
+              disabled={deleting}
               onClick={() => {
-                void handleDeletePlan();
+                void handleDelete();
               }}
               variant="destructive"
             >
-              {loading ? (
+              {deleting ? (
                 <Icons.Loader className="size-4 animate-spin" />
               ) : null}
               Usuń

@@ -1,7 +1,3 @@
-import type { Dispatch, SetStateAction } from "react";
-
-import type { ExtendedCourse } from "@/atoms/plan-family";
-
 export enum Day {
   MONDAY = "poniedziałek",
   TUESDAY = "wtorek",
@@ -12,31 +8,47 @@ export enum Day {
   SUNDAY = "niedziela",
 }
 
-export enum LessonType {
-  LECTURE = "wyklad",
-  EXERCISES = "cwiczenia",
-  LABORATORY = "laboratorium",
-  PROJECT = "projekt",
-  SEMINAR = "seminarium",
-}
+export type ClassType = "C" | "L" | "P" | "S" | "W";
 
-export interface ClassBlockProps {
-  startTime: string;
-  endTime: string;
+/** "" = every week, TN = odd weeks, TP = even weeks, "!" = irregular */
+export type WeekParity = "" | "TN" | "TP" | "!";
+
+/**
+ * One class group as stored inside a plan. A group is one weekly slot
+ * (day + time) that belongs to a course; `groupOnlineId` is the identifier
+ * synced with the online plan, `groupId` is the local key used by the UI.
+ */
+export interface ExtendedGroup {
   groupId: string;
   groupNumber: string;
   groupOnlineId: string;
   courseId: string;
   courseName: string;
+  courseType: ClassType;
+  registrationId: string;
   lecturer: string;
   day: Day;
-  week: "" | "TN" | "TP" | "!";
-  courseType: "C" | "L" | "P" | "S" | "W";
-  registrationId: string;
+  week: WeekParity;
+  /** "HH:MM" */
+  startTime: string;
+  /** "HH:MM" */
+  endTime: string;
   spotsOccupied: number;
   spotsTotal: number;
   averageRating: number;
   opinionsCount: number;
+  isChecked: boolean;
+  /** Real meeting dates ("YYYY-MM-DD") from USOS; missing on plans saved before this field existed. */
+  dates?: string[];
+}
+
+export interface ExtendedCourse {
+  id: string;
+  name: string;
+  type: string;
+  registrationId: string;
+  isChecked: boolean;
+  groups: ExtendedGroup[];
 }
 
 export interface Registration {
@@ -45,11 +57,24 @@ export interface Registration {
   departmentId: string;
 }
 
-export interface Course {
-  name: string;
+/** Shape persisted in localStorage under `${id}-plan-v2`. */
+export interface StoredPlan {
   id: string;
-  type: string;
-  registrationId: string;
+  name: string;
+  sharedId: string | null;
+  courses: ExtendedCourse[];
+  registrations: Registration[];
+  /** ISO date */
+  createdAt: string;
+  /** ISO date of the online version this local copy was last reconciled with. */
+  updatedAt: string;
+  onlineId: string | null;
+  /** True until the plan receives content (added registration or pulled online data). */
+  toCreate: boolean;
+  /** False whenever there are local edits not yet pushed online. */
+  synced: boolean;
+  /** Incremented on every user edit; used to detect edits made while a sync was in flight. */
+  revision: number;
 }
 
 export interface SharedPlan {
@@ -58,7 +83,7 @@ export interface SharedPlan {
     name: string;
     courses: ExtendedCourse[];
     registrations: Registration[];
-    allGroups: ExtendedCourse["groups"];
+    allGroups: ExtendedGroup[];
   };
 }
 
@@ -78,146 +103,22 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface UserSettingsPayload {
-  allowNotifications: boolean;
-}
-
-export interface CreatePlanResponseType {
-  success: boolean;
-  message: string;
-  schedule: {
-    name: string;
-    userId: string;
-    createdAt: string;
-    updatedAt: string;
-    id: string;
-  };
-}
-
-export interface PlanResponseType {
+export interface OnlinePlan {
   name: string;
   userId: string;
   id: string;
   createdAt: string;
   updatedAt: string;
-  courses: {
-    id: string;
-  }[];
-  groups: {
-    id: string;
-  }[];
-  registrations: {
-    id: string;
-  }[];
+  courses: { id: string }[];
+  groups: { id: string }[];
+  registrations: { id: string }[];
 }
-
-export interface DeletePlanResponseType {
-  success: boolean;
-  message: string;
-}
-
-export interface GroupMeeting {
-  id: number;
-  groupId: number;
-  startTime: string;
-  endTime: string;
-  week: "-" | "TN" | "TP" | "!";
-  day: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface GroupLecturer {
-  id: number;
-  name: string;
-  surname: string;
-  createdAt: string;
-  updatedAt: string;
-  averageRating: string;
-  opinionsCount: string;
-}
-
-export interface SingleGroup {
-  id: string;
-  name: string;
-  lecturer: string;
-  averageRating: string;
-  opinionsCount: number;
-  group: string;
-  type: "C" | "L" | "P" | "S" | "W";
-  url: string;
-  courseId: string;
-  createdAt: string;
-  updatedAt: string;
-  spotsOccupied: number;
-  spotsTotal: number;
-  isActive: boolean;
-  lecturers: GroupLecturer[];
-  meetings: GroupMeeting[];
-}
-
-export interface SingleCourse {
-  id: string;
-  name: string;
-  registrationId: string;
-  groups: SingleGroup[];
-}
-
-export type CourseType = SingleCourse[];
 
 export interface ClassgroupDate {
   date: string;
   startTime: string;
   endTime: string;
 }
-
-export type FacultyType = {
-  id: string;
-  name: string;
-  departmentId: string;
-}[];
-
-export interface PlanState {
-  id: string;
-  name: string;
-  sharedId: string | null;
-  courses: ExtendedCourse[];
-  registrations: Registration[];
-  allGroups: ExtendedCourse["groups"];
-  onlineId: string | null;
-  synced: boolean;
-  toCreate: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  setPlan: SetPlanType;
-}
-
-type SetPlanType = Dispatch<
-  SetStateAction<{
-    id: string;
-    name: string;
-    sharedId: string | null;
-    courses: ExtendedCourse[];
-    registrations: Registration[];
-    createdAt: Date;
-    updatedAt: Date;
-    onlineId: string | null;
-    toCreate: boolean;
-    synced: boolean;
-  }>
->;
-
-export type VerifyOtpReponseType =
-  | {
-      success: true;
-      user: User;
-      isNewAccount: boolean;
-    }
-  | {
-      success: false;
-      message: string;
-      errors: Record<string, string>;
-    };
 
 export interface Contributor {
   name: string;

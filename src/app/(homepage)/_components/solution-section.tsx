@@ -1,93 +1,82 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element */
-import { motion, useAnimation, useInView } from "motion/react";
-import React, { useEffect, useRef } from "react";
+import { motion } from "motion/react";
 
-import {
-  AnimatedGroupsDemo,
-  AnimatedNotificationsDemo,
-} from "@/components/animated-list-components";
 import {
   AnimatedTitle,
   TitleHighlight,
   TitleText,
 } from "@/components/animated-title";
-import { Icons } from "@/components/icons";
-import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
+import {
+  CollisionsArt,
+  ScheduleSyncArt,
+  ShareArt,
+  StudentsArt,
+} from "@/components/homepage/bento-illustrations";
+import { BentoCard, BentoGrid, Kbd } from "@/components/magicui/bento-grid";
 import { childVariants, parentVariants } from "@/constants";
 
 const features = [
   {
-    Icon: Icons.Workflow,
     name: "Automatyczne pobieranie zajęć",
-    description:
-      "Dzięki planerowi masz gwarancję aktualnych danych o zapisach.",
+    description: (
+      <>
+        Grupy, godziny i wolne miejsca prosto z <Kbd>USOS</Kbd>. Zawsze
+        aktualne, bez przepisywania.
+      </>
+    ),
     className: "lg:col-span-1 lg:row-span-1",
     href: "/plans",
     cta: "Przejdź do planowania",
-    background: (
-      <AnimatedGroupsDemo className="absolute top-10 h-[240px] mask-[linear-gradient(to_top,transparent_40%,#000_100%)] [--duration:40s]" />
-    ),
+    background: <ScheduleSyncArt className="p-2" />,
   },
   {
-    Icon: Icons.Share,
     name: "Udostępnij znajomym",
-    description:
-      "Po stworzeniu swojego arcydzieła, możesz je udostępnić znajomym.",
+    description: (
+      <>
+        Wyślij link, pobierz <Kbd>.png</Kbd> albo wrzuć <Kbd>.ics</Kbd> do
+        kalendarza.
+      </>
+    ),
     className: "lg:col-span-1 lg:row-span-1",
     href: "/plans",
     cta: "Przejdź do planowania",
-    background: (
-      <img className="absolute -top-20 -right-20 opacity-60" alt="" />
-    ),
+    background: <ShareArt className="p-2" />,
   },
   {
-    Icon: Icons.Bell,
-    name: "Powiadomienia o zmianach",
-    description: "Coś się zmieniło w planie? Dowiesz się o tym jako pierwszy.",
-    className: "lg:col-span-1 lg:row-span-2",
-    href: "/plans/account/notifications",
-    cta: "Sprawdź ustawienia",
-    background: (
-      <AnimatedNotificationsDemo className="absolute top-4 right-2 h-[600px] w-full scale-75 border-none mask-[linear-gradient(to_top,transparent_10%,#000_100%)] transition-all duration-300 ease-out group-hover:scale-90" />
-    ),
-  },
-  {
-    Icon: Icons.Logo,
-    name: "Od studentów dla studentów",
+    name: "Kolizje i wolne miejsca",
     description:
-      "Razem z grupą znajomych KN Solvro stworzyliśmy planer dla Ciebie.",
+      "Nakładające się zajęcia i pełne grupy widzisz od razu, zanim klikniesz zapisz w USOS.",
+    className: "lg:col-span-1 lg:row-span-2",
+    href: "/plans",
+    cta: "Sprawdź swój plan",
+    background: <CollisionsArt className="p-3" />,
+  },
+  {
+    name: "Od studentów dla studentów",
+    description: (
+      <>
+        Razem z grupą znajomych z KN Solvro stworzyliśmy planer dla Ciebie. Kod
+        jest otwarty na <Kbd>GitHub</Kbd>.
+      </>
+    ),
     className: "lg:col-span-2 lg:row-span-1",
     href: "https://solvro.pwr.edu.pl/",
     cta: "Odwiedź stronę koła",
-    background: (
-      <img className="absolute -top-20 -right-20 opacity-60" alt="" />
-    ),
+    background: <StudentsArt className="p-2" />,
   },
 ];
 
 export function SolutionSection() {
-  const ref = useRef(null);
-  const isInview = useInView(ref, { once: true, amount: 0.4 });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (isInview) {
-      void controls.start("visible");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInview]);
-
   return (
-    <section>
-      <div className="bg-neutral-100 dark:bg-white/5">
+    <section className="relative">
+      <div className="bg-muted/40 dark:bg-white/[0.03]">
         <motion.div
           className="relative container mx-auto max-w-7xl px-4 py-16"
           variants={parentVariants}
-          ref={ref}
           initial="hidden"
-          animate={controls}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ staggerChildren: 0.1 }}
         >
           <div className="mx-auto space-y-4 pb-6 text-center">
@@ -102,10 +91,13 @@ export function SolutionSection() {
               <TitleHighlight>wymarzony plan</TitleHighlight>
               <TitleText> z planerem!</TitleText>
             </AnimatedTitle>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-6 text-balance text-slate-600">
-              Wybierz swój wydział, kierunek i już. Możesz ułożyć swój plan
-              widząc swoje wszystkie zajęcia na jednej stronie.
-            </p>
+            <motion.p
+              variants={childVariants}
+              className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg leading-6 text-balance"
+            >
+              Wybierz swój wydział, rejestrację i już. Wszystkie zajęcia na
+              jednej stronie, w widoku tygodnia, dnia albo listy.
+            </motion.p>
           </div>
 
           <BentoGrid className="min-h-[750px] lg:grid-cols-3 lg:grid-rows-2">
@@ -114,6 +106,7 @@ export function SolutionSection() {
                 key={feature.name}
                 {...feature}
                 variants={childVariants}
+                transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.6 }}
               />
             ))}
           </BentoGrid>

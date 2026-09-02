@@ -1,82 +1,57 @@
 "use client";
 
-import { formatDistance, isAfter, isEqual } from "date-fns";
+import { formatDistance, isAfter } from "date-fns";
 import { pl } from "date-fns/locale";
-import React, { useState } from "react";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { PlanResponseType } from "@/types";
 
 export function SyncErrorAlert({
-  onlinePlan,
-  planDate,
-  downloadChanges,
-  sendChanges,
+  localUpdatedAt,
+  onlineUpdatedAt,
+  isPulling,
+  isPushing,
+  onPull,
+  onPush,
 }: {
-  onlinePlan: PlanResponseType | null | undefined;
-  planDate: Date;
-  downloadChanges: () => void;
-  sendChanges: () => void;
+  localUpdatedAt: string;
+  onlineUpdatedAt: string;
+  isPulling: boolean;
+  isPushing: boolean;
+  onPull: () => Promise<void>;
+  onPush: () => Promise<void>;
 }) {
-  const [loadingSending, setLoadingSending] = useState(false);
-  const [loadingDownloading, setLoadingDownloading] = useState(false);
-  if (onlinePlan == null) {
-    return null;
-  }
-  if (isEqual(planDate, new Date(onlinePlan.updatedAt))) {
-    return null;
-  }
-
-  const timePassed = formatDistance(planDate, new Date(onlinePlan.updatedAt), {
-    addSuffix: false,
-    locale: pl,
-  });
-
-  const clearLoading = () => {
-    setTimeout(() => {
-      setLoadingDownloading(false);
-      setLoadingSending(false);
-    }, 5000);
-  };
+  const local = new Date(localUpdatedAt);
+  const online = new Date(onlineUpdatedAt);
+  const busy = isPulling || isPushing;
 
   return (
-    <div
-      className={cn(
-        "bg-primary/10 flex w-full flex-col rounded-md transition-all",
-      )}
-    >
-      <div className="flex w-full items-start justify-start p-4 pb-2">
-        <div className="">
-          <h1 className="text-primary text-lg font-bold">
-            Wystąpił konflikt w chmurze!
-          </h1>
-          <p className="text-xs font-medium text-black/90 dark:text-white">
-            Posiadasz{" "}
-            <strong>
-              {isAfter(planDate, onlinePlan.updatedAt)
-                ? "najnowszą"
-                : "starszą"}
-            </strong>{" "}
-            wersję o <span className="font-bold">{timePassed}</span> w
-            porównaniu do wersji zapisanej w chmurze.
-          </p>
-        </div>
+    <div className="bg-primary/10 flex w-full flex-col rounded-md">
+      <div className="p-4 pb-2">
+        <h1 className="text-primary text-lg font-bold">
+          Wystąpił konflikt w chmurze!
+        </h1>
+        <p className="text-xs font-medium text-black/90 dark:text-white">
+          Posiadasz{" "}
+          <strong>{isAfter(local, online) ? "najnowszą" : "starszą"}</strong>{" "}
+          wersję o{" "}
+          <span className="font-bold">
+            {formatDistance(local, online, { locale: pl })}
+          </span>{" "}
+          w porównaniu do wersji zapisanej w chmurze.
+        </p>
       </div>
       <div className="flex items-center justify-center gap-2 border-t p-4 pt-2">
         <Button
-          disabled={loadingSending || loadingDownloading}
+          disabled={busy}
           variant="outline"
           className="w-full rounded-sm text-xs"
           size="xs"
           onClick={() => {
-            setLoadingDownloading(true);
-            downloadChanges();
-            clearLoading();
+            void onPull();
           }}
         >
-          {loadingDownloading ? (
+          {isPulling ? (
             <Icons.Loader className="size-4 animate-spin" />
           ) : (
             <Icons.DownloadCloud className="size-4" />
@@ -84,17 +59,15 @@ export function SyncErrorAlert({
           Pobierz zmiany
         </Button>
         <Button
-          disabled={loadingSending || loadingDownloading}
+          disabled={busy}
           variant="default"
           className="w-full rounded-sm text-xs"
           size="xs"
           onClick={() => {
-            setLoadingSending(true);
-            sendChanges();
-            clearLoading();
+            void onPush();
           }}
         >
-          {loadingSending ? (
+          {isPushing ? (
             <Icons.Loader className="size-4 animate-spin" />
           ) : (
             <Icons.UploadCloud className="size-4" />

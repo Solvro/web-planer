@@ -4,7 +4,7 @@ const DAYS = ["Pon", "Wt", "Śr", "Czw", "Pt"];
 
 export default function PreviewPlanLoading() {
   return (
-    <div className="flex w-full grow flex-col overflow-x-auto pt-20">
+    <div className="flex w-full grow flex-col overflow-x-auto pt-16">
       <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4 md:px-14">
         <Skeleton className="h-7 w-48" />
         <Skeleton className="h-9 w-36 rounded-md" />

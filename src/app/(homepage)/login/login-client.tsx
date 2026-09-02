@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type * as z from "zod";
@@ -107,12 +107,75 @@ function EmailStep({
   evpNonce: string;
 }) {
   const router = useRouter();
+  const [isPasskeyLoading, setIsPasskeyLoading] = useState(false);
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
     resolver: zodResolver(loginOtpEmailSchema),
     defaultValues: { email: "" },
   });
 
   const isLoading = form.formState.isSubmitting;
+
+  function handlePasskeySuccess(user: {
+    email: string;
+    onboardingCompleted?: boolean | null;
+  }) {
+    if (user.onboardingCompleted === true) {
+      toast.success("Zalogowano pomyślnie");
+      router.push("/plans");
+    } else {
+      setEmail(user.email);
+      handleTriggerConfetti();
+      setStep("onboard");
+    }
+  }
+
+  async function handlePasskeyLogin() {
+    setIsPasskeyLoading(true);
+    const { data, error } = await authClient.signIn.passkey({});
+    setIsPasskeyLoading(false);
+
+    if (error !== null) {
+      toast.error("Nie udało się zalogować kluczem dostępu", {
+        description: error.message,
+      });
+      return;
+    }
+    handlePasskeySuccess(data.user);
+  }
+
+  useEffect(() => {
+    if (
+      typeof PublicKeyCredential === "undefined" ||
+      typeof PublicKeyCredential.isConditionalMediationAvailable !== "function"
+    ) {
+      return;
+    }
+
+    let cancelled = false;
+
+    void PublicKeyCredential.isConditionalMediationAvailable().then(
+      (available) => {
+        if (!available || cancelled) {
+          return;
+        }
+        void authClient.signIn
+          .passkey({ autoFill: true })
+          .then((result) => {
+            if (!cancelled && result.data !== null) {
+              handlePasskeySuccess(result.data.user);
+            }
+          })
+          .catch(() => {
+            // ignore: no saved passkey, or the request was cancelled
+          });
+      },
+    );
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function sendOtp(email: string) {
     const { error } = await authClient.emailOtp.sendVerificationOtp({
@@ -186,7 +249,7 @@ function EmailStep({
                 <Input
                   {...field}
                   id="login-email"
-                  autoComplete="email"
+                  autoComplete="email webauthn"
                   aria-invalid={fieldState.invalid}
                   disabled={isLoading}
                   placeholder="123456@student.pwr.edu.pl"
@@ -207,6 +270,23 @@ function EmailStep({
         <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
           {isLoading ? <Icons.Loader className="size-4 animate-spin" /> : null}
           Wyślij kod
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          className="w-full"
+          disabled={isPasskeyLoading}
+          onClick={() => {
+            void handlePasskeyLogin();
+          }}
+        >
+          {isPasskeyLoading ? (
+            <Icons.Loader className="size-4 animate-spin" />
+          ) : (
+            <Icons.Fingerprint className="size-4" />
+          )}
+          Zaloguj się kluczem dostępu
         </Button>
       </form>
     </div>
