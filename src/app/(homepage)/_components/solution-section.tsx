@@ -13,50 +13,57 @@ import {
   ShareArt,
   StudentsArt,
 } from "@/components/homepage/bento-illustrations";
-import { Icons } from "@/components/icons";
-import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
+import { BentoCard, BentoGrid, Kbd } from "@/components/magicui/bento-grid";
 import { childVariants, parentVariants } from "@/constants";
 
 const features = [
   {
-    Icon: Icons.Workflow,
     name: "Automatyczne pobieranie zajęć",
-    description:
-      "Grupy, godziny i wolne miejsca prosto z USOS. Zawsze aktualne, bez przepisywania.",
+    description: (
+      <>
+        Grupy, godziny i wolne miejsca prosto z <Kbd>USOS</Kbd>. Zawsze
+        aktualne, bez przepisywania.
+      </>
+    ),
     className: "lg:col-span-1 lg:row-span-1",
     href: "/plans",
     cta: "Przejdź do planowania",
-    background: <ScheduleSyncArt className="top-0 h-[70%]" />,
+    background: <ScheduleSyncArt className="p-2" />,
   },
   {
-    Icon: Icons.Share,
     name: "Udostępnij znajomym",
-    description:
-      "Po stworzeniu swojego arcydzieła wyślij link albo pobierz plan jako obrazek.",
+    description: (
+      <>
+        Wyślij link, pobierz <Kbd>.png</Kbd> albo wrzuć <Kbd>.ics</Kbd> do
+        kalendarza.
+      </>
+    ),
     className: "lg:col-span-1 lg:row-span-1",
     href: "/plans",
     cta: "Przejdź do planowania",
-    background: <ShareArt className="top-0 h-[70%]" />,
+    background: <ShareArt className="p-2" />,
   },
   {
-    Icon: Icons.AlertTriangle,
     name: "Kolizje i wolne miejsca",
     description:
       "Nakładające się zajęcia i pełne grupy widzisz od razu, zanim klikniesz zapisz w USOS.",
     className: "lg:col-span-1 lg:row-span-2",
     href: "/plans",
     cta: "Sprawdź swój plan",
-    background: <CollisionsArt className="top-4 h-[72%]" />,
+    background: <CollisionsArt className="p-3" />,
   },
   {
-    Icon: Icons.Logo,
     name: "Od studentów dla studentów",
-    description:
-      "Razem z grupą znajomych z KN Solvro stworzyliśmy planer dla Ciebie. Kod jest otwarty.",
+    description: (
+      <>
+        Razem z grupą znajomych z KN Solvro stworzyliśmy planer dla Ciebie. Kod
+        jest otwarty na <Kbd>GitHub</Kbd>.
+      </>
+    ),
     className: "lg:col-span-2 lg:row-span-1",
     href: "https://solvro.pwr.edu.pl/",
     cta: "Odwiedź stronę koła",
-    background: <StudentsArt className="top-0 h-[80%]" />,
+    background: <StudentsArt className="p-2" />,
   },
 ];
 

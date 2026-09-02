@@ -3,7 +3,6 @@ import type { MotionProps, Transition, Variants } from "motion/react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface BentoGridProps extends Omit<
@@ -20,9 +19,9 @@ interface BentoCardProps extends Omit<
 > {
   name: string;
   className: string;
+  /** Illustration rendered inside the inset panel at the top of the card. */
   background: ReactNode;
-  Icon: React.ElementType;
-  description: string;
+  description: ReactNode;
   href: string;
   cta: string;
   variants?: Variants | undefined;
@@ -47,7 +46,6 @@ function BentoCard({
   name,
   className,
   background,
-  Icon,
   description,
   href,
   cta,
@@ -57,48 +55,45 @@ function BentoCard({
     <motion.div
       key={name}
       className={cn(
-        "group relative col-span-3 flex flex-col justify-end overflow-hidden rounded-2xl",
-        "border-border/60 bg-card/70 border shadow-[0_1px_2px_rgba(0,0,0,.04),0_12px_32px_-16px_rgba(15,23,42,.18)] backdrop-blur-sm",
-        "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 hover:shadow-[0_1px_2px_rgba(0,0,0,.04),0_24px_48px_-20px_hsl(var(--primary)/.35)]",
-        "dark:bg-card/50 dark:hover:border-primary/40 dark:shadow-none",
+        "group border-border/70 bg-card/60 relative col-span-3 flex flex-col overflow-hidden rounded-2xl border p-3 backdrop-blur-sm",
+        "hover:border-primary/40 transition-[border-color,box-shadow] duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:shadow-[0_20px_50px_-30px_hsl(var(--primary)/.5)]",
         className,
       )}
       {...props}
     >
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 [background:radial-gradient(60%_50%_at_50%_0%,hsl(var(--primary)/.14),transparent_70%)] group-hover:opacity-100" />
-      <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.03]">
-        {background}
+      <a
+        href={href}
+        aria-label={`${name} – ${cta}`}
+        className="focus-visible:ring-primary/60 absolute inset-0 z-20 rounded-2xl focus-visible:ring-2 focus-visible:outline-none"
+      />
+      <div className="border-border/60 bg-background/70 relative min-h-0 flex-1 overflow-hidden rounded-xl border shadow-[inset_0_1px_0_hsl(var(--foreground)/.04)] dark:bg-black/30">
+        <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.02]">
+          {background}
+        </div>
       </div>
-      <div className="from-card via-card/85 pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t to-transparent" />
-
-      <div className="pointer-events-none relative z-10 flex flex-col gap-1.5 p-6 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-9">
-        <span className="bg-primary/10 text-primary ring-primary/15 mb-1 inline-flex size-10 items-center justify-center rounded-xl ring-1">
-          <Icon className="size-5" />
-        </span>
-        <h3 className="text-foreground text-xl font-semibold tracking-tight">
+      <div className="flex flex-col gap-1.5 px-3 pt-4 pb-2">
+        <h3 className="text-foreground text-lg font-semibold tracking-tight">
           {name}
         </h3>
-        <p className="text-muted-foreground max-w-lg text-sm text-balance">
+        <p className="text-muted-foreground text-sm text-balance">
           {description}
         </p>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex translate-y-8 items-center p-4 opacity-0 transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-y-0 group-hover:opacity-100">
-        <Button
-          variant="ghost"
-          nativeButton={false}
-          size="sm"
-          className="pointer-events-auto"
-          render={
-            <a href={href}>
-              {cta}
-              <ArrowRightIcon className="ms-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:rotate-180" />
-            </a>
-          }
-        />
+        <span className="text-primary mt-1 inline-flex items-center gap-1 text-sm font-medium opacity-0 transition-[opacity,transform] duration-500 group-hover:translate-x-0.5 group-hover:opacity-100">
+          {cta}
+          <ArrowRightIcon className="size-4" />
+        </span>
       </div>
     </motion.div>
   );
 }
 
-export { BentoCard, BentoGrid };
+/** Inline keycap-like chip used in bento descriptions. */
+function Kbd({ children }: { children: ReactNode }) {
+  return (
+    <kbd className="bg-muted text-foreground/80 border-border/70 rounded-md border px-1.5 py-0.5 font-mono text-[11px] font-medium shadow-[inset_0_-1px_0_hsl(var(--foreground)/.08)]">
+      {children}
+    </kbd>
+  );
+}
+
+export { BentoCard, BentoGrid, Kbd };

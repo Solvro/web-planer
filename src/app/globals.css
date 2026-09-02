@@ -211,7 +211,7 @@ layer(base);
 }
 .svg-dash {
   stroke-dasharray: 4 10;
-  animation: svg-dash 1.6s linear infinite;
+  animation: svg-dash 2.4s linear infinite;
 }
 .svg-draw {
   stroke-dasharray: 1;
@@ -232,8 +232,8 @@ layer(base);
   transform-box: fill-box;
   transform-origin: center;
 }
-.svg-fill {
-  animation: svg-fill 6s ease-in-out infinite;
+.svg-meter {
+  animation: svg-meter 6s ease-in-out infinite;
 }
 .svg-blink {
   animation: svg-blink 2.4s ease-in-out infinite;
@@ -305,14 +305,14 @@ layer(base);
     transform: scale(1.6);
   }
 }
-@keyframes svg-fill {
+@keyframes svg-meter {
   0%,
   10% {
-    width: 12%;
+    width: 18px;
   }
   60%,
   100% {
-    width: 92%;
+    width: 131px;
   }
 }
 @keyframes svg-blink {
@@ -335,7 +335,7 @@ layer(base);
   .svg-travel,
   .svg-spin,
   .svg-ring,
-  .svg-fill,
+  .svg-meter,
   .svg-blink {
     animation: none;
   }
