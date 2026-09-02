@@ -8,7 +8,7 @@ export enum Day {
   SUNDAY = "niedziela",
 }
 
-export type ClassType = "C" | "L" | "P" | "S" | "W";
+export type ClassType = "C" | "D" | "L" | "P" | "S" | "W";
 
 /** "" = every week, TN = odd weeks, TP = even weeks, "!" = irregular */
 export type WeekParity = "" | "TN" | "TP" | "!";

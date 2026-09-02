@@ -84,6 +84,7 @@ const config = {
           c: "hsl(var(--type-c))",
           s: "hsl(var(--type-s))",
           p: "hsl(var(--type-p))",
+          d: "hsl(var(--type-d))",
         },
         status: {
           ready: "hsl(var(--status-ready))",
