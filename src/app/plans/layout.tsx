@@ -6,10 +6,8 @@ import { PlansTopbar } from "./_components/plans-topbar";
 
 export default function PlansLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   // const year = await getCurrentYear();
 
@@ -19,7 +17,6 @@ export default function PlansLayout({
         <PlansTopbar />
 
         {children}
-        {modal}
       </SidebarProvider>
 
       {/* <div className="flex w-full flex-col items-center justify-center p-2 py-6">
