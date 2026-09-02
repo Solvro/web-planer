@@ -40,6 +40,7 @@ layer(base);
     --type-c: 142 65% 36%;
     --type-s: 32 87% 43%;
     --type-p: 289 58% 47%;
+    --type-d: 185 65% 33%;
 
     --status-ready: 142 71% 45%;
     --status-collision: 0 72% 55%;
@@ -81,6 +82,7 @@ layer(base);
     --type-c: 142 55% 43%;
     --type-s: 32 83% 47%;
     --type-p: 289 51% 54%;
+    --type-d: 185 60% 50%;
 
     --status-ready: 142 60% 55%;
     --status-collision: 0 75% 65%;
