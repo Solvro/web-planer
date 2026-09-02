@@ -31,7 +31,7 @@ interface Particle {
 export function ParticleLogo({
   className,
   /** Distance between sampled points in CSS pixels; lower = more particles. */
-  density = 4,
+  density = 2,
 }: {
   className?: string;
   density?: number;

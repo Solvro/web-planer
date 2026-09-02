@@ -6,7 +6,6 @@ import { Alerts } from "@/components/alerts";
 import { AuroraBackground } from "@/components/homepage/aurora-background";
 import { ParticleLogo } from "@/components/homepage/particle-logo";
 import { Icons } from "@/components/icons";
-import { AnimatedGradientText } from "@/components/magicui/animated-text";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Button } from "@/components/ui/button";
 import { getCachedAlerts } from "@/lib/get-cached-alerts";
@@ -87,24 +86,6 @@ export default async function Home() {
             className="animate-in fade-in slide-in-from-top"
             initialAlerts={alerts}
           />
-        </div>
-
-        <div className="animate-fade-up z-10 flex items-center justify-center opacity-0 [--animation-delay:100ms]">
-          <Link href="#topwr">
-            <AnimatedGradientText>
-              <Image
-                src="/assets/logo/topwr_logo.svg"
-                alt="ToPWR Logo"
-                className="inline"
-                width={60}
-                height={10}
-              />
-              <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />
-              <span className="animate-gradient inline bg-linear-to-r from-[#ffd5a2] via-[#cea1ff] to-[#ffd5a2] bg-size-[var(--bg-size)_100%] bg-clip-text text-balance text-transparent dark:from-[#ffaa40] dark:via-[#9c40ff] dark:to-[#ffaa40]">
-                Obowiązkowa apka dla każdego studenta!
-              </span>
-            </AnimatedGradientText>
-          </Link>
         </div>
 
         <Link
