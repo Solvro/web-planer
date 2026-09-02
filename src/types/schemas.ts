@@ -15,7 +15,7 @@ export const loginOtpEmailSchema = z.object({
       message: "Email musi być z domeny Politechniki Wrocławskiej",
     })
     .refine((email) => !staffEmailWithIndexRegex.test(email), {
-      message:
+      error:
         "Studenci logują się mailem z domeny student.pwr.edu.pl, nie pwr.edu.pl",
     }),
 });
