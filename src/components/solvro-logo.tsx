@@ -15,7 +15,7 @@ export function SolvroLogo({
     <Image
       src={colored ? logoColored : logo}
       alt="Logo Koła Naukowego Solvro"
-className={colored ? undefined : "invert-0 dark:invert"}
+      className={colored ? undefined : "invert-0 dark:invert"}
       width={30}
     />
   );
