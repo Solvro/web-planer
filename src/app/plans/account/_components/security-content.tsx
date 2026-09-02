@@ -8,14 +8,85 @@ import { toast } from "sonner";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { authClient, useSession } from "@/lib/auth-client";
+import { authClient, signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { parseUserAgent } from "@/lib/utils/parse-user-agent";
 
 const SESSIONS_QUERY_KEY = ["auth-sessions"];
+
+/**
+ * Sensitive account actions (viewing sessions, registering a passkey) require
+ * a session created within the last 24h. Older sessions get this error back
+ * instead of the requested data.
+ */
+function isStaleSessionError(message: string | null | undefined): boolean {
+  return message?.toLowerCase().includes("session is not fresh") ?? false;
+}
+
+function StaleSessionDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    await signOut();
+    window.location.href = "/login";
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Wymagane ponowne logowanie</DialogTitle>
+          <DialogDescription>
+            Ze względów bezpieczeństwa ta operacja wymaga świeżej sesji. Wyloguj
+            się i zaloguj ponownie, a potem spróbuj jeszcze raz.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            disabled={isSigningOut}
+            onClick={() => {
+              onOpenChange(false);
+            }}
+          >
+            Anuluj
+          </Button>
+          <Button
+            disabled={isSigningOut}
+            onClick={() => {
+              void handleSignOut();
+            }}
+          >
+            {isSigningOut ? (
+              <Icons.Loader className="size-4 animate-spin" />
+            ) : (
+              <Icons.LogOut className="size-4" />
+            )}
+            Wyloguj mnie
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 interface SessionRow {
   id: string;
@@ -87,7 +158,7 @@ function SessionRowItem({
   );
 }
 
-function SessionsSection() {
+function SessionsSection({ onStaleSession }: { onStaleSession: () => void }) {
   const session = useSession();
   const queryClient = useQueryClient();
   const currentToken = session.data?.session.token;
@@ -167,9 +238,20 @@ function SessionsSection() {
             <Skeleton className="h-16 w-full rounded-md" />
           </>
         ) : sessionsQuery.isError ? (
-          <p className="text-status-collision text-sm">
-            {sessionsQuery.error.message}
-          </p>
+          isStaleSessionError(sessionsQuery.error.message) ? (
+            <div className="flex items-center justify-between gap-3 rounded-md border p-3">
+              <p className="text-muted-foreground text-sm">
+                Zaloguj się ponownie, aby zobaczyć aktywne sesje.
+              </p>
+              <Button size="sm" variant="outline" onClick={onStaleSession}>
+                Zaloguj ponownie
+              </Button>
+            </div>
+          ) : (
+            <p className="text-status-collision text-sm">
+              {sessionsQuery.error.message}
+            </p>
+          )
         ) : (
           sessionsQuery.data
             .toSorted((a, b) =>
@@ -196,7 +278,7 @@ function SessionsSection() {
   );
 }
 
-function PasskeysSection() {
+function PasskeysSection({ onStaleSession }: { onStaleSession: () => void }) {
   const passkeys = authClient.useListPasskeys();
   const [isAddingName, setIsAddingName] = useState(false);
   const [name, setName] = useState("");
@@ -216,6 +298,10 @@ function PasskeysSection() {
       setName("");
     },
     onError: (error: Error) => {
+      if (isStaleSessionError(error.message)) {
+        onStaleSession();
+        return;
+      }
       toast.error(error.message);
     },
   });
@@ -361,11 +447,20 @@ function PasskeysSection() {
 }
 
 export function SecurityContent({ className }: { className?: string }) {
+  const [staleSessionOpen, setStaleSessionOpen] = useState(false);
+  const onStaleSession = () => {
+    setStaleSessionOpen(true);
+  };
+
   return (
     <div className={cn("space-y-8", className)}>
-      <SessionsSection />
+      <SessionsSection onStaleSession={onStaleSession} />
       <Separator />
-      <PasskeysSection />
+      <PasskeysSection onStaleSession={onStaleSession} />
+      <StaleSessionDialog
+        open={staleSessionOpen}
+        onOpenChange={setStaleSessionOpen}
+      />
     </div>
   );
 }
