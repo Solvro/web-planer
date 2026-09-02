@@ -52,14 +52,6 @@ function addDays(date: string, days: number): string {
   return result.toISOString().slice(0, 10);
 }
 
-function isoWeekNumber(date: string): number {
-  const d = parseIsoDate(date);
-  const day = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - day);
-  const yearStart = Date.UTC(d.getUTCFullYear(), 0, 1);
-  return Math.ceil(((d.getTime() - yearStart) / DAY_MS + 1) / 7);
-}
-
 export function mostFrequent<T>(values: T[]): T | undefined {
   const counts = new Map<T, number>();
   let best: T | undefined;
@@ -147,12 +139,11 @@ export function buildGroupSchedulePattern(
   }
 
   if (typicalGap === BIWEEKLY_GAP) {
-    // Fallback parity (ISO week of the first meeting). The planner action
-    // overrides it with the parity relative to the term start.
+    // Parity is filled in by the caller from the scraped group page.
     return {
       ...base,
       pattern: "biweekly",
-      parity: isoWeekNumber(dates[0]) % 2 === 0 ? "even" : "odd",
+      parity: "unknown",
       exceptions: [],
     };
   }
