@@ -7,10 +7,17 @@ export const feedbackFormSchema = z.object({
 });
 
 const emailWithDomainRegex = /^[\w.%+-]+@(student\.)?pwr\.edu\.pl$/;
+const staffEmailWithIndexRegex = /^\d+@pwr\.edu\.pl$/;
 export const loginOtpEmailSchema = z.object({
-  email: z.email({ message: "Niepoprawny email" }).regex(emailWithDomainRegex, {
-    message: "Email musi być z domeny Politechniki Wrocławskiej",
-  }),
+  email: z
+    .email({ message: "Niepoprawny email" })
+    .regex(emailWithDomainRegex, {
+      message: "Email musi być z domeny Politechniki Wrocławskiej",
+    })
+    .refine((email) => !staffEmailWithIndexRegex.test(email), {
+      error:
+        "Studenci logują się mailem z domeny student.pwr.edu.pl, nie pwr.edu.pl",
+    }),
 });
 
 export const otpPinSchema = z.object({
