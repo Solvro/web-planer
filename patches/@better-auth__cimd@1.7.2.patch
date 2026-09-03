@@ -1,0 +1,16 @@
+diff --git a/dist/node.mjs b/dist/node.mjs
+index a12d50e19d1fa726246f9a2fbe6f76d07471c0ee..6d2f361b8077d0e06799abeaadf6bc3a7c31ec31 100644
+--- a/dist/node.mjs
++++ b/dist/node.mjs
+@@ -46,8 +46,9 @@ const fetchClientMetadataResource = async (input, init) => {
+ 			method: webRequest.method,
+ 			servername: isIP(url.hostname.replace(/^\[|\]$/g, "")) === 0 ? url.hostname : void 0,
+ 			signal,
+-			lookup: (_hostname, _options, callback) => {
+-				callback(null, pinnedAddress.address, pinnedAddress.family);
++			lookup: (_hostname, options, callback) => {
++				if (options?.all) callback(null, [pinnedAddress]);
++				else callback(null, pinnedAddress.address, pinnedAddress.family);
+ 			}
+ 		}, (response) => {
+ 			const status = response.statusCode ?? 500;
