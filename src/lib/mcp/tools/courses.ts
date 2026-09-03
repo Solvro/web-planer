@@ -1,9 +1,16 @@
-import type { McpServer } from "@modelcontextprotocol/server";
+import type { McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
 import * as z from "zod";
 
 import { FACULTIES } from "@/actions/v2/get-faculties";
 
 import { jsonResult } from "../json-result";
+
+const READ_ONLY: ToolAnnotations = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: true,
+};
 
 export function registerCourseTools(server: McpServer): void {
   server.registerTool(
@@ -11,6 +18,7 @@ export function registerCourseTools(server: McpServer): void {
     {
       description: "List university faculties available in the planner.",
       inputSchema: z.object({}),
+      annotations: READ_ONLY,
     },
     () => jsonResult(FACULTIES),
   );
@@ -21,6 +29,7 @@ export function registerCourseTools(server: McpServer): void {
       description:
         "List active course registrations for a faculty (a registration groups rounds a student can pick courses in).",
       inputSchema: z.object({ facultyId: z.string().trim() }),
+      annotations: READ_ONLY,
     },
     async ({ facultyId }) => {
       const { getFacultyRegistrationsAction } =
@@ -34,6 +43,7 @@ export function registerCourseTools(server: McpServer): void {
     {
       description: "Get faculty/type details for one registration.",
       inputSchema: z.object({ registrationId: z.string().trim() }),
+      annotations: READ_ONLY,
     },
     async ({ registrationId }) => {
       const { getRegistrationFacultyAction } =
@@ -47,6 +57,7 @@ export function registerCourseTools(server: McpServer): void {
     {
       description: "List registration rounds for a registration.",
       inputSchema: z.object({ registrationId: z.string().trim() }),
+      annotations: READ_ONLY,
     },
     async ({ registrationId }) => {
       const { getRegistrationRoundsAction } =
@@ -61,6 +72,7 @@ export function registerCourseTools(server: McpServer): void {
       description:
         "List courses available to sign up for in a registration round.",
       inputSchema: z.object({ roundId: z.string().trim() }),
+      annotations: READ_ONLY,
     },
     async ({ roundId }) => {
       const { getRegistrationRoundCoursesAction } =
@@ -80,6 +92,7 @@ export function registerCourseTools(server: McpServer): void {
         start: z.string().trim(),
         days: z.int().positive(),
       }),
+      annotations: READ_ONLY,
     },
     async (input) => {
       const { getBatchCoursePreviewAction } =
@@ -96,6 +109,7 @@ export function registerCourseTools(server: McpServer): void {
         courseId: z.string().trim(),
         termId: z.string().trim(),
       }),
+      annotations: READ_ONLY,
     },
     async ({ courseId, termId }) => {
       const { getCourseEditionDetailsAction } =
@@ -113,6 +127,7 @@ export function registerCourseTools(server: McpServer): void {
         courseId: z.string().trim(),
         termId: z.string().trim(),
       }),
+      annotations: READ_ONLY,
     },
     async ({ courseId, termId }) => {
       const { getPlannerCourseGroupsAction } =
@@ -129,6 +144,7 @@ export function registerCourseTools(server: McpServer): void {
         unitId: z.string().trim(),
         groupNumber: z.string().trim(),
       }),
+      annotations: READ_ONLY,
     },
     async ({ unitId, groupNumber }) => {
       const { getGroupSpotsAction } =
@@ -142,6 +158,7 @@ export function registerCourseTools(server: McpServer): void {
     {
       description: "Get a lecturer's display info by their USOS user id.",
       inputSchema: z.object({ userId: z.string().trim() }),
+      annotations: READ_ONLY,
     },
     async ({ userId }) => {
       const { getLecturerAction } = await import("@/actions/v2/get-lecturer");

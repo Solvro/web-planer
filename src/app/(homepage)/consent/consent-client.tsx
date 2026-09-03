@@ -74,12 +74,12 @@ export function ConsentClient() {
             </p>
           ) : (
             <>
-              <h1 className="text-lg font-semibold">
+              <h1 className="text-lg font-semibold text-balance">
                 {client?.client_name ?? "Aplikacja"} prosi o dostęp do Twojego
                 konta Planer
               </h1>
               {requestedScopes.length > 0 && (
-                <ul className="text-muted-foreground list-inside list-disc text-left text-sm">
+                <ul className="text-muted-foreground w-full list-outside list-disc pl-5 text-left text-sm">
                   {requestedScopes.map((s) => (
                     <li key={s}>{s}</li>
                   ))}

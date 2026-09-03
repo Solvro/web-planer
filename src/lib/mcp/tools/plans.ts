@@ -46,6 +46,7 @@ export function registerPlanTools(server: McpServer): void {
     {
       description: "List the current user's saved plans.",
       inputSchema: z.object({}),
+      annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async (_arguments: unknown, context: ServerContext) =>
       jsonResult(await planStore.listPlans(requireUserId(context))),
@@ -57,6 +58,7 @@ export function registerPlanTools(server: McpServer): void {
       description:
         "Get one plan's full contents: its selected course, group and registration ids.",
       inputSchema: z.object({ planId: z.string().trim() }),
+      annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async ({ planId }, context) => {
       const plan = await planStore.getPlan(requireUserId(context), planId);
@@ -69,6 +71,12 @@ export function registerPlanTools(server: McpServer): void {
     {
       description: "Create a new, empty plan owned by the current user.",
       inputSchema: z.object({ name: z.string().trim().min(1) }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: false,
+        openWorldHint: false,
+      },
     },
     async ({ name }, context) =>
       jsonResult(
@@ -90,6 +98,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         name: z.string().trim().min(1),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, name }, context) => {
       const userId = requireUserId(context);
@@ -112,6 +126,12 @@ export function registerPlanTools(server: McpServer): void {
     {
       description: "Permanently delete a plan.",
       inputSchema: z.object({ planId: z.string().trim() }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId }, context) => {
       const deleted = await planStore.deletePlan(
@@ -131,6 +151,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         courseId: z.string().trim(),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, courseId }, context) => {
       const userId = requireUserId(context);
@@ -156,6 +182,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         courseId: z.string().trim(),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, courseId }, context) => {
       const userId = requireUserId(context);
@@ -182,6 +214,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         groupId: z.string().trim(),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, groupId }, context) => {
       const userId = requireUserId(context);
@@ -207,6 +245,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         groupId: z.string().trim(),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, groupId }, context) => {
       const userId = requireUserId(context);
@@ -232,6 +276,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         registrationId: z.string().trim(),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, registrationId }, context) => {
       const userId = requireUserId(context);
@@ -257,6 +307,12 @@ export function registerPlanTools(server: McpServer): void {
         planId: z.string().trim(),
         registrationId: z.string().trim(),
       }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
     },
     async ({ planId, registrationId }, context) => {
       const userId = requireUserId(context);
