@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import Script from "next/script";
@@ -126,6 +127,7 @@ export default function RootLayout({
             data-domains="planer.solvro.pl"
           />
           <Toaster richColors={true} />
+          <GoogleAnalytics gaId="G-63K05JV85M" />
         </body>
       </ClientProviders>
     </html>
