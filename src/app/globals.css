@@ -45,6 +45,7 @@ layer(base);
     --status-ready: 142 71% 45%;
     --status-collision: 0 72% 55%;
     --status-pending: 217 15% 55%;
+    --status-partial: 38 92% 50%;
   }
 
   .dark {
@@ -87,6 +88,7 @@ layer(base);
     --status-ready: 142 60% 55%;
     --status-collision: 0 75% 65%;
     --status-pending: 217 15% 60%;
+    --status-partial: 38 92% 58%;
   }
 }
 

@@ -90,6 +90,7 @@ const config = {
           ready: "hsl(var(--status-ready))",
           collision: "hsl(var(--status-collision))",
           pending: "hsl(var(--status-pending))",
+          partial: "hsl(var(--status-partial))",
         },
       },
       fontFamily: {
