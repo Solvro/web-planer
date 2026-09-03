@@ -9,7 +9,7 @@ import { buildMcpServer } from "@/lib/mcp/server";
 const resource = `${env.SITE_URL}/api/mcp`;
 
 const mcpServerHandler = createMcpHandler(() => buildMcpServer(), {
-  legacy: "reject",
+  legacy: "stateless",
 });
 
 export const POST = requireMcpAuth(

@@ -15,6 +15,15 @@ interface OAuthClientPublic {
   client_name?: string;
 }
 
+const SCOPE_LABELS: Record<string, string> = {
+  openid: "Twoja tożsamość w Planerze",
+  profile: "Twoje dane profilowe (imię, nazwisko, zdjęcie)",
+  email: "Twój adres e-mail",
+  offline_access: "Stały dostęp bez konieczności ponownego logowania",
+};
+
+const scopeLabel = (scope: string) => SCOPE_LABELS[scope] ?? scope;
+
 export function ConsentClient() {
   const searchParameters = useSearchParams();
   const clientId = searchParameters.get("client_id") ?? "";
@@ -81,7 +90,7 @@ export function ConsentClient() {
               {requestedScopes.length > 0 && (
                 <ul className="text-muted-foreground w-full list-outside list-disc pl-5 text-left text-sm">
                   {requestedScopes.map((s) => (
-                    <li key={s}>{s}</li>
+                    <li key={s}>{scopeLabel(s)}</li>
                   ))}
                 </ul>
               )}
