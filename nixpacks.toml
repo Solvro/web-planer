@@ -1,0 +1,5 @@
+[phases.install]
+cmds = ["npx --yes pnpm@11.9.0 install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["npx --yes pnpm@11.9.0 run build"]
