@@ -1,3 +1,6 @@
+import { cimd } from "@better-auth/cimd";
+import { fetchClientMetadataResource } from "@better-auth/cimd/node";
+import { mcp } from "@better-auth/mcp";
 import { passkey } from "@better-auth/passkey";
 import OtpEmail from "@emails/otp-email";
 import { betterAuth } from "better-auth";
@@ -5,7 +8,7 @@ import { emailVerificationProtocol } from "better-auth-evp";
 import { usosAuth } from "better-auth-usos";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP } from "better-auth/plugins";
+import { emailOTP, jwt } from "better-auth/plugins";
 import React from "react";
 
 import { db } from "@/db";
@@ -91,6 +94,16 @@ export const auth = betterAuth({
       rpID: new URL(env.SITE_URL).hostname,
       rpName: "Planer Solvro",
       origin: env.SITE_URL,
+    }),
+    jwt(),
+    mcp({
+      loginPage: "/login",
+      consentPage: "/consent",
+      resource: `${env.SITE_URL}/api/mcp`,
+    }),
+    cimd({
+      fetchClientMetadataResource,
+      metadataProfile: "mcp-2026-07-28",
     }),
     nextCookies(),
   ],
