@@ -9,3 +9,6 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - better-auth-evp@0.1.0 || 1.0.1 || 1.0.2 || 1.0.7
+
+patchedDependencies:
+  "@better-auth/cimd@1.7.2": patches/@better-auth__cimd@1.7.2.patch
