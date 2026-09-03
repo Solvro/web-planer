@@ -1,16 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod";
 
-import { getCourseEditionDetailsAction } from "@/actions/v2/get-course-edition-details";
-import { getBatchCoursePreviewAction } from "@/actions/v2/get-course-editions-preview";
-import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
 import { FACULTIES } from "@/actions/v2/get-faculties";
-import { getFacultyRegistrationsAction } from "@/actions/v2/get-faculty-registrations";
-import { getGroupSpotsAction } from "@/actions/v2/get-group-spots";
-import { getLecturerAction } from "@/actions/v2/get-lecturer";
-import { getRegistrationFacultyAction } from "@/actions/v2/get-registration-faculty";
-import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
-import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
 
 import { jsonResult } from "../json-result";
 
@@ -18,6 +9,13 @@ import { jsonResult } from "../json-result";
  * Read-only USOS browsing tools, thin 1:1 wraps of `src/actions/v2/*` — the
  * same session-independent data the planner UI uses to let a user pick
  * courses and groups.
+ *
+ * Each action (other than the static `FACULTIES` list) is imported
+ * dynamically inside its tool handler rather than at module scope: those
+ * actions pull in `src/lib/redis`, which constructs a real Redis client at
+ * import time and throws if `REDIS_URL` is unset. A static import would make
+ * that reachable from `/api/mcp`'s module graph and crash `next build` in
+ * any environment (e.g. CI) that builds without a Redis URL configured.
  */
 export function registerCourseTools(server: McpServer): void {
   server.registerTool(
@@ -36,8 +34,11 @@ export function registerCourseTools(server: McpServer): void {
         "List active course registrations for a faculty (a registration groups rounds a student can pick courses in).",
       inputSchema: z.object({ facultyId: z.string().trim() }),
     },
-    async ({ facultyId }) =>
-      jsonResult(await getFacultyRegistrationsAction(facultyId)),
+    async ({ facultyId }) => {
+      const { getFacultyRegistrationsAction } =
+        await import("@/actions/v2/get-faculty-registrations");
+      return jsonResult(await getFacultyRegistrationsAction(facultyId));
+    },
   );
 
   server.registerTool(
@@ -46,8 +47,11 @@ export function registerCourseTools(server: McpServer): void {
       description: "Get faculty/type details for one registration.",
       inputSchema: z.object({ registrationId: z.string().trim() }),
     },
-    async ({ registrationId }) =>
-      jsonResult(await getRegistrationFacultyAction(registrationId)),
+    async ({ registrationId }) => {
+      const { getRegistrationFacultyAction } =
+        await import("@/actions/v2/get-registration-faculty");
+      return jsonResult(await getRegistrationFacultyAction(registrationId));
+    },
   );
 
   server.registerTool(
@@ -56,8 +60,11 @@ export function registerCourseTools(server: McpServer): void {
       description: "List registration rounds for a registration.",
       inputSchema: z.object({ registrationId: z.string().trim() }),
     },
-    async ({ registrationId }) =>
-      jsonResult(await getRegistrationRoundsAction(registrationId)),
+    async ({ registrationId }) => {
+      const { getRegistrationRoundsAction } =
+        await import("@/actions/v2/get-registration-rounds");
+      return jsonResult(await getRegistrationRoundsAction(registrationId));
+    },
   );
 
   server.registerTool(
@@ -67,8 +74,11 @@ export function registerCourseTools(server: McpServer): void {
         "List courses available to sign up for in a registration round.",
       inputSchema: z.object({ roundId: z.string().trim() }),
     },
-    async ({ roundId }) =>
-      jsonResult(await getRegistrationRoundCoursesAction(roundId)),
+    async ({ roundId }) => {
+      const { getRegistrationRoundCoursesAction } =
+        await import("@/actions/v2/get-round-courses");
+      return jsonResult(await getRegistrationRoundCoursesAction(roundId));
+    },
   );
 
   server.registerTool(
@@ -83,7 +93,11 @@ export function registerCourseTools(server: McpServer): void {
         days: z.int().positive(),
       }),
     },
-    async (input) => jsonResult(await getBatchCoursePreviewAction(input)),
+    async (input) => {
+      const { getBatchCoursePreviewAction } =
+        await import("@/actions/v2/get-course-editions-preview");
+      return jsonResult(await getBatchCoursePreviewAction(input));
+    },
   );
 
   server.registerTool(
@@ -95,8 +109,11 @@ export function registerCourseTools(server: McpServer): void {
         termId: z.string().trim(),
       }),
     },
-    async ({ courseId, termId }) =>
-      jsonResult(await getCourseEditionDetailsAction(courseId, termId)),
+    async ({ courseId, termId }) => {
+      const { getCourseEditionDetailsAction } =
+        await import("@/actions/v2/get-course-edition-details");
+      return jsonResult(await getCourseEditionDetailsAction(courseId, termId));
+    },
   );
 
   server.registerTool(
@@ -109,8 +126,11 @@ export function registerCourseTools(server: McpServer): void {
         termId: z.string().trim(),
       }),
     },
-    async ({ courseId, termId }) =>
-      jsonResult(await getPlannerCourseGroupsAction(courseId, termId)),
+    async ({ courseId, termId }) => {
+      const { getPlannerCourseGroupsAction } =
+        await import("@/actions/v2/get-course-groups-for-planner");
+      return jsonResult(await getPlannerCourseGroupsAction(courseId, termId));
+    },
   );
 
   server.registerTool(
@@ -122,8 +142,11 @@ export function registerCourseTools(server: McpServer): void {
         groupNumber: z.string().trim(),
       }),
     },
-    async ({ unitId, groupNumber }) =>
-      jsonResult(await getGroupSpotsAction(unitId, groupNumber)),
+    async ({ unitId, groupNumber }) => {
+      const { getGroupSpotsAction } =
+        await import("@/actions/v2/get-group-spots");
+      return jsonResult(await getGroupSpotsAction(unitId, groupNumber));
+    },
   );
 
   server.registerTool(
@@ -132,6 +155,9 @@ export function registerCourseTools(server: McpServer): void {
       description: "Get a lecturer's display info by their USOS user id.",
       inputSchema: z.object({ userId: z.string().trim() }),
     },
-    async ({ userId }) => jsonResult(await getLecturerAction(userId)),
+    async ({ userId }) => {
+      const { getLecturerAction } = await import("@/actions/v2/get-lecturer");
+      return jsonResult(await getLecturerAction(userId));
+    },
   );
 }
