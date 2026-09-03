@@ -1,10 +1,6 @@
 import type { AuthInfo } from "@modelcontextprotocol/server";
 import type { JWTPayload } from "jose";
 
-/**
- * `@modelcontextprotocol/server`'s `AuthInfo` has no `sub` field of its own
- * (it's provider-agnostic), so the better-auth user id travels in `extra`.
- */
 export function claimsToAuthInfo(
   request: Request,
   claims: JWTPayload,

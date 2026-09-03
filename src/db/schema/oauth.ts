@@ -11,15 +11,6 @@ import {
 
 import { session, user } from "./auth";
 
-/**
- * Tables required by the `jwt()`, `mcp()` (built on `oauthProvider()`) and
- * `cimd()` better-auth plugins wired in `src/lib/auth.ts` for MCP OAuth.
- * Field shapes transcribed from the plugins' own schema declarations
- * (`node_modules/better-auth/dist/plugins/jwt/schema.mjs` and
- * `@better-auth/oauth-provider`'s `src/schema.ts`) — `cimd()` persists no
- * tables of its own, it only reads `oauthClient.clientDiscoveryId`.
- */
-
 export const jwks = pgTable("jwks", {
   id: text("id").primaryKey(),
   publicKey: text("public_key").notNull(),
@@ -213,11 +204,6 @@ export const oauthConsent = pgTable(
   ],
 );
 
-/**
- * Single-use replay guard for `private_key_jwt` client assertion `jti`s — the
- * row `id` is a digest of the assertion identifier, so a concurrent/replayed
- * assertion collides on the primary key.
- */
 export const oauthClientAssertion = pgTable("oauth_client_assertion", {
   id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),

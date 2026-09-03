@@ -5,18 +5,6 @@ import { FACULTIES } from "@/actions/v2/get-faculties";
 
 import { jsonResult } from "../json-result";
 
-/**
- * Read-only USOS browsing tools, thin 1:1 wraps of `src/actions/v2/*` — the
- * same session-independent data the planner UI uses to let a user pick
- * courses and groups.
- *
- * Each action (other than the static `FACULTIES` list) is imported
- * dynamically inside its tool handler rather than at module scope: those
- * actions pull in `src/lib/redis`, which constructs a real Redis client at
- * import time and throws if `REDIS_URL` is unset. A static import would make
- * that reachable from `/api/mcp`'s module graph and crash `next build` in
- * any environment (e.g. CI) that builds without a Redis URL configured.
- */
 export function registerCourseTools(server: McpServer): void {
   server.registerTool(
     "list_faculties",

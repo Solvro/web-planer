@@ -40,13 +40,6 @@ function planNotFound() {
   return errorResult("Nie znaleziono planu");
 }
 
-/**
- * Plan management tools: list/create/rename/delete a plan, and add/remove one
- * course, group or registration at a time — thin wraps over
- * `src/lib/plan/store.ts` (the same drizzle logic `src/actions/plans.ts` uses
- * for the cookie-session web UI, just addressed by the MCP bearer token's
- * user id instead of a session cookie).
- */
 export function registerPlanTools(server: McpServer): void {
   server.registerTool(
     "list_plans",
