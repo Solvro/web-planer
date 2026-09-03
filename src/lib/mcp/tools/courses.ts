@@ -122,7 +122,7 @@ export function registerCourseTools(server: McpServer): void {
     "get_course_groups",
     {
       description:
-        "Get every group for a course in a term, each with its lecturers and weekly schedule pattern — the main tool for analyzing which group to place in a plan.",
+        "Get every group for a course in a term, each with its lecturers and weekly schedule pattern — the main tool for analyzing which group to place in a plan. Each group's `groupOnlineId` is the id add_group_to_plan/remove_group_from_plan expect, not `unitId`.",
       inputSchema: z.object({
         courseId: z.string().trim(),
         termId: z.string().trim(),
@@ -132,7 +132,13 @@ export function registerCourseTools(server: McpServer): void {
     async ({ courseId, termId }) => {
       const { getPlannerCourseGroupsAction } =
         await import("@/actions/v2/get-course-groups-for-planner");
-      return jsonResult(await getPlannerCourseGroupsAction(courseId, termId));
+      const groups = await getPlannerCourseGroupsAction(courseId, termId);
+      return jsonResult(
+        groups.map((group, index) => ({
+          ...group,
+          groupOnlineId: `${courseId}_group_${index.toString()}`,
+        })),
+      );
     },
   );
 

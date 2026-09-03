@@ -146,7 +146,7 @@ export function registerPlanTools(server: McpServer): void {
     "add_course_to_plan",
     {
       description:
-        "Add a course to a plan (idempotent — adding an already-selected id just re-affirms it).",
+        "Add a course to a plan (idempotent — adding an already-selected id just re-affirms it). The course only shows as selected in the web UI once the plan also has the matching registration via add_registration_to_plan.",
       inputSchema: z.object({
         planId: z.string().trim(),
         courseId: z.string().trim(),
@@ -209,7 +209,7 @@ export function registerPlanTools(server: McpServer): void {
     "add_group_to_plan",
     {
       description:
-        "Select a class group (a specific lecture/lab/etc. slot, identified by its unit id) into a plan.",
+        "Select a class group (a specific lecture/lab/etc. slot) into a plan. groupId must be the `groupOnlineId` returned by get_course_groups — not a raw unitId — or the web UI won't recognize it as selected.",
       inputSchema: z.object({
         planId: z.string().trim(),
         groupId: z.string().trim(),
@@ -240,7 +240,8 @@ export function registerPlanTools(server: McpServer): void {
   server.registerTool(
     "remove_group_from_plan",
     {
-      description: "Deselect a class group from a plan.",
+      description:
+        "Deselect a class group from a plan. groupId is the `groupOnlineId` from get_course_groups.",
       inputSchema: z.object({
         planId: z.string().trim(),
         groupId: z.string().trim(),
@@ -271,7 +272,8 @@ export function registerPlanTools(server: McpServer): void {
   server.registerTool(
     "add_registration_to_plan",
     {
-      description: "Add a registration to track in a plan.",
+      description:
+        "Add a registration to track in a plan. Required for any of that registration's courses to show as selected in the web UI, even if add_course_to_plan was already called for them.",
       inputSchema: z.object({
         planId: z.string().trim(),
         registrationId: z.string().trim(),
