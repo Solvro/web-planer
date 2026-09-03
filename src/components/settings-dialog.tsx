@@ -59,8 +59,8 @@ export function SettingsDialog({
             Zarządzaj swoim kontem i ustawieniami planera.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex min-h-0 flex-1">
-          <nav className="w-52 shrink-0 space-y-1 border-r p-3 sm:w-60">
+        <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
+          <nav className="flex shrink-0 gap-1 overflow-x-auto border-b p-3 sm:w-60 sm:flex-col sm:space-y-1 sm:overflow-x-visible sm:border-r sm:border-b-0">
             {TABS.map((item) => (
               <button
                 key={item.id}
@@ -69,7 +69,7 @@ export function SettingsDialog({
                   onTabChange(item.id);
                 }}
                 className={cn(
-                  "flex w-full items-start gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors",
+                  "flex w-full shrink-0 items-start gap-2 rounded-md px-3 py-2 text-left text-sm font-medium whitespace-nowrap transition-colors sm:whitespace-normal",
                   tab === item.id
                     ? "bg-muted text-foreground"
                     : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
