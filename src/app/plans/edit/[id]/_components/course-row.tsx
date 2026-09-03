@@ -106,7 +106,7 @@ export function CourseRow({
         >
           {course.isChecked
             ? status === "czesciowe"
-              ? `${checkedTypes.size}/${types.length}`
+              ? `${String(checkedTypes.size)}/${String(types.length)}`
               : STATUS_LABEL[status]
             : "wyłączony"}
         </span>
