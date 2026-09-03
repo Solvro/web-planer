@@ -18,11 +18,13 @@ const DAY_SHORT: Record<Day, string> = {
   [Day.SUNDAY]: "nd",
 };
 
-type CourseStatus = "gotowe" | "kolizja" | "do-wyboru" | "brak-grupy";
+type CourseStatus =
+  "gotowe" | "kolizja" | "czesciowe" | "do-wyboru" | "brak-grupy";
 
 const STATUS_LABEL: Record<CourseStatus, string> = {
   gotowe: "gotowe",
   kolizja: "kolizja",
+  czesciowe: "częściowe",
   "do-wyboru": "do wyboru",
   "brak-grupy": "brak grupy",
 };
@@ -30,6 +32,7 @@ const STATUS_LABEL: Record<CourseStatus, string> = {
 const STATUS_CLASS: Record<CourseStatus, string> = {
   gotowe: "text-status-ready",
   kolizja: "text-status-collision",
+  czesciowe: "text-status-partial",
   "do-wyboru": "text-status-pending",
   "brak-grupy": "text-status-pending",
 };
@@ -48,7 +51,11 @@ export function CourseRow({
   const [expanded, setExpanded] = useState(false);
 
   const types = [...new Set(course.groups.map((group) => group.courseType))];
-  const checkedCount = course.groups.filter((group) => group.isChecked).length;
+  const checkedTypes = new Set(
+    course.groups
+      .filter((group) => group.isChecked)
+      .map((group) => group.courseType),
+  );
   const hasCollision = course.groups.some(
     (group) => group.isChecked && collidingGroupIds.has(group.groupId),
   );
@@ -58,9 +65,11 @@ export function CourseRow({
       ? "brak-grupy"
       : hasCollision
         ? "kolizja"
-        : checkedCount > 0
+        : checkedTypes.size === types.length
           ? "gotowe"
-          : "do-wyboru";
+          : checkedTypes.size > 0
+            ? "czesciowe"
+            : "do-wyboru";
 
   return (
     <div className="border-border/60 border-b last:border-b-0">
@@ -69,7 +78,10 @@ export function CourseRow({
         onClick={() => {
           setExpanded((value) => !value);
         }}
-        className="hover:bg-muted/50 flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors"
+        className={cn(
+          "hover:bg-muted/50 flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors",
+          !course.isChecked && "opacity-40",
+        )}
       >
         <span className="flex shrink-0 gap-0.5">
           {types.map((type) => (
@@ -87,9 +99,16 @@ export function CourseRow({
           </p>
         </div>
         <span
-          className={cn("shrink-0 text-xs font-medium", STATUS_CLASS[status])}
+          className={cn(
+            "shrink-0 text-xs font-medium",
+            course.isChecked ? STATUS_CLASS[status] : "text-muted-foreground",
+          )}
         >
-          {STATUS_LABEL[status]}
+          {course.isChecked
+            ? status === "czesciowe"
+              ? `${String(checkedTypes.size)}/${String(types.length)}`
+              : STATUS_LABEL[status]
+            : "wyłączony"}
         </span>
       </button>
       {expanded ? (
