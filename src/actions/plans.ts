@@ -1,13 +1,14 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-import { db } from "@/db";
-import { schedule } from "@/db/schema/schedule";
 import { auth } from "@/lib/auth";
+import * as planStore from "@/lib/plan/store";
+import type { PlanPayload, UserSchedulesDTO } from "@/lib/plan/store";
 import type { OnlinePlan, SharedPlan } from "@/types";
+
+export type { UserSchedulesDTO } from "@/lib/plan/store";
 
 export type PlanActionResult<T = null> =
   | { ok: true; data: T }
@@ -16,13 +17,6 @@ export type PlanActionResult<T = null> =
       reason: "unauthorized" | "not_found" | "error";
       message: string;
     };
-
-interface PlanPayload {
-  name: string;
-  courses: { id: string }[];
-  registrations: { id: string }[];
-  groups: { id: string }[];
-}
 
 const UNAUTHORIZED: PlanActionResult<never> = {
   ok: false,
@@ -39,15 +33,6 @@ const NOT_FOUND: PlanActionResult<never> = {
 const getSession = async () =>
   auth.api.getSession({ headers: await headers() });
 
-const first = <T>(rows: T[]): T | undefined => rows.at(0);
-
-const ownedPlan = (id: string, userId: string) =>
-  and(eq(schedule.id, id), eq(schedule.userId, userId));
-
-/**
- * Creates the online copy of a local plan. Idempotent: calling it again for an
- * id that already exists returns the stored timestamps instead of failing.
- */
 export async function createNewPlan(
   input: PlanPayload & { id: string },
 ): Promise<PlanActionResult<{ id: string; updatedAt: string }>> {
@@ -57,29 +42,8 @@ export async function createNewPlan(
   }
 
   try {
-    const existing = first(
-      await db
-        .select({ id: schedule.id, updatedAt: schedule.updatedAt })
-        .from(schedule)
-        .where(eq(schedule.id, input.id)),
-    );
-
-    if (existing !== undefined) {
-      return {
-        ok: true,
-        data: { id: existing.id, updatedAt: existing.updatedAt.toISOString() },
-      };
-    }
-
-    const [created] = await db
-      .insert(schedule)
-      .values({ ...input, userId: session.user.id })
-      .returning({ id: schedule.id, updatedAt: schedule.updatedAt });
-
-    return {
-      ok: true,
-      data: { id: created.id, updatedAt: created.updatedAt.toISOString() },
-    };
+    const data = await planStore.createPlan(session.user.id, input);
+    return { ok: true, data };
   } catch (error) {
     console.error("createNewPlan failed", error);
     return {
@@ -100,19 +64,8 @@ export async function updatePlan(
 
   try {
     const { id, ...payload } = input;
-    const updated = first(
-      await db
-        .update(schedule)
-        .set(payload)
-        .where(ownedPlan(id, session.user.id))
-        .returning({ updatedAt: schedule.updatedAt }),
-    );
-
-    if (updated === undefined) {
-      return NOT_FOUND;
-    }
-
-    return { ok: true, data: { updatedAt: updated.updatedAt.toISOString() } };
+    const updated = await planStore.updatePlan(session.user.id, id, payload);
+    return updated === null ? NOT_FOUND : { ok: true, data: updated };
   } catch (error) {
     console.error("updatePlan failed", error);
     return {
@@ -135,17 +88,8 @@ export async function sharePlan({
     return UNAUTHORIZED;
   }
 
-  const updated = first(
-    await db
-      .update(schedule)
-      .set({ isPublic: true, publicSnapshot: snapshot })
-      .where(ownedPlan(id, session.user.id))
-      .returning({ updatedAt: schedule.updatedAt }),
-  );
-
-  return updated === undefined
-    ? NOT_FOUND
-    : { ok: true, data: { updatedAt: updated.updatedAt.toISOString() } };
+  const updated = await planStore.sharePlan(session.user.id, id, snapshot);
+  return updated === null ? NOT_FOUND : { ok: true, data: updated };
 }
 
 export async function unsharePlan({
@@ -158,17 +102,8 @@ export async function unsharePlan({
     return UNAUTHORIZED;
   }
 
-  const updated = first(
-    await db
-      .update(schedule)
-      .set({ isPublic: false, publicSnapshot: null })
-      .where(ownedPlan(id, session.user.id))
-      .returning({ updatedAt: schedule.updatedAt }),
-  );
-
-  return updated === undefined
-    ? NOT_FOUND
-    : { ok: true, data: { updatedAt: updated.updatedAt.toISOString() } };
+  const updated = await planStore.unsharePlan(session.user.id, id);
+  return updated === null ? NOT_FOUND : { ok: true, data: updated };
 }
 
 export async function getSharedPlan({
@@ -176,22 +111,7 @@ export async function getSharedPlan({
 }: {
   id: string;
 }): Promise<SharedPlan | null> {
-  const row = first(
-    await db
-      .select({
-        id: schedule.id,
-        isPublic: schedule.isPublic,
-        publicSnapshot: schedule.publicSnapshot,
-      })
-      .from(schedule)
-      .where(eq(schedule.id, id)),
-  );
-
-  if (row === undefined || !row.isPublic || row.publicSnapshot == null) {
-    return null;
-  }
-
-  return { id: row.id, plan: row.publicSnapshot };
+  return planStore.getSharedPlan(id);
 }
 
 export async function deletePlan({
@@ -204,13 +124,10 @@ export async function deletePlan({
     return UNAUTHORIZED;
   }
 
-  const result = await db
-    .delete(schedule)
-    .where(ownedPlan(id, session.user.id))
-    .returning({ id: schedule.id });
+  const deleted = await planStore.deletePlan(session.user.id, id);
 
   revalidatePath("/plans");
-  return result.length > 0 ? { ok: true, data: null } : NOT_FOUND;
+  return deleted ? { ok: true, data: null } : NOT_FOUND;
 }
 
 /** Returns the plan or null when it does not exist, belongs to someone else or the user is logged out. */
@@ -224,35 +141,7 @@ export async function getPlan({
     return null;
   }
 
-  const row = first(
-    await db.select().from(schedule).where(ownedPlan(id, session.user.id)),
-  );
-
-  if (row === undefined) {
-    return null;
-  }
-
-  return {
-    id: row.id,
-    userId: row.userId,
-    name: row.name,
-    createdAt: row.createdAt.toISOString(),
-    updatedAt: row.updatedAt.toISOString(),
-    courses: row.courses,
-    groups: row.groups,
-    registrations: row.registrations,
-  };
-}
-
-export interface UserSchedulesDTO {
-  id: string;
-  userId: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  coursesCount: number;
-  registrationsCount: number;
-  groupsCount: number;
+  return planStore.getPlan(session.user.id, id);
 }
 
 /** All online plans of the current user, or null when logged out. */
@@ -262,19 +151,5 @@ export async function getUserSchedules(): Promise<UserSchedulesDTO[] | null> {
     return null;
   }
 
-  const rows = await db
-    .select()
-    .from(schedule)
-    .where(eq(schedule.userId, session.user.id));
-
-  return rows.map((row) => ({
-    id: row.id,
-    userId: row.userId,
-    name: row.name,
-    createdAt: row.createdAt.toISOString(),
-    updatedAt: row.updatedAt.toISOString(),
-    coursesCount: row.courses.length,
-    registrationsCount: row.registrations.length,
-    groupsCount: row.groups.length,
-  }));
+  return planStore.listPlans(session.user.id);
 }
