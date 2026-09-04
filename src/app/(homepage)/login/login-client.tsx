@@ -14,6 +14,7 @@ import SolvroLogoMono from "@/../public/assets/logo/logo_solvro_mono.png";
 import BgImage from "@/../public/assets/planer-bg.png";
 import { handleTriggerConfetti } from "@/components/confetti";
 import { Icons } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -30,6 +31,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 import {
   loginOtpEmailSchema,
   otpPinSchema,
@@ -108,6 +110,7 @@ function EmailStep({
 }) {
   const router = useRouter();
   const [isPasskeyLoading, setIsPasskeyLoading] = useState(false);
+  const lastMethod = authClient.getLastUsedLoginMethod();
   const form = useForm<z.infer<typeof loginOtpEmailSchema>>({
     resolver: zodResolver(loginOtpEmailSchema),
     defaultValues: { email: "" },
@@ -221,14 +224,23 @@ function EmailStep({
 
   return (
     <div className="mt-5 flex w-full max-w-xs flex-col gap-4 text-center">
-      <Button
-        variant="outline"
-        className="w-full"
-        onClick={handleUsosLogin}
-        type="button"
-      >
-        Zaloguj się przez USOS
-      </Button>
+      <div className="relative">
+        <Button
+          variant="outline"
+          className={cn("w-full", {
+            "ring-primary ring-2 ring-offset-2": lastMethod === "usos-auth",
+          })}
+          onClick={handleUsosLogin}
+          type="button"
+        >
+          Zaloguj się przez USOS
+        </Button>
+        {lastMethod === "usos-auth" && (
+          <Badge className="absolute -top-3.5 -right-4 text-[10px]">
+            Ostatnio użyta
+          </Badge>
+        )}
+      </div>
       <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
         <span className="bg-background text-muted-foreground relative z-10 px-2">
           Lub kontynuuj poprzez
@@ -267,27 +279,55 @@ function EmailStep({
           nonce={evpNonce}
           autoComplete="email-verification-token"
         />
-        <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
-          {isLoading ? <Icons.Loader className="size-4 animate-spin" /> : null}
-          Wyślij kod
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          className="w-full"
-          disabled={isPasskeyLoading}
-          onClick={() => {
-            void handlePasskeyLogin();
-          }}
-        >
-          {isPasskeyLoading ? (
-            <Icons.Loader className="size-4 animate-spin" />
-          ) : (
-            <Icons.Fingerprint className="size-4" />
+        <div className="relative">
+          <Button
+            type="submit"
+            size="sm"
+            className={cn("w-full", {
+              "ring-secondary ring-2 ring-offset-2": lastMethod === "email-otp",
+            })}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Icons.Loader className="size-4 animate-spin" />
+            ) : null}
+            Wyślij kod
+          </Button>
+          {lastMethod === "email-otp" && (
+            <Badge
+              variant="secondary"
+              className="absolute -top-3.5 -right-4 text-[10px]"
+            >
+              Ostatnio użyta
+            </Badge>
           )}
-          Zaloguj się kluczem dostępu
-        </Button>
+        </div>
+        <div className="relative">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className={cn("w-full", {
+              "ring-primary ring-2 ring-offset-2": lastMethod === "passkey",
+            })}
+            disabled={isPasskeyLoading}
+            onClick={() => {
+              void handlePasskeyLogin();
+            }}
+          >
+            {isPasskeyLoading ? (
+              <Icons.Loader className="size-4 animate-spin" />
+            ) : (
+              <Icons.Fingerprint className="size-4" />
+            )}
+            Zaloguj się kluczem dostępu
+          </Button>
+          {lastMethod === "passkey" && (
+            <Badge className="absolute -top-3.5 -right-4 text-[10px]">
+              Ostatnio użyta
+            </Badge>
+          )}
+        </div>
       </form>
     </div>
   );
