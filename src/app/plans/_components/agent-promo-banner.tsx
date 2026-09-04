@@ -29,6 +29,7 @@ export function AgentPromoBanner() {
       return;
     }
     setSettings({ open: true, tab: "mcp" });
+    setDismissed(true);
   };
 
   useEffect(() => {
