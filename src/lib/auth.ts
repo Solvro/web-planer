@@ -8,7 +8,7 @@ import { emailVerificationProtocol } from "better-auth-evp";
 import { usosAuth } from "better-auth-usos";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP, jwt } from "better-auth/plugins";
+import { emailOTP, jwt, lastLoginMethod } from "better-auth/plugins";
 import React from "react";
 
 import { db } from "@/db";
@@ -96,6 +96,17 @@ export const auth = betterAuth({
       origin: env.SITE_URL,
     }),
     jwt(),
+    lastLoginMethod({
+      customResolveMethod: (context) => {
+        if (context.path === "/sign-in/email-otp") {
+          return "email-otp";
+        }
+        if (context.path === "/usos/callback") {
+          return "usos-auth";
+        }
+        return null;
+      },
+    }),
     mcp({
       loginPage: "/login",
       consentPage: "/consent",
