@@ -50,13 +50,15 @@ function extractRowValue($: cheerio.CheerioAPI, label: string): number {
 function extractParity($: cheerio.CheerioAPI): ScheduleParity {
   const text = findRow($, "Termin i miejsce:").text();
 
-  if (text.includes("nieparzyste")) {
+  const checkedValue = text.slice(0, 300);
+
+  if (checkedValue.includes("nieparzyste")) {
     return "odd";
   }
-  if (text.includes("parzyste")) {
+  if (checkedValue.includes("parzyste")) {
     return "even";
   }
-  if (text.includes("co tydzień")) {
+  if (checkedValue.includes("co tydzień")) {
     return "all";
   }
   return "unknown";
