@@ -2,6 +2,7 @@
 
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 import {
@@ -19,6 +20,9 @@ export function AgentPromoBanner() {
   const router = useRouter();
 
   const openMcpSettings = () => {
+    void window.umami?.track("MCP promo banner: check how clicked", {
+      loggedIn: session.data == null ? "false" : "true",
+    });
     if (session.data == null) {
       toast.info("Musisz się zalogować, aby korzystać z MCP");
       router.push("/login");
@@ -26,6 +30,13 @@ export function AgentPromoBanner() {
     }
     setSettings({ open: true, tab: "mcp" });
   };
+
+  useEffect(() => {
+    if (!dismissed) {
+      void window.umami?.track("MCP promo banner: shown");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (dismissed) {
     return null;
@@ -39,6 +50,7 @@ export function AgentPromoBanner() {
         className="absolute top-1 right-1 size-6"
         aria-label="Zamknij"
         onClick={() => {
+          void window.umami?.track("MCP promo banner: dismissed");
           setDismissed(true);
         }}
       >
