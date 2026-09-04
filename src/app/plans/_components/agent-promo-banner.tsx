@@ -1,6 +1,8 @@
 "use client";
 
 import { useAtom, useSetAtom } from "jotai";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   agentPromoDismissedAtom,
@@ -8,10 +10,22 @@ import {
 } from "@/atoms/settings-dialog";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth-client";
 
 export function AgentPromoBanner() {
   const setSettings = useSetAtom(settingsDialogAtom);
   const [dismissed, setDismissed] = useAtom(agentPromoDismissedAtom);
+  const session = useSession();
+  const router = useRouter();
+
+  const openMcpSettings = () => {
+    if (session.data == null) {
+      toast.info("Musisz się zalogować, aby korzystać z MCP");
+      router.push("/login");
+      return;
+    }
+    setSettings({ open: true, tab: "mcp" });
+  };
 
   if (dismissed) {
     return null;
@@ -39,9 +53,7 @@ export function AgentPromoBanner() {
         variant="secondary"
         size="sm"
         className="mt-3 w-full"
-        onClick={() => {
-          setSettings({ open: true, tab: "mcp" });
-        }}
+        onClick={openMcpSettings}
       >
         Jak połączyć
       </Button>
