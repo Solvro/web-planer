@@ -53,6 +53,14 @@ export function ConsentClient() {
       scope: accept ? scope : undefined,
     });
     setStatus(error == null ? "done" : "error");
+    if (error == null) {
+      void window.umami?.track(
+        accept ? "MCP consent accepted" : "MCP consent rejected",
+        {
+          clientName: client?.client_name ?? clientId,
+        },
+      );
+    }
   };
 
   return (

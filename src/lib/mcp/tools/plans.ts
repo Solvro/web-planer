@@ -1,7 +1,14 @@
 import type { McpServer, ServerContext } from "@modelcontextprotocol/server";
 import * as z from "zod";
 
+import { env } from "@/env.mjs";
+import {
+  RegistrationUnavailableError,
+  fetchRegistrationCourses,
+  fetchRegistrationDetails,
+} from "@/lib/plan/build-registration-courses";
 import * as planStore from "@/lib/plan/store";
+import type { ExtendedCourse, OnlinePlan } from "@/types";
 
 import { userIdFromAuthInfo } from "../auth-info";
 import { errorResult, jsonResult } from "../json-result";
@@ -38,6 +45,39 @@ async function updateSelection(
 
 function planNotFound() {
   return errorResult("Nie znaleziono planu");
+}
+
+async function buildSharedSnapshot(plan: OnlinePlan) {
+  const courseIds = new Set(plan.courses.map((course) => course.id));
+  const groupIds = new Set(plan.groups.map((group) => group.id));
+
+  const [registrations, coursesByRegistration] = await Promise.all([
+    Promise.all(
+      plan.registrations.map(async ({ id }) => fetchRegistrationDetails(id)),
+    ),
+    Promise.all(
+      plan.registrations.map(async ({ id }) => fetchRegistrationCourses(id)),
+    ),
+  ]);
+
+  const courses: ExtendedCourse[] = coursesByRegistration
+    .flat()
+    .filter((course) => courseIds.has(course.id))
+    .map((course) => ({
+      ...course,
+      isChecked: true,
+      groups: course.groups.map((group) => ({
+        ...group,
+        isChecked: groupIds.has(group.groupOnlineId),
+      })),
+    }));
+
+  return {
+    name: plan.name,
+    courses,
+    registrations,
+    allGroups: courses.flatMap((course) => course.groups),
+  };
 }
 
 export function registerPlanTools(server: McpServer): void {
@@ -327,6 +367,66 @@ export function registerPlanTools(server: McpServer): void {
         planId,
         "registrations",
         withoutId(plan.registrations, registrationId),
+      );
+      return updated === null ? planNotFound() : jsonResult(updated);
+    },
+  );
+
+  server.registerTool(
+    "share_plan",
+    {
+      description:
+        "Publish a plan's current selection as a public, read-only link anyone can open — no login required. Re-sharing an already-shared plan refreshes the snapshot to match its current selection.",
+      inputSchema: z.object({ planId: z.string().trim() }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ planId }, context) => {
+      const userId = requireUserId(context);
+      const plan = await planStore.getPlan(userId, planId);
+      if (plan === null) {
+        return planNotFound();
+      }
+      let snapshot;
+      try {
+        snapshot = await buildSharedSnapshot(plan);
+      } catch (error) {
+        return errorResult(
+          error instanceof RegistrationUnavailableError
+            ? error.message
+            : "Nie udało się przygotować planu do udostępnienia",
+        );
+      }
+      const updated = await planStore.sharePlan(userId, planId, snapshot);
+      return updated === null
+        ? planNotFound()
+        : jsonResult({
+            url: `${env.SITE_URL}/plans/preview/${planId}`,
+            updatedAt: updated.updatedAt,
+          });
+    },
+  );
+
+  server.registerTool(
+    "unshare_plan",
+    {
+      description: "Disable a plan's public share link.",
+      inputSchema: z.object({ planId: z.string().trim() }),
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ planId }, context) => {
+      const updated = await planStore.unsharePlan(
+        requireUserId(context),
+        planId,
       );
       return updated === null ? planNotFound() : jsonResult(updated);
     },
