@@ -48,17 +48,19 @@ function extractRowValue($: cheerio.CheerioAPI, label: string): number {
  * directly instead of inferring parity from the list of past meeting dates.
  */
 function extractParity($: cheerio.CheerioAPI): ScheduleParity {
-  const text = findRow($, "Termin i miejsce:").text();
+  const html = findRow($, "Termin i miejsce:");
 
-  const checkedValue = text.slice(0, 300);
+  html.find(".note").remove();
 
-  if (checkedValue.includes("nieparzyste")) {
+  const text = html.text();
+
+  if (text.includes("nieparzyste")) {
     return "odd";
   }
-  if (checkedValue.includes("parzyste")) {
+  if (text.includes("parzyste")) {
     return "even";
   }
-  if (checkedValue.includes("co tydzień")) {
+  if (text.includes("co tydzień")) {
     return "all";
   }
   return "unknown";
