@@ -17,6 +17,7 @@ import { useHydrated } from "@/hooks/use-hydrated";
 import { useLocalPlans } from "@/lib/plan/local-plans";
 import type { StoredPlan } from "@/types";
 
+import { AgentPromoBanner } from "./_components/agent-promo-banner";
 import PlansLoading from "./loading";
 
 export function PlansPage({
@@ -82,6 +83,7 @@ function PlansList({
           Nowy plan
         </Button>
       </div>
+      <AgentPromoBanner />
       {localPlans.length === 0 && onlineOnlyPlans.length === 0 ? (
         <div className="border-border/70 text-muted-foreground flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed px-6 py-16 text-center">
           <Icons.Plans className="text-primary/70 size-8" />

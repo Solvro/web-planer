@@ -2,6 +2,7 @@
 
 import { AppearanceContent } from "@/app/plans/account/_components/appearance-content";
 import { CalendarContent } from "@/app/plans/account/_components/calendar-content";
+import { McpContent } from "@/app/plans/account/_components/mcp-content";
 import { ProfileSummary } from "@/app/plans/account/_components/profile-summary";
 import { SecurityContent } from "@/app/plans/account/_components/security-content";
 import {
@@ -16,7 +17,8 @@ import type { User } from "@/types";
 
 import { Icons } from "./icons";
 
-export type SettingsTab = "profile" | "security" | "appearance" | "calendar";
+export type SettingsTab =
+  "profile" | "security" | "appearance" | "calendar" | "mcp";
 
 const TABS: { id: SettingsTab; title: string; icon: React.ReactNode }[] = [
   { id: "profile", title: "Profil", icon: <Icons.User className="size-4" /> },
@@ -32,8 +34,13 @@ const TABS: { id: SettingsTab; title: string; icon: React.ReactNode }[] = [
   },
   {
     id: "calendar",
-    title: "Dodawanie do kalendarza",
+    title: "Kalendarz",
     icon: <Icons.AddCalendar className="size-4" />,
+  },
+  {
+    id: "mcp",
+    title: "MCP",
+    icon: <Icons.Sparkles className="size-4" />,
   },
 ];
 
@@ -87,8 +94,10 @@ export function SettingsDialog({
               <SecurityContent />
             ) : tab === "appearance" ? (
               <AppearanceContent />
-            ) : (
+            ) : tab === "calendar" ? (
               <CalendarContent />
+            ) : (
+              <McpContent />
             )}
           </div>
         </div>

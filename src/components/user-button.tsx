@@ -1,9 +1,11 @@
 "use client";
 
+import { useAtom } from "jotai";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
+import { settingsDialogAtom } from "@/atoms/settings-dialog";
 import type { SettingsTab } from "@/components/settings-dialog";
 import { SettingsDialog } from "@/components/settings-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,13 +28,11 @@ const THEME_LABEL: Record<string, string> = {
 
 export function UserButton({ profile }: { profile: User }) {
   const [opened, setOpened] = React.useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<SettingsTab>("profile");
+  const [settings, setSettings] = useAtom(settingsDialogAtom);
   const { theme } = useTheme();
 
   const openSettings = (tab: SettingsTab) => {
-    setSettingsTab(tab);
-    setSettingsOpen(true);
+    setSettings({ open: true, tab });
     setOpened(false);
   };
 
@@ -95,6 +95,13 @@ export function UserButton({ profile }: { profile: User }) {
                 openSettings("calendar");
               }}
             />
+            <MenuButton
+              icon={<Icons.Sparkles className="h-4 w-4" />}
+              label="MCP"
+              onClick={() => {
+                openSettings("mcp");
+              }}
+            />
             <SignOutButton
               render={
                 <button className="bg-background hover:bg-muted/50 flex w-full items-center gap-3 rounded-b-lg border-t border-b p-4 py-4 shadow-sm transition-all dark:hover:shadow-black/50">
@@ -117,10 +124,14 @@ export function UserButton({ profile }: { profile: User }) {
         </DropdownMenuContent>
       </DropdownMenu>
       <SettingsDialog
-        open={settingsOpen}
-        onOpenChange={setSettingsOpen}
-        tab={settingsTab}
-        onTabChange={setSettingsTab}
+        open={settings.open}
+        onOpenChange={(open) => {
+          setSettings((current) => ({ ...current, open }));
+        }}
+        tab={settings.tab}
+        onTabChange={(tab) => {
+          setSettings((current) => ({ ...current, tab }));
+        }}
         profile={profile}
       />
     </>
