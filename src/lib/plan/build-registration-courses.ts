@@ -1,9 +1,5 @@
-import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
 import type { PlannerGroupDTO } from "@/actions/v2/get-course-groups-for-planner";
-import { getRegistrationFacultyAction } from "@/actions/v2/get-registration-faculty";
-import { getRegistrationRoundsAction } from "@/actions/v2/get-registration-rounds";
 import type { RoundCourseDTO } from "@/actions/v2/get-round-courses";
-import { getRegistrationRoundCoursesAction } from "@/actions/v2/get-round-courses";
 import type { ScheduleParity } from "@/lib/utils/build-group-schedule-pattern";
 import type {
   ClassType,
@@ -105,6 +101,8 @@ async function fetchCourse(
   course: RoundCourseDTO,
   registrationId: string,
 ): Promise<ExtendedCourse> {
+  const { getPlannerCourseGroupsAction } =
+    await import("@/actions/v2/get-course-groups-for-planner");
   const groups = await getPlannerCourseGroupsAction(
     course.courseId,
     course.termId,
@@ -125,6 +123,11 @@ async function fetchCourse(
 export async function fetchRegistrationCourses(
   registrationId: string,
 ): Promise<ExtendedCourse[]> {
+  const { getRegistrationRoundsAction } =
+    await import("@/actions/v2/get-registration-rounds");
+  const { getRegistrationRoundCoursesAction } =
+    await import("@/actions/v2/get-round-courses");
+
   const rounds = await getRegistrationRoundsAction(registrationId);
   const nominalRound = rounds.at(0);
   if (nominalRound === undefined) {
@@ -151,6 +154,8 @@ export async function fetchRegistrationCourses(
 export async function fetchRegistrationDetails(
   registrationId: string,
 ): Promise<Registration> {
+  const { getRegistrationFacultyAction } =
+    await import("@/actions/v2/get-registration-faculty");
   const data = await getRegistrationFacultyAction(registrationId);
   return {
     id: registrationId,
