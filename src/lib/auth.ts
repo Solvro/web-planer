@@ -100,6 +100,7 @@ export const auth = betterAuth({
       loginPage: "/login",
       consentPage: "/consent",
       resource: `${env.SITE_URL}/api/mcp`,
+      allowDynamicClientRegistration: true,
     }),
     cimd({
       fetchClientMetadataResource,
