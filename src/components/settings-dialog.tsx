@@ -76,7 +76,7 @@ export function SettingsDialog({
                   onTabChange(item.id);
                 }}
                 className={cn(
-                  "flex w-full shrink-0 items-start gap-2 rounded-md px-3 py-2 text-left text-sm font-medium whitespace-nowrap transition-colors sm:whitespace-normal",
+                  "flex w-auto shrink-0 items-start gap-2 rounded-md px-3 py-2 text-left text-sm font-medium whitespace-nowrap transition-colors sm:whitespace-normal md:w-full",
                   tab === item.id
                     ? "bg-muted text-foreground"
                     : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",

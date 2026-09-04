@@ -5,6 +5,7 @@ import { usosAuthClient } from "better-auth-usos/client";
 import {
   emailOTPClient,
   inferAdditionalFields,
+  lastLoginMethodClient,
 } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
@@ -21,6 +22,7 @@ export const authClient = createAuthClient({
     usosAuthClient(),
     passkeyClient(),
     oauthProviderClient(),
+    lastLoginMethodClient(),
   ],
 });
 
