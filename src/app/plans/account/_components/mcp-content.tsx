@@ -178,7 +178,7 @@ export function McpContent() {
           <TabsList>
             <TabsTrigger value="claude">Claude</TabsTrigger>
             <TabsTrigger value="claude-code">Claude Code</TabsTrigger>
-            <TabsTrigger value="opencode">opencode</TabsTrigger>
+            <TabsTrigger value="opencode">OpenCode</TabsTrigger>
             <TabsTrigger value="codex">Codex</TabsTrigger>
           </TabsList>
 
