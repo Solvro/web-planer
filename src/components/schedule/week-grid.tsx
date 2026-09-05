@@ -2,9 +2,11 @@
 
 import { useMemo } from "react";
 
+import type { ScheduleOrientation } from "@/atoms/schedule-orientation";
 import { ALL_DAYS, DAYS, WEEKEND_DAYS } from "@/constants/days";
 import { useScheduleDensity } from "@/hooks/use-schedule-density";
 import { useScheduleOrientation } from "@/hooks/use-schedule-orientation";
+import { cn } from "@/lib/utils";
 import type { Collision } from "@/lib/utils/detect-collisions";
 import type { Day, ExtendedGroup } from "@/types";
 
@@ -44,9 +46,16 @@ export function WeekGrid({
   onSelectGroup,
   isReadonly = false,
   onlyDaysWithGroups = false,
-}: ScheduleViewProps & { onlyDaysWithGroups?: boolean }) {
+  orientation: orientationOverride,
+  fitContent = false,
+}: ScheduleViewProps & {
+  onlyDaysWithGroups?: boolean;
+  orientation?: ScheduleOrientation;
+  fitContent?: boolean;
+}) {
   const { density } = useScheduleDensity();
-  const { orientation } = useScheduleOrientation();
+  const { orientation: globalOrientation } = useScheduleOrientation();
+  const orientation = orientationOverride ?? globalOrientation;
 
   const groupsByDay = useMemo(() => groupByDay(allGroups), [allGroups]);
   const collisionsByDay = useMemo(() => groupByDay(collisions), [collisions]);
@@ -73,7 +82,12 @@ export function WeekGrid({
     const startTimeMarks = buildStartTimeMarks(allGroups, hourMarks);
 
     return (
-      <div className="divide-border/60 flex flex-col divide-y overflow-x-auto">
+      <div
+        className={cn(
+          "divide-border/60 flex flex-col divide-y",
+          fitContent ? "w-max" : "overflow-x-auto",
+        )}
+      >
         {visibleDays.map(({ day, label }) => (
           <div key={day} className="py-4 first:pt-0 last:pb-0">
             <DayRow
@@ -100,7 +114,12 @@ export function WeekGrid({
   const totalHeight = Math.max((endMinutes - startMinutes) * minuteHeight, 120);
 
   return (
-    <div className="flex gap-3 overflow-x-auto pb-2">
+    <div
+      className={cn(
+        "flex gap-3 pb-2",
+        fitContent ? "w-max" : "overflow-x-auto",
+      )}
+    >
       <div className="w-14 shrink-0">
         <div className="h-10" />
         <div className="relative" style={{ height: totalHeight }}>

@@ -21,7 +21,7 @@ export function PlanDisplayLink() {
         }
       />
       <TooltipContent>
-        <p>Udostępnij</p>
+        <p>Udostępnij / pobierz plan</p>
       </TooltipContent>
     </Tooltip>
   );
