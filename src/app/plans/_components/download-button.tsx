@@ -12,10 +12,14 @@ export function DownloadPlanButton({
   captureRef,
   planName,
   hideDays,
+  hideLectures,
+  disabled = false,
 }: {
   captureRef: RefObject<HTMLDivElement | null>;
   planName: string;
   hideDays: boolean;
+  hideLectures: boolean;
+  disabled?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -28,8 +32,10 @@ export function DownloadPlanButton({
     try {
       const dataUrl = await toPng(element, {
         cacheBust: true,
+        pixelRatio: 2,
         width: element.scrollWidth,
         height: element.scrollHeight,
+        style: { transform: "none", transformOrigin: "top left", margin: "0" },
       });
       const link = document.createElement("a");
       link.download = `${planName || "plan"}.png`;
@@ -38,6 +44,7 @@ export function DownloadPlanButton({
 
       void window.umami?.track("Download plan", {
         withHiddenDays: hideDays.toString(),
+        withHiddenLectures: hideLectures.toString(),
       });
     } catch (error) {
       console.error(error);
@@ -50,7 +57,7 @@ export function DownloadPlanButton({
   return (
     <Button
       className="rounded-full dark:bg-white dark:text-black"
-      disabled={loading}
+      disabled={loading || disabled}
       onClick={() => {
         void downloadPlan();
       }}
