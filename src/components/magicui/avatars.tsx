@@ -23,7 +23,12 @@ interface AvatarCirclesProps {
 
 export function AvatarCircles({ className, contributors }: AvatarCirclesProps) {
   return (
-    <div className={cn("z-10 flex -space-x-4 rtl:space-x-reverse", className)}>
+    <div
+      className={cn(
+        "z-10 flex flex-wrap justify-center -space-x-4 gap-y-2 rtl:space-x-reverse",
+        className,
+      )}
+    >
       {contributors.map((contributor, index) => (
         <Tooltip key={contributor.id}>
           <TooltipTrigger

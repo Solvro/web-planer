@@ -50,8 +50,11 @@ export const fetchGithubStats = async () => {
       id: number;
       contributions: number;
     }[];
-    contributorsCount = data.length;
-    for (const contributor of data) {
+    const filteredData = data.filter(
+      (contributor) => !contributor.login.includes("dependabot"),
+    );
+    contributorsCount = filteredData.length;
+    for (const contributor of filteredData) {
       contributors.push({
         name: contributor.login,
         avatar: contributor.avatar_url,
