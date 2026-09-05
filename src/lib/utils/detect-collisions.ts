@@ -24,13 +24,12 @@ function weeksOverlap(a: ExtendedGroup["week"], b: ExtendedGroup["week"]) {
   return a === b;
 }
 
-/**
- * `week` (TN/TP) comes from scraping the group page and can stay "" (unknown)
- * even for a genuinely biweekly group. Actual meeting dates come straight
- * from the official schedule API, so when both groups have them, trust
- * those instead: no shared date means no real collision even if `week`
- * hasn't resolved yet.
- */
+function oppositeParities(a: ExtendedGroup["week"], b: ExtendedGroup["week"]) {
+  const isParity = (week: ExtendedGroup["week"]) =>
+    week === "TN" || week === "TP";
+  return isParity(a) && isParity(b) && a !== b;
+}
+
 function datesOverlap(
   a: string[] | undefined,
   b: string[] | undefined,
@@ -67,6 +66,9 @@ export function detectCollisions(groups: ExtendedGroup[]): Collision[] {
         const bEnd = parseTimeToMinutes(b.endTime);
 
         if (!rangesOverlap(aStart, aEnd, bStart, bEnd)) {
+          continue;
+        }
+        if (oppositeParities(a.week, b.week)) {
           continue;
         }
         const sharedDate = datesOverlap(a.dates, b.dates);
