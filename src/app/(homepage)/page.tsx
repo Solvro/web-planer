@@ -7,6 +7,7 @@ import { AuroraBackground } from "@/components/homepage/aurora-background";
 import { ParticleLogo } from "@/components/homepage/particle-logo";
 import { Icons } from "@/components/icons";
 import { BorderBeam } from "@/components/magicui/border-beam";
+import { StructuredData } from "@/components/structured-data";
 import { Button } from "@/components/ui/button";
 import { getCachedAlerts } from "@/lib/get-cached-alerts";
 import { getCachedSession } from "@/lib/get-session";
@@ -74,6 +75,7 @@ export default async function Home() {
 
   return (
     <main className="mx-auto flex-1 overflow-hidden">
+      <StructuredData />
       <section
         id="hero"
         className="relative mx-auto max-w-[80rem] px-2 text-center md:px-8"

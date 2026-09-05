@@ -8,6 +8,7 @@ import { ClientProviders } from "@/components/providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/env.mjs";
+import { SITE_DESCRIPTION, SITE_ORIGIN, SITE_TITLE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import type { UmamiTracker } from "@/types/umami";
 
@@ -16,7 +17,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: {
     template: "%s | Planer Solvro",
-    default: "Planer - utwórz swój plan zajęć na PWR!",
+    default: SITE_TITLE,
   },
   icons: [
     {
@@ -34,8 +35,7 @@ export const metadata: Metadata = {
       url: "/favicon-16x16.png",
     },
   ],
-  description:
-    "Planer to strona stworzona z myślą o studentach PWR, którzy pragną w prosty i intuicyjny sposób zarządzać swoimi zapisami na kursy (za darmo!).",
+  description: SITE_DESCRIPTION,
   robots: "index, follow",
   keywords: [
     "planer",
@@ -54,16 +54,15 @@ export const metadata: Metadata = {
     canonical: "./",
   },
   openGraph: {
-    title: "Planer - utwórz swój plan zajęć na PWR!",
-    description:
-      "Planer to strona stworzona z myślą o studentach PWR, którzy pragną w prosty i intuicyjny sposób zarządzać swoimi zapisami na kursy (za darmo!).",
-    url: `https://planer.solvro.pl/`,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_ORIGIN,
     images: [
       {
         url: "/og_image.png",
         width: 2170,
         height: 1064,
-        alt: "Planer - utwórz swój plan zajęć na PWR!",
+        alt: SITE_TITLE,
       },
     ],
     locale: "pl_PL",
@@ -71,13 +70,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Planer - utwórz swój plan zajęć na PWR!",
-    description: "https://planer.solvro.pl/",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: ["/og_image.png"],
   },
   appleWebApp: {
     statusBarStyle: "black",
-    title: "Planer - utwórz swój plan zajęć na PWR!",
+    title: SITE_TITLE,
     startupImage: "/apple_startup_image.png",
   },
   manifest: "/site.webmanifest",

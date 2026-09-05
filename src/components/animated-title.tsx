@@ -7,13 +7,13 @@ import { childVariants } from "@/constants";
 
 export function AnimatedTitle({ children }: { children: React.ReactNode }) {
   return (
-    <motion.h1
+    <motion.h2
       whileHover={{ scale: 1.05 }}
       variants={childVariants}
       className="group relative z-10 mx-auto mt-4 max-w-xs transform-gpu text-3xl font-semibold transition-all sm:max-w-none sm:text-4xl md:text-5xl"
     >
       {children}
-    </motion.h1>
+    </motion.h2>
   );
 }
 

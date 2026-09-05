@@ -39,12 +39,12 @@ export function ProblemSection() {
     >
       <div className="relative container mx-auto max-w-7xl px-4 py-16">
         <div className="mx-auto space-y-4 pb-6 text-center">
-          <motion.h2
+          <motion.p
             variants={childVariants}
             className="text-primary font-mono text-sm font-medium tracking-wider uppercase"
           >
             problem
-          </motion.h2>
+          </motion.p>
           <AnimatedTitle>
             <TitleText>Układanie planu zajęć to </TitleText>
             <TitleHighlight>nie lada wyzwanie</TitleHighlight>

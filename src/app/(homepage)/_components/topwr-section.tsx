@@ -23,13 +23,13 @@ export function ToPWrSection() {
           transition={{ staggerChildren: 0.1 }}
         >
           <div className="mx-auto space-y-4 pb-6 text-center">
-            <motion.h2
+            <motion.p
               variants={childVariants}
               className="font-mono text-sm font-semibold tracking-wider text-orange-500 uppercase"
             >
               Jesteś studentem politechniki wrocławskiej?
-            </motion.h2>
-            <motion.h3
+            </motion.p>
+            <motion.h2
               variants={childVariants}
               className="mx-auto mt-4 max-w-xs text-3xl font-bold tracking-tight sm:max-w-none sm:text-4xl md:text-5xl"
             >
@@ -41,7 +41,7 @@ export function ToPWrSection() {
                 width={140}
                 height={50}
               />
-            </motion.h3>
+            </motion.h2>
             <motion.p
               variants={childVariants}
               className="text-muted-foreground mx-auto mt-6 max-w-2xl text-lg leading-6 text-balance"

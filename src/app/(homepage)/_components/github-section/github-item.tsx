@@ -33,12 +33,12 @@ export function GithubItem({
     >
       <div className="relative container mx-auto max-w-7xl px-4 py-16">
         <div className="mx-auto space-y-4 pb-6 text-center">
-          <motion.h2
+          <motion.p
             variants={childVariants}
             className="text-primary font-mono text-sm font-medium tracking-wider uppercase"
           >
             autorzy
-          </motion.h2>
+          </motion.p>
           <AnimatedTitle>
             <TitleHighlight>{contributorsCount} developerów</TitleHighlight>
             <TitleText> tworzy ten projekt</TitleText>
