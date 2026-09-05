@@ -24,23 +24,6 @@ function weeksOverlap(a: ExtendedGroup["week"], b: ExtendedGroup["week"]) {
   return a === b;
 }
 
-function oppositeParities(a: ExtendedGroup["week"], b: ExtendedGroup["week"]) {
-  const isParity = (week: ExtendedGroup["week"]) =>
-    week === "TN" || week === "TP";
-  return isParity(a) && isParity(b) && a !== b;
-}
-
-function datesOverlap(
-  a: string[] | undefined,
-  b: string[] | undefined,
-): boolean | undefined {
-  if (a === undefined || b === undefined || a.length === 0 || b.length === 0) {
-    return undefined;
-  }
-  const bDates = new Set(b);
-  return a.some((date) => bDates.has(date));
-}
-
 export function detectCollisions(groups: ExtendedGroup[]): Collision[] {
   const byDay = new Map<Day, ExtendedGroup[]>();
   for (const group of groups) {
@@ -68,12 +51,7 @@ export function detectCollisions(groups: ExtendedGroup[]): Collision[] {
         if (!rangesOverlap(aStart, aEnd, bStart, bEnd)) {
           continue;
         }
-        if (oppositeParities(a.week, b.week)) {
-          continue;
-        }
-        const sharedDate = datesOverlap(a.dates, b.dates);
-        const overlaps = sharedDate ?? weeksOverlap(a.week, b.week);
-        if (!overlaps) {
+        if (!weeksOverlap(a.week, b.week)) {
           continue;
         }
 
