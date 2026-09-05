@@ -80,12 +80,12 @@ export function SolutionSection() {
           transition={{ staggerChildren: 0.1 }}
         >
           <div className="mx-auto space-y-4 pb-6 text-center">
-            <motion.h2
+            <motion.p
               variants={childVariants}
               className="text-primary font-mono text-sm font-medium tracking-wider uppercase"
             >
               rozwiązanie
-            </motion.h2>
+            </motion.p>
             <AnimatedTitle>
               <TitleText>Ułóż swój </TitleText>
               <TitleHighlight>wymarzony plan</TitleHighlight>
