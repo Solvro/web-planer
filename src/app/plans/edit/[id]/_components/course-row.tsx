@@ -164,7 +164,23 @@ export function CourseRow({
                   </span>
                 </span>
                 <Checkbox
+                  className={
+                    course.groups.some(
+                      (courseGroup) =>
+                        courseGroup.courseType === group.courseType &&
+                        courseGroup.isChecked &&
+                        courseGroup.groupNumber !== group.groupNumber,
+                    )
+                      ? "opacity-40"
+                      : ""
+                  }
                   checked={group.isChecked}
+                  disabled={course.groups.some(
+                    (courseGroup) =>
+                      courseGroup.courseType === group.courseType &&
+                      courseGroup.isChecked &&
+                      courseGroup.groupNumber !== group.groupNumber,
+                  )}
                   onCheckedChange={() => {
                     onToggleGroup(group.groupId);
                   }}
