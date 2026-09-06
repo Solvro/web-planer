@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type React from "react";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { CalendarProvider } from "@/hooks/use-calendar";
 import { FeedbackProvider } from "@/hooks/use-feedback";
 import { ShareProvider } from "@/hooks/use-share";
 
@@ -20,11 +21,13 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <TooltipProvider delay={0}>
       <FeedbackProvider>
-        <ShareProvider>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </ShareProvider>
+        <CalendarProvider>
+          <ShareProvider>
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
+          </ShareProvider>
+        </CalendarProvider>
       </FeedbackProvider>
     </TooltipProvider>
   );

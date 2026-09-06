@@ -30,7 +30,7 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { exportPlanToIcs } from "@/lib/plan/export-ics";
+import { useCalendarDialog } from "@/hooks/use-calendar";
 import { planUpdates } from "@/lib/plan/plan-updates";
 import {
   RegistrationUnavailableError,
@@ -64,6 +64,8 @@ export function AppSidebar({
     string | null
   >(null);
   const fetchCourses = useRegistrationCoursesFetcher();
+
+  const calendarDialog = useCalendarDialog();
 
   const registrations = useQuery({
     enabled: faculty !== null,
@@ -210,11 +212,11 @@ export function AppSidebar({
                 variant="outline"
                 className="flex-1"
                 onClick={() => {
-                  exportPlanToIcs(plan.allGroups, plan.name);
+                  calendarDialog.openDialog();
                 }}
               >
                 <Icons.Download className="size-4" />
-                Eksport .ics
+                Eksport .ics (Nowe)
               </Button>
             </div>
 

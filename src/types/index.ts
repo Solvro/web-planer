@@ -93,6 +93,12 @@ export interface SharedPlan {
   };
 }
 
+export interface CalendarPlan {
+  id: string;
+  groups: OnlinePlan["groups"];
+  registrations: OnlinePlan["registrations"];
+}
+
 export interface User {
   id: string;
   email: string;
