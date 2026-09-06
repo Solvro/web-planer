@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { schedule } from "@/db/schema/schedule";
-import type { OnlinePlan, SharedPlan } from "@/types";
+import type { CalendarPlan, OnlinePlan, SharedPlan } from "@/types";
 
 export interface PlanPayload {
   name: string;
@@ -124,6 +124,27 @@ export async function getSharedPlan(id: string): Promise<SharedPlan | null> {
   }
 
   return { id: row.id, plan: row.publicSnapshot };
+}
+
+export async function getCalendarPlan(
+  id: string,
+): Promise<CalendarPlan | null> {
+  const row = first(
+    await db
+      .select({
+        id: schedule.id,
+        registrations: schedule.registrations,
+        groups: schedule.groups,
+      })
+      .from(schedule)
+      .where(eq(schedule.id, id)),
+  );
+
+  if (row === undefined) {
+    return null;
+  }
+
+  return { id: row.id, groups: row.groups, registrations: row.registrations };
 }
 
 export async function deletePlan(userId: string, id: string): Promise<boolean> {

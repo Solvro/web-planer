@@ -1,5 +1,3 @@
-import type { ExtendedGroup } from "@/types";
-
 const CRLF = "\r\n";
 const TIMEZONE = "Europe/Warsaw";
 
@@ -47,13 +45,13 @@ const toUtcStamp = (date: Date) =>
     .replace(/\.\d{3}/, "");
 
 function buildEvent(
-  group: ExtendedGroup,
+  group: CalendarGroup,
   date: string,
   stamp: string,
 ): string[] {
   return [
     "BEGIN:VEVENT",
-    `UID:${group.groupOnlineId}-${date}@planer.solvro.pl`,
+    `UID:${group.id}-${date}@planer.solvro.pl`,
     `DTSTAMP:${stamp}`,
     `SUMMARY:${escapeText(`${group.courseName} (${group.courseType})`)}`,
     `DESCRIPTION:${escapeText(`Grupa ${group.groupNumber}${group.lecturer === "" ? "" : ` · ${group.lecturer}`}`)}`,
@@ -72,12 +70,23 @@ export interface IcsExport {
   skippedGroups: number;
 }
 
+export interface CalendarGroup {
+  dates: string[];
+  id: string;
+  courseName: string;
+  courseType: string;
+  groupNumber: string;
+  lecturer: string;
+  startTime: string;
+  endTime: string;
+}
+
 /**
  * Builds a calendar with one event per real meeting date of every selected
  * group. Dates come straight from USOS, so holidays and rescheduled weeks are
  * already accounted for.
  */
-function buildIcs(groups: ExtendedGroup[]): IcsExport {
+export function buildIcs(groups: CalendarGroup[]): IcsExport {
   const stamp = toUtcStamp(new Date());
   const lines = [
     "BEGIN:VCALENDAR",
@@ -91,10 +100,7 @@ function buildIcs(groups: ExtendedGroup[]): IcsExport {
   let skippedGroups = 0;
 
   for (const group of groups) {
-    if (!group.isChecked) {
-      continue;
-    }
-    const dates = group.dates ?? [];
+    const dates = group.dates;
     if (dates.length === 0) {
       skippedGroups++;
       continue;
@@ -107,21 +113,4 @@ function buildIcs(groups: ExtendedGroup[]): IcsExport {
 
   lines.push("END:VCALENDAR");
   return { content: lines.join(CRLF) + CRLF, exportedGroups, skippedGroups };
-}
-
-export function downloadIcs(groups: ExtendedGroup[], name: string): IcsExport {
-  const result = buildIcs(groups);
-  if (result.exportedGroups === 0) {
-    return result;
-  }
-
-  const blob = new Blob([result.content], { type: "text/calendar" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${name || "plan"}.ics`;
-  link.click();
-  URL.revokeObjectURL(url);
-
-  return result;
 }
