@@ -238,9 +238,9 @@ export function AppSidebar({
                       value === null
                         ? "Wybierz swój wydział"
                         : registrationReplacer(
-                          FACULTIES.find((f) => f.value === value)?.name ??
-                          value,
-                        )
+                            FACULTIES.find((f) => f.value === value)?.name ??
+                              value,
+                          )
                     }
                   </SelectValue>
                 </SelectTrigger>
@@ -282,7 +282,7 @@ export function AppSidebar({
                 {registrations.isLoading ? (
                   <Skeleton className="h-7 w-24 rounded-full" />
                 ) : registrations.data === undefined ? null : registrations.data
-                  .length === 0 ? (
+                    .length === 0 ? (
                   <p className="text-muted-foreground text-xs">
                     Brak rejestracji
                   </p>
