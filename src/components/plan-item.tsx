@@ -26,7 +26,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { exportPlanToIcs } from "@/lib/plan/export-ics";
 import { useLocalPlans } from "@/lib/plan/local-plans";
 import { onlinePlanQueryKey } from "@/lib/plan/use-plan-sync";
 import { cn, pluralize } from "@/lib/utils";
@@ -251,25 +250,10 @@ export function PlanItem(props: PlanItemProps) {
             <DropdownMenuLabel>Wybierz akcję</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {localPlan === undefined ? null : (
-              <>
-                <DropdownMenuItem onClick={copyPlan}>
-                  <Icons.Copy />
-                  <span>Kopiuj</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    exportPlanToIcs(
-                      localPlan.courses
-                        .filter((course) => course.isChecked)
-                        .flatMap((course) => course.groups),
-                      localPlan.name,
-                    );
-                  }}
-                >
-                  <Icons.Download />
-                  <span>Dodaj do kalendarza (.ics)</span>
-                </DropdownMenuItem>
-              </>
+              <DropdownMenuItem onClick={copyPlan}>
+                <Icons.Copy />
+                <span>Kopiuj</span>
+              </DropdownMenuItem>
             )}
             <DropdownMenuItem
               onClick={() => {

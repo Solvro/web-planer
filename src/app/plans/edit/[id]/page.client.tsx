@@ -9,6 +9,7 @@ import { usePlan } from "@/lib/plan/use-plan";
 import { usePlanSync } from "@/lib/plan/use-plan-sync";
 import { detectCollisions } from "@/lib/utils/detect-collisions";
 
+import { AddCalendarDialog } from "./_components/add-calendar-dialog";
 import { AppSidebar } from "./_components/app-sidebar";
 import { SharePlanDialog } from "./_components/share-plan-dialog";
 import EditPlanLoading from "./loading";
@@ -47,6 +48,7 @@ function PlanEditor({ planId }: { planId: string }) {
         </div>
       </SidebarInset>
       <SharePlanDialog plan={plan} />
+      <AddCalendarDialog planId={plan.id} />
     </>
   );
 }
