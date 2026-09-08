@@ -10,6 +10,9 @@ import type { ExtendedGroup } from "@/types";
 import { ClassCard } from "./class-card";
 import { layoutOverlaps, parseTimeToMinutes } from "./time-scale";
 
+const DEFAULT_COLUMN_WIDTH = 220;
+const MIN_CARD_WIDTH = DEFAULT_COLUMN_WIDTH / 2;
+
 export function DayColumn({
   label,
   groups,
@@ -49,9 +52,20 @@ export function DayColumn({
     [groups],
   );
   const checkedCount = groups.filter((group) => group.isChecked).length;
+  const maxColumns = layout.reduce(
+    (max, { columns }) => Math.max(max, columns),
+    1,
+  );
+  const minColumnWidth = Math.max(
+    DEFAULT_COLUMN_WIDTH,
+    maxColumns * MIN_CARD_WIDTH,
+  );
 
   return (
-    <div className={cn("min-w-[220px] flex-1", showHeader ? "" : "w-full")}>
+    <div
+      className={cn("flex-1", showHeader ? "" : "w-full")}
+      style={{ minWidth: minColumnWidth }}
+    >
       {showHeader ? (
         <div className="mb-2 h-10">
           <p className="font-semibold">{label}</p>
@@ -96,6 +110,7 @@ export function DayColumn({
                 height: Math.max((end - start) * minuteHeight, 26),
                 left: `${((column / columns) * 100).toString()}%`,
                 width: `${(100 / columns).toString()}%`,
+                minWidth: MIN_CARD_WIDTH,
               }}
             />
           );
