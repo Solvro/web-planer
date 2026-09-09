@@ -3,7 +3,6 @@ import "server-only";
 
 import { auth } from "@/lib/auth";
 
-export async function getCachedSession() {
-  "use cache: private";
+export async function getSession() {
   return auth.api.getSession({ headers: await headers() });
 }

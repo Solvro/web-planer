@@ -23,7 +23,7 @@ function buildGroupPageUrl(unitId: string, groupNumber: string): string {
 }
 
 function findRow($: cheerio.CheerioAPI, label: string) {
-  return $("div#layout-c22")
+  return $("#layout-main-content")
     .find("table")
     .find("tbody")
     .children()

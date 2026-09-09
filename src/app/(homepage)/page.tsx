@@ -10,7 +10,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { StructuredData } from "@/components/structured-data";
 import { Button } from "@/components/ui/button";
 import { getCachedAlerts } from "@/lib/get-cached-alerts";
-import { getCachedSession } from "@/lib/get-session";
+import { getSession } from "@/lib/get-session";
 
 import HeroImageDark from "../../../public/assets/planer-dark.png";
 import HeroImageLight from "../../../public/assets/planer-light.png";
@@ -21,7 +21,7 @@ import { ToPWrSection } from "./_components/topwr-section";
 import { TrustedSection } from "./_components/trusted-section";
 
 async function JoinUsBlock() {
-  const session = await getCachedSession();
+  const session = await getSession();
 
   if (session == null) {
     return (
