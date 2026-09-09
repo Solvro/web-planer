@@ -6,7 +6,7 @@ import { TOPBAR_SLOT_ID } from "@/components/topbar-portal";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton } from "@/components/user-button";
-import { getCachedSession } from "@/lib/get-session";
+import { getSession } from "@/lib/get-session";
 
 import { FeedbackButton } from "./feedback-button";
 import { SidebarTriggerButton } from "./sidebar-trigger-button";
@@ -65,7 +65,7 @@ export function PlansTopbar() {
 }
 
 async function UserProfile() {
-  const session = await getCachedSession();
+  const session = await getSession();
 
   if (session == null) {
     return (
