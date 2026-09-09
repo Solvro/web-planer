@@ -107,7 +107,10 @@ export function Navbar() {
               variant="ghost"
               className="hover:bg-blue-200/40 dark:hover:bg-white/5"
               render={
-                <Link href="https://solvro.pwr.edu.pl/contact/" target="_blank">
+                <Link
+                  href="https://solvro.pwr.edu.pl/pl/contact/"
+                  target="_blank"
+                >
                   Kontakt
                 </Link>
               }
@@ -155,7 +158,9 @@ export function Navbar() {
                   </Link>
                 </li>
                 <li className="p-2">
-                  <Link href="https://solvro.pwr.edu.pl/contact/">Kontakt</Link>
+                  <Link href="https://solvro.pwr.edu.pl/pl/contact/">
+                    Kontakt
+                  </Link>
                 </li>
                 <li className="p-2">
                   <button onClick={openDialog}>Zgłoś błąd</button>
