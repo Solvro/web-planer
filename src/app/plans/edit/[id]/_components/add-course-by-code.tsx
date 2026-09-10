@@ -60,7 +60,7 @@ export function AddCourseByCode({ plan }: { plan: PlanHandle }) {
       toast.error(
         error instanceof CatalogCourseNotFoundError
           ? error.message
-          : "Nie udało się wyszukać przedmiotu w katalogu USOSweb.",
+          : "Nie udało się wyszukać przedmiotu w katalogu USOS.",
         { duration: 6000 },
       );
     } finally {
@@ -147,7 +147,7 @@ export function AddCourseByCode({ plan }: { plan: PlanHandle }) {
           </div>
           {terms.length === 0 ? (
             <p className="text-muted-foreground text-xs">
-              Brak cykli zajęć w katalogu.
+              Brak cykli zajęć w USOS.
             </p>
           ) : (
             <>

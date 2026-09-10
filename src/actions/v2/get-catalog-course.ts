@@ -1,81 +1,71 @@
 "use server";
 
+import type { PlannerGroupDTO } from "@/actions/v2/get-course-groups-for-planner";
+import { getPlannerCourseGroupsAction } from "@/actions/v2/get-course-groups-for-planner";
 import redis from "@/lib/redis";
 import { getOrSetRedis } from "@/lib/redis/get-set";
-import {
-  courseTimetableUrl,
-  fetchUsosWebHtml,
-  parseCourseTimetable,
-} from "@/lib/usos-catalog";
-import type {
-  CatalogCourseTimetable,
-  CatalogScrapedGroup,
-} from "@/lib/usos-catalog";
+import { fetchUsosApi, isUsosObjectNotFound } from "@/lib/usos";
 import { CatalogCourseNotFoundError } from "@/lib/usos-catalog-error";
-import { buildGroupSchedulePattern } from "@/lib/utils/build-group-schedule-pattern";
-import type { ClassgroupDate } from "@/types";
 
-import { getClassgroupDatesAction } from "./get-class-group-dates";
+interface UsosLangDict {
+  pl: string;
+}
+
+export interface CatalogCoursePayload {
+  courseId: string;
+  courseName: string;
+  termId: string;
+  termName: string;
+  groups: PlannerGroupDTO[];
+}
+
+async function fetchCourseName(courseId: string): Promise<string> {
+  const course = await fetchUsosApi<{ name: UsosLangDict }>("courses/course", {
+    course_id: courseId,
+    fields: "name",
+  });
+  return course.name.pl;
+}
+
+async function fetchTermName(termId: string): Promise<string> {
+  const term = await fetchUsosApi<{ name: UsosLangDict }>("terms/term", {
+    term_id: termId,
+  });
+  return term.name.pl;
+}
 
 export async function getCatalogCourseAction(
   courseId: string,
   termId: string,
-): Promise<CatalogCourseTimetable> {
+): Promise<CatalogCoursePayload> {
   if (courseId.trim() === "" || termId.trim() === "") {
     throw new CatalogCourseNotFoundError(courseId);
   }
 
   return getOrSetRedis({
     redis,
-    key: `usos:catalog_timetable:${courseId}:${termId}`,
+    key: `usos:catalog_course_groups:v2:${courseId}:${termId}`,
     ttlSeconds: 60 * 15,
     fetcher: async () => {
-      const { status, html } = await fetchUsosWebHtml(
-        courseTimetableUrl(courseId, termId),
-      );
-      if (status >= 400) {
-        throw new CatalogCourseNotFoundError(courseId);
+      try {
+        const [courseName, termName, groups] = await Promise.all([
+          fetchCourseName(courseId),
+          fetchTermName(termId),
+          getPlannerCourseGroupsAction(courseId, termId),
+        ]);
+        return {
+          courseId,
+          courseName,
+          termId,
+          termName,
+          groups,
+        };
+      } catch (error) {
+        if (isUsosObjectNotFound(error)) {
+          throw new CatalogCourseNotFoundError(courseId);
+        }
+        throw error;
       }
-      const timetable = parseCourseTimetable(html, courseId, termId);
-      const groups = await Promise.all(
-        timetable.groups.map(async (group) => enrichGroupDates(group)),
-      );
-      return { ...timetable, groups };
     },
   });
-}
-
-async function enrichGroupDates(
-  group: CatalogScrapedGroup,
-): Promise<CatalogScrapedGroup> {
-  try {
-    const dates = await getClassgroupDatesAction(
-      group.unitId,
-      group.groupNumber,
-    );
-    const pattern = buildGroupSchedulePattern(
-      dates.flatMap((entry): ClassgroupDate[] =>
-        entry.startTime != null && entry.endTime != null
-          ? [
-              {
-                date: entry.startTime.slice(0, 10),
-                startTime: entry.startTime,
-                endTime: entry.endTime,
-              },
-            ]
-          : [],
-      ),
-    );
-    if (pattern === null) {
-      return group;
-    }
-    return {
-      ...group,
-      startTime: pattern.startTime,
-      endTime: pattern.endTime,
-      dates: pattern.dates,
-    };
-  } catch {
-    return group;
-  }
 }

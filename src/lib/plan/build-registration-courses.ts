@@ -61,17 +61,19 @@ async function mapConcurrent<T, R>(
  * Builds the identifier stored in online plans. Kept index based for
  * compatibility with plans saved before this rewrite.
  */
-const groupOnlineId = (courseId: string, index: number) =>
-  `${courseId}_group_${index.toString()}`;
+function plannerGroupOnlineId(base: string, index: number) {
+  return `${base}_group_${index.toString()}`;
+}
 
-function toExtendedGroup(
-  course: RoundCourseDTO,
+export function plannerGroupToExtendedGroup(
+  course: { courseId: string; courseName: string },
   registrationId: string,
   group: PlannerGroupDTO,
   index: number,
+  onlineIdBase = course.courseId,
 ): ExtendedGroup {
   const pattern = group.schedulePattern;
-  const id = groupOnlineId(course.courseId, index);
+  const id = plannerGroupOnlineId(onlineIdBase, index);
   return {
     groupId: id,
     groupOnlineId: id,
@@ -114,7 +116,7 @@ async function fetchCourse(
     type: groups[0]?.classtypeId ?? "",
     isChecked: false,
     groups: groups.map((group, index) =>
-      toExtendedGroup(course, registrationId, group, index),
+      plannerGroupToExtendedGroup(course, registrationId, group, index),
     ),
   };
 }

@@ -1,10 +1,11 @@
+import type { CatalogCoursePayload } from "@/actions/v2/get-catalog-course";
+import { plannerGroupToExtendedGroup } from "@/lib/plan/build-registration-courses";
 import type {
   CatalogCourseLookup,
   CatalogCourseTerm,
-  CatalogCourseTimetable,
 } from "@/lib/usos-catalog";
 import { CatalogCourseNotFoundError } from "@/lib/usos-catalog-error";
-import type { ExtendedCourse, ExtendedGroup, Registration } from "@/types";
+import type { ExtendedCourse, Registration } from "@/types";
 
 export { CatalogCourseNotFoundError } from "@/lib/usos-catalog-error";
 export type { CatalogCourseLookup } from "@/lib/usos-catalog";
@@ -69,7 +70,12 @@ export function sortCatalogTerms(
     if (statusDelta !== 0) {
       return statusDelta;
     }
-    return termChronology(right.termId) - termChronology(left.termId);
+    const chronologyDelta =
+      termChronology(left.termId) - termChronology(right.termId);
+    // Prefer the soonest upcoming term, otherwise the newest current/finished one.
+    return termStatusRank(left.status) === 0
+      ? chronologyDelta
+      : -chronologyDelta;
   });
 }
 
@@ -79,52 +85,37 @@ export function preferredCatalogTermId(
   return sortCatalogTerms(terms).at(0)?.termId ?? null;
 }
 
-const groupOnlineId = (courseKey: string, index: number) =>
-  `${courseKey}_group_${index.toString()}`;
-
-export function toCatalogExtendedCourse(timetable: CatalogCourseTimetable): {
+export function toCatalogExtendedCourse(payload: CatalogCoursePayload): {
   registration: Registration;
   course: ExtendedCourse;
 } {
   const registrationId = catalogRegistrationId(
-    timetable.courseId,
-    timetable.termId,
+    payload.courseId,
+    payload.termId,
   );
-  const courseKey = registrationId;
-  const groups: ExtendedGroup[] = timetable.groups.map((group, index) => {
-    const id = groupOnlineId(courseKey, index);
-    return {
-      groupId: id,
-      groupOnlineId: id,
-      groupNumber: group.groupNumber,
-      courseId: timetable.courseId,
-      courseName: timetable.courseName,
-      courseType: group.classtypeId,
+  const courseRef = {
+    courseId: payload.courseId,
+    courseName: payload.courseName,
+  };
+  const groups = payload.groups.map((group, index) =>
+    plannerGroupToExtendedGroup(
+      courseRef,
       registrationId,
-      lecturer: group.lecturer,
-      day: group.day,
-      week: group.week,
-      startTime: group.startTime,
-      endTime: group.endTime,
-      spotsOccupied: 0,
-      spotsTotal: 0,
-      averageRating: 0,
-      opinionsCount: 0,
-      isChecked: false,
-      dates: group.dates,
-      unitId: group.unitId,
-    };
-  });
+      group,
+      index,
+      registrationId,
+    ),
+  );
 
   return {
     registration: {
       id: registrationId,
-      name: timetable.courseName,
-      departmentId: timetable.termName,
+      name: payload.courseName,
+      departmentId: payload.termName,
     },
     course: {
-      id: courseKey,
-      name: timetable.courseName,
+      id: registrationId,
+      name: payload.courseName,
       registrationId,
       type: groups[0]?.courseType ?? "",
       isChecked: true,
@@ -157,8 +148,8 @@ export async function fetchCatalogCourse(
 ): Promise<{ registration: Registration; course: ExtendedCourse }> {
   const { getCatalogCourseAction } =
     await import("@/actions/v2/get-catalog-course");
-  const timetable = await getCatalogCourseAction(courseId, termId);
-  return toCatalogExtendedCourse(timetable);
+  const payload = await getCatalogCourseAction(courseId, termId);
+  return toCatalogExtendedCourse(payload);
 }
 
 export async function fetchCatalogRegistration(

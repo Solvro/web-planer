@@ -122,7 +122,7 @@ export function registerCourseTools(server: McpServer): void {
     "search_course_by_code",
     {
       description:
-        "Look up a course in the public USOSweb catalog by course code (prz_kod). Returns the course name and the available teaching cycles (semesters) the user can pick from.",
+        "Look up a course in the USOS catalog by course code. Returns the course name and the academic terms the course is conducted in.",
       inputSchema: z.object({ courseCode: z.string().trim() }),
       annotations: READ_ONLY,
     },
@@ -137,7 +137,7 @@ export function registerCourseTools(server: McpServer): void {
     "get_catalog_course_groups",
     {
       description:
-        "Scrape a course's semester timetable from USOSweb (katalog) and return every group with lecturer, day, time and unit id — use after search_course_by_code once the user picked a termId.",
+        "Get a catalog course's groups for a term via the USOS API — use after search_course_by_code once the user picked a termId. groupOnlineId uses the katalog:: prefix stored in plans.",
       inputSchema: z.object({
         courseId: z.string().trim(),
         termId: z.string().trim(),
@@ -147,10 +147,10 @@ export function registerCourseTools(server: McpServer): void {
     async ({ courseId, termId }) => {
       const { getCatalogCourseAction } =
         await import("@/actions/v2/get-catalog-course");
-      const timetable = await getCatalogCourseAction(courseId, termId);
+      const payload = await getCatalogCourseAction(courseId, termId);
       return jsonResult({
-        ...timetable,
-        groups: timetable.groups.map((group, index) => ({
+        ...payload,
+        groups: payload.groups.map((group, index) => ({
           ...group,
           groupOnlineId: `katalog::${courseId}::${termId}_group_${index.toString()}`,
         })),
