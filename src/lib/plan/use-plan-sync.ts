@@ -16,6 +16,7 @@ import type {
   StoredPlan,
 } from "@/types";
 
+import { fetchCatalogRegistration } from "./catalog-courses";
 import { planUpdates } from "./plan-updates";
 import {
   fetchRegistrationDetails,
@@ -227,6 +228,10 @@ export function usePlanSync(plan: PlanHandle) {
 
       const perRegistration = await Promise.all(
         online.registrations.map(async ({ id }) => {
+          const catalog = await fetchCatalogRegistration(id);
+          if (catalog !== null) {
+            return catalog;
+          }
           const [registration, courses] = await Promise.all([
             fetchRegistrationDetails(id),
             fetchCourses(id),
@@ -295,7 +300,13 @@ export function usePlanSync(plan: PlanHandle) {
   const refreshGroups = useCallback(async () => {
     const current = readPlan();
     const results = await Promise.allSettled(
-      current.registrations.map(async ({ id }) => fetchCourses(id)),
+      current.registrations.map(async ({ id }) => {
+        const catalog = await fetchCatalogRegistration(id);
+        if (catalog !== null) {
+          return catalog.courses;
+        }
+        return fetchCourses(id);
+      }),
     );
 
     const fresh = new Map<string, Partial<ExtendedGroup>>();

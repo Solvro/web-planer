@@ -7,6 +7,7 @@ import {
   fetchRegistrationCourses,
   fetchRegistrationDetails,
 } from "@/lib/plan/build-registration-courses";
+import { fetchCatalogRegistration } from "@/lib/plan/catalog-courses";
 import * as planStore from "@/lib/plan/store";
 import type { ExtendedCourse, OnlinePlan } from "@/types";
 
@@ -51,14 +52,22 @@ async function buildSharedSnapshot(plan: OnlinePlan) {
   const courseIds = new Set(plan.courses.map((course) => course.id));
   const groupIds = new Set(plan.groups.map((group) => group.id));
 
-  const [registrations, coursesByRegistration] = await Promise.all([
-    Promise.all(
-      plan.registrations.map(async ({ id }) => fetchRegistrationDetails(id)),
-    ),
-    Promise.all(
-      plan.registrations.map(async ({ id }) => fetchRegistrationCourses(id)),
-    ),
-  ]);
+  const loaded = await Promise.all(
+    plan.registrations.map(async ({ id }) => {
+      const catalog = await fetchCatalogRegistration(id);
+      if (catalog !== null) {
+        return catalog;
+      }
+      const [registration, courses] = await Promise.all([
+        fetchRegistrationDetails(id),
+        fetchRegistrationCourses(id),
+      ]);
+      return { registration, courses };
+    }),
+  );
+
+  const registrations = loaded.map((entry) => entry.registration);
+  const coursesByRegistration = loaded.map((entry) => entry.courses);
 
   const courses: ExtendedCourse[] = coursesByRegistration
     .flat()

@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCalendarDialog } from "@/hooks/use-calendar";
+import { parseCatalogRegistrationId } from "@/lib/plan/catalog-courses";
 import { planUpdates } from "@/lib/plan/plan-updates";
 import {
   RegistrationUnavailableError,
@@ -45,6 +46,7 @@ import type { Collision } from "@/lib/utils/detect-collisions";
 import { collidingGroupIds } from "@/lib/utils/detect-collisions";
 import type { Registration } from "@/types";
 
+import { AddCourseByCode } from "./add-course-by-code";
 import { CourseList } from "./course-list";
 import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
@@ -86,12 +88,23 @@ export function AppSidebar({
       options.set(registration.id, registrationReplacer(registration.name));
     }
     for (const registration of plan.registrations) {
-      if (!options.has(registration.id)) {
-        options.set(registration.id, registrationReplacer(registration.name));
+      if (
+        parseCatalogRegistrationId(registration.id) !== null ||
+        options.has(registration.id)
+      ) {
+        continue;
       }
+      options.set(registration.id, registrationReplacer(registration.name));
     }
     return [...options].map(([value, label]) => ({ value, label }));
   }, [registrations.data, plan.registrations]);
+
+  const facultyPlanRegistrations = plan.registrations.filter(
+    (registration) => parseCatalogRegistrationId(registration.id) === null,
+  );
+  const catalogPlanRegistrations = plan.registrations.filter(
+    (registration) => parseCatalogRegistrationId(registration.id) !== null,
+  );
 
   const collidingIds = useMemo(
     () => collidingGroupIds(collisions),
@@ -261,7 +274,7 @@ export function AppSidebar({
             <div>
               <p className="text-sm font-medium">Rejestracje</p>
               <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                {plan.registrations.map((registration) => (
+                {facultyPlanRegistrations.map((registration) => (
                   <span
                     key={registration.id}
                     className="bg-secondary flex items-center gap-1 rounded-full py-1 pr-1 pl-2.5 text-xs"
@@ -296,6 +309,35 @@ export function AppSidebar({
                     }}
                   />
                 )}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium">Przedmioty</p>
+              <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                {catalogPlanRegistrations.map((registration) => (
+                  <span
+                    key={registration.id}
+                    className="bg-secondary flex max-w-full items-center gap-1 rounded-full py-1 pr-1 pl-2.5 text-xs"
+                  >
+                    <span className="min-w-0 truncate">
+                      {registration.name.split(" · ")[0]}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Usuń przedmiot"
+                      onClick={() => {
+                        plan.removeRegistration(registration.id);
+                      }}
+                      className="hover:bg-background/60 shrink-0 rounded-full p-0.5"
+                    >
+                      <Icons.X className="size-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="mt-2">
+                <AddCourseByCode plan={plan} />
               </div>
             </div>
 

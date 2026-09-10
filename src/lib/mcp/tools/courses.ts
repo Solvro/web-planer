@@ -119,6 +119,46 @@ export function registerCourseTools(server: McpServer): void {
   );
 
   server.registerTool(
+    "search_course_by_code",
+    {
+      description:
+        "Look up a course in the public USOSweb catalog by course code (prz_kod). Returns the course name and the available teaching cycles (semesters) the user can pick from.",
+      inputSchema: z.object({ courseCode: z.string().trim() }),
+      annotations: READ_ONLY,
+    },
+    async ({ courseCode }) => {
+      const { lookupCourseByCodeAction } =
+        await import("@/actions/v2/lookup-course-by-code");
+      return jsonResult(await lookupCourseByCodeAction(courseCode));
+    },
+  );
+
+  server.registerTool(
+    "get_catalog_course_groups",
+    {
+      description:
+        "Scrape a course's semester timetable from USOSweb (katalog) and return every group with lecturer, day, time and unit id — use after search_course_by_code once the user picked a termId.",
+      inputSchema: z.object({
+        courseId: z.string().trim(),
+        termId: z.string().trim(),
+      }),
+      annotations: READ_ONLY,
+    },
+    async ({ courseId, termId }) => {
+      const { getCatalogCourseAction } =
+        await import("@/actions/v2/get-catalog-course");
+      const timetable = await getCatalogCourseAction(courseId, termId);
+      return jsonResult({
+        ...timetable,
+        groups: timetable.groups.map((group, index) => ({
+          ...group,
+          groupOnlineId: `katalog::${courseId}::${termId}_group_${index.toString()}`,
+        })),
+      });
+    },
+  );
+
+  server.registerTool(
     "get_course_groups",
     {
       description:
