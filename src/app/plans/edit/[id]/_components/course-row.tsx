@@ -92,7 +92,9 @@ export function CourseRow({
           ))}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium">{course.name}</p>
+          <p className="line-clamp-2 text-sm leading-snug font-medium break-words">
+            {course.name}
+          </p>
           <p className="text-muted-foreground truncate text-xs">
             {types.join(" + ")} · {course.groups.length}{" "}
             {pluralize(course.groups.length, "grupa", "grupy", "grup")}
