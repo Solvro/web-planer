@@ -80,7 +80,9 @@ export function ClassCard({
         <span>G{group.groupNumber}</span>
       </div>
       <div className="min-w-0">
-        <p className="truncate font-bold">{group.courseName}</p>
+        <p className="line-clamp-2 leading-tight font-bold break-words">
+          {group.courseName}
+        </p>
         <p className="text-muted-foreground truncate">{group.lecturer}</p>
       </div>
       <div className="mt-1 flex items-center gap-1.5">
