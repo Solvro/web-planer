@@ -119,6 +119,46 @@ export function registerCourseTools(server: McpServer): void {
   );
 
   server.registerTool(
+    "search_course_by_code",
+    {
+      description:
+        "Look up a course in the USOS catalog by course code. Returns the course name and the academic terms the course is conducted in.",
+      inputSchema: z.object({ courseCode: z.string().trim() }),
+      annotations: READ_ONLY,
+    },
+    async ({ courseCode }) => {
+      const { lookupCourseByCodeAction } =
+        await import("@/actions/v2/lookup-course-by-code");
+      return jsonResult(await lookupCourseByCodeAction(courseCode));
+    },
+  );
+
+  server.registerTool(
+    "get_catalog_course_groups",
+    {
+      description:
+        "Get a catalog course's groups for a term via the USOS API — use after search_course_by_code once the user picked a termId. groupOnlineId uses the katalog:: prefix stored in plans.",
+      inputSchema: z.object({
+        courseId: z.string().trim(),
+        termId: z.string().trim(),
+      }),
+      annotations: READ_ONLY,
+    },
+    async ({ courseId, termId }) => {
+      const { getCatalogCourseAction } =
+        await import("@/actions/v2/get-catalog-course");
+      const payload = await getCatalogCourseAction(courseId, termId);
+      return jsonResult({
+        ...payload,
+        groups: payload.groups.map((group, index) => ({
+          ...group,
+          groupOnlineId: `katalog::${courseId}::${termId}_group_${index.toString()}`,
+        })),
+      });
+    },
+  );
+
+  server.registerTool(
     "get_course_groups",
     {
       description:
