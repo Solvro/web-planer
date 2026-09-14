@@ -58,7 +58,10 @@ export function ListView({
             <div className="flex flex-col gap-2">
               {dayGroups.map((group) => (
                 <button
-                  key={group.groupId}
+                  key={
+                    group.meetingKey ??
+                    group.groupId + group.courseId + group.registrationId
+                  }
                   type="button"
                   onClick={() => {
                     onSelectGroup?.(group.groupId);

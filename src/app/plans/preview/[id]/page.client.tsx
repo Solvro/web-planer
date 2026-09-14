@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { Icons } from "@/components/icons";
 import { WeekGrid } from "@/components/schedule/week-grid";
 import { Button } from "@/components/ui/button";
+import { expandGroupsMeetings } from "@/lib/plan/expand-group-meetings";
 import { useLocalPlans } from "@/lib/plan/local-plans";
 import type { SharedPlan } from "@/types";
 
@@ -14,7 +15,8 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
   const localPlans = useLocalPlans();
 
   const selectedGroups = useMemo(
-    () => plan.allGroups.filter((group) => group.isChecked),
+    () =>
+      expandGroupsMeetings(plan.allGroups.filter((group) => group.isChecked)),
     [plan.allGroups],
   );
 

@@ -20,6 +20,14 @@ export function CourseList({
   onToggleCourse: (courseId: string, isChecked: boolean) => void;
   onRemoveRegistration: (registrationId: string) => void;
 }) {
+  const toogleAllCoursesInRegistration = (registrationId: string) => {
+    for (const course of courses) {
+      if (course.registrationId === registrationId) {
+        onToggleCourse(course.id, !course.isChecked);
+      }
+    }
+  };
+
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto">
       {registrations.map((registration) => (
@@ -36,6 +44,19 @@ export function CourseList({
               className="text-muted-foreground hover:text-foreground shrink-0 text-xs"
             >
               Usuń
+            </button>
+          </div>
+          <div className="mb-1 flex items-center justify-between px-2">
+            <button
+              type="button"
+              onClick={() => {
+                toogleAllCoursesInRegistration(registration.id);
+              }}
+              className="text-muted-foreground hover:text-foreground shrink-0 text-xs"
+            >
+              <p className="text-muted-foreground truncate text-xs font-semibold tracking-wide uppercase">
+                Przełącz widoczność kursów
+              </p>
             </button>
           </div>
           {courses

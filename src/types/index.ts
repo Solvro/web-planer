@@ -13,10 +13,17 @@ export type ClassType = "C" | "D" | "L" | "P" | "S" | "W";
 /** "" = every week, TN = odd weeks, TP = even weeks, "!" = irregular */
 export type WeekParity = "" | "TN" | "TP" | "!";
 
+export interface GroupMeeting {
+  day: Day;
+  startTime: string;
+  endTime: string;
+  dates: string[];
+}
+
 /**
- * One class group as stored inside a plan. A group is one weekly slot
- * (day + time) that belongs to a course; `groupOnlineId` is the identifier
- * synced with the online plan, `groupId` is the local key used by the UI.
+ * One class group as stored inside a plan. A group may contain multiple
+ * recurring meeting slots; `groupOnlineId` is the identifier synced with the
+ * online plan, and `groupId` is the local key used by the UI.
  */
 export interface ExtendedGroup {
   groupId: string;
@@ -40,6 +47,10 @@ export interface ExtendedGroup {
   isChecked: boolean;
   /** Real meeting dates ("YYYY-MM-DD") from USOS; missing on plans saved before this field existed. */
   dates?: string[];
+  /** All recurring meeting slots. Missing on plans saved before multi-slot groups were introduced. */
+  meetings?: GroupMeeting[];
+  /** Internal key used when one logical group is rendered as multiple cards. */
+  meetingKey?: string;
   /**
    * USOS course-unit id, used to fetch live spot counts and week parity
    * after the group is already shown. Missing on plans saved before this

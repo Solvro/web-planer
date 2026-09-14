@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useShare } from "@/hooks/use-share";
+import { expandGroupsMeetings } from "@/lib/plan/expand-group-meetings";
 import type { PlanHandle } from "@/lib/plan/use-plan";
 
 import { DownloadPlanButton } from "../../../_components/download-button";
@@ -46,9 +47,11 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
 
   const groups = useMemo(
     () =>
-      hideLectures
-        ? plan.selectedGroups.filter((group) => group.courseType !== "W")
-        : plan.selectedGroups,
+      expandGroupsMeetings(
+        hideLectures
+          ? plan.selectedGroups.filter((group) => group.courseType !== "W")
+          : plan.selectedGroups,
+      ),
     [plan.selectedGroups, hideLectures],
   );
 

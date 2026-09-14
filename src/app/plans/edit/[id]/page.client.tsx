@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { ScheduleBoard } from "@/components/schedule/schedule-board";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { expandGroupsMeetings } from "@/lib/plan/expand-group-meetings";
 import { usePlan } from "@/lib/plan/use-plan";
 import { usePlanSync } from "@/lib/plan/use-plan-sync";
 import { detectCollisions } from "@/lib/utils/detect-collisions";
@@ -30,7 +31,15 @@ function PlanEditor({ planId }: { planId: string }) {
   const sync = usePlanSync(plan);
 
   const collisions = useMemo(
-    () => detectCollisions(plan.selectedGroups),
+    () => detectCollisions(expandGroupsMeetings(plan.selectedGroups)),
+    [plan.selectedGroups],
+  );
+  const displayGroups = useMemo(
+    () => expandGroupsMeetings(plan.allGroups),
+    [plan.allGroups],
+  );
+  const displaySelectedGroups = useMemo(
+    () => expandGroupsMeetings(plan.selectedGroups),
     [plan.selectedGroups],
   );
 
@@ -40,8 +49,8 @@ function PlanEditor({ planId }: { planId: string }) {
       <SidebarInset className="mr-1 w-full overflow-x-auto overflow-y-auto bg-transparent pt-14">
         <div className="ml-2 flex h-full w-full flex-1 grow flex-col items-start p-2 md:ml-0 md:w-auto">
           <ScheduleBoard
-            allGroups={plan.allGroups}
-            selectedGroups={plan.selectedGroups}
+            allGroups={displayGroups}
+            selectedGroups={displaySelectedGroups}
             collisions={collisions}
             onSelectGroup={plan.selectGroup}
           />

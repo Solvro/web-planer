@@ -27,6 +27,11 @@ async function loadScheduleGroups(
             groupNumber: group.groupNumber,
             lecturer: group.lecturer,
             dates: group.dates ?? [],
+            meetings: group.meetings?.map((meeting) => ({
+              dates: meeting.dates,
+              startTime: meeting.startTime,
+              endTime: meeting.endTime,
+            })),
             startTime: group.startTime,
             endTime: group.endTime,
             courseName: group.courseName,

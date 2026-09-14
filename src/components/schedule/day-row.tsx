@@ -112,7 +112,10 @@ export function DayRow({
             );
             return (
               <ClassCard
-                key={group.groupId + group.courseId + group.registrationId}
+                key={
+                  group.meetingKey ??
+                  group.groupId + group.courseId + group.registrationId
+                }
                 group={group}
                 isReadonly={isReadonly}
                 isDisabled={group.isChecked ? false : isThisCourseChecked}
