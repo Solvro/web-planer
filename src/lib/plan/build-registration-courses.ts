@@ -5,6 +5,7 @@ import type {
   ClassType,
   ExtendedCourse,
   ExtendedGroup,
+  GroupMeeting,
   Registration,
   WeekParity,
 } from "@/types";
@@ -71,6 +72,14 @@ function toExtendedGroup(
   index: number,
 ): ExtendedGroup {
   const pattern = group.schedulePattern;
+  const meetings: GroupMeeting[] =
+    pattern?.meetings.map((meeting) => ({
+      day: WEEKDAY_TO_DAY[meeting.weekday - 1] ?? Day.MONDAY,
+      startTime: meeting.startTime,
+      endTime: meeting.endTime,
+      dates: meeting.dates,
+    })) ?? [];
+  const primaryMeeting = meetings[0];
   const id = groupOnlineId(course.courseId, index);
   return {
     groupId: id,
@@ -83,16 +92,17 @@ function toExtendedGroup(
     lecturer: group.lecturers
       .map((lecturer) => `${lecturer.firstName} ${lecturer.lastName}`)
       .join(", "),
-    day: WEEKDAY_TO_DAY[(pattern?.weekday ?? 1) - 1] ?? Day.MONDAY,
+    day: primaryMeeting.day,
     week: PARITY_TO_WEEK[pattern?.parity ?? "all"],
-    startTime: pattern?.startTime ?? "07:30",
-    endTime: pattern?.endTime ?? "09:00",
+    startTime: primaryMeeting.startTime,
+    endTime: primaryMeeting.endTime,
     spotsOccupied: group.spotsOccupied,
     spotsTotal: group.spotsTotal,
     averageRating: 0,
     opinionsCount: 0,
     isChecked: false,
     dates: pattern?.dates ?? [],
+    meetings,
     unitId: group.unitId,
   };
 }

@@ -46,17 +46,17 @@ const toUtcStamp = (date: Date) =>
 
 function buildEvent(
   group: CalendarGroup,
-  date: string,
+  occurrence: CalendarOccurrence,
   stamp: string,
 ): string[] {
   return [
     "BEGIN:VEVENT",
-    `UID:${group.id}-${date}@planer.solvro.pl`,
+    `UID:${group.id}-${occurrence.date}-${occurrence.startTime}@planer.solvro.pl`,
     `DTSTAMP:${stamp}`,
     `SUMMARY:${escapeText(`${group.courseName} (${group.courseType})`)}`,
     `DESCRIPTION:${escapeText(`Grupa ${group.groupNumber}${group.lecturer === "" ? "" : ` · ${group.lecturer}`}`)}`,
-    `DTSTART;TZID=${TIMEZONE}:${toLocalStamp(date, group.startTime)}`,
-    `DTEND;TZID=${TIMEZONE}:${toLocalStamp(date, group.endTime)}`,
+    `DTSTART;TZID=${TIMEZONE}:${toLocalStamp(occurrence.date, occurrence.startTime)}`,
+    `DTEND;TZID=${TIMEZONE}:${toLocalStamp(occurrence.date, occurrence.endTime)}`,
     "STATUS:CONFIRMED",
     "END:VEVENT",
   ];
@@ -77,6 +77,19 @@ export interface CalendarGroup {
   courseType: string;
   groupNumber: string;
   lecturer: string;
+  startTime: string;
+  endTime: string;
+  meetings?: CalendarMeeting[];
+}
+
+export interface CalendarMeeting {
+  dates: string[];
+  startTime: string;
+  endTime: string;
+}
+
+interface CalendarOccurrence {
+  date: string;
   startTime: string;
   endTime: string;
 }
@@ -100,14 +113,26 @@ export function buildIcs(groups: CalendarGroup[]): IcsExport {
   let skippedGroups = 0;
 
   for (const group of groups) {
-    const dates = group.dates;
-    if (dates.length === 0) {
+    const occurrences =
+      group.meetings?.flatMap((meeting) =>
+        meeting.dates.map((date) => ({
+          date,
+          startTime: meeting.startTime,
+          endTime: meeting.endTime,
+        })),
+      ) ??
+      group.dates.map((date) => ({
+        date,
+        startTime: group.startTime,
+        endTime: group.endTime,
+      }));
+    if (occurrences.length === 0) {
       skippedGroups++;
       continue;
     }
     exportedGroups++;
-    for (const date of dates) {
-      lines.push(...buildEvent(group, date, stamp));
+    for (const occurrence of occurrences) {
+      lines.push(...buildEvent(group, occurrence, stamp));
     }
   }
 

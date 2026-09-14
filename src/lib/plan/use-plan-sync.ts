@@ -320,6 +320,7 @@ export function usePlanSync(plan: PlanHandle) {
             averageRating: group.averageRating,
             opinionsCount: group.opinionsCount,
             dates: group.dates,
+            meetings: group.meetings,
             unitId: group.unitId,
           });
           groups.push(group);

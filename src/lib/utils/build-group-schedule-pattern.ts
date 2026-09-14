@@ -23,6 +23,14 @@ export interface GroupSchedulePattern {
   exceptions: string[];
   /** Every real meeting date, sorted ascending ("YYYY-MM-DD"). */
   dates: string[];
+  meetings: ScheduleMeetingPattern[];
+}
+
+export interface ScheduleMeetingPattern {
+  weekday: number;
+  startTime: string;
+  endTime: string;
+  dates: string[];
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -30,6 +38,7 @@ const WEEKLY_GAP = 7;
 const BIWEEKLY_GAP = 14;
 const GAP_TOLERANCE = 2;
 const WEEKLY_SHARE_THRESHOLD = 0.7;
+const SECOND_SLOT_SHARE_THRESHOLD = 0.6;
 
 /** Parses "YYYY-MM-DD" as UTC midnight so the result never depends on the server timezone. */
 function parseIsoDate(date: string): Date {
@@ -97,6 +106,49 @@ function collectSkippedWeeks(sorted: string[], gaps: number[]): string[] {
   return skipped;
 }
 
+function groupEntries(
+  entries: ClassgroupDate[],
+): Map<string, ClassgroupDate[]> {
+  const grouped = new Map<string, ClassgroupDate[]>();
+  for (const entry of entries) {
+    const startTime = extractClock(entry.startTime) ?? "07:30";
+    const endTime = extractClock(entry.endTime) ?? "09:00";
+    const key = `${isoWeekday(entry.date).toString()}|${startTime}|${endTime}`;
+    const current = grouped.get(key) ?? [];
+    current.push(entry);
+    grouped.set(key, current);
+  }
+  return grouped;
+}
+
+function selectDominantSlots(
+  grouped: Map<string, ClassgroupDate[]>,
+): [string, ClassgroupDate[]][] {
+  const slots = [...grouped.entries()].toSorted(
+    ([, first], [, second]) => second.length - first.length,
+  );
+  const primary = slots[0];
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (primary === undefined) {
+    return [];
+  }
+
+  const secondary = slots[1];
+  if (
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    secondary !== undefined &&
+    secondary[1].length >= primary[1].length * SECOND_SLOT_SHARE_THRESHOLD &&
+    (primary[1].length + secondary[1].length) /
+      slots.reduce((total, [, entries]) => total + entries.length, 0) >=
+      WEEKLY_SHARE_THRESHOLD
+  ) {
+    return [primary, secondary];
+  }
+
+  return [primary];
+}
+
 export function buildGroupSchedulePattern(
   entries: ClassgroupDate[],
 ): GroupSchedulePattern | null {
@@ -104,16 +156,29 @@ export function buildGroupSchedulePattern(
     return null;
   }
 
+  // Keep the old dominant-slot behaviour: moved or exceptional meetings do
+  // not become cards. A second slot is retained only for genuinely recurring
+  // twice-weekly groups.
+  const meetings = selectDominantSlots(groupEntries(entries))
+    .map(([key, meetingEntries]) => {
+      const [weekdayText, startTime, endTime] = key.split("|");
+      return {
+        weekday: Number(weekdayText),
+        startTime,
+        endTime,
+        dates: [
+          ...new Set(meetingEntries.map((entry) => entry.date)),
+        ].toSorted(),
+      };
+    })
+    .toSorted(
+      (a, b) => a.weekday - b.weekday || a.startTime.localeCompare(b.startTime),
+    );
+  const primaryMeeting = meetings[0];
   const dates = [...new Set(entries.map((entry) => entry.date))].toSorted();
-  const startTime =
-    mostFrequent(
-      entries.flatMap((entry) => extractClock(entry.startTime) ?? []),
-    ) ?? "07:30";
-  const endTime =
-    mostFrequent(
-      entries.flatMap((entry) => extractClock(entry.endTime) ?? []),
-    ) ?? "09:00";
-  const weekday = mostFrequent(dates.map((date) => isoWeekday(date))) ?? 1;
+  const startTime = primaryMeeting.startTime;
+  const endTime = primaryMeeting.endTime;
+  const weekday = primaryMeeting.weekday;
 
   const base = {
     weekday,
@@ -123,22 +188,33 @@ export function buildGroupSchedulePattern(
     lastOccurrence: dates.at(-1) ?? dates[0],
     occurrencesCount: dates.length,
     dates,
+    meetings,
   };
 
   if (dates.length === 1) {
     return { ...base, pattern: "irregular", parity: "unknown", exceptions: [] };
   }
 
-  const gaps = dates
-    .slice(1)
-    .map((date, index) => daysBetween(dates[index], date));
-  const typicalGap = mostFrequent(gaps);
+  const meetingGaps = meetings.map((meeting) =>
+    meeting.dates
+      .slice(1)
+      .map((date, index) => daysBetween(meeting.dates[index], date)),
+  );
+  const gaps = meetingGaps.flat();
+  const allWeekly = meetingGaps.every(
+    (meeting) =>
+      meeting.length > 0 && meeting.every((gap) => isNear(gap, WEEKLY_GAP)),
+  );
+  const allBiweekly = meetingGaps.every(
+    (meeting) =>
+      meeting.length > 0 && meeting.every((gap) => isNear(gap, BIWEEKLY_GAP)),
+  );
 
-  if (typicalGap === WEEKLY_GAP) {
+  if (allWeekly) {
     return { ...base, pattern: "weekly", parity: "all", exceptions: [] };
   }
 
-  if (typicalGap === BIWEEKLY_GAP) {
+  if (allBiweekly) {
     // Parity is filled in by the caller from the scraped group page.
     return {
       ...base,
@@ -156,7 +232,14 @@ export function buildGroupSchedulePattern(
       ...base,
       pattern: "weekly_with_exceptions",
       parity: "all",
-      exceptions: collectSkippedWeeks(dates, gaps),
+      exceptions: meetings.flatMap((meeting) =>
+        collectSkippedWeeks(
+          meeting.dates,
+          meeting.dates
+            .slice(1)
+            .map((date, index) => daysBetween(meeting.dates[index], date)),
+        ),
+      ),
     };
   }
 

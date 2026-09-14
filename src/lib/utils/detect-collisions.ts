@@ -39,7 +39,7 @@ export function detectCollisions(groups: ExtendedGroup[]): Collision[] {
       for (let second = first + 1; second < dayGroups.length; second++) {
         const a = dayGroups[first];
         const b = dayGroups[second];
-        if (a.courseId === b.courseId && a.groupId === b.groupId) {
+        if (a.groupOnlineId === b.groupOnlineId) {
           continue;
         }
 

@@ -20,14 +20,13 @@ export function CourseList({
   onToggleCourse: (courseId: string, isChecked: boolean) => void;
   onRemoveRegistration: (registrationId: string) => void;
 }) {
-
   const toogleAllCoursesInRegistration = (registrationId: string) => {
     for (const course of courses) {
       if (course.registrationId === registrationId) {
-        onToggleCourse(course.id, !course.isChecked)
+        onToggleCourse(course.id, !course.isChecked);
       }
     }
-  }
+  };
 
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto">
@@ -48,11 +47,10 @@ export function CourseList({
             </button>
           </div>
           <div className="mb-1 flex items-center justify-between px-2">
-
             <button
               type="button"
               onClick={() => {
-                toogleAllCoursesInRegistration(registration.id)
+                toogleAllCoursesInRegistration(registration.id);
               }}
               className="text-muted-foreground hover:text-foreground shrink-0 text-xs"
             >
