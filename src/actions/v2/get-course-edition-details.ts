@@ -1,7 +1,7 @@
 "use server";
 
 import redis from "@/lib/redis";
-import { getOrSetRedis } from "@/lib/redis/get-set";
+import { getOrSetRedisSmart } from "@/lib/redis/get-set-smart";
 import { fetchUsosApi } from "@/lib/usos";
 
 import type { LecturerDTO, UsosLecturer } from "./get-lecturer";
@@ -83,10 +83,11 @@ export async function getCourseEditionDetailsAction(
   courseId: string,
   termId: string,
 ): Promise<CourseEditionDetailsDTO> {
-  return getOrSetRedis({
+  return getOrSetRedisSmart({
     redis,
     key: `usos:course_edition_details:${courseId}:${termId}`,
-    ttlSeconds: 60 * 60 * 24,
+    minFreshSeconds: 60 * 60 * 2,
+    maxStaleSeconds: 60 * 60 * 24,
     fetcher: async () => {
       const edition = await fetchUsosApi<UsosCourseEdition>(
         "courses/course_edition",

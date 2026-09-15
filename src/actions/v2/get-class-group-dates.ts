@@ -1,7 +1,7 @@
 "use server";
 
 import redis from "@/lib/redis";
-import { getOrSetRedis } from "@/lib/redis/get-set";
+import { getOrSetRedisSmart } from "@/lib/redis/get-set-smart";
 import { fetchUsosApi } from "@/lib/usos";
 
 interface UsosClassgroupDate {
@@ -58,10 +58,11 @@ export async function getClassgroupDatesAction(
   unitId: string,
   groupNumber: string,
 ): Promise<ClassgroupDateDTO[]> {
-  return getOrSetRedis({
+  return getOrSetRedisSmart({
     redis,
     key: `usos:classgroup_dates2:${unitId}:${groupNumber}`,
-    ttlSeconds: 60 * 60 * 24 * 7,
+    minFreshSeconds: 60 * 60 * 2,
+    maxStaleSeconds: 60 * 60 * 24 * 7,
     fetcher: async () => {
       const data = await fetchUsosApi<UsosClassgroupDate[]>(
         "tt/classgroup_dates2",
