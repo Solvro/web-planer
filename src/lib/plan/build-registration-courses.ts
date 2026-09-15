@@ -79,7 +79,7 @@ function toExtendedGroup(
       endTime: meeting.endTime,
       dates: meeting.dates,
     })) ?? [];
-  const primaryMeeting = meetings[0];
+  const primaryMeeting: GroupMeeting | undefined = meetings.at(0);
   const id = groupOnlineId(course.courseId, index);
   return {
     groupId: id,
@@ -92,10 +92,10 @@ function toExtendedGroup(
     lecturer: group.lecturers
       .map((lecturer) => `${lecturer.firstName} ${lecturer.lastName}`)
       .join(", "),
-    day: primaryMeeting.day,
+    day: primaryMeeting?.day ?? Day.MONDAY,
     week: PARITY_TO_WEEK[pattern?.parity ?? "all"],
-    startTime: primaryMeeting.startTime,
-    endTime: primaryMeeting.endTime,
+    startTime: primaryMeeting?.startTime ?? "07:30",
+    endTime: primaryMeeting?.endTime ?? "09:00",
     spotsOccupied: group.spotsOccupied,
     spotsTotal: group.spotsTotal,
     averageRating: 0,

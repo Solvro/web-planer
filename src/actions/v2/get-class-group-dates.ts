@@ -61,7 +61,7 @@ export async function getClassgroupDatesAction(
   return getOrSetRedis({
     redis,
     key: `usos:classgroup_dates2:${unitId}:${groupNumber}`,
-    ttlSeconds: 60 * 60 * 24 * 7,
+    ttlSeconds: 60 * 60,
     fetcher: async () => {
       const data = await fetchUsosApi<UsosClassgroupDate[]>(
         "tt/classgroup_dates2",

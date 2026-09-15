@@ -86,7 +86,7 @@ export async function getCourseEditionDetailsAction(
   return getOrSetRedis({
     redis,
     key: `usos:course_edition_details:${courseId}:${termId}`,
-    ttlSeconds: 60 * 60 * 24,
+    ttlSeconds: 60 * 60,
     fetcher: async () => {
       const edition = await fetchUsosApi<UsosCourseEdition>(
         "courses/course_edition",
