@@ -2,7 +2,6 @@
 
 import { NextResponse } from "next/server";
 
-import { getClassgroupDatesAction } from "@/actions/v2/get-class-group-dates";
 import { fetchRegistrationCourses } from "@/lib/plan/build-registration-courses";
 import { getCalendarPlan } from "@/lib/plan/store";
 import { buildIcs } from "@/lib/utils/generate-ics-file";
@@ -25,6 +24,8 @@ async function loadScheduleGroups(
     for (const course of allCourseData) {
       for (const group of course.groups) {
         if (schedule.groups.some((g) => g.id === group.groupOnlineId)) {
+          const { getClassgroupDatesAction } =
+            await import("@/actions/v2/get-class-group-dates");
           const allMeetings = await getClassgroupDatesAction(
             group.unitId ?? "",
             group.groupNumber,
