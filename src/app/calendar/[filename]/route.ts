@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { getClassgroupDatesAction } from "@/actions/v2/get-class-group-dates";
 import { fetchRegistrationCourses } from "@/lib/plan/build-registration-courses";
 import { getCalendarPlan } from "@/lib/plan/store";
 import { buildIcs } from "@/lib/utils/generate-ics-file";
@@ -22,16 +23,17 @@ async function loadScheduleGroups(
     for (const course of allCourseData) {
       for (const group of course.groups) {
         if (schedule.groups.some((g) => g.id === group.groupOnlineId)) {
+          const allMeetings = await getClassgroupDatesAction(
+            group.unitId ?? "",
+            group.groupNumber,
+          );
+
           result.push({
             id: group.groupId,
             groupNumber: group.groupNumber,
             lecturer: group.lecturer,
             dates: group.dates ?? [],
-            meetings: group.meetings?.map((meeting) => ({
-              dates: meeting.dates,
-              startTime: meeting.startTime,
-              endTime: meeting.endTime,
-            })),
+            meetings: allMeetings,
             startTime: group.startTime,
             endTime: group.endTime,
             courseName: group.courseName,
