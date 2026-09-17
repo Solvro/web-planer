@@ -1,3 +1,5 @@
+"use server";
+
 import { NextResponse } from "next/server";
 
 import { getClassgroupDatesAction } from "@/actions/v2/get-class-group-dates";
