@@ -1,3 +1,5 @@
+import type { ClassgroupDateDTO } from "@/actions/v2/get-class-group-dates";
+
 const CRLF = "\r\n";
 const TIMEZONE = "Europe/Warsaw";
 
@@ -32,11 +34,21 @@ const escapeText = (value: string) =>
     .replaceAll(",", String.raw`\,`)
     .replaceAll(/\r?\n/g, String.raw`\n`);
 
-/** "YYYY-MM-DD" + "HH:MM" → "YYYYMMDDTHHMM00" (floating local time, qualified with TZID). */
-const toLocalStamp = (date: string, time: string) => {
-  const [hours = "00", minutes = "00"] = time.split(":");
-  return `${date.replaceAll("-", "")}T${hours.padStart(2, "0")}${minutes.padStart(2, "0")}00`;
-};
+/** "YYYY-MM-DD HH:MM:SS" (USOS meeting format) → "YYYYMMDDTHHMM00" (floating local time, qualified with TZID). */
+function formatToIcsDate(dateString: string): string {
+  const regex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+  const match = regex.exec(dateString);
+
+  if (match == null) {
+    throw new Error(
+      'Nieprawidłowy format daty. Oczekiwano "yyyy-mm-dd hh:mm:ss"',
+    );
+  }
+
+  const [, year, month, day, hour, minute, _second] = match;
+
+  return `${year}${month}${day}T${hour}${minute}00`;
+}
 
 const toUtcStamp = (date: Date) =>
   date
@@ -46,17 +58,17 @@ const toUtcStamp = (date: Date) =>
 
 function buildEvent(
   group: CalendarGroup,
-  occurrence: CalendarOccurrence,
+  meeting: ClassgroupDateDTO,
   stamp: string,
 ): string[] {
   return [
     "BEGIN:VEVENT",
-    `UID:${group.id}-${occurrence.date}-${occurrence.startTime}@planer.solvro.pl`,
+    `UID:${group.id}-${formatToIcsDate(meeting.startTime ?? "")}@planer.solvro.pl`,
     `DTSTAMP:${stamp}`,
     `SUMMARY:${escapeText(`${group.courseName} (${group.courseType})`)}`,
     `DESCRIPTION:${escapeText(`Grupa ${group.groupNumber}${group.lecturer === "" ? "" : ` · ${group.lecturer}`}`)}`,
-    `DTSTART;TZID=${TIMEZONE}:${toLocalStamp(occurrence.date, occurrence.startTime)}`,
-    `DTEND;TZID=${TIMEZONE}:${toLocalStamp(occurrence.date, occurrence.endTime)}`,
+    `DTSTART;TZID=${TIMEZONE}:${formatToIcsDate(meeting.startTime ?? "")}`,
+    `DTEND;TZID=${TIMEZONE}:${formatToIcsDate(meeting.endTime ?? "")}`,
     "STATUS:CONFIRMED",
     "END:VEVENT",
   ];
@@ -79,17 +91,11 @@ export interface CalendarGroup {
   lecturer: string;
   startTime: string;
   endTime: string;
-  meetings?: CalendarMeeting[];
+  meetings: ClassgroupDateDTO[];
 }
 
 export interface CalendarMeeting {
   dates: string[];
-  startTime: string;
-  endTime: string;
-}
-
-interface CalendarOccurrence {
-  date: string;
   startTime: string;
   endTime: string;
 }
@@ -113,26 +119,14 @@ export function buildIcs(groups: CalendarGroup[]): IcsExport {
   let skippedGroups = 0;
 
   for (const group of groups) {
-    const occurrences =
-      group.meetings?.flatMap((meeting) =>
-        meeting.dates.map((date) => ({
-          date,
-          startTime: meeting.startTime,
-          endTime: meeting.endTime,
-        })),
-      ) ??
-      group.dates.map((date) => ({
-        date,
-        startTime: group.startTime,
-        endTime: group.endTime,
-      }));
-    if (occurrences.length === 0) {
+    const meetings = group.meetings;
+    if (meetings.length === 0) {
       skippedGroups++;
       continue;
     }
     exportedGroups++;
-    for (const occurrence of occurrences) {
-      lines.push(...buildEvent(group, occurrence, stamp));
+    for (const meeting of meetings) {
+      lines.push(...buildEvent(group, meeting, stamp));
     }
   }
 

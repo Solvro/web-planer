@@ -1,3 +1,5 @@
+"use server";
+
 import { NextResponse } from "next/server";
 
 import { fetchRegistrationCourses } from "@/lib/plan/build-registration-courses";
@@ -22,16 +24,19 @@ async function loadScheduleGroups(
     for (const course of allCourseData) {
       for (const group of course.groups) {
         if (schedule.groups.some((g) => g.id === group.groupOnlineId)) {
+          const { getClassgroupDatesAction } =
+            await import("@/actions/v2/get-class-group-dates");
+          const allMeetings = await getClassgroupDatesAction(
+            group.unitId ?? "",
+            group.groupNumber,
+          );
+
           result.push({
             id: group.groupId,
             groupNumber: group.groupNumber,
             lecturer: group.lecturer,
             dates: group.dates ?? [],
-            meetings: group.meetings?.map((meeting) => ({
-              dates: meeting.dates,
-              startTime: meeting.startTime,
-              endTime: meeting.endTime,
-            })),
+            meetings: allMeetings,
             startTime: group.startTime,
             endTime: group.endTime,
             courseName: group.courseName,
