@@ -50,6 +50,41 @@ import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
 import { SyncedButton } from "./synced-button";
 
+/** Used for filtering cross-faculty registrations, filters SJO out of SWFIS sub-faculty, and vice versa */
+const checkCrossFacultyRegistrations = (
+  registrationName: string,
+  facultyID: string | null,
+): boolean => {
+  if (facultyID !== null) {
+    if (facultyID.includes("SWFIS::") && registrationName.includes("SJO")) {
+      return false;
+    }
+    if (facultyID.includes("SJO::") && registrationName.includes("SWF")) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const removeDuplicates = (
+  registrations: { label: string; value: string }[],
+): { label: string; value: string }[] => {
+  const output: { label: string; value: string }[] = [];
+
+  for (const registration of registrations) {
+    if (
+      !output.some(
+        (checkedRegistration) =>
+          checkedRegistration.label === registration.label,
+      )
+    ) {
+      output.push(registration);
+    }
+  }
+
+  return output;
+};
+
 export function AppSidebar({
   plan,
   sync,
@@ -71,11 +106,20 @@ export function AppSidebar({
     enabled: faculty !== null,
     queryKey: ["registrations", faculty],
     queryFn: async (): Promise<Registration[]> => {
-      const data = await getFacultyRegistrationsAction(faculty ?? "");
+      let facultyID = faculty;
+      if (facultyID !== null) {
+        if (facultyID.includes("SWFIS::")) {
+          facultyID = facultyID.replace("SWFIS::", "");
+        }
+        if (facultyID.includes("SJO::")) {
+          facultyID = facultyID.replace("SJO::", "");
+        }
+      }
+      const data = await getFacultyRegistrationsAction(facultyID ?? "");
       return data.map((registration) => ({
         id: registration.id,
         name: registration.description,
-        departmentId: faculty ?? "",
+        departmentId: facultyID ?? "",
       }));
     },
   });
@@ -289,7 +333,13 @@ export function AppSidebar({
                 ) : (
                   <RegistrationCombobox
                     name="registration"
-                    registrations={registrationOptions}
+                    registrations={removeDuplicates(registrationOptions).filter(
+                      (registration) =>
+                        checkCrossFacultyRegistrations(
+                          registration.label,
+                          faculty,
+                        ),
+                    )}
                     isPending={pendingRegistrationId !== null}
                     onSelect={(registrationId) => {
                       void toggleRegistration(registrationId);

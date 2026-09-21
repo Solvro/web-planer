@@ -14,7 +14,10 @@ export const registrationReplacer = (name: string | { pl: string }) => {
     .replace("W04 zapisy wydziałowe dla kierunku", "")
     .replace("zapisy wydziałowe na ", "")
     .replace("W04 ", "")
-    .replace("2025/26-L", "")
+    .replace("2026/27-Z", "")
+    .replace("<b>", "")
+    .replace("</b>", "")
+    .replace("Zapisy ogólnouczelniane, ", "")
     .trim();
   return newName.charAt(0).toUpperCase() + newName.slice(1);
 };
