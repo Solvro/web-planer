@@ -46,7 +46,7 @@ export function CourseList({
               Usuń
             </button>
           </div>
-          <div className="mb-1 flex items-center justify-between px-2">
+          <div className="mt-2 mb-1 flex items-center justify-end px-2">
             <button
               type="button"
               onClick={() => {
@@ -54,7 +54,7 @@ export function CourseList({
               }}
               className="text-muted-foreground hover:text-foreground shrink-0 text-xs"
             >
-              <p className="text-muted-foreground truncate text-xs font-semibold tracking-wide uppercase">
+              <p className="text-muted-foreground hover:text-foreground truncate text-xs font-semibold tracking-wide uppercase">
                 Przełącz widoczność kursów
               </p>
             </button>

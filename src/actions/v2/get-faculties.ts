@@ -70,15 +70,19 @@ export const FACULTIES: Faculty[] = [
     name: "Szkoła Doktorska Politechniki Wrocławskiej",
   },
   {
-    value: "PRK24/S1",
-    name: "PRK24/S1",
+    value: "SWFIS::PRK24/S1",
+    name: "Zapisy ogólnouczelniane - SWFIS",
   },
   {
-    value: "PRK24/S3",
-    name: "PRK24/S3",
+    value: "SJO::PRK24/S1",
+    name: "Zapisy ogólnouczelniane - SJO",
   },
-  {
-    value: "PWR",
-    name: "PWR",
-  },
+  // {     //no registrations at this moment
+  //   value: "PRK24/S3",
+  //   name: "PRK24/S3",
+  // },
+  // {
+  //   value: "PWR",
+  //   name: "PWR",
+  // },
 ];
