@@ -180,6 +180,7 @@ export function McpContent() {
             <TabsTrigger value="claude-code">Claude Code</TabsTrigger>
             <TabsTrigger value="opencode">OpenCode</TabsTrigger>
             <TabsTrigger value="codex">Codex</TabsTrigger>
+            <TabsTrigger value="antigravity">Antigravity</TabsTrigger>
           </TabsList>
 
           <TabsContent value="claude" className="space-y-3">
@@ -247,6 +248,47 @@ export function McpContent() {
               Przy pierwszym użyciu Codex CLI otworzy przeglądarkę, w której
               zalogujesz się do Planera i potwierdzisz dostęp.
             </p>
+          </TabsContent>
+
+          <TabsContent value="antigravity" className="space-y-3">
+            <p className="text-muted-foreground text-sm">
+              Dotyczy Antigravity IDE, Antigravity 2.0 oraz Antigravity CLI (
+              <code>agy</code>). Konfiguracja jest współdzielona między
+              wszystkimi środowiskami.
+            </p>
+            <p className="text-sm">Dodaj serwer poleceniem w terminalu:</p>
+            <CodeSnippet snippet={`agy mcp add planer ${mcpUrl}`} />
+            <p className="text-muted-foreground text-sm">
+              Polecenie automatycznie zarejestruje serwer także w aplikacji
+              Antigravity 2.0 oraz IDE.
+            </p>
+            <p className="text-sm">Następnie autoryzuj połączenie:</p>
+            <p className="text-muted-foreground text-sm">
+              • W aplikacji przejdź do Customizations → Installed MCP Servers i
+              kliknij Authenticate przy serwerze planer.
+              <br />• W terminalu uruchom <code>agy</code>, wpisz{" "}
+              <code>/mcp</code> i wybierz Authenticate dla serwera planer (lub
+              potwierdź dostęp przy pierwszym wywołaniu narzędzia).
+            </p>
+            <p className="text-sm">
+              Możesz też dodać wpis do{" "}
+              <code>~/.gemini/config/mcp_config.json</code> (w aplikacji
+              dostępny przez Settings → Customizations → Installed MCP Servers →
+              Open MCP Config):
+            </p>
+            <CodeSnippet
+              snippet={JSON.stringify(
+                {
+                  mcpServers: {
+                    planer: {
+                      serverUrl: mcpUrl,
+                    },
+                  },
+                },
+                null,
+                2,
+              )}
+            />
           </TabsContent>
         </Tabs>
       </div>
