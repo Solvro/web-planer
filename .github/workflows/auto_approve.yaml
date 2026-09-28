@@ -1,0 +1,31 @@
+name: Auto-approve admin PRs
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  approve:
+    name: Approve
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check author permission
+        id: author
+        run: echo "permission=$(gh api "repos/$REPO/collaborators/$AUTHOR/permission" --jq .permission)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+
+      - name: Approve
+        if: steps.author.outputs.permission == 'admin'
+        run: gh pr review --approve "$PR_URL"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
