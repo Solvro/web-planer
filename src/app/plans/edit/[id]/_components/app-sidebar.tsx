@@ -50,22 +50,6 @@ import { OfflineAlert } from "./offline-alert";
 import { SyncErrorAlert } from "./sync-error-alert";
 import { SyncedButton } from "./synced-button";
 
-/** Used for filtering cross-faculty registrations, filters SJO out of SWFIS sub-faculty, and vice versa */
-const checkCrossFacultyRegistrations = (
-  registrationName: string,
-  facultyID: string | null,
-): boolean => {
-  if (facultyID !== null) {
-    if (facultyID.includes("SWFIS::") && registrationName.includes("SJO")) {
-      return false;
-    }
-    if (facultyID.includes("SJO::") && registrationName.includes("SWF")) {
-      return false;
-    }
-  }
-  return true;
-};
-
 const removeDuplicates = (
   registrations: { label: string; value: string }[],
 ): { label: string; value: string }[] => {
@@ -94,7 +78,10 @@ export function AppSidebar({
   sync: ReturnType<typeof usePlanSync>;
   collisions: Collision[];
 }) {
-  const [faculty, setFaculty] = useAtom(selectedFacultyAtom);
+  const [storedFaculty, setFaculty] = useAtom(selectedFacultyAtom);
+  const faculty = FACULTIES.some((f) => f.value === storedFaculty)
+    ? storedFaculty
+    : null;
   const [pendingRegistrationId, setPendingRegistrationId] = useState<
     string | null
   >(null);
@@ -106,20 +93,11 @@ export function AppSidebar({
     enabled: faculty !== null,
     queryKey: ["registrations", faculty],
     queryFn: async (): Promise<Registration[]> => {
-      let facultyID = faculty;
-      if (facultyID !== null) {
-        if (facultyID.includes("SWFIS::")) {
-          facultyID = facultyID.replace("SWFIS::", "");
-        }
-        if (facultyID.includes("SJO::")) {
-          facultyID = facultyID.replace("SJO::", "");
-        }
-      }
-      const data = await getFacultyRegistrationsAction(facultyID ?? "");
+      const data = await getFacultyRegistrationsAction(faculty ?? "");
       return data.map((registration) => ({
         id: registration.id,
         name: registration.description,
-        departmentId: facultyID ?? "",
+        departmentId: faculty ?? "",
       }));
     },
   });
@@ -333,13 +311,7 @@ export function AppSidebar({
                 ) : (
                   <RegistrationCombobox
                     name="registration"
-                    registrations={removeDuplicates(registrationOptions).filter(
-                      (registration) =>
-                        checkCrossFacultyRegistrations(
-                          registration.label,
-                          faculty,
-                        ),
-                    )}
+                    registrations={removeDuplicates(registrationOptions)}
                     isPending={pendingRegistrationId !== null}
                     onSelect={(registrationId) => {
                       void toggleRegistration(registrationId);
