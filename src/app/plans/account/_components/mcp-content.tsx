@@ -253,8 +253,8 @@ export function McpContent() {
           <TabsContent value="antigravity" className="space-y-3">
             <p className="text-muted-foreground text-sm">
               Dotyczy Antigravity IDE, Antigravity 2.0 oraz Antigravity CLI (
-              <code>agy</code>). Konfiguracja jest współdzielona między wszystkimi
-              środowiskami.
+              <code>agy</code>). Konfiguracja jest współdzielona między
+              wszystkimi środowiskami.
             </p>
             <p className="text-sm">Dodaj serwer poleceniem w terminalu:</p>
             <CodeSnippet snippet={`agy mcp add planer ${mcpUrl}`} />
@@ -266,10 +266,9 @@ export function McpContent() {
             <p className="text-muted-foreground text-sm">
               • W aplikacji przejdź do Customizations → Installed MCP Servers i
               kliknij Authenticate przy serwerze planer.
-              <br />
-              • W terminalu uruchom <code>agy</code>, wpisz <code>/mcp</code> i
-              wybierz Authenticate dla serwera planer (lub potwierdź dostęp
-              przy pierwszym wywołaniu narzędzia).
+              <br />• W terminalu uruchom <code>agy</code>, wpisz{" "}
+              <code>/mcp</code> i wybierz Authenticate dla serwera planer (lub
+              potwierdź dostęp przy pierwszym wywołaniu narzędzia).
             </p>
             <p className="text-sm">
               Możesz też dodać wpis do{" "}
