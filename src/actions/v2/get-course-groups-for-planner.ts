@@ -26,23 +26,25 @@ export interface PlannerGroupDTO {
 }
 
 function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
-  return dates.flatMap((entry) =>
-    entry.startTime != null && entry.endTime != null
-      ? [
-          {
-            date: entry.startTime.slice(0, 10),
-            startTime: entry.startTime,
-            endTime: entry.endTime,
-            location: [
-              entry.roomNumber?.trim(),
-              (entry.buildingId ?? entry.buildingName)?.trim(),
-            ]
-              .filter(Boolean)
-              .join(", "),
-          },
+  return dates.flatMap((entry) => {
+    if (entry.startTime == null || entry.endTime == null) {
+      return [];
+    }
+    const buildingId = entry.buildingId?.trim() ?? "";
+    return [
+      {
+        date: entry.startTime.slice(0, 10),
+        startTime: entry.startTime,
+        endTime: entry.endTime,
+        location: [
+          entry.roomNumber?.trim(),
+          buildingId === "" ? entry.buildingName?.trim() : buildingId,
         ]
-      : [],
-  );
+          .filter(Boolean)
+          .join(", "),
+      },
+    ];
+  });
 }
 
 async function buildPlannerGroup(

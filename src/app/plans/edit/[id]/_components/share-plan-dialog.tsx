@@ -53,8 +53,11 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
         hideLectures
           ? plan.selectedGroups.filter((group) => group.courseType !== "W")
           : plan.selectedGroups,
-      ),
-    [plan.selectedGroups, hideLectures],
+      ).map((group) => ({
+        ...group,
+        locations: showRooms ? group.locations : undefined,
+      })),
+    [plan.selectedGroups, hideLectures, showRooms],
   );
 
   const measure = useCallback(() => {
@@ -123,7 +126,6 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
                   onlyDaysWithGroups={hideDays}
                   orientation={orientation}
                   fitContent={true}
-                  showRooms={showRooms}
                 />
 
                 <div className="pointer-events-none absolute right-4 bottom-4 z-20 opacity-10">
@@ -158,7 +160,7 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
             hideLectures={hideLectures}
             disabled={groups.length === 0}
           />
-          <SharePlanButton plan={plan} showRooms={showRooms} />
+          <SharePlanButton plan={plan} />
         </div>
       </DialogContent>
     </Dialog>

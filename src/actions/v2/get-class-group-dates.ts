@@ -63,7 +63,7 @@ export async function getClassgroupDatesAction(
 ): Promise<ClassgroupDateDTO[]> {
   return getOrSetRedisSmart({
     redis,
-    key: `usos:classgroup_dates2:v2:${unitId}:${groupNumber}`,
+    key: `usos:classgroup_dates2:${unitId}:${groupNumber}`,
     minFreshSeconds: 60 * 60 * 2,
     maxStaleSeconds: 60 * 60 * 24 * 7,
     fetcher: async () => {

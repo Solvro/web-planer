@@ -20,7 +20,6 @@ export function DayColumn({
   collisions,
   onSelectGroup,
   isReadonly = false,
-  showRooms = false,
   startMinutes,
   endMinutes,
   minuteHeight,
@@ -33,7 +32,6 @@ export function DayColumn({
   collisions: Collision[];
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
-  showRooms?: boolean;
   startMinutes: number;
   endMinutes: number;
   minuteHeight: number;
@@ -105,7 +103,6 @@ export function DayColumn({
               }
               group={group}
               isReadonly={isReadonly}
-              showRooms={showRooms}
               isDisabled={group.isChecked ? false : isThisCourseChecked}
               isCollision={collidingIds.has(group.groupId)}
               onClick={() => {

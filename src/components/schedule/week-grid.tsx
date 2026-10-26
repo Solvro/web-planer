@@ -48,12 +48,10 @@ export function WeekGrid({
   onlyDaysWithGroups = false,
   orientation: orientationOverride,
   fitContent = false,
-  showRooms = false,
 }: ScheduleViewProps & {
   onlyDaysWithGroups?: boolean;
   orientation?: ScheduleOrientation;
   fitContent?: boolean;
-  showRooms?: boolean;
 }) {
   const { density } = useScheduleDensity();
   const { orientation: globalOrientation } = useScheduleOrientation();
@@ -99,7 +97,6 @@ export function WeekGrid({
               collisions={collisionsByDay.get(day) ?? EMPTY_COLLISIONS}
               onSelectGroup={onSelectGroup}
               isReadonly={isReadonly}
-              showRooms={showRooms}
               startMinutes={startMinutes}
               endMinutes={endMinutes}
               minuteWidth={minuteWidth}
@@ -146,7 +143,6 @@ export function WeekGrid({
           collisions={collisionsByDay.get(day) ?? EMPTY_COLLISIONS}
           onSelectGroup={onSelectGroup}
           isReadonly={isReadonly}
-          showRooms={showRooms}
           startMinutes={startMinutes}
           endMinutes={endMinutes}
           minuteHeight={minuteHeight}

@@ -21,7 +21,6 @@ export function DayRow({
   collisions,
   onSelectGroup,
   isReadonly = false,
-  showRooms = false,
   startMinutes,
   endMinutes,
   minuteWidth,
@@ -35,7 +34,6 @@ export function DayRow({
   collisions: Collision[];
   onSelectGroup?: (groupId: string) => void;
   isReadonly?: boolean;
-  showRooms?: boolean;
   startMinutes: number;
   endMinutes: number;
   minuteWidth: number;
@@ -120,7 +118,6 @@ export function DayRow({
                 }
                 group={group}
                 isReadonly={isReadonly}
-                showRooms={showRooms}
                 isDisabled={group.isChecked ? false : isThisCourseChecked}
                 isCollision={collidingIds.has(group.groupId)}
                 onClick={() => {

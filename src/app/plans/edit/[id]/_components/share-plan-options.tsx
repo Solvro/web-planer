@@ -76,7 +76,7 @@ export function SharePlanOptions() {
       />
       <ToggleOption
         label="Wyświetl numery sal"
-        description="Pokazuje sale i budynki z USOS"
+        description="Sale i budynki z USOS na podglądzie i PNG"
         checked={showRooms}
         onCheckedChange={setShowRooms}
       />

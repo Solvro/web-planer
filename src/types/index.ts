@@ -102,7 +102,6 @@ export interface SharedPlan {
   id: string;
   plan: {
     name: string;
-    showRooms?: boolean;
     courses: ExtendedCourse[];
     registrations: Registration[];
     allGroups: ExtendedGroup[];
