@@ -53,10 +53,8 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
         hideLectures
           ? plan.selectedGroups.filter((group) => group.courseType !== "W")
           : plan.selectedGroups,
-      ).map((group) => ({
-        ...group,
-        locations: showRooms ? group.locations : undefined,
-      })),
+        showRooms,
+      ),
     [plan.selectedGroups, hideLectures, showRooms],
   );
 

@@ -35,11 +35,7 @@ function PlanEditor({ planId }: { planId: string }) {
     [plan.selectedGroups],
   );
   const displayGroups = useMemo(
-    () =>
-      expandGroupsMeetings(plan.allGroups).map((group) => ({
-        ...group,
-        locations: undefined,
-      })),
+    () => expandGroupsMeetings(plan.allGroups),
     [plan.allGroups],
   );
   const displaySelectedGroups = useMemo(

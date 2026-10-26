@@ -16,12 +16,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
 
   const selectedGroups = useMemo(
     () =>
-      expandGroupsMeetings(
-        plan.allGroups.filter((group) => group.isChecked),
-      ).map((group) => ({
-        ...group,
-        locations: undefined,
-      })),
+      expandGroupsMeetings(plan.allGroups.filter((group) => group.isChecked)),
     [plan.allGroups],
   );
 

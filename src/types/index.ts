@@ -53,7 +53,7 @@ export interface ExtendedGroup {
   meetings?: GroupMeeting[];
   /** Internal key used when one logical group is rendered as multiple cards. */
   meetingKey?: string;
-  /** USOS locations for the primary meeting slot; missing on older saved plans. */
+  /** Display-only locations populated when expanding a group into meeting cards. */
   locations?: string[];
   /**
    * USOS course-unit id, used to fetch live spot counts and week parity

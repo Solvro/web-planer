@@ -104,7 +104,6 @@ function toExtendedGroup(
     isChecked: false,
     dates: pattern?.dates ?? [],
     meetings,
-    locations: primaryMeeting?.locations,
     unitId: group.unitId,
   };
 }
