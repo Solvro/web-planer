@@ -31,17 +31,22 @@ function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
       return [];
     }
     const buildingId = entry.buildingId?.trim() ?? "";
+    const buildingName = entry.buildingName?.trim();
+    const buildingCode = buildingName?.match(/\[([^\]]+)\]\s*$/)?.[1]?.trim();
     return [
       {
         date: entry.startTime.slice(0, 10),
         startTime: entry.startTime,
         endTime: entry.endTime,
-        location: [
-          entry.roomNumber?.trim(),
-          buildingId === "" ? entry.buildingName?.trim() : buildingId,
-        ]
-          .filter(Boolean)
-          .join(", "),
+        location:
+          buildingName === "Zajęcia zdalne"
+            ? buildingName
+            : [
+                entry.roomNumber?.trim(),
+                buildingId === "" ? (buildingCode ?? buildingName) : buildingId,
+              ]
+                .filter(Boolean)
+                .join(", "),
       },
     ];
   });
