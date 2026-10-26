@@ -18,6 +18,8 @@ export interface GroupMeeting {
   startTime: string;
   endTime: string;
   dates: string[];
+  /** USOS locations for this slot; missing on older saved plans. */
+  locations?: string[];
 }
 
 /**
@@ -51,6 +53,8 @@ export interface ExtendedGroup {
   meetings?: GroupMeeting[];
   /** Internal key used when one logical group is rendered as multiple cards. */
   meetingKey?: string;
+  /** USOS locations for the primary meeting slot; missing on older saved plans. */
+  locations?: string[];
   /**
    * USOS course-unit id, used to fetch live spot counts and week parity
    * after the group is already shown. Missing on plans saved before this
@@ -98,6 +102,7 @@ export interface SharedPlan {
   id: string;
   plan: {
     name: string;
+    showRooms?: boolean;
     courses: ExtendedCourse[];
     registrations: Registration[];
     allGroups: ExtendedGroup[];
@@ -141,6 +146,7 @@ export interface ClassgroupDate {
   date: string;
   startTime: string;
   endTime: string;
+  location?: string;
 }
 
 export interface Contributor {

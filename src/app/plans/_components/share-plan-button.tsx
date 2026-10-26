@@ -17,7 +17,13 @@ async function copyLink(id: string) {
   toast.success("Skopiowano link do schowka");
 }
 
-export function SharePlanButton({ plan }: { plan: PlanHandle }) {
+export function SharePlanButton({
+  plan,
+  showRooms = false,
+}: {
+  plan: PlanHandle;
+  showRooms?: boolean;
+}) {
   const [sharing, setSharing] = useState(false);
   const [unsharing, setUnsharing] = useState(false);
   const { onlineId, sharedId } = plan;
@@ -33,6 +39,7 @@ export function SharePlanButton({ plan }: { plan: PlanHandle }) {
         id: onlineId,
         snapshot: {
           name: plan.name,
+          showRooms,
           registrations: plan.registrations,
           courses: plan.courses,
           allGroups: plan.allGroups,

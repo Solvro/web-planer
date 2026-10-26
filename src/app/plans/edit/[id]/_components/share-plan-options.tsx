@@ -7,6 +7,7 @@ import {
   shareHideDaysAtom,
   shareHideLecturesAtom,
   shareOrientationAtom,
+  shareShowRoomsAtom,
 } from "@/atoms/share-options";
 import { Icons } from "@/components/icons";
 import { Switch } from "@/components/ui/switch";
@@ -47,6 +48,7 @@ export function SharePlanOptions() {
   const [hideDays, setHideDays] = useAtom(shareHideDaysAtom);
   const [hideLectures, setHideLectures] = useAtom(shareHideLecturesAtom);
   const [orientation, setOrientation] = useAtom(shareOrientationAtom);
+  const [showRooms, setShowRooms] = useAtom(shareShowRoomsAtom);
 
   return (
     <div className="bg-muted/40 flex flex-wrap items-center gap-x-8 gap-y-4 rounded-xl border p-3">
@@ -71,6 +73,12 @@ export function SharePlanOptions() {
             checked: checked.toString(),
           });
         }}
+      />
+      <ToggleOption
+        label="Wyświetl numery sal"
+        description="Pokazuje sale i budynki z USOS"
+        checked={showRooms}
+        onCheckedChange={setShowRooms}
       />
       <div className="ml-auto flex items-center gap-2">
         <span className="text-muted-foreground text-xs font-medium">Układ</span>

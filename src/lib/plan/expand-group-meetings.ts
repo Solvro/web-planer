@@ -6,6 +6,7 @@ function legacyMeeting(group: ExtendedGroup): GroupMeeting {
     startTime: group.startTime,
     endTime: group.endTime,
     dates: group.dates ?? [],
+    locations: group.locations,
   };
 }
 
@@ -21,6 +22,7 @@ export function expandGroupMeetings(group: ExtendedGroup): ExtendedGroup[] {
     startTime: meeting.startTime,
     endTime: meeting.endTime,
     dates: meeting.dates,
+    locations: meeting.locations,
   }));
 }
 

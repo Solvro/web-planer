@@ -52,6 +52,7 @@ export function SharePlanPage({ plan }: { plan: SharedPlan["plan"] }) {
           selectedGroups={[]}
           collisions={[]}
           isReadonly={true}
+          showRooms={plan.showRooms ?? false}
         />
       </div>
     </div>

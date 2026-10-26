@@ -33,6 +33,12 @@ function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
             date: entry.startTime.slice(0, 10),
             startTime: entry.startTime,
             endTime: entry.endTime,
+            location: [
+              entry.roomNumber?.trim(),
+              (entry.buildingId ?? entry.buildingName)?.trim(),
+            ]
+              .filter(Boolean)
+              .join(", "),
           },
         ]
       : [],

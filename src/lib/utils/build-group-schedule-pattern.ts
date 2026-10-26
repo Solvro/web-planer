@@ -31,6 +31,7 @@ export interface ScheduleMeetingPattern {
   startTime: string;
   endTime: string;
   dates: string[];
+  locations: string[];
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -169,6 +170,15 @@ export function buildGroupSchedulePattern(
         dates: [
           ...new Set(meetingEntries.map((entry) => entry.date)),
         ].toSorted(),
+        locations: [
+          ...new Set(
+            meetingEntries.flatMap((entry) =>
+              entry.location === undefined || entry.location === ""
+                ? []
+                : [entry.location],
+            ),
+          ),
+        ],
       };
     })
     .toSorted(

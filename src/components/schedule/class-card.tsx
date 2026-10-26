@@ -13,6 +13,7 @@ export function ClassCard({
   isCollision,
   isDisabled,
   isReadonly = false,
+  showRooms = false,
   onClick,
 }: {
   group: ExtendedGroup;
@@ -20,6 +21,7 @@ export function ClassCard({
   isCollision: boolean;
   isDisabled: boolean;
   isReadonly?: boolean;
+  showRooms?: boolean;
   onClick?: () => void;
 }) {
   const isFull = group.spotsOccupied >= group.spotsTotal;
@@ -73,11 +75,18 @@ export function ClassCard({
         )}
       />
       <div className="flex items-center justify-between gap-1 text-[10px] font-semibold tracking-wide uppercase">
-        <span>
+        <span className="shrink-0">
           {group.courseType}
           {group.week === "" ? "" : `|${group.week}`}
         </span>
-        <span>G{group.groupNumber}</span>
+        {showRooms &&
+        group.locations !== undefined &&
+        group.locations.length > 0 ? (
+          <span className="min-w-0 text-center normal-case">
+            {group.locations.join("; ")}
+          </span>
+        ) : null}
+        <span className="shrink-0">G{group.groupNumber}</span>
       </div>
       <div className="min-w-0">
         <p className="line-clamp-2 leading-tight font-bold break-words">

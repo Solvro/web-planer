@@ -78,6 +78,7 @@ function toExtendedGroup(
       startTime: meeting.startTime,
       endTime: meeting.endTime,
       dates: meeting.dates,
+      locations: meeting.locations,
     })) ?? [];
   const primaryMeeting: GroupMeeting | undefined = meetings.at(0);
   const id = groupOnlineId(course.courseId, index);
@@ -103,6 +104,7 @@ function toExtendedGroup(
     isChecked: false,
     dates: pattern?.dates ?? [],
     meetings,
+    locations: primaryMeeting?.locations,
     unitId: group.unitId,
   };
 }

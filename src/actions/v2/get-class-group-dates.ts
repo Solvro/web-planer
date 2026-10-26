@@ -12,6 +12,7 @@ interface UsosClassgroupDate {
     en: string;
   } | null;
   room_number?: string | null;
+  building_id?: string | null;
   building_name?: {
     pl: string;
     en: string;
@@ -24,6 +25,7 @@ export interface ClassgroupDateDTO {
   endTime: string | null;
   name: string | null;
   roomNumber: string | null;
+  buildingId: string | null;
   buildingName: string | null;
   classtypeId: string | number | null;
   weekday: number | null;
@@ -48,6 +50,7 @@ function normalizeClassgroupDates(
     endTime: item.end_time ?? null,
     name: item.name?.pl ?? null,
     roomNumber: item.room_number ?? null,
+    buildingId: item.building_id ?? null,
     buildingName: item.building_name?.pl ?? null,
     classtypeId: item.classtype_id ?? null,
     weekday: getWeekday(item.start_time ?? null),
@@ -60,7 +63,7 @@ export async function getClassgroupDatesAction(
 ): Promise<ClassgroupDateDTO[]> {
   return getOrSetRedisSmart({
     redis,
-    key: `usos:classgroup_dates2:${unitId}:${groupNumber}`,
+    key: `usos:classgroup_dates2:v2:${unitId}:${groupNumber}`,
     minFreshSeconds: 60 * 60 * 2,
     maxStaleSeconds: 60 * 60 * 24 * 7,
     fetcher: async () => {
@@ -70,7 +73,7 @@ export async function getClassgroupDatesAction(
           unit_id: unitId,
           group_number: groupNumber,
           fields:
-            "start_time|end_time|name|room_number|building_name|classtype_id",
+            "start_time|end_time|name|room_number|building_id|building_name|classtype_id",
         },
       );
 
