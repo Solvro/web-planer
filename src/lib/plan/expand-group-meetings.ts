@@ -10,7 +10,10 @@ function legacyMeeting(group: ExtendedGroup): GroupMeeting {
 }
 
 /** Expands one logical USOS group into the cards needed by schedule views. */
-export function expandGroupMeetings(group: ExtendedGroup): ExtendedGroup[] {
+export function expandGroupMeetings(
+  group: ExtendedGroup,
+  includeLocations = false,
+): ExtendedGroup[] {
   const meetings =
     group.meetings?.length == null ? [legacyMeeting(group)] : group.meetings;
 
@@ -21,9 +24,15 @@ export function expandGroupMeetings(group: ExtendedGroup): ExtendedGroup[] {
     startTime: meeting.startTime,
     endTime: meeting.endTime,
     dates: meeting.dates,
+    locations: includeLocations ? meeting.locations : undefined,
   }));
 }
 
-export function expandGroupsMeetings(groups: ExtendedGroup[]): ExtendedGroup[] {
-  return groups.flatMap((element) => expandGroupMeetings(element));
+export function expandGroupsMeetings(
+  groups: ExtendedGroup[],
+  includeLocations = false,
+): ExtendedGroup[] {
+  return groups.flatMap((element) =>
+    expandGroupMeetings(element, includeLocations),
+  );
 }

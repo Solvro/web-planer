@@ -26,17 +26,30 @@ export interface PlannerGroupDTO {
 }
 
 function toClassgroupDates(dates: ClassgroupDateDTO[]): ClassgroupDate[] {
-  return dates.flatMap((entry) =>
-    entry.startTime != null && entry.endTime != null
-      ? [
-          {
-            date: entry.startTime.slice(0, 10),
-            startTime: entry.startTime,
-            endTime: entry.endTime,
-          },
-        ]
-      : [],
-  );
+  return dates.flatMap((entry) => {
+    if (entry.startTime == null || entry.endTime == null) {
+      return [];
+    }
+    const buildingId = entry.buildingId?.trim() ?? "";
+    const buildingName = entry.buildingName?.trim();
+    const buildingCode = buildingName?.match(/\[([^\]]+)\]\s*$/)?.[1]?.trim();
+    return [
+      {
+        date: entry.startTime.slice(0, 10),
+        startTime: entry.startTime,
+        endTime: entry.endTime,
+        location:
+          buildingName === "Zajęcia zdalne"
+            ? buildingName
+            : [
+                entry.roomNumber?.trim(),
+                buildingId === "" ? (buildingCode ?? buildingName) : buildingId,
+              ]
+                .filter(Boolean)
+                .join(", "),
+      },
+    ];
+  });
 }
 
 async function buildPlannerGroup(

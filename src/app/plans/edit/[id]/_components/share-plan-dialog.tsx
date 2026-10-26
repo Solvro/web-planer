@@ -8,6 +8,7 @@ import {
   shareHideDaysAtom,
   shareHideLecturesAtom,
   shareOrientationAtom,
+  shareShowRoomsAtom,
 } from "@/atoms/share-options";
 import { WeekGrid } from "@/components/schedule/week-grid";
 import {
@@ -30,6 +31,7 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
   const hideDays = useAtomValue(shareHideDaysAtom);
   const hideLectures = useAtomValue(shareHideLecturesAtom);
   const orientation = useAtomValue(shareOrientationAtom);
+  const showRooms = useAtomValue(shareShowRoomsAtom);
   const captureRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [preview, setPreview] = useState({ scale: 1, height: 0 });
@@ -51,8 +53,9 @@ export function SharePlanDialog({ plan }: { plan: PlanHandle }) {
         hideLectures
           ? plan.selectedGroups.filter((group) => group.courseType !== "W")
           : plan.selectedGroups,
+        showRooms,
       ),
-    [plan.selectedGroups, hideLectures],
+    [plan.selectedGroups, hideLectures, showRooms],
   );
 
   const measure = useCallback(() => {

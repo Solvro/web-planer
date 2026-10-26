@@ -5,6 +5,11 @@ import type { ScheduleOrientation } from "./schedule-orientation";
 /** Options controlling how the plan is rendered for sharing/exporting as an image. */
 export const shareHideDaysAtom = atomWithStorage<boolean>("hideDays", false);
 
+export const shareShowRoomsAtom = atomWithStorage<boolean>(
+  "shareShowRooms",
+  false,
+);
+
 export const shareHideLecturesAtom = atomWithStorage<boolean>(
   "shareHideLectures",
   false,
